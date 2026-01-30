@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Audio, Img, Sequence, Video, staticFile, Series } from "remotion";
+import { AbsoluteFill, Audio, Img, Sequence, Video, staticFile } from "remotion";
 import { z } from "zod";
 import * as Effects from "../components/effects";
 import * as Transitions from "../components/transitions";

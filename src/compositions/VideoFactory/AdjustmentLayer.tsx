@@ -2,9 +2,10 @@ import { AbsoluteFill, random, useCurrentFrame } from "remotion";
 
 type Props = {
 	rank: number;
+	beatPulse?: number;
 };
 
-export const AdjustmentLayer: React.FC<Props> = ({ rank }) => {
+export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
 	const frame = useCurrentFrame();
 
 	// Theme configuration based on rank - WEAKENED INTENSITY
@@ -53,15 +54,23 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank }) => {
 		? `hue-rotate(${random(frame) * 20}deg) blur(1px)`
 		: "none";
 
+	// theme boost based on beat
+	const beatBrightness = theme.brightness + (beatPulse || 0) * 0.3;
+	const beatContrast = theme.contrast + (beatPulse || 0) * 0.2;
+
+	// Screen Shake Logic (Impactful!)
+	const shakeX = (beatPulse || 0) * (random(frame + 100) - 0.5) * 40;
+	const shakeY = (beatPulse || 0) * (random(frame + 200) - 0.5) * 40;
+
 	return (
 		<AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
 			{/* 1. Backdrop Filter (Global Color Grading) - WEAKENED */}
 			{/* Added Glitch Twist: Hue Rotate or Invert occasionally? */}
 			<AbsoluteFill
 				style={{
-					backdropFilter: `contrast(${theme.contrast}) saturate(${theme.saturate}) brightness(${theme.brightness}) ${glitchFilter}`,
+					backdropFilter: `contrast(${beatContrast}) saturate(${theme.saturate}) brightness(${beatBrightness}) ${glitchFilter}`,
 					zIndex: 100,
-					transform: `translate(${shiftX}px, ${shiftY}px)`,
+					transform: `translate(${shiftX + shakeX}px, ${shiftY + shakeY}px) scale(${1 + (beatPulse || 0) * 0.02})`,
 				}}
 			/>
 

@@ -19,7 +19,10 @@ import { LuxuryGoldBackground } from "./LuxuryGoldBackground";
 import { CinematicBorder } from "./CinematicBorder";
 import { TextShine } from "./TextShine";
 import { AdjustmentLayer } from "./AdjustmentLayer";
+import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
+
+const BPM = 128;
 
 type Props = {
 	rank: number;
@@ -28,6 +31,7 @@ type Props = {
 };
 
 export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
+	// Podium3D component removed as it was not needed.
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 
@@ -41,8 +45,10 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 	const scale = interpolate(entrance, [0, 1], [2.5, 1]);
 	const opacity = interpolate(entrance, [0, 1], [0, 1]);
 	
+	const { pulse } = useBeatValue(BPM);
+	
 	// Ultra Pulse for Text
-	const pulse = 1 + Math.sin(frame / 8) * 0.05;
+	const pulseScale = (1 + Math.sin(frame / 8) * 0.05) * (1 + pulse * 0.05);
 
 	// Rank specific styles
 	const getRankColors = (r: number) => {
@@ -60,6 +66,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000" }}>
 			<LuxuryGoldBackground color={primary} secondaryColor={secondary} />
+			<AdjustmentLayer rank={rank} beatPulse={pulse} />
 			
 			{/* Blurred Character Background Overlay */}
 			<AbsoluteFill style={{ zIndex: 1, opacity: 0.15, pointerEvents: "none" }}>
@@ -91,10 +98,12 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 				<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
 					{frame < 12 && <ImpactEffect color={primary} intensity="high" />}
 					<Explosion delay={4} color={primary} secondaryColor={secondary} />
+					{/* Recurring Beat Impact */}
+					<ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
 				</AbsoluteFill>
 
 				<div style={{ transform: `scale(${scale})`, opacity, zIndex: 120, display: "flex", flexDirection: "column", alignItems: "center" }}>
-					<div style={{ transform: `scale(${pulse})`, marginBottom: 30, position: "relative" }}>
+					<div style={{ transform: `scale(${pulseScale})`, marginBottom: 30, position: "relative" }}>
 						<div style={{ 
 							position: "absolute", 
 							top: "50%", 

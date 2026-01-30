@@ -7,11 +7,13 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
+import { useBeatValue } from "./utils/beat-sync";
 
 const TRAIL_COUNT = 20;
 const MUSIC_SYMBOL_COUNT = 10; // Reduced count because icons are larger now
 const SPRITE_ROWS = 3;
 const SPRITE_COLS = 3;
+const BPM = 128;
 
 interface LightTrail {
 	x: number;
@@ -86,6 +88,8 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 		return p;
 	}, [width, height]);
 
+	const { pulse } = useBeatValue(BPM);
+
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
@@ -100,13 +104,16 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 		// 1. Draw Light Trails
 		ctx.globalCompositeOperation = "screen";
 		trails.forEach((t) => {
-			let currZ = (t.z - frame * t.speedZ) % 5000;
+			// Pulse speed on beats - significantly moderated
+			const beatSpeed = t.speedZ * (1 + pulse * 0.15);
+			let currZ = (t.z - frame * beatSpeed) % 5000;
 			if (currZ < 0) currZ += 5000;
 
-			const alpha = interpolate(currZ, [0, 800, 4000, 5000], [0, 0.5, 0.5, 0]);
+			const alpha = interpolate(currZ, [0, 800, 4000, 5000], [0, 0.3, 0.3, 0]);
 			if (alpha <= 0) return;
 
-			ctx.lineWidth = t.width;
+			// Pulse width on beats - moderated
+			ctx.lineWidth = t.width * (1 + pulse * 0.2);
 			ctx.strokeStyle = t.color;
 			ctx.globalAlpha = alpha;
 
@@ -127,18 +134,18 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 
 			musicParticles.forEach((p) => {
 				// Pure 2D Drifting and Floating
-				const driftX = Math.sin(frame * 0.005 + p.floatOffset) * 50;
-				const driftY = Math.cos(frame * 0.008 + p.floatOffset) * 30;
-				const bobY = Math.sin(frame * 0.02 + p.floatOffset) * 40;
+				const driftX = Math.sin(frame * 0.00005 + p.floatOffset) * 50;
+				const driftY = Math.cos(frame * 0.0005 + p.floatOffset) * 30;
+				const bobY = Math.sin(frame * 0.0002 + p.floatOffset) * 40;
 				
 				const screenX = p.x + driftX;
 				const screenY = p.y + driftY + bobY;
 				
-				// Larger size for visibility
-				const size = 180 * p.scale; 
+				// Larger size for visibility, pulse on beat - very moderated
+				const size = 180 * p.scale * (1 + pulse * 0.05); 
 
-				// Morph/Glitch Selection
-				const glitchSpeed = 45; // Slower change (1.5s at 30fps)
+				// Morph/Glitch Selection - faster on beats
+				const glitchSpeed = Math.max(5, 45 * (1 - pulse)); 
 				const timeSeed = Math.floor((frame + p.seed * 10) / glitchSpeed);
 				const symbolIndex = Math.floor(random(`morph-${timeSeed}-${p.seed}`) * (SPRITE_ROWS * SPRITE_COLS));
 				
@@ -146,18 +153,18 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 				const row = Math.floor(symbolIndex / SPRITE_COLS);
 
 				ctx.save();
-				// Gentle global pulse for alpha
-				ctx.globalAlpha = 0.4 + Math.sin(frame * 0.03 + p.floatOffset) * 0.2;
+				// Pulse alpha on beat - very moderated
+				ctx.globalAlpha = (0.3 + Math.sin(frame * 0.03 + p.floatOffset) * 0.1) * (1 + pulse * 0.1);
 				ctx.translate(screenX, screenY);
 				ctx.rotate(p.rotation + frame * p.rotationSpeed);
 				
 				// a. Elegant Dark Card Background (No Border)
 				ctx.globalCompositeOperation = "source-over";
-				ctx.fillStyle = "rgba(5, 10, 25, 0.5)"; // Even more subtle
+				ctx.fillStyle = "rgba(5, 10, 25, 0.5)"; 
 				ctx.fillRect(-size / 2, -size / 2, size, size);
 
-				// b. Icon with Glow (Removed strokeRect)
-				ctx.filter = "contrast(1.2) brightness(1.2) saturate(1.2)";
+				// Icon with Glow - subtle pulse
+				ctx.filter = `contrast(1.1) brightness(${1.1 + pulse * 0.2}) saturate(${1.1 + pulse * 0.2})`;
 				ctx.globalCompositeOperation = "screen"; 
 				ctx.drawImage(
 					icons,
@@ -169,7 +176,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 			});
 		}
 
-	}, [frame, width, height, trails, musicParticles]);
+	}, [frame, width, height, trails, musicParticles, pulse]);
 
 	const formatDigits = (val: number) => val.toString().padStart(2, "0");
 	const hours = formatDigits(Math.floor(frame / 3600) % 24);
@@ -177,16 +184,16 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 	const secs = formatDigits(frame % 60);
 	const ms = formatDigits(Math.floor((frame % 30) * 3.33));
 
-	const timerPulse = interpolate(Math.sin(frame * 0.15), [-1, 1], [0.15, 0.3]);
+	const timerPulse = 0.1 + pulse * 0.15;
 
 	return (
 		<AbsoluteFill style={{ 
 			background: "linear-gradient(160deg, #020815 0%, #051a3a 50%, #080215 100%)" 
 		}}>
-			{/* CENTRAL GLOW */}
+			{/* CENTRAL GLOW - Pulses with music */}
 			<AbsoluteFill
 				style={{
-					background: "radial-gradient(circle, rgba(0, 240, 255, 0.3) 0%, transparent 70%)",
+					background: `radial-gradient(circle, rgba(0, 240, 255, ${0.2 + pulse * 0.2}) 0%, transparent 70%)`,
 					pointerEvents: "none",
 				}}
 			/>
@@ -206,9 +213,9 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 						fontWeight: 900,
 						fontFamily: "Impact, sans-serif",
 						color: "#00f0ff",
-						filter: "blur(3px) drop-shadow(0 0 50px #00f0ff)",
+						filter: `blur(${3 - pulse * 1}px) drop-shadow(0 0 ${30 + pulse * 30}px #00f0ff)`,
 						letterSpacing: "-0.05em",
-						transform: "scale(1.3) skewX(-10deg)",
+						transform: `scale(${1.3 + pulse * 0.05}) skewX(-10deg)`,
 						whiteSpace: "nowrap",
 					}}
 				>
@@ -223,17 +230,19 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 				style={{ width: "100%", height: "100%" }}
 			/>
 
-			{/* Audio Visualizer Style Lines (Bottom) */}
-			<AbsoluteFill style={{ top: "auto", height: 200, bottom: 50, opacity: 0.3 }}>
+			{/* Audio Visualizer Style Lines (Bottom) - Driven by pulse */}
+			<AbsoluteFill style={{ top: "auto", height: 300, bottom: 50, opacity: 0.4 }}>
 				<div style={{ display: "flex", gap: 10, alignItems: "flex-end", height: "100%", padding: "0 100px" }}>
-					{Array.from({ length: 20 }).map((_, i) => {
-						const h = interpolate(Math.sin(frame * 0.2 + i), [-1, 1], [20, 150]);
+					{Array.from({ length: 40 }).map((_, i) => {
+						const h = interpolate(Math.sin(frame * 0.1 + i), [-1, 1], [15, 100]) * (1 + pulse * 0.4);
 						return (
 							<div key={i} style={{ 
 								flex: 1, 
 								height: h, 
-								background: "linear-gradient(to top, #00f0ff, transparent)",
-								borderRadius: "10px 10px 0 0" 
+								background: `linear-gradient(to top, #00f0ff, transparent)`,
+								boxShadow: pulse > 0.5 ? `0 0 20px #00f0ff` : "none",
+								borderRadius: "10px 10px 0 0",
+                                transition: "height 0.1s ease-out"
 							}} />
 						);
 					})}

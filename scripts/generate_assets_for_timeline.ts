@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import Replicate from "replicate";
 // Use the unified scenario file
 import scenarioData from "../src/ai_scenario.json";
-import type { OrchestraTimeline, Scene } from "../src/types/schema";
+import type { Scene } from "../src/types/schema";
 
 dotenv.config();
 

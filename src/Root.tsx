@@ -25,6 +25,7 @@ import {
 	TRANSITION_FRAMES,
 } from "./compositions/VideoFactory/RankingVideo";
 import { RankingTime } from "./compositions/VideoFactory/RankingTime";
+import { AssetCatalog } from "./compositions/VideoFactory/Assets/Catalog";
 import "./index.css";
 import React from "react";
 
@@ -191,6 +192,14 @@ export const RemotionRoot: React.FC = () => {
 				component={JumpCutComposition}
 				durationInFrames={liverFormatterDuration}
 				fps={LIVER_FORMATTER_FPS}
+				width={1080}
+				height={1920}
+			/>
+			<Composition
+				id="AssetCatalog"
+				component={AssetCatalog}
+				durationInFrames={1500}
+				fps={60}
 				width={1080}
 				height={1920}
 			/>

@@ -90,7 +90,7 @@ const ShinyText: React.FC<{
 export const OpeningTitleTime: React.FC = () => {
     // ... existing hook calls ...
 	const frame = useCurrentFrame();
-	const { width, durationInFrames } = useVideoConfig();
+	const { width } = useVideoConfig();
 
 	const getShake = (delay: number) => {
 		if (frame < delay || frame > delay + 10) return 0;

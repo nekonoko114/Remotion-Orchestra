@@ -1,5 +1,5 @@
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
-import { AbsoluteFill, useVideoConfig } from "remotion";
+import { AbsoluteFill, useVideoConfig, Audio, staticFile } from "remotion";
 import RANKING_DATA_JSON from "./data.json";
 import type { Liver } from "./types";
 import {
@@ -14,7 +14,12 @@ import { EndingLogoTime as EndingLogo } from "./EndingLogoTime";
 import { TimeBackground } from "./TimeBackground";
 import { OpeningTitleTime as OpeningTitle } from "./OpeningTitleTime";
 import { RankingGroupTime as RankingGroup } from "./RankingGroupTime";
-import { TopRankReveal } from "./TopRankReveal";
+import { TopRankRevealTime as TopRankReveal } from "./TopRankRevealTime";
+import { useBeatValue } from "./utils/beat-sync";
+
+const BPM = 128;
+const BGM_SOURCE = staticFile("assets/audio/music/true_jpop_final.mp3");
+const BGM_START_FROM = 0.0; // Seconds
 
 // Export duration constants for Root.tsx
 export const OPENING_SEC = 5;
@@ -38,14 +43,20 @@ export const RankingTime = () => {
 	// Define the timing
 	const timing = linearTiming({ durationInFrames: TRANSITION_DURATION });
 
+	const { pulse } = useBeatValue(BPM);
+	const beatScale = 1 + pulse * 0.008;
+
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#1a1a1a" }}>
-			{/* Background persists throughout the entire video */}
-			<TimeBackground />
+			<Audio src={BGM_SOURCE} loop startFrom={BGM_START_FROM * fps} />
 
-			{/* Sequenced Content: Opening -> Ranking with TRANSITIONS */}
-			<TransitionSeries>
-				{/* 1. Opening Title */}
+			<AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
+				{/* Background persists throughout the entire video */}
+				<TimeBackground />
+
+				{/* Sequenced Content: Opening -> Ranking with TRANSITIONS */}
+				<TransitionSeries>
+					{/* 1. Opening Title */}
 				<TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
 					<OpeningTitle />
 				</TransitionSeries.Sequence>
@@ -128,6 +139,7 @@ export const RankingTime = () => {
 					<EndingLogo />
 				</TransitionSeries.Sequence>
 			</TransitionSeries>
+			</AbsoluteFill>
 		</AbsoluteFill>
 	);
 };

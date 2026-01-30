@@ -9,11 +9,13 @@ import {
 type Props = {
 	color?: string; // Optional color tint (e.g. Gold)
 	intensity?: "normal" | "high"; // "high" for top ranks
+	beatPulse?: number; // 0.0 to 1.0 pulse from BGM
 };
 
 export const ImpactEffect: React.FC<Props> = ({
 	color = "white",
 	intensity = "normal",
+	beatPulse = 0,
 }) => {
 	const frame = useCurrentFrame();
 
@@ -21,7 +23,7 @@ export const ImpactEffect: React.FC<Props> = ({
 	const flashOpacity = interpolate(frame, [0, 5, 20], [0.8, 1, 0], {
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
-	});
+	}) /* + (beatPulse || 0) * 0.3 */; // Removed beat sync
 
 	// 2. Shockwave Rings
 	// Multiple rings for high intensity
@@ -108,10 +110,10 @@ export const ImpactEffect: React.FC<Props> = ({
 							width: 1000,
 							height: 1000,
 							borderRadius: "50%",
-							border: `50px solid ${i === 0 ? "white" : color}`, // Inner ring white, outer colored
+							border: `${50}px solid ${i === 0 ? "white" : color}`,
 							transform: `scale(${ringScale})`,
 							opacity: ringOpacity,
-							boxShadow: `0 0 50px ${color}, inset 0 0 50px ${color}`,
+							boxShadow: `0 0 ${50}px ${color}, inset 0 0 50px ${color}`,
 							position: "absolute",
 						}}
 					/>

@@ -1,7 +1,7 @@
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { flip } from "@remotion/transitions/flip";
 import { slide } from "@remotion/transitions/slide";
-import { AbsoluteFill, useVideoConfig } from "remotion";
+import { AbsoluteFill, useVideoConfig, Audio, staticFile } from "remotion";
 import RANKING_DATA_JSON from "./data.json";
 import type { Liver } from "./types";
 
@@ -11,14 +11,19 @@ import { FireBackground } from "./FireBackground";
 import { OpeningTitle } from "./OpeningTitle";
 import { RankingGroup } from "./RankingGroup";
 import { TopRankReveal } from "./TopRankReveal";
+import { useBeatValue } from "./utils/beat-sync";
+
+const BPM = 128;
 
 // Export duration constants for Root.tsx
 export const OPENING_SEC = 5;
 export const GROUP_SEC = 5;
-export const TOP_RANK_SEC = 5.5;
+export const TOP_RANK_SEC = 5.6; // ~12 beats exactly
 export const ENDING_SEC = 5;
-export const TRANSITION_FRAMES = 15;
+export const TRANSITION_FRAMES = 14; // Exactly half a beat (28/2)
 export const LAST_TRANSITION_FRAMES = 10;
+
+const BGM_START_FROM = 56; // 秒単位で指定。56秒付近が盛り上がり始めるポイント。
 
 export const RankingVideo = () => {
 	const { fps } = useVideoConfig();
@@ -40,14 +45,24 @@ export const RankingVideo = () => {
 	// Define the timing
 	const timing = linearTiming({ durationInFrames: TRANSITION_DURATION });
 
+	const { pulse } = useBeatValue(BPM);
+	const beatScale = 1 + pulse * 0.015; // わずかな振動
+
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#1a1a1a" }}>
-			{/* Background persists throughout the entire video */}
-			<FireBackground />
+			<Audio
+				src={staticFile("assets/audio/music/gen_music_1769637348176.mp3")}
+				loop
+				startFrom={Math.floor(BGM_START_FROM * fps)}
+			/>
+			
+			<AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
+				{/* Background persists throughout the entire video */}
+				<FireBackground />
 
-			{/* Sequenced Content: Opening -> Ranking with TRANSITIONS */}
-			<TransitionSeries>
-				{/* 1. Opening Title */}
+				{/* Sequenced Content: Opening -> Ranking with TRANSITIONS */}
+				<TransitionSeries>
+					{/* 1. Opening Title */}
 				<TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
 					<OpeningTitle />
 				</TransitionSeries.Sequence>
@@ -136,6 +151,7 @@ export const RankingVideo = () => {
 					<EndingLogo />
 				</TransitionSeries.Sequence>
 			</TransitionSeries>
+			</AbsoluteFill>
 		</AbsoluteFill>
 	);
 };

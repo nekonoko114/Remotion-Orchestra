@@ -8,8 +8,10 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
+import { useBeatValue } from "./utils/beat-sync";
 
-const PARTICLE_COUNT = 600; // Increase count for better depth effect
+const PARTICLE_COUNT = 600;
+const BPM = 128;
 
 interface Particle3D {
 	x: number;
@@ -25,6 +27,7 @@ export const FireBackground: React.FC = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const { width, height } = useVideoConfig();
 	const frame = useCurrentFrame();
+	const { pulse } = useBeatValue(BPM);
 
 	// Initialize particles in 3D space
 	const particles = useMemo(() => {
@@ -64,7 +67,9 @@ export const FireBackground: React.FC = () => {
 
 		particles.forEach((p) => {
 			// Calculate current depth with wrapping
-			let currZ = (p.z - frame * p.speedZ) % 2000;
+			// Speed boosts on the beat - extremely moderated from 3 to 1
+			const beatSpeedBoost = (pulse || 0) * 1;
+			let currZ = (p.z - frame * (p.speedZ + beatSpeedBoost)) % 2000;
 			if (currZ < 0) currZ += 2000;
 
 			// Perspective Projection
@@ -74,8 +79,8 @@ export const FireBackground: React.FC = () => {
 			const screenX = centerX + p.x * scale;
 			const screenY = centerY + p.y * scale;
 
-			// Size increases as it approaches
-			const drawnSize = p.size * scale * 2;
+			// Size increases as it approaches, boosted on beat - reset to original punch
+			const drawnSize = p.size * scale * (2 + (pulse || 0));
 
 			// Fade particles very close or very far
 			const alpha = interpolate(currZ, [0, 200, 1500, 2000], [0, 0.8, 0.8, 0]);

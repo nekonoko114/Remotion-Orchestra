@@ -1,5 +1,6 @@
 import { AbsoluteFill, Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import { ImpactEffect } from "./ImpactEffect";
+import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
+import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
 
 type Props = {
@@ -9,6 +10,8 @@ type Props = {
 	hideRank?: boolean; // ランクバッジを非表示にする（TopRankReveal用）
 };
 
+const BPM = 128;
+
 export const RankingGroupTime: React.FC<Props> = ({
 	title,
 	livers,
@@ -17,6 +20,8 @@ export const RankingGroupTime: React.FC<Props> = ({
 }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
+	const { pulse } = useBeatValue(BPM);
+
 	const titleSpr = spring({
 		frame,
 		fps,
@@ -43,7 +48,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 		<AbsoluteFill style={{ 
 			justifyContent: "center", 
 			alignItems: "center",
-			transform: `translateX(${shakeX}px)`
+			transform: `translateX(${shakeX}px) scale(${1 + pulse * 0.01})`
 		}}>
 			{/* Impact Glow Burst Overlay */}
 			{glowOpacity > 0 && (
@@ -280,7 +285,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 					);
 				})}
 			</div>
-			<ImpactEffect />
+			<ImpactEffect beatPulse={pulse} />
 		</AbsoluteFill>
 	);
 };

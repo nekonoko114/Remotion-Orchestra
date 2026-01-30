@@ -7,19 +7,13 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { LensFlare } from "../../components/effects/LensFlare"; // Import LensFlare
 import { TimeBackground } from "./TimeBackground";
 
 export const EndingLogoTime: React.FC = () => {
 	const frame = useCurrentFrame();
 	const { durationInFrames, width } = useVideoConfig();
 
-	const opacity = interpolate(
-		frame,
-		[0, 20, durationInFrames - 20, durationInFrames],
-		[0, 1, 1, 0],
-		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-	);
+	// Removed unused opacity interpolate
 
 	const scale = interpolate(frame, [0, durationInFrames], [1.0, 1.1], {
 		extrapolateRight: "clamp",
@@ -120,15 +114,6 @@ export const EndingLogoTime: React.FC = () => {
 				</div>
 			</AbsoluteFill>
 
-			{/* 4. LENS FLARE / ATMOSPHERE (Top-most) */}
-			<AbsoluteFill style={{ zIndex: 9999, pointerEvents: "none" }}>
-				<LensFlare
-					opacity={0.7 * opacity}
-					scale={1.4}
-					color="#00f0ff"
-					intensity={1.1}
-				/>
-			</AbsoluteFill>
 		</AbsoluteFill>
 	);
 };

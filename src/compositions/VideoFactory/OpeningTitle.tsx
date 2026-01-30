@@ -1,16 +1,11 @@
-import type React from "react";
 import {
 	AbsoluteFill,
-	Img,
 	interpolate,
 	random,
 	spring,
-	staticFile,
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { HeatDistortion } from "../../components/effects/HeatDistortion";
-import { FireBackground } from "./FireBackground";
 import { ImpactEffect } from "./ImpactEffect";
 
 // HIGH-GLOW Metallic Text Component
