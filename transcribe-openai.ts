@@ -3,9 +3,13 @@ import fs from "node:fs";
 import path from "node:path";
 import OpenAI from "openai";
 
-// ▼▼▼ ここにAPIキーをセット ▼▼▼
-const OPENAI_API_KEY =
-	"process.env.OPENAI_API_KEY";
+// ▼▼▼ ここにAPIキーをセット (環境変数から取得するように変更) ▼▼▼
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+if (!OPENAI_API_KEY) {
+	console.error("❌ エラー: OPENAI_API_KEY が設定されていません。.env ファイルを確認してください。");
+	process.exit(1);
+}
 
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
