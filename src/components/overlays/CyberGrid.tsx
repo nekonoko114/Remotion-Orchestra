@@ -1,7 +1,7 @@
 import type React from "react";
 import { AbsoluteFill, useCurrentFrame } from "remotion";
 
-export const CyberGrid: React.FC = () => {
+export const CyberGrid: React.FC<{ color?: string }> = ({ color = "#00f0ff" }) => {
 	const frame = useCurrentFrame();
 	const speed = (frame * 5) % 160;
 
@@ -54,8 +54,8 @@ export const CyberGrid: React.FC = () => {
 					top: "50%",
 					width: "100%",
 					height: "6px",
-					backgroundColor: "#00f0ff",
-					boxShadow: "0 0 20px #00f0ff, 0 0 40px #00f0ff",
+					backgroundColor: color,
+					boxShadow: `0 0 20px ${color}, 0 0 40px ${color}`,
 					zIndex: 5,
 				}}
 			/>
@@ -79,12 +79,12 @@ export const CyberGrid: React.FC = () => {
 						transform: "rotateX(80deg)",
 						transformOrigin: "top center",
 						backgroundImage: `
-                        linear-gradient(to right, #00f0ff 2px, transparent 2px),
-                        linear-gradient(to bottom, #00f0ff 2px, transparent 2px)
+                        linear-gradient(to right, ${color} 2px, transparent 2px),
+                        linear-gradient(to bottom, ${color} 2px, transparent 2px)
                     `,
 						backgroundSize: "80px 80px",
 						backgroundPosition: `0px ${speed}px`,
-						boxShadow: "inset 0 0 150px rgba(0, 240, 255, 0.4)",
+						boxShadow: `inset 0 0 150px ${color}66`,
 						maskImage:
 							"linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)",
 					}}

@@ -551,7 +551,9 @@ export const StardustGalaxy: React.FC<{ text: string; fontSize?: number }> = ({
 export const ThunderGodStrike: React.FC<{
 	text: string;
 	fontSize?: number;
-}> = ({ text, fontSize = 100 }) => {
+	color?: string;
+	glowColor?: string;
+}> = ({ text, fontSize = 100, color = "#00ffff", glowColor = "#0099ff" }) => {
 	const frame = useCurrentFrame();
 
 	const strike = frame > 10;
@@ -570,7 +572,7 @@ export const ThunderGodStrike: React.FC<{
 						transform: "translateX(-50%)",
 					}}
 				>
-					<LightningBolt color="#00ffff" intensity={2} thickness={5} />
+					<LightningBolt color={color} intensity={2} thickness={5} />
 				</div>
 			)}
 
@@ -596,8 +598,8 @@ export const ThunderGodStrike: React.FC<{
 					color: "#fff",
 					opacity: strike ? 1 : 0,
 					transform: `scale(${strike ? 1 : 1.5})`,
-					filter: `drop-shadow(0 0 ${random(frame) * 20}px #00ffff)`,
-					textShadow: "0 0 10px #0099ff",
+					filter: `drop-shadow(0 0 ${random(frame) * 20}px ${color})`,
+					textShadow: `0 0 10px ${glowColor}`,
 					willChange: "transform, filter",
 				}}
 			>
@@ -616,7 +618,7 @@ export const ThunderGodStrike: React.FC<{
 								top: `${random(frame + i + 10) * 100}%`,
 								width: 10,
 								height: 1,
-								background: "#00ffff",
+								background: color,
 								transform: `rotate(${random(i) * 360}deg)`,
 								opacity: random(frame + i) > 0.8 ? 1 : 0,
 							}}

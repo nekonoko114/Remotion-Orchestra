@@ -17,11 +17,12 @@ async function generateMusic(
 	console.log(`Generating music for: "${prompt}" (${duration}s)`);
 
 	const output: any = await replicate.run(
-		"stability-ai/stable-audio-open:d350b984e9115bc05972ed883ba8a6d654924c8b3658510bf22ba794eb84826b",
+		"meta/musicgen:671ac645ce5e52dda61048e1d0a0ac5347248f2a6fcda7f1d060b5711b660140",
 		{
 			input: {
+				model_version: "stereo-large",
 				prompt: prompt,
-				seconds_total: duration,
+				duration: duration,
 			},
 		},
 	);

@@ -10,7 +10,8 @@ import {
 export const ImpactShockwave: React.FC<{
 	delay?: number;
 	duration?: number;
-}> = ({ delay = 0, duration = 20 }) => {
+	color?: string;
+}> = ({ delay = 0, duration = 20, color = "rgba(255, 255, 255, 1)" }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 
@@ -38,9 +39,9 @@ export const ImpactShockwave: React.FC<{
 				style={{
 					width: `${radius * 2}%`,
 					height: `${radius * 2}%`,
-					border: `${borderWeight}px solid rgba(255, 255, 255, ${opacity})`,
+					border: `${borderWeight}px solid ${color.includes("rgba") ? color.replace(/[\d.]+\)$/, `${opacity})`) : color}`,
 					borderRadius: "50%",
-					boxShadow: `0 0 50px rgba(255, 255, 255, ${opacity})`,
+					boxShadow: `0 0 50px ${color}`,
 					filter: "blur(10px)",
 					opacity,
 				}}

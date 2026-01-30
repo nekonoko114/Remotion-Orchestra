@@ -13,7 +13,6 @@ import { EffectsCatalog } from "./compositions/VFXLibrary/EffectsCatalog";
 import { JsonDrivenVideo } from "./compositions/VFXLibrary/JsonDrivenVideo";
 import { ThreeDTextScene } from "./compositions/VFXLibrary/ThreeDTextScene";
 import { VFXShowreel } from "./compositions/VFXLibrary/VFXShowreel";
-import { BattleVideo } from "./compositions/VideoFactory/BattleVideo";
 import { MyVideo } from "./compositions/VideoFactory/MyVideo";
 import {
 	ENDING_SEC,
@@ -25,6 +24,9 @@ import {
 	TRANSITION_FRAMES,
 } from "./compositions/VideoFactory/RankingVideo";
 import { RankingTime } from "./compositions/VideoFactory/RankingTime";
+import { BattleCrystal } from "./compositions/VideoFactory/BattleCrystal";
+import { BattleInferno } from "./compositions/VideoFactory/BattleInferno";
+import { BattleWater } from "./compositions/VideoFactory/BattleWater";
 import { AssetCatalog } from "./compositions/VideoFactory/Assets/Catalog";
 import "./index.css";
 import React from "react";
@@ -179,8 +181,24 @@ export const RemotionRoot: React.FC = () => {
 			/>
 			<Composition
 				id="JOL-Battle"
-				component={BattleVideo}
-				durationInFrames={1800}
+				component={BattleCrystal}
+				durationInFrames={844} // Trimmed version: 13 measures + 3s ending
+				fps={30}
+				width={1080}
+				height={1920}
+			/>
+			<Composition
+				id="JOL-Battle-Inferno"
+				component={BattleInferno}
+				durationInFrames={844}
+				fps={30}
+				width={1080}
+				height={1920}
+			/>
+			<Composition
+				id="JOL-Battle-Water"
+				component={BattleWater}
+				durationInFrames={652}
 				fps={30}
 				width={1080}
 				height={1920}
