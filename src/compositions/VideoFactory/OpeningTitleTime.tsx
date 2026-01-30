@@ -9,13 +9,14 @@ import {
 } from "remotion";
 import { LensFlare } from "../../components/effects/LensFlare";
 import { ImpactEffect } from "./ImpactEffect";
+import { TextShine } from "./TextShine";
 import { TimeBackground } from "./TimeBackground";
 
 // HIGH-GLOW Metallic Text Component (Cyan/Blue Theme)
 const ShinyText: React.FC<{
 	text: string;
 	fontSize: number;
-	className: string;
+	className: string; // Kept for interface compatibility but mostly overridden
 	delay: number;
 	glowColor?: string;
 }> = ({
@@ -63,21 +64,25 @@ const ShinyText: React.FC<{
 				}}
 			/>
 
-			<h1
-				className={className}
-				style={{
-					fontSize,
-					fontWeight: 900,
-					margin: 0,
-					textAlign: "center",
-					letterSpacing: "0.1em",
-					lineHeight: 1.1,
-					fontFamily: "system-ui, -apple-system, sans-serif",
-					// REMOVED faulty filters. Using specialized CSS class instead.
-				}}
-			>
-				{text}
-			</h1>
+            {/* RICH TEXT UPGRADE: TextShine + Solid White + Strong Shadow */}
+            <TextShine delay={delay + 5} duration={45} color="white">
+                <h1
+                    style={{
+                        fontSize,
+                        fontWeight: 900,
+                        margin: 0,
+                        textAlign: "center",
+                        letterSpacing: "0.1em",
+                        lineHeight: 1.1,
+                        fontFamily: "system-ui, -apple-system, sans-serif",
+                        color: "#FFFFFF",
+                        textShadow: `0 0 20px ${glowColor}, 0 0 50px ${glowColor}`, 
+                        filter: "drop-shadow(0px 5px 10px rgba(0,0,0,0.8))", // Add depth
+                    }}
+                >
+                    {text}
+                </h1>
+            </TextShine>
 		</div>
 	);
 };
@@ -173,42 +178,42 @@ export const OpeningTitleTime: React.FC = () => {
 			>
 				<ShinyText
 					text="J.O.L"
-					fontSize={180}
+					fontSize={260}
 					className="metallic-diamond"
 					delay={10}
-					glowColor="rgba(0, 200, 255, 0.6)"
+					glowColor="rgba(0, 220, 255, 0.7)"
 				/>
 				
 				<ShinyText
 					text="2026年1月度"
-					fontSize={50}
+					fontSize={140}
 					className="metallic-silver"
 					delay={25}
-					glowColor="rgba(200, 200, 255, 0.4)"
+					glowColor="rgba(220, 220, 255, 0.5)"
 				/>
 
 				<ShinyText
 					text="月間配信時間"
-					fontSize={70}
+					fontSize={140}
 					className="metallic-silver"
 					delay={35}
-					glowColor="rgba(200, 200, 255, 0.4)"
+					glowColor="rgba(220, 220, 255, 0.5)"
 				/>
 
 				<ShinyText
 					text="ランキング"
-					fontSize={100}
+					fontSize={160}
 					className="metallic-diamond"
 					delay={45}
-					glowColor="rgba(0, 240, 255, 0.5)"
+					glowColor="rgba(0, 240, 255, 0.6)"
 				/>
 
 				<ShinyText
-					text="結果発表"
+					text="結果発表!"
 					fontSize={160}
 					className="metallic-diamond"
 					delay={55}
-					glowColor="rgba(0, 240, 255, 0.8)"
+					glowColor="rgba(0, 255, 255, 0.9)"
 				/>
 			</div>
 
