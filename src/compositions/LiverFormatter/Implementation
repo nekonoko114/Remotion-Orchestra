@@ -1,0 +1,60 @@
+import { AbsoluteFill, Video, staticFile, Composition } from 'remotion';
+// skillsからインポート
+import { MyAnimation as WordHighlightAnimation } from '../skills/remotion/rules/assets/text-animations-word-highlight';
+
+const MyVideoScene = () => {
+  const videoSource = staticFile("video/test-video.MOV");
+
+  return (
+    <AbsoluteFill style={{ backgroundColor: 'black' }}>
+      
+      {/* 1. 背景動画 */}
+      <Video 
+        src={videoSource}
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      />
+      
+      {/* 2. Skillsの字幕アニメーションを重ねる */}
+      <div style={{ 
+        position: 'absolute', 
+        bottom: 150, // 下の方に表示
+        width: '100%', 
+        height: 200, // 字幕エリアの高さ
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+      }}>
+        {/* 
+           skillsのコンポーネントを配置
+           ※注意: WordHighlightAnimationが内部でどういうPropsを取るかは
+           ファイルの中身次第ですが、通常は defaultProps でデータを持っています。
+           ここでは「上書き」を試みます。
+        */}
+        <WordHighlightAnimation />
+      </div>
+
+    </AbsoluteFill>
+  );
+};
+
+export const RemotionRoot: React.FC = () => {
+  return (
+    <Composition
+      id="CaptionTest"
+      component={MyVideoScene}
+      durationInFrames={30 * 60} // 1分
+      fps={30}
+      width={1080}
+      height={1920}
+      // ここからデータを流し込む！（重要）
+      defaultProps={{
+        captions: [
+          { text: "This", startFrame: 0, endFrame: 10 },
+          { text: "is", startFrame: 10, endFrame: 20 },
+          { text: "JOL", startFrame: 20, endFrame: 40 },
+          { text: "Project", startFrame: 40, endFrame: 60 },
+        ]
+      }}
+    />
+  );
+};

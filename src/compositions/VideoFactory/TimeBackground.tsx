@@ -1,0 +1,262 @@
+import React, { useEffect, useMemo, useRef } from "react";
+import {
+	AbsoluteFill,
+	interpolate,
+	random,
+	staticFile,
+	useCurrentFrame,
+	useVideoConfig,
+} from "remotion";
+
+const TRAIL_COUNT = 20;
+const MUSIC_SYMBOL_COUNT = 10; // Reduced count because icons are larger now
+const SPRITE_ROWS = 3;
+const SPRITE_COLS = 3;
+
+interface LightTrail {
+	x: number;
+	y: number;
+	z: number;
+	speedZ: number;
+	length: number;
+	color: string;
+	width: number;
+}
+
+interface MusicParticle {
+	x: number;
+	y: number;
+	rotation: number;
+	rotationSpeed: number;
+	scale: number;
+	seed: number; 
+	floatOffset: number; 
+}
+
+interface Props {
+	particleCount?: number;
+	overlayColor?: string; // Optional tint for Top 3 (Gold/Silver/Bronze)
+}
+
+export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayColor }) => {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const imageRef = useRef<HTMLImageElement | null>(null);
+	const { width, height } = useVideoConfig();
+	const frame = useCurrentFrame();
+
+	// Load the 3x3 grid music icons image
+	useEffect(() => {
+		const img = new Image();
+		img.src = staticFile("video-factory/images/neon_instruments_grid.png");
+		img.onload = () => {
+			imageRef.current = img;
+		};
+	}, []);
+
+	const trails = useMemo(() => {
+		const t: LightTrail[] = [];
+		for (let i = 0; i < TRAIL_COUNT; i++) {
+			const isCyan = random(`color-${i}`) < 0.7;
+			t.push({
+				x: (random(`x-${i}`) - 0.5) * width * 4,
+				y: (random(`y-${i}`) - 0.5) * height * 4,
+				z: random(`z-${i}`) * 5000,
+				speedZ: random(`sz-${i}`) * 60 + 40,
+				length: random(`len-${i}`) * 1200 + 800,
+				color: isCyan ? "#00f0ff" : "#00ffaa",
+				width: random(`w-${i}`) * 3 + 1,
+			});
+		}
+		return t;
+	}, [width, height]);
+
+	const musicParticles = useMemo(() => {
+		const p: MusicParticle[] = [];
+		for (let i = 0; i < MUSIC_SYMBOL_COUNT; i++) {
+			p.push({
+				x: random(`mx-${i}`) * width,
+				y: random(`my-${i}`) * height,
+				rotation: random(`rot-${i}`) * Math.PI * 2,
+				rotationSpeed: (random(`rs-${i}`) - 0.5) * 0.01,
+				scale: random(`sc-${i}`) * 0.5 + 0.5, 
+				seed: i,
+				floatOffset: random(`float-${i}`) * Math.PI * 2,
+			});
+		}
+		return p;
+	}, [width, height]);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		if (!canvas) return;
+		const ctx = canvas.getContext("2d");
+		if (!ctx) return;
+
+		ctx.clearRect(0, 0, width, height);
+		const fov = 1000;
+		const centerX = width / 2;
+		const centerY = height / 2;
+
+		// 1. Draw Light Trails
+		ctx.globalCompositeOperation = "screen";
+		trails.forEach((t) => {
+			let currZ = (t.z - frame * t.speedZ) % 5000;
+			if (currZ < 0) currZ += 5000;
+
+			const alpha = interpolate(currZ, [0, 800, 4000, 5000], [0, 0.5, 0.5, 0]);
+			if (alpha <= 0) return;
+
+			ctx.lineWidth = t.width;
+			ctx.strokeStyle = t.color;
+			ctx.globalAlpha = alpha;
+
+			ctx.beginPath();
+			for (let j = 0; j < 4; j++) {
+				const segmentZ = currZ + j * (t.length / 4);
+				const scaleFactor = fov / (fov + segmentZ);
+				ctx.lineTo(centerX + t.x * scaleFactor, centerY + t.y * scaleFactor);
+			}
+			ctx.stroke();
+		});
+
+		// 2. Draw Music Icons with Floating "Neon Card" Style
+		const icons = imageRef.current;
+		if (icons) {
+			const spriteW = icons.width / SPRITE_COLS;
+			const spriteH = icons.height / SPRITE_ROWS;
+
+			musicParticles.forEach((p) => {
+				// Pure 2D Drifting and Floating
+				const driftX = Math.sin(frame * 0.005 + p.floatOffset) * 50;
+				const driftY = Math.cos(frame * 0.008 + p.floatOffset) * 30;
+				const bobY = Math.sin(frame * 0.02 + p.floatOffset) * 40;
+				
+				const screenX = p.x + driftX;
+				const screenY = p.y + driftY + bobY;
+				
+				// Larger size for visibility
+				const size = 180 * p.scale; 
+
+				// Morph/Glitch Selection
+				const glitchSpeed = 45; // Slower change (1.5s at 30fps)
+				const timeSeed = Math.floor((frame + p.seed * 10) / glitchSpeed);
+				const symbolIndex = Math.floor(random(`morph-${timeSeed}-${p.seed}`) * (SPRITE_ROWS * SPRITE_COLS));
+				
+				const col = symbolIndex % SPRITE_COLS;
+				const row = Math.floor(symbolIndex / SPRITE_COLS);
+
+				ctx.save();
+				// Gentle global pulse for alpha
+				ctx.globalAlpha = 0.4 + Math.sin(frame * 0.03 + p.floatOffset) * 0.2;
+				ctx.translate(screenX, screenY);
+				ctx.rotate(p.rotation + frame * p.rotationSpeed);
+				
+				// a. Elegant Dark Card Background (No Border)
+				ctx.globalCompositeOperation = "source-over";
+				ctx.fillStyle = "rgba(5, 10, 25, 0.5)"; // Even more subtle
+				ctx.fillRect(-size / 2, -size / 2, size, size);
+
+				// b. Icon with Glow (Removed strokeRect)
+				ctx.filter = "contrast(1.2) brightness(1.2) saturate(1.2)";
+				ctx.globalCompositeOperation = "screen"; 
+				ctx.drawImage(
+					icons,
+					col * spriteW, row * spriteH, spriteW, spriteH,
+					-size / 2, -size / 2, size, size
+				);
+				
+				ctx.restore();
+			});
+		}
+
+	}, [frame, width, height, trails, musicParticles]);
+
+	const formatDigits = (val: number) => val.toString().padStart(2, "0");
+	const hours = formatDigits(Math.floor(frame / 3600) % 24);
+	const mins = formatDigits(Math.floor(frame / 60) % 60);
+	const secs = formatDigits(frame % 60);
+	const ms = formatDigits(Math.floor((frame % 30) * 3.33));
+
+	const timerPulse = interpolate(Math.sin(frame * 0.15), [-1, 1], [0.15, 0.3]);
+
+	return (
+		<AbsoluteFill style={{ 
+			background: "linear-gradient(160deg, #020815 0%, #051a3a 50%, #080215 100%)" 
+		}}>
+			{/* CENTRAL GLOW */}
+			<AbsoluteFill
+				style={{
+					background: "radial-gradient(circle, rgba(0, 240, 255, 0.3) 0%, transparent 70%)",
+					pointerEvents: "none",
+				}}
+			/>
+
+			{/* Large Timer Background */}
+			<AbsoluteFill
+				style={{
+					justifyContent: "center",
+					alignItems: "center",
+					opacity: timerPulse,
+					pointerEvents: "none",
+				}}
+			>
+				<div
+					style={{
+						fontSize: 500,
+						fontWeight: 900,
+						fontFamily: "Impact, sans-serif",
+						color: "#00f0ff",
+						filter: "blur(3px) drop-shadow(0 0 50px #00f0ff)",
+						letterSpacing: "-0.05em",
+						transform: "scale(1.3) skewX(-10deg)",
+						whiteSpace: "nowrap",
+					}}
+				>
+					{hours}:{mins}:{secs}:{ms}
+				</div>
+			</AbsoluteFill>
+
+			<canvas
+				ref={canvasRef}
+				width={width}
+				height={height}
+				style={{ width: "100%", height: "100%" }}
+			/>
+
+			{/* Audio Visualizer Style Lines (Bottom) */}
+			<AbsoluteFill style={{ top: "auto", height: 200, bottom: 50, opacity: 0.3 }}>
+				<div style={{ display: "flex", gap: 10, alignItems: "flex-end", height: "100%", padding: "0 100px" }}>
+					{Array.from({ length: 20 }).map((_, i) => {
+						const h = interpolate(Math.sin(frame * 0.2 + i), [-1, 1], [20, 150]);
+						return (
+							<div key={i} style={{ 
+								flex: 1, 
+								height: h, 
+								background: "linear-gradient(to top, #00f0ff, transparent)",
+								borderRadius: "10px 10px 0 0" 
+							}} />
+						);
+					})}
+				</div>
+			</AbsoluteFill>
+
+			<AbsoluteFill
+				style={{
+					background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.7) 100%)",
+					pointerEvents: "none",
+				}}
+			/>
+
+			{/* Optional Tint Overlay for Ranks */}
+			{overlayColor && (
+				<AbsoluteFill
+					style={{
+						backgroundColor: overlayColor,
+						mixBlendMode: "overlay",
+						opacity: 0.6,
+					}}
+				/>
+			)}
+		</AbsoluteFill>
+	);
+};

@@ -1,28 +1,49 @@
 {
-  "name": "temp_remotion_setup",
-  "version": "1.0.0",
-  "description": "My Remotion video",
-  "repository": {},
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@remotion/cli": "4.0.409",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "remotion": "4.0.409"
-  },
-  "devDependencies": {
-    "@remotion/eslint-config-flat": "4.0.409",
-    "@types/react": "19.2.7",
-    "@types/web": "0.0.166",
-    "eslint": "9.19.0",
-    "prettier": "3.6.0",
-    "typescript": "5.9.3"
-  },
-  "scripts": {
-    "dev": "remotion studio",
-    "build": "remotion bundle",
-    "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
-  }
+	"name": "temp_remotion_setup",
+	"version": "1.0.0",
+	"description": "My Remotion video",
+	"repository": {},
+	"license": "UNLICENSED",
+	"private": true,
+	"dependencies": {
+		"@react-three/drei": "^10.7.7",
+		"@react-three/fiber": "^9.5.0",
+		"@remotion/cli": "4.0.409",
+		"@remotion/google-fonts": "4.0.409",
+		"@remotion/tailwind-v4": "4.0.409",
+		"@remotion/three": "4.0.409",
+		"@remotion/transitions": "4.0.409",
+		"@remotion/zod-types": "4.0.409",
+		"@tailwindcss/postcss": "^4.1.18",
+		"@types/three": "^0.182.0",
+		"axios": "^1.13.4",
+		"dotenv": "^17.2.3",
+		"elevenlabs": "^1.59.0",
+		"lumaai": "^1.19.1",
+		"node-fetch": "^3.3.2",
+		"openai": "^6.16.0",
+		"react": "19.2.3",
+		"react-dom": "19.2.3",
+		"remotion": "4.0.409",
+		"replicate": "^1.4.0",
+		"tailwindcss": "^4.1.18",
+		"three": "^0.182.0",
+		"zod": "^3.22.3"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/node-fetch": "^2.6.13",
+		"@types/react": "19.2.7",
+		"@types/web": "0.0.166",
+		"prettier": "3.6.0",
+		"typescript": "5.9.3"
+	},
+	"scripts": {
+		"start": "remotion studio",
+		"dev": "remotion studio",
+		"build": "remotion bundle",
+		"upgrade": "remotion upgrade",
+		"lint": "biome check src && tsc",
+		"transcribe": "npx tsx transcribe-openai.ts"
+	}
 }
