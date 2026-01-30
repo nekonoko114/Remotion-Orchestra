@@ -1,16 +1,20 @@
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
-import { flip } from "@remotion/transitions/flip";
-import { slide } from "@remotion/transitions/slide";
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import RANKING_DATA_JSON from "./data.json";
 import type { Liver } from "./types";
+import {
+  wipeTransition,
+  slideTransition,
+  spinTransition,
+  zoomTransition,
+} from "./CustomTransitions";
 
 const RANKING_DATA = RANKING_DATA_JSON as Liver[];
 import { EndingLogoTime as EndingLogo } from "./EndingLogoTime";
 import { TimeBackground } from "./TimeBackground";
 import { OpeningTitleTime as OpeningTitle } from "./OpeningTitleTime";
 import { RankingGroupTime as RankingGroup } from "./RankingGroupTime";
-import { TopRankRevealTime as TopRankReveal } from "./TopRankRevealTime";
+import { TopRankReveal } from "./TopRankReveal";
 
 // Export duration constants for Root.tsx
 export const OPENING_SEC = 5;
@@ -18,7 +22,7 @@ export const GROUP_SEC = 5;
 export const TOP_RANK_SEC = 5.5;
 export const ENDING_SEC = 5;
 export const TRANSITION_FRAMES = 15;
-export const LAST_TRANSITION_FRAMES = 10;
+
 
 export const RankingTime = () => {
 	const { fps } = useVideoConfig();
@@ -29,13 +33,7 @@ export const RankingTime = () => {
 	const TOP_RANK_DURATION = TOP_RANK_SEC * fps;
 	const ENDING_DURATION = ENDING_SEC * fps;
 	const TRANSITION_DURATION = TRANSITION_FRAMES;
-	const LAST_TRANSITION_DURATION = LAST_TRANSITION_FRAMES;
 
-	// Define the transition (3D Flip)
-	const transition = flip({
-		direction: "from-bottom", // Flips up like a fresh card
-		perspective: 1000,
-	});
 
 	// Define the timing
 	const timing = linearTiming({ durationInFrames: TRANSITION_DURATION });
@@ -52,9 +50,9 @@ export const RankingTime = () => {
 					<OpeningTitle />
 				</TransitionSeries.Sequence>
 
-				{/* Transition 1: Opening -> Top 10-7 */}
+				{/* Transition 1: Opening -> Top 10-7 (WIPE from Left) */}
 				<TransitionSeries.Transition
-					presentation={transition}
+					presentation={wipeTransition({ direction: "from-left" })}
 					timing={timing}
 				/>
 
@@ -66,9 +64,9 @@ export const RankingTime = () => {
 					/>
 				</TransitionSeries.Sequence>
 
-				{/* Transition 2: Group 1 -> Group 2 */}
+				{/* Transition 2: Group 1 -> Group 2 (SLIDE / Whip Pan from Right) */}
 				<TransitionSeries.Transition
-					presentation={transition}
+					presentation={slideTransition({ direction: "from-right" })}
 					timing={timing}
 				/>
 
@@ -80,9 +78,9 @@ export const RankingTime = () => {
 					/>
 				</TransitionSeries.Sequence>
 
-				{/* Transition 3: Group 2 -> 3rd Place */}
+				{/* Transition 3: Group 2 -> 3rd Place (WIPE from Top) */}
 				<TransitionSeries.Transition
-					presentation={transition}
+					presentation={wipeTransition({ direction: "from-top" })}
 					timing={timing}
 				/>
 
@@ -95,9 +93,9 @@ export const RankingTime = () => {
 					/>
 				</TransitionSeries.Sequence>
 
-				{/* Transition 4: 3rd -> 2nd */}
+				{/* Transition 4: 3rd -> 2nd (SPIN) */}
 				<TransitionSeries.Transition
-					presentation={transition}
+					presentation={spinTransition()}
 					timing={timing}
 				/>
 
@@ -110,9 +108,9 @@ export const RankingTime = () => {
 					/>
 				</TransitionSeries.Sequence>
 
-				{/* Transition 5: 2nd -> Champion */}
+				{/* Transition 5: 2nd -> Champion (ZOOM) */}
 				<TransitionSeries.Transition
-					presentation={transition}
+					presentation={zoomTransition({ direction: "in" })}
 					timing={timing}
 				/>
 
@@ -125,13 +123,7 @@ export const RankingTime = () => {
 					/>
 				</TransitionSeries.Sequence>
 
-				{/* Transition 6: Champion -> Logo (SHARP TRANSITION) */}
-				<TransitionSeries.Transition
-					presentation={slide({ direction: "from-right" })}
-					timing={linearTiming({ durationInFrames: LAST_TRANSITION_DURATION })} // Fast frames
-				/>
-
-				{/* 7. Ending Logo */}
+				{/* 7. Ending Logo (Hard Cut for Visibility) */}
 				<TransitionSeries.Sequence durationInFrames={ENDING_DURATION}>
 					<EndingLogo />
 				</TransitionSeries.Sequence>

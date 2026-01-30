@@ -57,7 +57,15 @@ import { RadarInterface } from "../../components/effects/RadarInterface";
 import { CircularReveal } from "../../components/transitions/CircularReveal";
 import { CubeTransition } from "../../components/transitions/CubeTransition";
 import { FlipTransition } from "../../components/transitions/FlipTransition";
+
 import { GlitchTransition } from "../../components/transitions/GlitchTransition";
+import {
+  WipeTransitionComponent,
+  SlideTransitionComponent,
+  ZoomTransitionComponent,
+  SpinTransitionComponent,
+  ColorFadeTransitionComponent
+} from "../VideoFactory/CustomTransitions";
 // --- TRANSITIONS ---
 import { HyperSpinTransition } from "../../components/transitions/HyperSpinTransition";
 import { ZoomBlurTransition } from "../../components/transitions/ZoomBlurTransition";
@@ -1501,6 +1509,118 @@ export const EffectsCatalog: React.FC = () => {
 									<TitleCard title="GHOST" subtitle="ECHO" color="#607D8B" />
 								}
 								to={<TitleCard title="TIME" subtitle="LAG" color="#37474F" />}
+							/>
+						</div>
+					</div>
+				</Series.Sequence>
+
+
+				{/* --- SECTOR 15: SKILLHUB TRANSITIONS --- */}
+				<Series.Sequence durationInFrames={200}>
+					<SectionHeader title="15. SKILLHUB TRANSITIONS" color="#ffffff" />
+					<div
+						style={{
+							display: "grid",
+							gridTemplateColumns: "1fr 1fr 1fr",
+							gridTemplateRows: "1fr 1fr",
+							gap: 20,
+							width: "100%",
+							height: "100%",
+						}}
+					>
+						{/* 1. Wipe */}
+						<div
+							style={{
+								position: "relative",
+								border: "2px solid #fff",
+								borderRadius: 15,
+								overflow: "hidden",
+								backgroundColor: "#000",
+							}}
+						>
+							<WipeTransitionComponent
+								from={<TitleCard title="WIPE" subtitle="Variable Angle" color="#e74c3c" />}
+								to={<TitleCard title="REVEAL" subtitle="Linear" color="#3498db" />}
+								direction="from-left"
+							/>
+						</div>
+						{/* 2. Slide (Whip Pan) */}
+						<div
+							style={{
+								position: "relative",
+								border: "2px solid #fff",
+								borderRadius: 15,
+								overflow: "hidden",
+								backgroundColor: "#000",
+							}}
+						>
+							<SlideTransitionComponent
+								from={<TitleCard title="SLIDE" subtitle="Whip Pan" color="#2ecc71" />}
+								to={<TitleCard title="NEXT" subtitle="Fast Move" color="#9b59b6" />}
+								direction="from-right"
+							/>
+						</div>
+						{/* 3. Zoom (Warp) */}
+						<div
+							style={{
+								position: "relative",
+								border: "2px solid #fff",
+								borderRadius: 15,
+								overflow: "hidden",
+								backgroundColor: "#000",
+							}}
+						>
+							<ZoomTransitionComponent
+								from={<TitleCard title="ZOOM" subtitle="Warp Out" color="#f1c40f" />}
+								to={<TitleCard title="IN" subtitle="Warp In" color="#e67e22" />}
+								direction="in"
+							/>
+						</div>
+						{/* 4. Spin */}
+						<div
+							style={{
+								position: "relative",
+								border: "2px solid #fff",
+								borderRadius: 15,
+								overflow: "hidden",
+								backgroundColor: "#000",
+							}}
+						>
+							<SpinTransitionComponent
+								from={<TitleCard title="SPIN" subtitle="Rotate" color="#1abc9c" />}
+								to={<TitleCard title="TURN" subtitle="360" color="#34495e" />}
+							/>
+						</div>
+						{/* 5. Black Fade */}
+						<div
+							style={{
+								position: "relative",
+								border: "2px solid #fff",
+								borderRadius: 15,
+								overflow: "hidden",
+								backgroundColor: "#000",
+							}}
+						>
+							<ColorFadeTransitionComponent
+								from={<TitleCard title="SAFE" subtitle="To Black" color="#95a5a6" />}
+								to={<TitleCard title="ZONE" subtitle="From Black" color="#7f8c8d" />}
+								color="black"
+							/>
+						</div>
+						{/* 6. White Fade */}
+						<div
+							style={{
+								position: "relative",
+								border: "2px solid #fff",
+								borderRadius: 15,
+								overflow: "hidden",
+								backgroundColor: "#000",
+							}}
+						>
+							<ColorFadeTransitionComponent
+								from={<TitleCard title="FLASH" subtitle="To White" color="#bdc3c7" />}
+								to={<TitleCard title="BANG" subtitle="From White" color="#2c3e50" />}
+								color="white"
 							/>
 						</div>
 					</div>

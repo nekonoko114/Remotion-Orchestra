@@ -55,14 +55,27 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 
 	const { primary, secondary, glow } = getRankColors(rank);
 
+	if (!liver) return null;
+
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000" }}>
-			{/* 1. ULTRA BACKGROUND: Luxury Particles (Space-like design) */}
-			{/* User requested "Space-like design" without the "Pedestal" */}
-			{/* NOW WITH RANK COLORS: Bronze/Silver/Gold */}
 			<LuxuryGoldBackground color={primary} secondaryColor={secondary} />
 			
-			{/* New Request: SMOKE EFFECT (Atmospheric) - Made more visible */}
+			{/* Blurred Character Background Overlay */}
+			<AbsoluteFill style={{ zIndex: 1, opacity: 0.15, pointerEvents: "none" }}>
+				{liver.saved_to ? (
+					<Img
+						src={staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)}
+						style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(40px)" }}
+					/>
+				) : (
+					<Img
+						src={liver.image_url}
+						style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(40px)" }}
+					/>
+				)}
+			</AbsoluteFill>
+			
 			<AbsoluteFill style={{ opacity: 0.4, pointerEvents: "none", zIndex: 110 }}>
 				<SmokeEffect color={primary} density={0.015} velocity={0.2} />
 			</AbsoluteFill>
@@ -71,120 +84,104 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 				style={{
 					justifyContent: "center",
 					alignItems: "center",
-					fontFamily: '"Inter", "Noto Sans JP", sans-serif', // Clean Bold Sans
+					fontFamily: '"Inter", "Noto Sans JP", sans-serif',
 					color: "white",
 				}}
 			>
-				{/* 2. IMPACT FX */}
 				<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
-					{/* Flash on entrance */}
 					{frame < 12 && <ImpactEffect color={primary} intensity="high" />}
-					{/* Explosion for impact */}
 					<Explosion delay={4} color={primary} secondaryColor={secondary} />
 				</AbsoluteFill>
 
-			<div style={{ transform: `scale(${scale})`, opacity, zIndex: 120, display: "flex", flexDirection: "column", alignItems: "center" }}>
-				
-				{/* 3. RANK TITLE (3位, 2位, 1位) - WHITE w/ GLOW & SHINE */}
-				{/* Reference Match: White text, Golden Glow background/shadow */}
-				<div style={{ transform: `scale(${pulse})`, marginBottom: 30, position: "relative" }}>
-					{/* Glow behind text */}
-					<div style={{ 
-						position: "absolute", 
-						top: "50%", 
-						left: "50%", 
-						transform: "translate(-50%, -50%)", 
-						width: 500, 
-						height: 500, 
-						background: `radial-gradient(circle, ${glow} 0%, transparent 70%)`, 
-						opacity: 0.8,
-						zIndex: -1
-					}} />
-					
+				<div style={{ transform: `scale(${scale})`, opacity, zIndex: 120, display: "flex", flexDirection: "column", alignItems: "center" }}>
+					<div style={{ transform: `scale(${pulse})`, marginBottom: 30, position: "relative" }}>
+						<div style={{ 
+							position: "absolute", 
+							top: "50%", 
+							left: "50%", 
+							transform: "translate(-50%, -50%)", 
+							width: 500, 
+							height: 500, 
+							background: `radial-gradient(circle, ${glow} 0%, transparent 70%)`, 
+							opacity: 0.8,
+							zIndex: -1
+						}} />
+						
+						<TextShine color="rgba(255, 255, 255, 0.9)" delay={15} duration={45}>
+							<h1 style={{ 
+								fontSize: 300, 
+								margin: 0, 
+								color: "#FFFFFF", 
+								textShadow: `0 0 40px ${primary}, 0 0 80px ${primary}`, 
+								fontWeight: 900,
+								fontStyle: "italic", 
+								lineHeight: 0.8,
+								position: "relative",
+								zIndex: 2,
+							}}>
+								{title}
+							</h1>
+						</TextShine>
+					</div>
 
-					{/* TEXT SHINE WRAPPER */}
-					<TextShine color="rgba(255, 255, 255, 0.9)" delay={15} duration={45}>
-						<h1 style={{ 
-							fontSize: 300, // Massive
-							margin: 0, 
-							color: "#FFFFFF", // Pure White
-							textShadow: `0 0 40px ${primary}, 0 0 80px ${primary}`, // Strong Color Glow
-							fontWeight: 900,
-							fontStyle: "italic", 
-							lineHeight: 0.8,
-							position: "relative",
-							zIndex: 2,
-						}}>
-							{title}
-						</h1>
-					</TextShine>
+					<div style={{
+						width: 640,
+						height: 640,
+						borderRadius: "50%",
+						overflow: "hidden",
+						border: "10px solid #FFFFFF", 
+						boxShadow: `0 0 0 8px ${primary}, 0 0 100px ${glow}, 0 50px 100px rgba(0,0,0,0.9)`, 
+						position: "relative",
+						backgroundColor: "#000",
+						zIndex: 5,
+						marginTop: 10
+					}}>
+						{liver.saved_to ? (
+							<Img
+								src={staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)}
+								style={{ width: "100%", height: "100%", objectFit: "cover" }}
+							/>
+						) : (
+							<Img
+								src={liver.image_url}
+								style={{ width: "100%", height: "100%", objectFit: "cover" }}
+							/>
+						)}
+					</div>
+
+					<h2 style={{ 
+						fontSize: 100, 
+						marginTop: 50, 
+						textShadow: `0 0 30px ${glow}, 0 4px 10px black`, 
+						fontWeight: 900,
+						fontFamily: '"Inter", sans-serif',
+						color: "#fff",
+						opacity: interpolate(frame, [0, 20], [0, 1])
+					}}>
+						{liver.nickname}
+					</h2>
 				</div>
+			</AbsoluteFill>
 
-				{/* 4. LIVER ICON ON PODIUM */}
-				{/* Reference Match: Glowing White/Gold Border, not solid block */}
-				<div style={{
-					width: 640,
-					height: 640,
-					borderRadius: "50%",
-					overflow: "hidden",
-					border: "10px solid #FFFFFF", // White inner border
-					boxShadow: `0 0 0 8px ${primary}, 0 0 100px ${glow}, 0 50px 100px rgba(0,0,0,0.9)`, // Outer Color ring + Glow
-					position: "relative",
-					backgroundColor: "#000",
-					zIndex: 5,
-					marginTop: 10
-				}}>
-					{liver.saved_to && (
-						<Img
-							src={staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)}
-							style={{ width: "100%", height: "100%", objectFit: "cover" }}
-						/>
-					)}
-				</div>
+			<CinematicBorder color={primary} glowColor={glow} />
+			
+			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 200, mixBlendMode: "screen" }}>
+				<GlobalLensFlare 
+					color={primary} 
+					intensity={1.5}
+					scale={1.5}
+					opacity={1}
+				/>
+			</AbsoluteFill>
 
-				{/* 5. LIVER NAME */}
-				<h2 style={{ 
-					fontSize: 100, 
-					marginTop: 50, 
-					textShadow: `0 0 30px ${glow}, 0 4px 10px black`, 
-					fontWeight: 900,
-					fontFamily: '"Inter", sans-serif',
-					color: "#fff",
-					opacity: interpolate(frame, [0, 20], [0, 1])
-				}}>
-					{liver.nickname}
-				</h2>
-			</div>
-		</AbsoluteFill>
+			<AdjustmentLayer rank={rank} />
 
-		{/* 6. CINEMATIC BORDER & LENS FLARE */}
-		{/* New Request: "Same style [White/Glow] for the frame" + "Lens Flare" */}
-		<CinematicBorder color={primary} glowColor={glow} />
-		
-		{/* 7. FULL SCREEN LENS FLARE (EffectsCatalog Version) */}
-		{/* Replaces previous local one. Applied to entire screen as requested. */}
-		{/* High intensity, animating across or positioned dynamically */}
-		<AbsoluteFill style={{ pointerEvents: "none", zIndex: 200, mixBlendMode: "screen" }}>
-			<GlobalLensFlare 
-				color={primary} 
-				intensity={1.5}
-				scale={1.5}
-				opacity={1}
-				// Default animation (left to right) if cx/cy undefined
-			/>
-		</AbsoluteFill>
-
-		{/* 8. POST-PROCESSING (Ultra) */}
-		<AdjustmentLayer rank={rank} />
-
-			{/* 7. RANK 1 SPECIAL FX */}
 			{rank === 1 && (
 				<>
 					<AbsoluteFill style={{ zIndex: 120, pointerEvents: "none" }}>
 						<LightningBolt color={primary} thickness={6} />
 					</AbsoluteFill>
 					<AbsoluteFill style={{ zIndex: 8, pointerEvents: "none", mixBlendMode: "screen" }}>
-						{/* Rays behind Rank 1 */}
 						<div style={{
 							position: "absolute", top: "50%", left: "50%", transform: `translate(-50%, -50%) rotate(${frame}deg)`,
 							width: 2000, height: 2000,
@@ -194,13 +191,8 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 				</>
 			)}
 
-			{/* CONFETTI (Restored for user request) + ParticleBurst */}
-			{/* User requested "Confetti", "Lens Flare", "Smoke" */}
 			<AbsoluteFill style={{ zIndex: 110, pointerEvents: "none" }}>
-				{/* Falling Confetti (Sustainable) */}
 				<Confetti count={rank === 1 ? 200 : 100} colors={[primary, "#fff", secondary]} />
-				
-				{/* Initial Burst (Impact) */}
 				<ParticleBurst 
 					count={50} 
 					colors={[primary, "#fff", secondary]} 
@@ -210,7 +202,6 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 				/>
 			</AbsoluteFill>
 
-			{/* Vignette */}
 			<AbsoluteFill
 				style={{
 					background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%)",

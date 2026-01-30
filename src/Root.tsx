@@ -27,25 +27,25 @@ import {
 import { RankingTime } from "./compositions/VideoFactory/RankingTime";
 import "./index.css";
 import React from "react";
-const LIVER_FORMATTER_FPS = 30;
 
-// JOL Ranking Settings
+const LIVER_FORMATTER_FPS = 30;
 const JOL_RANKING_FPS = 60;
-const JOL_RANKING_DURATION =
-	OPENING_SEC * JOL_RANKING_FPS +
-	TRANSITION_FRAMES +
-	GROUP_SEC * JOL_RANKING_FPS + // Top 10-7
-	TRANSITION_FRAMES +
-	GROUP_SEC * JOL_RANKING_FPS + // Top 6-4
-	TRANSITION_FRAMES +
-	TOP_RANK_SEC * JOL_RANKING_FPS + // Rank 3
-	TRANSITION_FRAMES +
-	TOP_RANK_SEC * JOL_RANKING_FPS + // Rank 2
-	TRANSITION_FRAMES +
-	TOP_RANK_SEC * JOL_RANKING_FPS + // Rank 1
-	LAST_TRANSITION_FRAMES +
-	ENDING_SEC * JOL_RANKING_FPS -
-	200; // Correction to match the actual content end (Timeline adjustment)
+
+// Calculate Base Duration (Same for both)
+const BASE_DURATION =
+	(OPENING_SEC +
+		GROUP_SEC * 2 +
+		TOP_RANK_SEC * 3 +
+		ENDING_SEC) *
+	JOL_RANKING_FPS;
+
+// Calculate Vertical Duration (With 5 standard transitions + 1 last transition)
+const JOL_RANKING_DURATION_VERTICAL =
+	BASE_DURATION - (5 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
+
+// Calculate Time Duration (With 5 standard transitions + 0 last transition/hard cut)
+const JOL_RANKING_DURATION_TIME =
+	BASE_DURATION - (5 * TRANSITION_FRAMES);
 
 export const RemotionRoot: React.FC = () => {
 	// LiverFormatter Duration Calculation
@@ -155,7 +155,7 @@ export const RemotionRoot: React.FC = () => {
 			<Composition
 				id="JOL-Ranking-Vertical"
 				component={RankingVideo}
-				durationInFrames={Math.ceil(JOL_RANKING_DURATION)}
+				durationInFrames={Math.ceil(JOL_RANKING_DURATION_VERTICAL)}
 				fps={JOL_RANKING_FPS}
 				width={1080}
 				height={1920}
@@ -163,7 +163,7 @@ export const RemotionRoot: React.FC = () => {
 			<Composition
 				id="JOL-Ranking-time"
 				component={RankingTime}
-				durationInFrames={Math.ceil(JOL_RANKING_DURATION)}
+				durationInFrames={Math.ceil(JOL_RANKING_DURATION_TIME)}
 				fps={JOL_RANKING_FPS}
 				width={1080}
 				height={1920}

@@ -130,8 +130,29 @@ export const RankingGroupTime: React.FC<Props> = ({
 								border: isHighlight
 									? "3px solid rgba(255, 215, 0, 0.5)"
 									: "1px solid rgba(255,255,255,0.1)",
+								position: "relative", // Needed for absolute background
+								overflow: "hidden", // Clip the blur
 							}}
 						>
+							{/* Blurred Background */}
+							<AbsoluteFill style={{ zIndex: -1, opacity: 0.4 }}>
+								{liver.saved_to ? (
+									<Img
+										src={staticFile(
+											`video-factory/images/icons/${liver.saved_to.split("/").pop()}`,
+										)}
+										style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
+									/>
+								) : (
+									<Img
+										src={liver.image_url}
+										style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
+									/>
+								)}
+							</AbsoluteFill>
+
+							{/* Dark overlay for readability */}
+							<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.3)" }} />
 							<div
 								style={{
 									display: "flex",
@@ -139,6 +160,8 @@ export const RankingGroupTime: React.FC<Props> = ({
 									alignItems: "center",
 									width: "100%",
 									justifyContent: isHighlight ? "center" : "flex-start",
+									position: "relative",
+									zIndex: 1,
 								}}
 							>
 								{/* 順位バッジ */}
@@ -189,7 +212,16 @@ export const RankingGroupTime: React.FC<Props> = ({
 												objectFit: "cover",
 											}}
 										/>
-									) : null}
+									) : (
+										<Img
+											src={liver.image_url}
+											style={{
+												width: "100%",
+												height: "100%",
+												objectFit: "cover",
+											}}
+										/>
+									)}
 								</div>
 
 								{/* 名前 */}
@@ -224,6 +256,8 @@ export const RankingGroupTime: React.FC<Props> = ({
 										textShadow: "0 4px 10px rgba(0,0,0,0.8)",
 										fontFamily: "Inter, sans-serif",
 										lineHeight: 1.1,
+										position: "relative",
+										zIndex: 1,
 									}}
 								>
 									{liver.nickname}

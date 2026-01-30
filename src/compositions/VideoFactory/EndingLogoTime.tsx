@@ -29,31 +29,20 @@ export const EndingLogoTime: React.FC = () => {
 	const rayRotate = frame * 0.2;
 
 	return (
-		<AbsoluteFill
-			style={{
-				justifyContent: "center",
-				alignItems: "center",
-				opacity,
-				background: "#000", // Base black
-			}}
-		>
-			{/* 1. BACKGROUND: Unified Time Theme */}
-			<AbsoluteFill style={{ zIndex: 0 }}>
-				{/* 
-                    Use the same TimeBackground as Opening/Ranking.
-                */}
+		<AbsoluteFill style={{ backgroundColor: "#000", zIndex: 5000 }}>
+			{/* 1. BACKGROUND LAYER (No opacity fade) */}
+			<AbsoluteFill style={{ zIndex: 1 }}>
 				<TimeBackground />
 				
 				{/* Brightening Gradient Overlay (Blue/Cyan) */}
 				<AbsoluteFill 
 					style={{
-						background: "radial-gradient(circle at center, rgba(0, 240, 255, 0.15) 0%, transparent 80%)",
-						mixBlendMode: "screen",
+						background: "radial-gradient(circle at center, rgba(0, 240, 255, 0.2) 0%, transparent 80%)",
 					}}
 				/>
 			</AbsoluteFill>
 
-			{/* 2. GOD RAYS (Cyan/Blue - "Time" Energy) */}
+			{/* 2. GOD RAYS LAYER */}
 			<div
 				style={{
 					position: "absolute",
@@ -81,84 +70,65 @@ export const EndingLogoTime: React.FC = () => {
 				}}
 			/>
 
-			{/* 3. CENTRAL GLOW (Behind Logo) */}
-			<div
+			{/* 3. CONTENT LAYER (Logo & Glow - Absolute Vanguard) */}
+			<AbsoluteFill
 				style={{
-					position: "absolute",
-					width: 1000,
-					height: 1000,
-					background:
-						"radial-gradient(circle, rgba(0, 240, 255, 0.5) 0%, rgba(0, 50, 150, 0.3) 50%, transparent 80%)",
-					zIndex: 2,
-					top: "50%",
-					left: "50%",
-					transform: `translate(-50%, -50%) scale(${scale})`,
-					mixBlendMode: "screen",
-					filter: "blur(40px)",
-				}}
-			/>
-
-			{/* 4. LOGO CONTAINER */}
-			<div
-				style={{
-					position: "relative",
-					width: "70%",
-					maxWidth: 900,
-					zIndex: 10,
-					transform: `scale(${scale})`,
-					// A subtle blue drop shadow instead of black
-					filter: "drop-shadow(0px 0px 30px rgba(0, 240, 255, 0.3))",
+					justifyContent: "center",
+					alignItems: "center",
+					opacity: 1, // Visible immediately for transition
+					zIndex: 9000,
 				}}
 			>
-				{/* Logo Image */}
-				<Img
-					src={staticFile("video-factory/images/logo/logo.png")}
-					style={{
-						width: "100%",
-						objectFit: "contain",
-						mixBlendMode: "screen", // Assumes black bg in logo image
-						filter: "contrast(1.2) brightness(1.1)", 
-					}}
-				/>
-
-				{/* Shine Sweep Effect (Cyan Tinted) */}
+				{/* CENTRAL NEON GLOW */}
 				<div
 					style={{
 						position: "absolute",
-						inset: 0,
+						width: 1200,
+						height: 1200,
 						background:
-							"linear-gradient(120deg, transparent 30%, rgba(200, 255, 255, 0.9) 50%, transparent 70%)",
-						backgroundSize: "200% 100%",
-						backgroundPosition: `${interpolate(frame, [30, 90], [150, -50])}%`,
-						mixBlendMode: "overlay",
-						opacity: interpolate(frame, [30, 60, 90], [0, 1, 0]),
-						WebkitMaskImage: `url(${staticFile("video-factory/images/logo/logo.png")})`,
-						WebkitMaskSize: "contain",
-						WebkitMaskRepeat: "no-repeat",
-						WebkitMaskPosition: "center",
+							"radial-gradient(circle, rgba(0, 240, 255, 0.4) 0%, rgba(0, 50, 255, 0.1) 40%, transparent 70%)",
+						top: "50%",
+						left: "50%",
+						transform: `translate(-50%, -50%) scale(${scale})`,
+						mixBlendMode: "screen",
+						filter: "blur(60px)",
 					}}
 				/>
-			</div>
 
-			{/* 5. LENS FLARE (Cinematic Polish) */}
-			<AbsoluteFill style={{ zIndex: 20, pointerEvents: "none" }}>
-				<LensFlare
-					opacity={0.6}
-					scale={1.2}
-					color="#00f0ff" // Cyan flare
-					intensity={1.0}
-				/>
+				{/* PREMIUM LOGO CONTAINER */}
+				<div
+					style={{
+						position: "relative",
+						width: "75%",
+						maxWidth: 950,
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						transform: `scale(${scale})`,
+						filter: "drop-shadow(0px 20px 60px rgba(0, 0, 0, 1)) drop-shadow(0px 0px 30px rgba(0, 240, 255, 0.2))",
+						zIndex: 9001,
+					}}
+				>
+					<Img
+						src={staticFile("video-factory/images/logo/logo.png")}
+						style={{
+							width: "100%",
+							height: "auto",
+							objectFit: "contain",
+						}}
+					/>
+				</div>
 			</AbsoluteFill>
 
-			{/* 6. FINAL BRIGHTNESS BLOOM (Global) */}
-			<AbsoluteFill
-				style={{
-					background: "radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 90%)",
-					zIndex: 100,
-					pointerEvents: "none",
-					mixBlendMode: "overlay",
-				}}
-			/>
+			{/* 4. LENS FLARE / ATMOSPHERE (Top-most) */}
+			<AbsoluteFill style={{ zIndex: 9999, pointerEvents: "none" }}>
+				<LensFlare
+					opacity={0.7 * opacity}
+					scale={1.4}
+					color="#00f0ff"
+					intensity={1.1}
+				/>
+			</AbsoluteFill>
 		</AbsoluteFill>
 	);
 };
