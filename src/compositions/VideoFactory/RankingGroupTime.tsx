@@ -110,7 +110,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 
 					// Highlight Sizing
 					const iconSize = isHighlight ? 450 : 150; // iconSize reduced for stack
-					const fontSize = isHighlight ? 100 : 90; // fontSize increased for space
+					const fontSize = isHighlight ? 100 : 70; // Reduced to 70 for optimal balance
 					const rankWidth = 180;
 
 					// ゆらゆら揺れるアニメーション (Y軸回転)
@@ -189,7 +189,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 													lineHeight: 1
 												}}
 											>
-												{liver.rank}位
+												{liver.rank}th
 											</div>
 
 											{/* Icon image */}

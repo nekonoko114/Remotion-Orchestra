@@ -35,7 +35,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 	const rankFontSize = is3Group ? 90 : 70; // Adjusted for stacking
 	const rankWidth = is3Group ? 200 : 160; // Widened for icon + rank stack
 	const iconSize = is3Group ? 200 : 150; // Slightly smaller to fit stack
-	const nameFontSize = is3Group ? 95 : 80; // Larger font size for wide space
+	const nameFontSize = 70; // Reduced to 70 for optimal balance
 
 	return (
 		<AbsoluteFill>
@@ -122,7 +122,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 								<div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: rankWidth, gap: 10, position: "relative", zIndex: 1 }}>
 									{/* Rank Number */}
 									<div style={{ fontSize: rankFontSize, fontWeight: 900, color: "#FFD700", textAlign: 'center', lineHeight: 1 }}>
-										{liver.rank}
+										{liver.rank}th
 									</div>
 									
 									{/* Icon */}
