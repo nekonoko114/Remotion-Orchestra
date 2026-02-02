@@ -109,8 +109,9 @@ export const RankingGroupTime: React.FC<Props> = ({
 					const liverScale = interpolate(liverSpr, [0, 1], [0.95, 1]);
 
 					// Highlight Sizing
-					const iconSize = isHighlight ? 450 : 250;
-					const fontSize = isHighlight ? 100 : 50;
+					const iconSize = isHighlight ? 450 : 150; // iconSize reduced for stack
+					const fontSize = isHighlight ? 100 : 90; // fontSize increased for space
+					const rankWidth = 180;
 
 					// ゆらゆら揺れるアニメーション (Y軸回転)
 					const wobble = Math.sin((frame + index * 10) / 15) * 15; 
@@ -124,7 +125,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 								alignItems: "center",
 								backgroundColor: "rgba(0, 0, 0, 0.6)",
 								width: "100%",
-								padding: isHighlight ? "60px 40px" : 20,
+								padding: isHighlight ? "60px 40px" : "20px 30px",
 								borderRadius: 20,
 								// Entrance + Wobble Animation
 								transform: `translateX(${liverX}px) scale(${liverScale}) rotateY(${Math.sin(frame / 60) * 5}deg)`,
@@ -144,7 +145,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 								<Img
 									src={
 										liver.saved_to 
-											? staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)
+											? staticFile(liver.saved_to)
 											: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
 									}
 									style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
@@ -153,85 +154,142 @@ export const RankingGroupTime: React.FC<Props> = ({
 
 							{/* Dark overlay for readability */}
 							<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.3)" }} />
-							<div
-								style={{
-									display: "flex",
-									flexDirection: "row",
-									alignItems: "center",
-									width: "100%",
-									justifyContent: isHighlight ? "center" : "flex-start",
-									position: "relative",
-									zIndex: 1,
-								}}
-							>
-								{/* 順位バッジ */}
-								{!hideRank && (
-									<div
-										className={
-											liver.rank <= 3 ? "metallic-gold" : "metallic-silver"
-										}
-										style={{
-											fontSize: isHighlight ? 120 : 60,
-											fontWeight: "bold",
-											marginRight: isHighlight ? 0 : 30,
-											marginBottom: isHighlight ? 30 : 0,
-											width: isHighlight ? "auto" : 100,
-											textAlign: "center",
-											transform: `rotateY(${wobble}deg)`, // Y軸回転を適用
-											transformStyle: "preserve-3d",
-											fontFamily: "Impact, sans-serif", // 強いフォント
-										}}
-									>
-										{liver.rank}位
-									</div>
-								)}
-
-								{/* アイコン画像 (なければ円形のグレー) */}
+								{/* Row content */}
 								<div
 									style={{
-										width: iconSize,
-										height: iconSize,
-										borderRadius: "50%",
-										overflow: "hidden",
-										marginRight: isHighlight ? 0 : 30, // No margin right if vertical
-										marginBottom: isHighlight ? 30 : 0, // Margin bottom if vertical
-										border: isHighlight ? "8px solid white" : "4px solid white",
-										boxShadow: "0 0 20px rgba(0,0,0,0.5)",
-										flexShrink: 0,
-										backgroundColor: "#ccc",
+										display: "flex",
+										flexDirection: "row",
+										alignItems: "center",
+										width: "100%",
+										justifyContent: isHighlight ? "center" : "flex-start",
+										position: "relative",
+										zIndex: 1,
 									}}
 								>
-									<Img
-										src={
-											liver.saved_to 
-												? staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)
-												: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
-										}
-										style={{
-											width: "100%",
-											height: "100%",
-											objectFit: "cover",
-										}}
-									/>
-								</div>
+									{/* Vertical Stack for Rank and Icon */}
+									{!isHighlight && (
+										<div style={{ 
+											display: "flex", 
+											flexDirection: "column", 
+											alignItems: "center", 
+											width: rankWidth, 
+											gap: 10,
+											marginRight: 30
+										}}>
+											{/* Rank Number */}
+											<div
+												className="metallic-silver" // Always silver for 10-4
+												style={{
+													fontSize: 70,
+													fontWeight: "bold",
+													textAlign: "center",
+													transform: `rotateY(${wobble}deg)`,
+													transformStyle: "preserve-3d",
+													fontFamily: "Impact, sans-serif",
+													lineHeight: 1
+												}}
+											>
+												{liver.rank}位
+											</div>
 
-								{/* 名前 */}
-								{!isHighlight && (
-									<div
-										className="metallic-silver"
-										style={{
-											fontSize: fontSize,
-											fontWeight: "bold",
-											color: "white",
-											flex: 1, // 残りの幅を使う
-											textShadow: "0 2px 4px rgba(0,0,0,0.8)",
-											fontFamily: "Inter, sans-serif",
-										}}
-									>
-										{liver.nickname}
-									</div>
-								)}
-							</div>
+											{/* Icon image */}
+											<div
+												style={{
+													width: iconSize,
+													height: iconSize,
+													borderRadius: "50%",
+													overflow: "hidden",
+													border: "4px solid white",
+													boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+													flexShrink: 0,
+													backgroundColor: "#ccc",
+												}}
+											>
+												<Img
+													src={
+														liver.saved_to 
+															? staticFile(liver.saved_to)
+															: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+													}
+													style={{
+														width: "100%",
+														height: "100%",
+														objectFit: "cover",
+													}}
+												/>
+											</div>
+										</div>
+									)}
+
+									{/* Original Highlight Logic (Special Handling for top 3) */}
+									{isHighlight && (
+										<>
+											{/* 順位バッジ */}
+											{!hideRank && (
+												<div
+													className="metallic-gold"
+													style={{
+														fontSize: 120,
+														fontWeight: "bold",
+														marginBottom: 30,
+														textAlign: "center",
+														transform: `rotateY(${wobble}deg)`,
+														transformStyle: "preserve-3d",
+														fontFamily: "Impact, sans-serif",
+													}}
+												>
+													{liver.rank}位
+												</div>
+											)}
+
+											{/* アイコン画像 */}
+											<div
+												style={{
+													width: iconSize,
+													height: iconSize,
+													borderRadius: "50%",
+													overflow: "hidden",
+													marginBottom: 30,
+													border: "8px solid white",
+													boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+													flexShrink: 0,
+													backgroundColor: "#ccc",
+												}}
+											>
+												<Img
+													src={
+														liver.saved_to 
+															? staticFile(liver.saved_to)
+															: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+													}
+													style={{
+														width: "100%",
+														height: "100%",
+														objectFit: "cover",
+													}}
+												/>
+											</div>
+										</>
+									)}
+
+									{/* Name Area */}
+									{!isHighlight && (
+										<div
+											className="metallic-silver"
+											style={{
+												fontSize: fontSize,
+												fontWeight: "bold",
+												color: "white",
+												flex: 1,
+												textShadow: "0 2px 4px rgba(0,0,0,0.8)",
+												fontFamily: "Inter, sans-serif",
+												lineHeight: 1.1,
+											}}
+										>
+											{liver.nickname}
+										</div>
+									)}
+								</div>
 
 							{/* Highlight Name is BELOW icon */}
 							{isHighlight && (

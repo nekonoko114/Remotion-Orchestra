@@ -124,7 +124,7 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 						<Img
 							src={
 								liver.saved_to 
-									? staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)
+									? staticFile(liver.saved_to)
 									: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
 							}
 							style={{ width: "100%", height: "100%", objectFit: "cover" }}

@@ -31,11 +31,11 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 
 	const is3Group = livers.length === 3;
 	const gap = is3Group ? 80 : 60;
-	const itemPadding = is3Group ? "40px 60px" : "30px 50px";
-	const rankFontSize = is3Group ? 120 : 90;
-	const rankWidth = is3Group ? 150 : 110;
-	const iconSize = is3Group ? 220 : 160;
-	const nameFontSize = is3Group ? 100 : 75;
+	const itemPadding = is3Group ? "30px 40px" : "30px 50px";
+	const rankFontSize = is3Group ? 90 : 70; // Adjusted for stacking
+	const rankWidth = is3Group ? 200 : 160; // Widened for icon + rank stack
+	const iconSize = is3Group ? 200 : 150; // Slightly smaller to fit stack
+	const nameFontSize = is3Group ? 95 : 80; // Larger font size for wide space
 
 	return (
 		<AbsoluteFill>
@@ -104,7 +104,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 								<AbsoluteFill style={{ zIndex: -1, opacity: 0.4 }}>
 									{liver.saved_to ? (
 										<Img
-											src={staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)}
+											src={staticFile(liver.saved_to)}
 											style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
 										/>
 									) : (
@@ -118,38 +118,50 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 								{/* Dark overlay for readability */}
 								<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.3)" }} />
 
-								{/* Rank Number - Larger */}
-								<div style={{ fontSize: rankFontSize, fontWeight: 900, width: rankWidth, color: "#FFD700", textAlign: 'center', position: "relative", zIndex: 1 }}>
-									{liver.rank}
-								</div>
-								
-								<div
-									style={{
-										width: iconSize,
-										height: iconSize,
-										borderRadius: "50%",
-										overflow: "hidden",
-										border: "5px solid white",
-										backgroundColor: "#333", // Fallback color
-										position: "relative",
-										zIndex: 1
-									}}
-								>
-									{liver.saved_to ? (
-										<Img
-											src={staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)}
-											style={{ width: "100%", height: "100%", objectFit: "cover" }}
-										/>
-									) : (
-										<Img
-											src={liver.image_url}
-											style={{ width: "100%", height: "100%", objectFit: "cover" }}
-										/>
-									)}
+								{/* Left Unit: Rank (Top) + Icon (Bottom) */}
+								<div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: rankWidth, gap: 10, position: "relative", zIndex: 1 }}>
+									{/* Rank Number */}
+									<div style={{ fontSize: rankFontSize, fontWeight: 900, color: "#FFD700", textAlign: 'center', lineHeight: 1 }}>
+										{liver.rank}
+									</div>
+									
+									{/* Icon */}
+									<div
+										style={{
+											width: iconSize,
+											height: iconSize,
+											borderRadius: "50%",
+											overflow: "hidden",
+											border: "4px solid white",
+											backgroundColor: "#333",
+										}}
+									>
+										{liver.saved_to ? (
+											<Img
+												src={staticFile(liver.saved_to)}
+												style={{ width: "100%", height: "100%", objectFit: "cover" }}
+											/>
+										) : (
+											<Img
+												src={liver.image_url}
+												style={{ width: "100%", height: "100%", objectFit: "cover" }}
+											/>
+										)}
+									</div>
 								</div>
 
-								{/* Name - Larger */}
-								<div style={{ fontSize: nameFontSize, color: "white", fontWeight: "bold", flex: 1, marginLeft: 20, position: "relative", zIndex: 1 }}>
+								{/* Name Area - Larger and Wider */}
+								<div style={{ 
+									fontSize: nameFontSize, 
+									color: "white", 
+									fontWeight: "bold", 
+									flex: 1, 
+									marginLeft: 20, 
+									position: "relative", 
+									zIndex: 1, 
+									lineHeight: 1.1,
+									textShadow: "0 4px 10px rgba(0,0,0,0.5)"
+								}}>
 									{liver.nickname}
 								</div>
 							</div>

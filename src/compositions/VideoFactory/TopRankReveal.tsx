@@ -69,10 +69,10 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 			<AdjustmentLayer rank={rank} beatPulse={pulse} />
 			
 			{/* Blurred Character Background Overlay */}
-			<AbsoluteFill style={{ zIndex: 1, opacity: 0.15, pointerEvents: "none" }}>
+			<AbsoluteFill style={{ zIndex: -2, opacity: 0.6 }}>
 				{liver.saved_to ? (
 					<Img
-						src={staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)}
+						src={staticFile(liver.saved_to)}
 						style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(40px)" }}
 					/>
 				) : (
@@ -147,7 +147,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 					}}>
 						{liver.saved_to ? (
 							<Img
-								src={staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)}
+								src={staticFile(liver.saved_to)}
 								style={{ width: "100%", height: "100%", objectFit: "cover" }}
 							/>
 						) : (
