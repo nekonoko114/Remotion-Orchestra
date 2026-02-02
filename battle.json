@@ -76,5 +76,11 @@
 			"text_primary": "予約受付中",
 			"color_theme": "monochrome_highlight"
 		}
-	]
+	],
+	"ai_orchestrator": {
+		"use_luma": true,
+		"use_elevenlabs": false,
+		"use_kling": false,
+		"use_minimax": true
+	}
 }

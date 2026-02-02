@@ -1,3 +1,4 @@
+
 import {
 	AbsoluteFill,
 	Img,
@@ -121,7 +122,11 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 						transform: `scale(${imgScale}) rotate(${imgRotate}deg) translateY(${imgY}px) rotateX(20deg)`,
 					}}>
 						<Img
-							src={liver.saved_to ? staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`) : liver.image_url}
+							src={
+								liver.saved_to 
+									? staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)
+									: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+							}
 							style={{ width: "100%", height: "100%", objectFit: "cover" }}
 						/>
 						

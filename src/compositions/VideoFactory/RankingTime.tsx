@@ -8,8 +8,6 @@ import {
   spinTransition,
   zoomTransition,
 } from "./CustomTransitions";
-
-const RANKING_DATA = RANKING_DATA_JSON as Liver[];
 import { EndingLogoTime as EndingLogo } from "./EndingLogoTime";
 import { TimeBackground } from "./TimeBackground";
 import { OpeningTitleTime as OpeningTitle } from "./OpeningTitleTime";
@@ -18,7 +16,7 @@ import { TopRankRevealTime as TopRankReveal } from "./TopRankRevealTime";
 import { useBeatValue } from "./utils/beat-sync";
 
 const BPM = 128;
-const BGM_SOURCE = staticFile("assets/audio/music/true_jpop_final.mp3");
+const BGM_SOURCE = staticFile("assets/audio/music/Night_Howling.mp3");
 const BGM_START_FROM = 0.0; // Seconds
 
 // Export duration constants for Root.tsx
@@ -29,8 +27,11 @@ export const ENDING_SEC = 5;
 export const TRANSITION_FRAMES = 15;
 
 
-export const RankingTime = () => {
+export const RankingTime = (props: { data?: Liver[] }) => {
 	const { fps } = useVideoConfig();
+
+	// Use data from props if available, otherwise fallback to local JSON
+	const RANKING_DATA = props.data || (RANKING_DATA_JSON as Liver[]);
 
 	// Duration Logic (Frames)
 	const OPENING_DURATION = OPENING_SEC * fps;
@@ -100,7 +101,7 @@ export const RankingTime = () => {
 					<TopRankReveal
 						rank={3}
 						title="3位"
-						liver={RANKING_DATA.find((d) => d.rank === 3)!}
+						liver={RANKING_DATA.find((d) => d.rank === 3) || RANKING_DATA[0]}
 					/>
 				</TransitionSeries.Sequence>
 
@@ -115,7 +116,7 @@ export const RankingTime = () => {
 					<TopRankReveal
 						rank={2}
 						title="2位"
-						liver={RANKING_DATA.find((d) => d.rank === 2)!}
+						liver={RANKING_DATA.find((d) => d.rank === 2) || RANKING_DATA[1]}
 					/>
 				</TransitionSeries.Sequence>
 
@@ -130,7 +131,7 @@ export const RankingTime = () => {
 					<TopRankReveal
 						rank={1}
 						title="1位"
-						liver={RANKING_DATA.find((d) => d.rank === 1)!}
+						liver={RANKING_DATA.find((d) => d.rank === 1) || RANKING_DATA[2]}
 					/>
 				</TransitionSeries.Sequence>
 

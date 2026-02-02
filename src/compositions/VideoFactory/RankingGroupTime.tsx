@@ -141,19 +141,14 @@ export const RankingGroupTime: React.FC<Props> = ({
 						>
 							{/* Blurred Background */}
 							<AbsoluteFill style={{ zIndex: -1, opacity: 0.4 }}>
-								{liver.saved_to ? (
-									<Img
-										src={staticFile(
-											`video-factory/images/icons/${liver.saved_to.split("/").pop()}`,
-										)}
-										style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
-									/>
-								) : (
-									<Img
-										src={liver.image_url}
-										style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
-									/>
-								)}
+								<Img
+									src={
+										liver.saved_to 
+											? staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)
+											: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+									}
+									style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
+								/>
 							</AbsoluteFill>
 
 							{/* Dark overlay for readability */}
@@ -206,27 +201,18 @@ export const RankingGroupTime: React.FC<Props> = ({
 										backgroundColor: "#ccc",
 									}}
 								>
-									{liver.saved_to ? (
-										<Img
-											src={staticFile(
-												`video-factory/images/icons/${liver.saved_to.split("/").pop()}`,
-											)}
-											style={{
-												width: "100%",
-												height: "100%",
-												objectFit: "cover",
-											}}
-										/>
-									) : (
-										<Img
-											src={liver.image_url}
-											style={{
-												width: "100%",
-												height: "100%",
-												objectFit: "cover",
-											}}
-										/>
-									)}
+									<Img
+										src={
+											liver.saved_to 
+												? staticFile(`video-factory/images/icons/${liver.saved_to.split("/").pop()}`)
+												: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+										}
+										style={{
+											width: "100%",
+											height: "100%",
+											objectFit: "cover",
+										}}
+									/>
 								</div>
 
 								{/* 名前 */}

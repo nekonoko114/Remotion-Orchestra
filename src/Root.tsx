@@ -27,6 +27,7 @@ import { RankingTime } from "./compositions/VideoFactory/RankingTime";
 import { BattleCrystal } from "./compositions/VideoFactory/BattleCrystal";
 import { BattleInferno } from "./compositions/VideoFactory/BattleInferno";
 import { BattleWater } from "./compositions/VideoFactory/BattleWater";
+import { BattleKawaii } from "./compositions/VideoFactory/BattleKawaii";
 import { AssetCatalog } from "./compositions/VideoFactory/Assets/Catalog";
 import "./index.css";
 import React from "react";
@@ -203,8 +204,22 @@ export const RemotionRoot: React.FC = () => {
 				width={1080}
 				height={1920}
 			/>
-
-			{/* Imported from liver-formatter */}
+			<Composition
+				id="JOL-Battle-Crystal"
+				component={BattleCrystal}
+				durationInFrames={652}
+				fps={30}
+				width={1080}
+				height={1920}
+			/>
+			<Composition
+				id="JOL-Battle-Kawaii"
+				component={BattleKawaii}
+				durationInFrames={684}
+				fps={30}
+				width={1080}
+				height={1920}
+			/>
 			<Composition
 				id="LiverFormatter"
 				component={JumpCutComposition}

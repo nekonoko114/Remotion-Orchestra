@@ -23,7 +23,7 @@ export const ENDING_SEC = 5;
 export const TRANSITION_FRAMES = 14; // Exactly half a beat (28/2)
 export const LAST_TRANSITION_FRAMES = 10;
 
-const BGM_START_FROM = 56; // 秒単位で指定。56秒付近が盛り上がり始めるポイント。
+const BGM_START_FROM = 0; // 秒単位で指定。
 
 export const RankingVideo = () => {
 	const { fps } = useVideoConfig();
@@ -51,7 +51,7 @@ export const RankingVideo = () => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#1a1a1a" }}>
 			<Audio
-				src={staticFile("assets/audio/music/gen_music_1769637348176.mp3")}
+				src={staticFile("assets/audio/music/Night_Howling.mp3")}
 				loop
 				startFrom={Math.floor(BGM_START_FROM * fps)}
 			/>
