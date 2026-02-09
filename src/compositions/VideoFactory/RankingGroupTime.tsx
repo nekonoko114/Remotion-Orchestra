@@ -110,7 +110,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 
 					// Highlight Sizing
 					const iconSize = isHighlight ? 450 : 150; // iconSize reduced for stack
-					const fontSize = isHighlight ? 100 : 70; // Reduced to 70 for optimal balance
+					const fontSize = isHighlight ? 100 : 50; // Reduced to 50 for optimal balance
 					const rankWidth = 180;
 
 					// ゆらゆら揺れるアニメーション (Y軸回転)
@@ -118,7 +118,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 
 					return (
 						<div
-							key={index}
+							key={liver.rank}
 							style={{
 								display: "flex",
 								flexDirection: isHighlight ? "column" : "row",
@@ -141,19 +141,19 @@ export const RankingGroupTime: React.FC<Props> = ({
 							}}
 						>
 							{/* Blurred Background */}
-							<AbsoluteFill style={{ zIndex: -1, opacity: 0.4 }}>
+							<AbsoluteFill style={{ zIndex: -1, opacity: 0.9 }}>
 								<Img
 									src={
 										liver.saved_to 
 											? staticFile(liver.saved_to)
 											: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
 									}
-									style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
+									style={{ width: "100%", height: "100%", objectFit: "cover" }}
 								/>
 							</AbsoluteFill>
 
 							{/* Dark overlay for readability */}
-							<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.3)" }} />
+							<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.15)" }} />
 								{/* Row content */}
 								<div
 									style={{
@@ -282,8 +282,9 @@ export const RankingGroupTime: React.FC<Props> = ({
 												color: "white",
 												flex: 1,
 												textShadow: "0 2px 4px rgba(0,0,0,0.8)",
-												fontFamily: "Inter, sans-serif",
+												fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
 												lineHeight: 1.1,
+												textAlign: "center",
 											}}
 										>
 											{liver.nickname}
@@ -303,7 +304,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 										textAlign: "center",
 										marginTop: 20,
 										textShadow: "0 4px 10px rgba(0,0,0,0.8)",
-										fontFamily: "Inter, sans-serif",
+										fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
 										lineHeight: 1.1,
 										position: "relative",
 										zIndex: 1,

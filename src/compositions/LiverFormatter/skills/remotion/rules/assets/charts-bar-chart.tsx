@@ -1,4 +1,3 @@
-import { loadFont } from "@remotion/google-fonts/Inter";
 import {
 	AbsoluteFill,
 	spring,
@@ -6,7 +5,8 @@ import {
 	useVideoConfig,
 } from "remotion";
 
-const { fontFamily } = loadFont();
+// import { loadFont } from "@remotion/google-fonts/Inter";
+const fontFamily = '"Zen Maru Gothic", sans-serif';
 
 const COLOR_BAR = "#D4AF37";
 const COLOR_TEXT = "#ffffff";

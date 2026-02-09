@@ -1,140 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
 @import "tailwindcss";
 
 :root {
-	background-color: #000;
+  background-color: #000;
 }
 
 body {
-	font-family: sans-serif;
-	margin: 0;
-	padding: 0;
+  font-family: "Zen Maru Gothic", sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 /* 3D Metallic Gold Effect (Hyper Saturated & Neon) */
 .metallic-gold {
-	background: linear-gradient(
-		110deg,
-		#ff8800 10%,
-		#ffff00 25%,
-		#ffcc00 40%,
-		#ffff88 60%,
-		#ff4400 90%
-	);
-	background-size: 200% auto;
-	-webkit-background-clip: text;
-	background-clip: text;
-	color: transparent;
+  background: linear-gradient(
+    110deg,
+    #ff8800 10%,
+    #ffff00 25%,
+    #ffcc00 40%,
+    #ffff88 60%,
+    #ff4400 90%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 
-	/* Deep 3D Extrusion + MULTI-LAYER GLOW */
-	text-shadow:
-		0px 1px 0px #cc6600,
-		0px 3px 0px #884400,
-		0px 6px 0px #441100,
-		/* Strong Glow Layers */
-		0px 0px 15px rgba(255, 215, 0, 0.8),
-		0px 0px 30px rgba(255, 120, 0, 0.6),
-		0px 0px 60px rgba(255, 60, 0, 0.4);
+  /* Deep 3D Extrusion + MULTI-LAYER GLOW */
+  text-shadow:
+    0px 1px 0px #cc6600,
+    0px 3px 0px #884400,
+    0px 6px 0px #441100,
+    /* Strong Glow Layers */ 0px 0px 15px rgba(255, 215, 0, 0.8),
+    0px 0px 30px rgba(255, 120, 0, 0.6),
+    0px 0px 60px rgba(255, 60, 0, 0.4);
 
-	animation: shine 1.5s linear infinite;
+  animation: shine 1.5s linear infinite;
 }
 
 /* 3D Metallic Diamond Effect (Electric Blue Prism) */
 .metallic-diamond {
-	background: linear-gradient(
-		110deg,
-		#0000ff 10%,
-		#00ffff 25%,
-		#ffffff 45%,
-		#00ffff 65%,
-		#0000ff 90%
-	);
-	background-size: 200% auto;
-	-webkit-background-clip: text;
-	background-clip: text;
-	color: transparent;
+  background: linear-gradient(
+    110deg,
+    #0000ff 10%,
+    #00ffff 25%,
+    #ffffff 45%,
+    #00ffff 65%,
+    #0000ff 90%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 
-	/* Deep 3D Extrusion + MULTI-LAYER GLOW */
-	text-shadow:
-		0px 1px 0px #00aaaa,
-		0px 3px 0px #006666,
-		0px 6px 0px #001111,
-		/* Strong Blue Glow Layers */
-		0px 0px 15px rgba(0, 255, 255, 0.8),
-		0px 0px 30px rgba(0, 150, 255, 0.6),
-		0px 0px 60px rgba(0, 100, 255, 0.4);
+  /* Deep 3D Extrusion + MULTI-LAYER GLOW */
+  text-shadow:
+    0px 1px 0px #00aaaa,
+    0px 3px 0px #006666,
+    0px 6px 0px #001111,
+    /* Strong Blue Glow Layers */ 0px 0px 15px rgba(0, 255, 255, 0.8),
+    0px 0px 30px rgba(0, 150, 255, 0.6),
+    0px 0px 60px rgba(0, 100, 255, 0.4);
 
-	animation: shine 2s linear infinite;
+  animation: shine 2s linear infinite;
 }
 
 /* 3D Metallic Silver Effect with Sparkle Animation */
 .metallic-silver {
-	background: linear-gradient(
-		110deg,
-		#999 10%,
-		#eee 30%,
-		#fff 50%,
-		/* Shine Highlight */ #eee 70%,
-		#999 90%
-	);
-	background-size: 200% auto;
-	-webkit-background-clip: text;
-	background-clip: text;
-	color: transparent;
+  background: linear-gradient(
+    110deg,
+    #999 10%,
+    #eee 30%,
+    #fff 50%,
+    /* Shine Highlight */ #eee 70%,
+    #999 90%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 
-	/* Deep 3D Extrusion (10px) */
-	text-shadow:
-		0px 1px 0px #999,
-		0px 2px 0px #888,
-		0px 3px 0px #777,
-		0px 4px 0px #666,
-		0px 5px 0px #555,
-		0px 6px 0px #444,
-		0px 7px 0px #333,
-		0px 8px 0px #222,
-		0px 9px 0px #111,
-		0px 10px 0px #000,
-		/* Glow/Drop Shadow behind the block */ 0px 10px 30px rgba(0, 0, 0, 0.8),
-		0px 10px 10px rgba(0, 0, 0, 0.5);
+  /* Deep 3D Extrusion (10px) */
+  text-shadow:
+    0px 1px 0px #999,
+    0px 2px 0px #888,
+    0px 3px 0px #777,
+    0px 4px 0px #666,
+    0px 5px 0px #555,
+    0px 6px 0px #444,
+    0px 7px 0px #333,
+    0px 8px 0px #222,
+    0px 9px 0px #111,
+    0px 10px 0px #000,
+    /* Glow/Drop Shadow behind the block */ 0px 10px 30px rgba(0, 0, 0, 0.8),
+    0px 10px 10px rgba(0, 0, 0, 0.5);
 
-	animation: shine 3s linear infinite;
+  animation: shine 3s linear infinite;
 }
 
 /* Shine Animation Keyframes */
 @keyframes shine {
-	to {
-		background-position: 200% center;
-	}
+  to {
+    background-position: 200% center;
+  }
 }
 
 /* Premium Glow for Normal Text */
 .text-glow {
-	text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
 }
 
 /* 3D Metallic White/Platinum Effect (High Visibility) */
 .metallic-white {
-	background: linear-gradient(
-		110deg,
-		#ffffff 20%,
-		#e0e0ff 40%,
-		#ffffff 50%,
-		#a0a0ff 60%,
-		#ffffff 80%
-	);
-	background-size: 200% auto;
-	-webkit-background-clip: text;
-	background-clip: text;
-	color: transparent;
+  background: linear-gradient(
+    110deg,
+    #ffffff 20%,
+    #e0e0ff 40%,
+    #ffffff 50%,
+    #a0a0ff 60%,
+    #ffffff 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 
-	/* Crisp 3D Extrusion */
-	text-shadow:
-		0px 1px 0px #bbbbdd,
-		0px 2px 0px #9999bb,
-		0px 3px 0px #777799,
-		0px 4px 0px #555577,
-		0px 8px 0px #333355,
-		0px 10px 20px rgba(0, 0, 0, 0.8),
-		/* White Bloom */ 0px 0px 15px rgba(255, 255, 255, 0.8);
+  /* Crisp 3D Extrusion */
+  text-shadow:
+    0px 1px 0px #bbbbdd,
+    0px 2px 0px #9999bb,
+    0px 3px 0px #777799,
+    0px 4px 0px #555577,
+    0px 8px 0px #333355,
+    0px 10px 20px rgba(0, 0, 0, 0.8),
+    /* White Bloom */ 0px 0px 15px rgba(255, 255, 255, 0.8);
 
-	animation: shine 2.5s linear infinite;
+  animation: shine 2.5s linear infinite;
+}
+
+/* Cute Sparkle Text Effect - PURPLE VERSION */
+.text-sparkle-cute {
+  background: linear-gradient(
+    110deg,
+    #9b5de5 20%, /* Purple */
+    #e0ccff 30%, /* Light Purple */
+    #ffffff 45%, /* White Glint */
+    #b388eb 60%, /* Medium Purple */
+    #9b5de5 80%  /* Purple */
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* Intense Sparkle Glow (White & Pink for Contrast) */
+  text-shadow:
+    /* Inner crisp highlight */
+    0px 0px 2px rgba(255, 255, 255, 1.0),
+    /* Soft bright glow */
+    0px 0px 10px rgba(255, 200, 255, 0.9),
+    /* Wide aura */
+    0px 0px 20px rgba(230, 200, 255, 0.6),
+    /* Deep outer glow */
+    0px 0px 40px rgba(155, 93, 229, 0.3),
+    /* Far reaching atmosphere */
+    0px 0px 70px rgba(255, 255, 255, 0.4);
+
+  animation: shine 2s linear infinite; /* Faster sparkle */
 }

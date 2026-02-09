@@ -1,8 +1,14 @@
 import React from "react";
-import { AbsoluteFill, interpolate, Easing, useCurrentFrame, useVideoConfig, spring } from "remotion";
+import { AbsoluteFill, interpolate, Easing, useCurrentFrame, useVideoConfig, spring, random } from "remotion";
 import { wipe } from "@remotion/transitions/wipe";
 import { slide } from "@remotion/transitions/slide";
-import type { TransitionPresentation, TransitionProps } from "@remotion/transitions";
+import type { TransitionPresentation, TransitionPresentationComponentProps } from "@remotion/transitions";
+
+type TransitionProps = TransitionPresentationComponentProps<any> & {
+  from?: React.ReactNode;
+  to?: React.ReactNode;
+  durationInFrames?: number;
+};
 
 // Helper to wrap presentation into a component for EffectsCatalog
 const TransitionWrapper: React.FC<{
@@ -30,7 +36,8 @@ const TransitionWrapper: React.FC<{
   return (
     <Component 
        presentationProgress={clampedProgress} 
-       presentationDirection="in"
+       presentationDirection="entering"
+       presentationDurationInFrames={durationInFrames}
        passedProps={{}}
     >
        {from}
@@ -70,7 +77,7 @@ export const WipeTransitionComponent: React.FC<TransitionProps & { direction?: "
 export const slideTransition = (options: {
   direction?: "from-left" | "from-right" | "from-top" | "from-bottom";
 } = {}): TransitionPresentation<any> => {
-    return slide({ direction: options.direction || "from-left" });
+    return slide({ direction: options.direction || "from-left" }) as TransitionPresentation<any>;
 };
 
 export const SlideTransitionComponent: React.FC<TransitionProps & { direction?: "from-left" | "from-right" | "from-top" | "from-bottom" }> = (props) => {
@@ -115,6 +122,7 @@ export const zoomTransition = (options: {
         </AbsoluteFill>
       );
     },
+    props: {} as any,
   };
 };
 
@@ -159,6 +167,7 @@ export const spinTransition = (): TransitionPresentation<any> => {
         </AbsoluteFill>
       );
     },
+    props: {} as any,
   };
 };
 
@@ -195,10 +204,98 @@ export const colorFadeTransition = (color: "black" | "white" = "black"): Transit
                     />
                 </AbsoluteFill>
             );
-        }
+        },
+        props: {} as any,
     };
 };
 
 export const ColorFadeTransitionComponent: React.FC<TransitionProps & { color?: "black" | "white" }> = (props) => {
     return <TransitionWrapper presentation={colorFadeTransition(props.color)} from={props.from} to={props.to} durationInFrames={props.durationInFrames} />;
+};
+// 7. GLITCH TRANSITION
+export const glitchTransition = (): TransitionPresentation<any> => {
+	return {
+		component: (props: TransitionProps) => {
+			const { children, presentationProgress } = props;
+			const arr = React.Children.toArray(children);
+			const exiting = arr[0];
+			const entering = arr[1];
+
+			const isSecondHalf = presentationProgress > 0.5;
+			const localProgress = isSecondHalf ? (presentationProgress - 0.5) * 2 : presentationProgress * 2;
+
+			// Jitter logic with localProgress scaling
+			const jitter = random(presentationProgress) < 0.3 ? (random(presentationProgress + 1) - 0.5) * 40 * (1 - localProgress) : 0;
+			const split = random(presentationProgress + 2) < 0.4 ? 10 * Math.sin(presentationProgress * 20) * localProgress : 0;
+
+			return (
+				<AbsoluteFill style={{ overflow: "hidden" }}>
+					<AbsoluteFill style={{ transform: `translateX(${jitter}px)` }}>
+						{isSecondHalf ? entering : exiting}
+					</AbsoluteFill>
+					
+					{/* RGB Split Simulation during transition */}
+					{presentationProgress > 0.2 && presentationProgress < 0.8 && (
+						<>
+							<AbsoluteFill style={{ 
+								mixBlendMode: "screen", 
+								opacity: 0.3, 
+								transform: `translateX(${jitter + split}px)`,
+								backgroundColor: "#ff0000" 
+							}} />
+							<AbsoluteFill style={{ 
+								mixBlendMode: "screen", 
+								opacity: 0.3, 
+								transform: `translateX(${jitter - split}px)`,
+								backgroundColor: "#00ffff" 
+							}} />
+						</>
+					)}
+				</AbsoluteFill>
+			);
+		},
+		props: {} as any,
+	};
+};
+
+// 8. FLARE TRANSITION (Light Sweep)
+export const flareTransition = (options: { color?: string } = {}): TransitionPresentation<any> => {
+	const flareColor = options.color || "#00f0ff";
+	return {
+		component: (props: TransitionProps) => {
+			const { children, presentationProgress } = props;
+			const arr = React.Children.toArray(children);
+			const exiting = arr[0];
+			const entering = arr[1];
+
+			const sweepX = interpolate(presentationProgress, [0, 1], [-100, 200]);
+			const flareOpacity = interpolate(presentationProgress, [0, 0.5, 1], [0, 1, 0]);
+
+			return (
+				<AbsoluteFill>
+					{presentationProgress < 0.5 ? exiting : entering}
+					
+					{/* Cinematic Light Sweep */}
+					<AbsoluteFill style={{ 
+						zIndex: 10,
+						pointerEvents: "none",
+						opacity: flareOpacity,
+						background: `linear-gradient(90deg, transparent, ${flareColor}44, #fff, ${flareColor}44, transparent)`,
+						transform: `translateX(${sweepX}%) skewX(-20deg)`,
+						width: "200%",
+						left: "-50%"
+					}} />
+					
+					{/* Global Glow Bloom */}
+					<AbsoluteFill style={{
+						zIndex: 9,
+						pointerEvents: "none",
+						background: `radial-gradient(circle at center, ${flareColor}66 0%, transparent 70%)`,
+						opacity: flareOpacity
+					}} />
+				</AbsoluteFill>
+			);
+		},
+		props: {} as any,
+	};
 };

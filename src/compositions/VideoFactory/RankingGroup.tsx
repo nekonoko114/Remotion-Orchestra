@@ -35,7 +35,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 	const rankFontSize = is3Group ? 90 : 70; // Adjusted for stacking
 	const rankWidth = is3Group ? 200 : 160; // Widened for icon + rank stack
 	const iconSize = is3Group ? 200 : 150; // Slightly smaller to fit stack
-	const nameFontSize = 70; // Reduced to 70 for optimal balance
+	const nameFontSize = 50; // Reduced to 50 for optimal balance as per user's preference
 
 	return (
 		<AbsoluteFill>
@@ -85,12 +85,11 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 
 						return (
 							<div
-								key={liver.unique_id}
+								key={liver.rank}
 								style={{
 									display: "flex",
 									alignItems: "center",
 									gap: 40, // More gap between elements
-									backgroundColor: "rgba(0,0,0,0.6)",
 									padding: itemPadding,
 									borderRadius: 100,
 									border: "4px solid #FFD700",
@@ -101,22 +100,27 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 								}}
 							>
 								{/* Blurred Background */}
-								<AbsoluteFill style={{ zIndex: -1, opacity: 0.4 }}>
+								<AbsoluteFill style={{ opacity: 0.9 }}>
 									{liver.saved_to ? (
 										<Img
 											src={staticFile(liver.saved_to)}
-											style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
+											style={{ 
+												width: "100%", 
+												height: "100%", 
+												objectFit: "cover", 
+												objectPosition: liver.rank === 6 ? "center 15%" : "center",
+											}}
 										/>
 									) : (
 										<Img
-											src={liver.image_url}
-											style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(20px)" }}
+											src={liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url)}
+											style={{ width: "100%", height: "100%", objectFit: "cover" }}
 										/>
 									)}
 								</AbsoluteFill>
 
 								{/* Dark overlay for readability */}
-								<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.3)" }} />
+								<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.4)" }} />
 
 								{/* Left Unit: Rank (Top) + Icon (Bottom) */}
 								<div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: rankWidth, gap: 10, position: "relative", zIndex: 1 }}>
@@ -136,31 +140,39 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 											backgroundColor: "#333",
 										}}
 									>
-										{liver.saved_to ? (
-											<Img
-												src={staticFile(liver.saved_to)}
-												style={{ width: "100%", height: "100%", objectFit: "cover" }}
-											/>
-										) : (
-											<Img
-												src={liver.image_url}
-												style={{ width: "100%", height: "100%", objectFit: "cover" }}
-											/>
-										)}
+										<Img
+											src={
+												liver.saved_to 
+													? staticFile(liver.saved_to) 
+													: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+											}
+											style={{ 
+												width: "100%", 
+												height: "100%", 
+												objectFit: "cover",
+												// Focus on face for Rank 6
+												objectPosition: liver.rank === 6 ? "center 15%" : "center",
+												transform: liver.rank === 6 ? "scale(1.1)" : "none"
+											}}
+										/>
 									</div>
 								</div>
 
-								{/* Name Area - Larger and Wider */}
+								{/* Name Area - Adaptive font size to prevent cut-off */}
 								<div style={{ 
-									fontSize: nameFontSize, 
+									fontSize: liver.nickname.length > 8 ? nameFontSize * 0.8 : nameFontSize, 
 									color: "white", 
 									fontWeight: "bold", 
 									flex: 1, 
 									marginLeft: 20, 
+									marginRight: 60, // Stronger margin to prevent border clipping
 									position: "relative", 
 									zIndex: 1, 
 									lineHeight: 1.1,
-									textShadow: "0 4px 10px rgba(0,0,0,0.5)"
+									textAlign: "center",
+									textShadow: "0 4px 10px rgba(0,0,0,0.5)",
+									whiteSpace: "nowrap",
+									overflow: "visible", 
 								}}>
 									{liver.nickname}
 								</div>

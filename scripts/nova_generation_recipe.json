@@ -1,0 +1,100 @@
+[
+  {
+    "scene": "scene_07_waiting_meeting_spot",
+    "prompt": "A beautiful Japanese girl waiting at a train station meeting spot, wearing a stylish beige winter trench coat and a red knitted scarf, hair styled in a cute high bun (odango), gentle smile finding her lover, urban winter background, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_08_park_walking",
+    "prompt": "A beautiful Japanese girl walking in an autumn park, wearing a casual checkered shirt and denim overalls, hair in a sporty high ponytail, energetic and happy expression holding a map, date atmosphere, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova02.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_09_cafe_date",
+    "prompt": "A beautiful Japanese girl in a classy cafe, wearing an elegant white lace blouse with a ribbon, hair in a half-up style with a pearl clip, sipping tea elegantly, girlfriend vibe, soft lighting, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova03.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_10_shopping",
+    "prompt": "A beautiful Japanese girl in a clothing store fitting room, wearing a slightly mature black off-shoulder dress, hair loose and wavy (makigami), asking 'does this suit me?' with a shy smile, mirror reflection, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova04.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_11_crepe_eating",
+    "prompt": "A beautiful Japanese girl on Harajuku street, wearing a colorful pastel hoodie and a mini skirt, hair in playful twin tails, holding a strawberry crepe, winking at camera, pop culture vibe, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova06.png",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_12_aquarium",
+    "prompt": "A beautiful Japanese girl in a dark aquarium, wearing a mystic blue long one-piece dress, straight long hair flowing, looking at jellyfish tank with wonder, silhouette profile, romantic atmosphere, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova-variatoin.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_13_sunset_beach",
+    "prompt": "A beautiful Japanese girl on a sunset beach, wearing a pure white sundress and a straw hat, hair blowing in sea breeze, holding sandals in hand, barefoot on sand, nostalgic summer memory, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_14_library",
+    "prompt": "A beautiful Japanese girl in a library, wearing a glasses and a thick oversized cardigan, braid hair style (mitsuami), whispering secretively, intellectual literature girl vibe, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova02.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_15_cooking_dinner",
+    "prompt": "A beautiful Japanese girl in kitchen, wearing a cute frilly apron over house clothes, hair tied back with a scrunchie, tasting soup with a ladle, 'is it good?' expression, domestic happiness, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova03.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_16_movie_theater",
+    "prompt": "A beautiful Japanese girl in a movie theater, wearing casual date clothes (hoodie and jeans), sharing popcorn, face illuminated by screen, excited expression, close distance, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova04.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_17_winter_illumination",
+    "prompt": "A beautiful Japanese girl at winter illumination event, wearing a white fluffy coat and earmuffs, cheeks flushed red from cold, sparkling eyes reflecting lights, holding hands pov, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova06.png",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_18_rainy_window",
+    "prompt": "A beautiful Japanese girl looking out a window on a rainy day, wearing a loose t-shirt, depressing but beautiful, turning to smile faintly, melancholic atmosphere, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova-variatoin.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_19_sofa_relax",
+    "prompt": "A beautiful Japanese girl relaxing on sofa, wearing a camisole and shorts roomwear, stretching lazily, cat-like pose, very intimate and private, soft lighting, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova.PNG",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_20_goodnight",
+    "prompt": "A beautiful Japanese girl in bed under duvet, wearing silk pajamas, hair down, looking at camera with sleepy eyes, whispering goodnight, very close up, extreme love, cinematic 16:9, high quality, 8k",
+    "negative_prompt": "blurry, low quality, distorted face, bad hands, square image, cropped",
+    "reference_image": "assets/characters/nova02.PNG",
+    "aspect_ratio": "16:9"
+  }
+]

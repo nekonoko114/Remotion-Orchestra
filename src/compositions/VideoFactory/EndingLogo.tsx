@@ -1,4 +1,3 @@
-import type React from "react";
 import {
 	AbsoluteFill,
 	Img,
@@ -7,7 +6,6 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { HeatDistortion } from "../../components/effects/HeatDistortion";
 import { FireBackground } from "./FireBackground";
 
 export const EndingLogo: React.FC = () => {
@@ -28,9 +26,7 @@ export const EndingLogo: React.FC = () => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000" }}>
 			<AbsoluteFill>
-				<HeatDistortion intensity={10} frequency={0.005}>
-					<FireBackground />
-				</HeatDistortion>
+				<FireBackground />
 			</AbsoluteFill>
 
 			<AbsoluteFill
@@ -43,14 +39,14 @@ export const EndingLogo: React.FC = () => {
 				<div
 					style={{
 						transform: `scale(${scale})`,
-						width: "70%",
+						width: 1080,
 						display: "flex",
 						justifyContent: "center",
 						alignItems: "center",
 					}}
 				>
 					<Img
-						src={staticFile("video-factory/images/logo/logo.png")}
+						src={staticFile("video-factory/images/logo/logo.webp")}
 						style={{
 							width: "100%",
 							objectFit: "contain",

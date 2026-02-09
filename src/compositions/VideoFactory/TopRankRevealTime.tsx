@@ -8,6 +8,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 	Easing,
+	Video,
 } from "remotion";
 import { ParticleBurst } from "../../components/effects/ParticleBurst";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
@@ -29,34 +30,50 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 
-	const entrance = spring({
-		frame,
+	const { pulse } = useBeatValue(BPM);
+	
+	// 4. Time Snap Effect
+	const snapReduction = pulse * 0.4;
+	const localFrame = frame - snapReduction;
+	
+	// 1. Staggered Entrance Timings (Sequential Reveal with higher "snap")
+	const rankEntrance = spring({
+		frame: localFrame,
 		fps,
-		config: { damping: 25, stiffness: 60 },
+		config: { damping: 10, stiffness: 180 }, // Much faster snap for sequence start
 	});
 
-	// Entrance Animations
-	const titleScale = interpolate(entrance, [0, 1], [3, 1], { easing: Easing.out(Easing.back(1.5)) });
-	const imgEntrance = spring({
-		frame: frame - 15, // Increased delay from 5 to 15 frames for a more intentional reveal
+	const imageEntrance = spring({
+		frame: localFrame - 10, // Faster interval
 		fps,
-		config: { damping: 25, stiffness: 60 },
+		config: { damping: 12, stiffness: 150 },
 	});
-	const imgScale = interpolate(imgEntrance, [0, 1], [0, 1], { easing: Easing.out(Easing.exp) });
-	const imgRotate = interpolate(imgEntrance, [0, 1], [-15, 0]);
-	const imgY = interpolate(imgEntrance, [0, 1], [100, 0]);
+
+	const nameEntrance = spring({
+		frame: localFrame - 22,
+		fps,
+		config: { damping: 14, stiffness: 120 },
+	});
+
+	// Reveal Animations Logic (Larger ranges for more velocity)
+	const rankScale = interpolate(rankEntrance, [0, 1], [8, 1], { easing: Easing.out(Easing.back(2)) });
+	const rankOpacity = interpolate(rankEntrance, [0, 0.3], [0, 1]);
 	
-	const opacity = interpolate(entrance, [0, 0.5], [0, 1]);
+	const imageScale = interpolate(imageEntrance, [0, 1], [3, 1], { easing: Easing.out(Easing.exp) });
+	const imageRotate = interpolate(imageEntrance, [0, 1], [-60, 0]);
+	const imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]);
 	
-	// Entrance Flash
+	const nameY = interpolate(nameEntrance, [0, 1], [150, 0]);
+	const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
+	
+	// Entrance Flash (Neon Leak style)
 	const flashOpacity = interpolate(frame, [0, 5, 20], [0, 0.8, 0], { extrapolateRight: "clamp" });
 	
-	const { pulse } = useBeatValue(BPM);
-	const pulseScale = 1 + pulse * 0.03;
+	const pulseScale = 1 + pulse * 0.04; 
 	
-	// Add beat-synced shake for orchestration feel
-	const shakeX = pulse > 0.5 ? (Math.random() - 0.5) * pulse * 20 : 0;
-	const shakeY = pulse > 0.5 ? (Math.random() - 0.5) * pulse * 20 : 0;
+	// Rhythmic Drift
+	const driftX = Math.sin(frame / 10) * pulse * 15;
+	const driftY = Math.cos(frame / 12) * pulse * 10;
 
 	const getRankColors = (r: number) => {
 		if (r === 1) return { primary: "#00f0ff", glow: "rgba(0, 240, 255, 0.8)" };
@@ -71,7 +88,28 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000" }}>
-			<TimeBackground overlayColor={primary + "33"} />
+			{/* Rank-specific Generated Video Background */}
+			<AbsoluteFill>
+				<Video
+					src={staticFile(
+						liver.username === "ritu_1115" || liver.nickname === "じんや"
+							? "assets/backgrounds/Can_i_move_202602041609_l613b.mp4" 
+							: `assets/backgrounds/rank_${rank}_bg.mp4`
+					)}
+					style={{ 
+						width: "100%", 
+						height: "100%", 
+						objectFit: "cover",
+						objectPosition: "center",
+						transform: (liver.username === "ritu_1115" || liver.nickname === "じんや") ? "scale(1.3)" : "none"
+					}}
+					loop
+					muted
+				/>
+				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.4)" }} />
+			</AbsoluteFill>
+
+			<TimeBackground overlayColor={primary + "33"} hideBackground />
 			<AdjustmentLayer rank={rank} beatPulse={pulse} />
 			
 			<AbsoluteFill
@@ -87,8 +125,7 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 				</AbsoluteFill>
 
 				<div style={{ 
-					transform: `translate(${shakeX}px, ${shakeY}px)`, 
-					opacity, 
+					transform: `translate(${driftX}px, ${driftY}px)`, 
 					zIndex: 120, 
 					display: "flex", 
 					flexDirection: "column", 
@@ -103,7 +140,8 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 						fontWeight: 900,
 						fontStyle: "italic", 
 						lineHeight: 0.8,
-						transform: `scale(${titleScale * pulseScale})`,
+						transform: `scale(${rankScale * pulseScale})`,
+						opacity: rankOpacity
 					}}>
 						{title}
 					</h1>
@@ -119,7 +157,8 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 						position: "relative",
 						backgroundColor: "#000",
 						marginTop: 40,
-						transform: `scale(${imgScale}) rotate(${imgRotate}deg) translateY(${imgY}px) rotateX(20deg)`,
+						transform: `scale(${imageScale}) rotate(${imageRotate}deg) rotateX(20deg)`,
+						opacity: imageOpacity
 					}}>
 						<Img
 							src={
@@ -144,8 +183,8 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 						textShadow: `0 0 20px ${glow}`, 
 						fontWeight: 900,
 						color: "#fff",
-						opacity: imgEntrance,
-						transform: `translateY(${interpolate(imgEntrance, [0, 1], [20, 0])}px)`,
+						opacity: nameOpacity,
+						transform: `translateY(${nameY}px)`,
 					}}>
 						{liver.nickname}
 					</h2>

@@ -15,7 +15,7 @@ export const Scene2_Walk: React.FC = () => {
 		<AbsoluteFill style={{ backgroundColor: "black" }}>
 			<AbsoluteFill style={{ transform: `translateX(${x}px) scale(1.1)` }}>
 				<Img
-					src={staticFile("images/generated/CatsAdventure/scene_2.png")}
+					src={staticFile("images/generated/CatsAdventure/scene_2.webp")}
 					style={{ width: "100%", height: "100%", objectFit: "cover" }}
 				/>
 			</AbsoluteFill>

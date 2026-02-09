@@ -16,7 +16,7 @@ export const Scene4_Sunset: React.FC = () => {
 			style={{ backgroundColor: "black", filter: `brightness(${brightness})` }}
 		>
 			<Img
-				src={staticFile("images/generated/CatsAdventure/scene_4.png")}
+				src={staticFile("images/generated/CatsAdventure/scene_4.webp")}
 				style={{ width: "100%", height: "100%", objectFit: "cover" }}
 			/>
 			<div

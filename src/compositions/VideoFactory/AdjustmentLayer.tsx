@@ -36,60 +36,57 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
 
 	const theme = getTheme();
 
-	// Glitch Logic - FURTHER WEAKENED
-	// Trigger glitches every ~2-3 seconds, or randomly
 	// Probability of glitch on any given frame
 	const isGlitching = random(frame) < 0.02; // 2% chance per frame (very subtle)
 
-	// Glitch Transform (Shift X/Y)
-	const shiftX = isGlitching ? (random(frame + 10) - 0.5) * 10 : 0; // Reduced from 40 to 10
-	const shiftY = isGlitching ? (random(frame + 20) - 0.5) * 5 : 0; // Reduced from 10 to 5
+	// Subtle Glitch Transform (Shift X/Y)
+	const shiftX = isGlitching ? (random(frame + 10) - 0.5) * 10 : 0;
+	const shiftY = isGlitching ? (random(frame + 20) - 0.5) * 5 : 0;
 
-	// Glitch Color Shift (Falsely separated channels)
-	const redShift = isGlitching ? random(frame + 30) * 4 : 0;
-	const blueShift = isGlitching ? random(frame + 40) * -4 : 0;
+	// 1. Contrast Pumping (Intense contrast boost on beat)
+	const beatBrightness = theme.brightness + (beatPulse || 0) * 0.4;
+	const beatContrast = theme.contrast + (beatPulse || 0) * 0.6; // Stronger pump
 
-	// Blur is also reduced
+	// 2. RGB Split Logic (Stylized color separation on beat)
+	const aberration = (beatPulse || 0) * 15;
+	const redShift = aberration;
+	const blueShift = -aberration;
+
 	const glitchFilter = isGlitching
 		? `hue-rotate(${random(frame) * 20}deg) blur(1px)`
 		: "none";
 
-	// theme boost based on beat
-	const beatBrightness = theme.brightness + (beatPulse || 0) * 0.3;
-	const beatContrast = theme.contrast + (beatPulse || 0) * 0.2;
-
-	// Screen Shake Logic (Impactful!)
-	const shakeX = (beatPulse || 0) * (random(frame + 100) - 0.5) * 40;
-	const shakeY = (beatPulse || 0) * (random(frame + 200) - 0.5) * 40;
-
 	return (
 		<AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
-			{/* 1. Backdrop Filter (Global Color Grading) - WEAKENED */}
-			{/* Added Glitch Twist: Hue Rotate or Invert occasionally? */}
+			{/* Base Grading & Contrast Pumping */}
 			<AbsoluteFill
 				style={{
 					backdropFilter: `contrast(${beatContrast}) saturate(${theme.saturate}) brightness(${beatBrightness}) ${glitchFilter}`,
 					zIndex: 100,
-					transform: `translate(${shiftX + shakeX}px, ${shiftY + shakeY}px) scale(${1 + (beatPulse || 0) * 0.02})`,
+					transform: `translate(${shiftX}px, ${shiftY}px) scale(${1 + (beatPulse || 0) * 0.01})`,
 				}}
 			/>
 
-			{/* Glitch RGB Split Simulation (Only visible during glitch) */}
-			{isGlitching && (
+			{/* RGB Split Overlays (Channel Separation) */}
+			{(beatPulse || 0) > 0.1 && (
 				<>
+					{/* Red Channel Shift */}
 					<AbsoluteFill
 						style={{
-							background: "rgba(255, 0, 0, 0.1)", // Reduced opacity
-							transform: `translate(${shiftX + redShift}px, ${shiftY}px)`,
+							backdropFilter: `contrast(1.5) brightness(1.2) hue-rotate(-10deg)`,
+							transform: `translateX(${redShift}px)`,
 							mixBlendMode: "screen",
+							opacity: (beatPulse || 0) * 0.6,
 							zIndex: 105,
 						}}
 					/>
+					{/* Blue/Cyan Channel Shift */}
 					<AbsoluteFill
 						style={{
-							background: "rgba(0, 255, 255, 0.1)", // Reduced opacity
-							transform: `translate(${shiftX + blueShift}px, ${shiftY}px)`,
+							backdropFilter: `contrast(1.5) brightness(1.2) hue-rotate(10deg)`,
+							transform: `translateX(${blueShift}px)`,
 							mixBlendMode: "screen",
+							opacity: (beatPulse || 0) * 0.6,
 							zIndex: 105,
 						}}
 					/>

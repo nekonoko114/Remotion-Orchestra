@@ -1,4 +1,3 @@
-import type React from "react";
 import {
 	AbsoluteFill,
 	Img,
@@ -93,8 +92,7 @@ export const EndingLogoTime: React.FC = () => {
 				<div
 					style={{
 						position: "relative",
-						width: "75%",
-						maxWidth: 950,
+						width: 1080,
 						display: "flex",
 						justifyContent: "center",
 						alignItems: "center",
@@ -104,7 +102,7 @@ export const EndingLogoTime: React.FC = () => {
 					}}
 				>
 					<Img
-						src={staticFile("video-factory/images/logo/logo.png")}
+						src={staticFile("video-factory/images/logo/logo.webp")}
 						style={{
 							width: "100%",
 							height: "auto",

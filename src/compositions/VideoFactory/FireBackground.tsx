@@ -10,7 +10,7 @@ import {
 } from "remotion";
 import { useBeatValue } from "./utils/beat-sync";
 
-const PARTICLE_COUNT = 600;
+const PARTICLE_COUNT = 100;
 const BPM = 128;
 
 interface Particle3D {
@@ -111,7 +111,7 @@ export const FireBackground: React.FC = () => {
 			<AbsoluteFill style={{ overflow: "hidden" }}>
 				<Img
 					src={staticFile(
-						"video-factory/images/generated/opening_luxury_fire.png",
+						"video-factory/images/generated/opening_luxury_fire.webp",
 					)}
 					style={{
 						width: "100%",

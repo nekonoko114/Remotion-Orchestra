@@ -40,7 +40,7 @@ export const BattleScene = () => {
 				<group rotation={[0, rotateGroup, 0]}>
 					{/* Background Grid - Massive Scale to fill horizon */}
 					<Image
-						url={staticFile("images/generated/neon_grid.png")}
+						url={staticFile("images/generated/neon_grid.webp")}
 						scale={[60, 35]}
 						position={[0, 5, -15]}
 						transparent
@@ -50,7 +50,7 @@ export const BattleScene = () => {
 					{/* Character A - Samurai (Left) - Dominant foregound */}
 					<Float speed={2} rotationIntensity={0.1} floatIntensity={0.2}>
 						<Image
-							url={staticFile("images/generated/cyberpunk_samurai.png")}
+							url={staticFile("images/generated/cyberpunk_samurai.webp")}
 							scale={[12, 12]}
 							position={[-4.5, -2, 2]}
 							transparent
@@ -60,7 +60,7 @@ export const BattleScene = () => {
 					{/* Character B - Mecha (Right) - Dominant foreground */}
 					<Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.3}>
 						<Image
-							url={staticFile("images/generated/mecha_robot.png")}
+							url={staticFile("images/generated/mecha_robot.webp")}
 							scale={[13, 13]}
 							position={[4.5, -2, 3]}
 							transparent

@@ -114,7 +114,7 @@ export const WaterBattleBackground: React.FC = () => {
 			{/* 1. Deep Ocean Cinematic Background (Static + Breathing) */}
 			<AbsoluteFill style={{ overflow: "hidden" }}>
 				<Img 
-					src={staticFile("video-factory/images/backgrounds/water/mermaid_bg_02.png")} 
+					src={staticFile("video-factory/images/backgrounds/water/mermaid_bg_02.webp")} 
 					style={{
 						width: "120%",
 						height: "120%",

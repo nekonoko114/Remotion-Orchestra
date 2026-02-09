@@ -1,26 +1,27 @@
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { AbsoluteFill, useVideoConfig, Audio, staticFile } from "remotion";
-import RANKING_DATA_JSON from "./data.json";
+import RANKING_DATA_TIME_JSON from "./data-time.json";
 import type { Liver } from "./types";
 import {
   wipeTransition,
-  slideTransition,
   spinTransition,
   zoomTransition,
+  glitchTransition,
+  flareTransition,
 } from "./CustomTransitions";
 import { EndingLogoTime as EndingLogo } from "./EndingLogoTime";
-import { TimeBackground } from "./TimeBackground";
 import { OpeningTitleTime as OpeningTitle } from "./OpeningTitleTime";
 import { RankingGroupTime as RankingGroup } from "./RankingGroupTime";
 import { TopRankRevealTime as TopRankReveal } from "./TopRankRevealTime";
 import { useBeatValue } from "./utils/beat-sync";
+import { TimeBackground } from "./TimeBackground";
 
 const BPM = 128;
 const BGM_SOURCE = staticFile("assets/audio/music/Night_Howling.mp3");
 const BGM_START_FROM = 0.0; // Seconds
 
 // Export duration constants for Root.tsx
-export const OPENING_SEC = 5;
+export const OPENING_SEC = 7;
 export const GROUP_SEC = 5;
 export const TOP_RANK_SEC = 5.5;
 export const ENDING_SEC = 5;
@@ -31,7 +32,7 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 	const { fps } = useVideoConfig();
 
 	// Use data from props if available, otherwise fallback to local JSON
-	const RANKING_DATA = props.data || (RANKING_DATA_JSON as Liver[]);
+	const RANKING_DATA = props.data || (RANKING_DATA_TIME_JSON as Liver[]);
 
 	// Duration Logic (Frames)
 	const OPENING_DURATION = OPENING_SEC * fps;
@@ -48,13 +49,11 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 	const beatScale = 1 + pulse * 0.008;
 
 	return (
-		<AbsoluteFill style={{ backgroundColor: "#1a1a1a" }}>
+		<AbsoluteFill>
+			<TimeBackground />
 			<Audio src={BGM_SOURCE} loop startFrom={BGM_START_FROM * fps} />
 
 			<AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
-				{/* Background persists throughout the entire video */}
-				<TimeBackground />
-
 				{/* Sequenced Content: Opening -> Ranking with TRANSITIONS */}
 				<TransitionSeries>
 					{/* 1. Opening Title */}
@@ -78,7 +77,7 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 
 				{/* Transition 2: Group 1 -> Group 2 (SLIDE / Whip Pan from Right) */}
 				<TransitionSeries.Transition
-					presentation={slideTransition({ direction: "from-right" })}
+					presentation={wipeTransition({ direction: "from-right" })}
 					timing={timing}
 				/>
 
@@ -135,7 +134,12 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 					/>
 				</TransitionSeries.Sequence>
 
-				{/* 7. Ending Logo (Hard Cut for Visibility) */}
+				{/* 7. Ending Logo (Glitch Transition for high energy end) */}
+				<TransitionSeries.Transition
+					presentation={wipeTransition({ direction: "from-right" })}
+					timing={timing}
+				/>
+
 				<TransitionSeries.Sequence durationInFrames={ENDING_DURATION}>
 					<EndingLogo />
 				</TransitionSeries.Sequence>

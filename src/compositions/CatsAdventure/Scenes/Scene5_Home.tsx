@@ -14,7 +14,7 @@ export const Scene5_Home: React.FC = () => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "black" }}>
 			<Img
-				src={staticFile("images/generated/CatsAdventure/scene_5.png")}
+				src={staticFile("images/generated/CatsAdventure/scene_5.webp")}
 				style={{ width: "100%", height: "100%", objectFit: "cover" }}
 			/>
 			<AbsoluteFill style={{ backgroundColor: "#000", opacity: blackout }} />

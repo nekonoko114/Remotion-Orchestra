@@ -5,6 +5,8 @@ import {
 	spring,
 	useCurrentFrame,
 	useVideoConfig,
+	Video,
+	staticFile,
 } from "remotion";
 import { ImpactEffect } from "./ImpactEffect";
 
@@ -36,10 +38,17 @@ const ShinyText: React.FC<{
 		extrapolateRight: "clamp",
 	});
 
+	// JITTER & Chromatic Aberration for "Radon" energy
+	const jitterX = (random(`jitter-x-${frame}`) - 0.5) * 4;
+	const jitterY = (random(`jitter-y-${frame}`) - 0.5) * 4;
+	
+	// Chromatic Aberration offset
+	const chromDist = 3 + Math.sin(frame * 0.1) * 2;
+
 	return (
 		<div
 			style={{
-				transform: `scale(${scale})`,
+				transform: `scale(${scale}) translate(${jitterX}px, ${jitterY}px)`,
 				opacity,
 				position: "relative",
 			}}
@@ -54,7 +63,6 @@ const ShinyText: React.FC<{
 					width: "120%",
 					height: "100%",
 					background: `radial-gradient(circle, ${glowColor} 0%, transparent 70%)`,
-					filter: "blur(40px)",
 					zIndex: -1,
 					opacity: interpolate(spr, [0.5, 1], [0, 1]),
 				}}
@@ -72,6 +80,11 @@ const ShinyText: React.FC<{
 					fontFamily: "system-ui, -apple-system, sans-serif",
 					// Add even more contrast to colors
 					filter: "brightness(1.5) contrast(1.2)",
+					// CHROMATIC ABERRATION TEXT SHADOW
+					textShadow: `
+						${chromDist}px 0 rgba(255, 0, 0, 0.5), 
+						-${chromDist}px 0 rgba(0, 255, 255, 0.5)
+					`
 				}}
 			>
 				{text}
@@ -79,8 +92,6 @@ const ShinyText: React.FC<{
 		</div>
 	);
 };
-
-import { OpeningBackground } from "./OpeningBackground";
 
 // ... (existing imports)
 
@@ -106,12 +117,24 @@ export const OpeningTitle: React.FC = () => {
 				transform: `translate(${totalShakeX}px, ${totalShakeY}px)`,
 			}}
 		>
-			{/* BACKGROUND LAYER - Replaced with Shared Component */}
-			<OpeningBackground />
+			{/* BACKGROUND LAYER - Direct Radon Video */}
+			<AbsoluteFill style={{ zIndex: -1 }}>
+				<Video
+					src={staticFile("assets/backgrounds/radon.mp4")}
+					style={{ 
+						width: "100%", 
+						height: "100%", 
+						objectFit: "cover",
+						objectPosition: "center",
+						transform: "scale(1.3)"
+					}}
+					loop
+					muted
+				/>
+			</AbsoluteFill>
 
 			{/* Impact Flash (Enhanced Brightness) */}
 			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
-
 				{frame > 5 && frame < 15 && (
 					<ImpactEffect color="#fff" intensity="high" />
 				)}

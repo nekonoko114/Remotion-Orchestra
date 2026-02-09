@@ -3,14 +3,15 @@ import {
 	AbsoluteFill,
 	interpolate,
 	random,
+	staticFile,
 	spring,
 	useCurrentFrame,
 	useVideoConfig,
+	Video,
 } from "remotion";
 import { LensFlare } from "../../components/effects/LensFlare";
 import { ImpactEffect } from "./ImpactEffect";
 import { TextShine } from "./TextShine";
-import { TimeBackground } from "./TimeBackground";
 
 // HIGH-GLOW Metallic Text Component (Cyan/Blue Theme)
 const ShinyText: React.FC<{
@@ -116,7 +117,18 @@ export const OpeningTitleTime: React.FC = () => {
 		>
 			{/* 1. BACKGROUND LAYER: Time Theme */}
 			<AbsoluteFill style={{ zIndex: 0 }}>
-				<TimeBackground />
+				<Video
+					src={staticFile("assets/backgrounds/byakko.mp4")}
+					style={{ 
+						width: "100%", 
+						height: "100%", 
+						objectFit: "cover",
+						objectPosition: "center",
+						transform: "scale(1.3)"
+					}}
+					loop
+					muted
+				/>
 				
 				{/* Global Cyan Tint Overlay */}
 				<AbsoluteFill 

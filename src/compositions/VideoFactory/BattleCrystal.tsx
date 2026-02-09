@@ -25,14 +25,14 @@ interface BattlePlayer {
 const MOCK_JOL_PLAYER: BattlePlayer = {
 	name: "J.O.L Creator",
 	id: "jol_creator_01",
-	image: staticFile("video-factory/images/logo/logo.png"), 
+	image: staticFile("video-factory/images/logo/logo.webp"), 
 	color: "#00f0ff",
 };
 
 const MOCK_OPPONENT: BattlePlayer = {
 	name: "Rival King",
 	id: "rival_king_99",
-	image: staticFile("video-factory/images/logo/logo.png"),
+	image: staticFile("video-factory/images/logo/logo.webp"),
 	color: "#aa00ff",
 };
 
@@ -116,7 +116,7 @@ const ScanlineOverlay: React.FC = () => {
 				position: "absolute",
 				width: "100%",
 				height: "100%",
-				backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.png")`,
+				backgroundImage: `url("https://www.transparenttextures.com/patterns/carbon-fibre.webp")`,
 				opacity: 0.05,
 				mixBlendMode: "overlay"
 			}} />
@@ -317,7 +317,7 @@ export const BattleCrystal: React.FC = () => {
 								zIndex: 500,
 								opacity: interpolate(frame - startMatchup - 10, [0, 2, 12], [0, 1, 0]) 
 							}}>
-								<Img src={staticFile("video-factory/images/vfx/screen_crack.png")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+								<Img src={staticFile("video-factory/images/vfx/screen_crack.webp")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
 							</AbsoluteFill>
 						</>
 					)}
@@ -425,7 +425,7 @@ export const BattleCrystal: React.FC = () => {
 							transform: `scale(${interpolate(frame - startEnd, [5, 25], [0.5, 1], { easing: Easing.out(Easing.back(1.5)) })})`,
 							margin: "40px 0"
 						}}>
-							<Img src={staticFile("video-factory/images/logo/logo.png")} style={{ width: 600, filter: "drop-shadow(0 0 30px #00f0ff)" }} />
+							<Img src={staticFile("video-factory/images/logo/logo.webp")} style={{ width: 600, filter: "drop-shadow(0 0 30px #00f0ff)" }} />
 						</div>
 						<div style={{ opacity: interpolate(frame - startEnd, [15, 35], [0, 1]) }}>
 							<h2 style={{ fontSize: 60, color: "white", fontWeight: 900 }}>応援よろしくお願いします！</h2>

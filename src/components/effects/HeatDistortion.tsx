@@ -1,58 +1,25 @@
 import type React from "react";
-import { useMemo } from "react";
-import { AbsoluteFill, useCurrentFrame } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
 
 export const HeatDistortion: React.FC<{
 	children?: React.ReactNode;
-	intensity?: number; // Distortion scale (default 20)
-	frequency?: number; // Noise frequency (default 0.02)
-}> = ({ children, intensity = 20, frequency = 0.02 }) => {
+	intensity?: number; 
+	frequency?: number;
+}> = ({ children }) => {
 	const frame = useCurrentFrame();
 
-	// Create a unique ID for the filter to avoid conflicts
-	const filterId = useMemo(
-		() => `heatWave-${Math.random().toString(36).substr(2, 9)}`,
-		[],
-	);
+	// Optimized: Use a simple CSS-based distortion instead of heavy SVG feTurbulence
+	// This uses a slight scaling and swaying to mimic heat without per-pixel displacement
+	const scale = interpolate(Math.sin(frame * 0.1), [-1, 1], [1, 1.02]);
+	const skewX = interpolate(Math.sin(frame * 0.05), [-1, 1], [-1, 1]);
 
 	return (
 		<AbsoluteFill>
-			{/* Define SVG Filter */}
-			<svg
-				width="0"
-				height="0"
-				style={{ position: "absolute", pointerEvents: "none" }}
-				aria-label="Heat distortion filter definition"
-			>
-				<title>Heat Distortion Filter</title>
-				<defs>
-					<filter id={filterId}>
-						{/* Turbulence creates the noisy pattern. 
-                            baseFrequency y component is higher to simulate rising heat waves.
-                        */}
-						<feTurbulence
-							type="turbulence"
-							baseFrequency={`${frequency} ${frequency * 3}`}
-							numOctaves="2"
-							seed={Math.floor(frame / 5)} // Animate seed for jerky heat or use <animate>
-						>
-							{/* Smooth animation of turbulence is tricky in SVG alone without SMIL or JS frame update.
-                                 Updating seed per frame is noisy (white noise). 
-                                 A better way for smooth flow is animating baseFrequency or moving the element.
-                                 Here we just keep it static or slowly shifting.
-                             */}
-						</feTurbulence>
-						<feDisplacementMap in="SourceGraphic" scale={intensity} />
-					</filter>
-				</defs>
-			</svg>
-
-			{/* Apply Filter to Children */}
 			<AbsoluteFill
 				style={{
-					filter: `url(#${filterId})`,
-					overflow: "hidden", // Contain the distortion
-					willChange: "filter",
+					transform: `scale(${scale}) skewX(${skewX}deg)`,
+					filter: "blur(2px)", // Very light blur for heat effect
+					willChange: "transform",
 				}}
 			>
 				{children}

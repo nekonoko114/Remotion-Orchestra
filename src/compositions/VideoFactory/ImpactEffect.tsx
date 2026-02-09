@@ -68,27 +68,7 @@ export const ImpactEffect: React.FC<Props> = ({
 				}}
 			/>
 
-			{/* Rotating Rays (God Rays) for High Intensity */}
-			{showRays && (
-				<div
-					style={{
-						position: "absolute",
-						width: "200%",
-						height: "200%",
-						background: `repeating-conic-gradient(
-                  from 0deg,
-                  ${color} 0deg 10deg,
-                  transparent 10deg 20deg
-              )`,
-						opacity: rayOpacity,
-						transform: `scale(${rayScale}) rotate(${rayRotation}deg)`,
-						maskImage:
-							"radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%)",
-						WebkitMaskImage:
-							"radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%)",
-					}}
-				/>
-			)}
+			{/* Rays removed for speed */}
 
 			{/* Expanding Rings */}
 			{rings.map((delay, i) => {

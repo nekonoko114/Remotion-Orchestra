@@ -926,7 +926,7 @@ export const EffectsCatalog: React.FC = () => {
 							}}
 						>
 							<KenBurns
-								src={staticFile("images/generated/cyberpunk_samurai.png")}
+								src={staticFile("images/generated/cyberpunk_samurai.webp")}
 								direction="zoomIn"
 							>
 								<TitleCard

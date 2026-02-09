@@ -6,6 +6,8 @@ import {
 	staticFile,
 	useCurrentFrame,
 	useVideoConfig,
+	OffthreadVideo,
+	Easing,
 } from "remotion";
 import { Confetti } from "../../components/effects/Confetti";
 import { ParticleBurst } from "../../components/effects/ParticleBurst";
@@ -14,7 +16,6 @@ import { LightningBolt } from "../../components/effects/LightningBolt";
 import { LensFlare as GlobalLensFlare } from "../../components/effects/LensFlare";
 import { SmokeEffect } from "../../components/effects/SmokeEffect";
 import { ImpactEffect } from "./ImpactEffect";
-import { LuxuryGoldBackground } from "./LuxuryGoldBackground";
 // Podium3D removed as per user request (wanted space background, not pedestal)
 import { CinematicBorder } from "./CinematicBorder";
 import { TextShine } from "./TextShine";
@@ -35,16 +36,36 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 
-	const entrance = spring({
+	// 1. Sequence Timings (Higher stiffness for more "snap")
+	const rankEntrance = spring({
 		frame,
 		fps,
-		config: { damping: 15, stiffness: 100 },
+		config: { damping: 10, stiffness: 160 }, // Increased stiffness
 	});
 
-	// Reveal Animations
-	const scale = interpolate(entrance, [0, 1], [2.5, 1]);
-	const opacity = interpolate(entrance, [0, 1], [0, 1]);
+	const imageEntrance = spring({
+		frame: frame - 12, // Slightly tighter timing
+		fps,
+		config: { damping: 12, stiffness: 140 },
+	});
+
+	const nameEntrance = spring({
+		frame: frame - 25,
+		fps,
+		config: { damping: 15, stiffness: 120 },
+	});
+
+	// Reveal Animations (Larger initial values for "impact")
+	const rankScale = interpolate(rankEntrance, [0, 1], [10, 1], { easing: Easing.out(Easing.back(2)) });
+	const rankOpacity = interpolate(rankEntrance, [0, 0.3], [0, 1]);
 	
+	const imageScale = interpolate(imageEntrance, [0, 1], [2, 1], { easing: Easing.out(Easing.exp) });
+	const imageRotate = interpolate(imageEntrance, [0, 1], [-45, 0]);
+	const imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]);
+	
+	const nameY = interpolate(nameEntrance, [0, 1], [100, 0]);
+	const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
+
 	const { pulse } = useBeatValue(BPM);
 	
 	// Ultra Pulse for Text
@@ -64,24 +85,26 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 	if (!liver) return null;
 
 	return (
-		<AbsoluteFill style={{ backgroundColor: "#000" }}>
-			<LuxuryGoldBackground color={primary} secondaryColor={secondary} />
-			<AdjustmentLayer rank={rank} beatPulse={pulse} />
-			
-			{/* Blurred Character Background Overlay */}
-			<AbsoluteFill style={{ zIndex: -2, opacity: 0.6 }}>
-				{liver.saved_to ? (
-					<Img
-						src={staticFile(liver.saved_to)}
-						style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(40px)" }}
-					/>
-				) : (
-					<Img
-						src={liver.image_url}
-						style={{ width: "100%", height: "100%", objectFit: "cover", filter: "blur(40px)" }}
-					/>
-				)}
+		<AbsoluteFill>
+			{/* <LuxuryGoldBackground color={primary} secondaryColor={secondary} /> */}
+			{/* Rank-specific Generated Video Background */}
+			<AbsoluteFill>
+				<OffthreadVideo
+					src={staticFile(
+						`assets/backgrounds/rank_${rank}_bg.mp4`
+					)}
+					style={{ 
+						width: "100%", 
+						height: "100%", 
+						objectFit: "cover",
+						objectPosition: "center",
+						transform: "none"
+					}}
+				/>
+				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.2)" }} />
 			</AbsoluteFill>
+
+			<AdjustmentLayer rank={rank} beatPulse={pulse} />
 			
 			<AbsoluteFill style={{ opacity: 0.4, pointerEvents: "none", zIndex: 110 }}>
 				<SmokeEffect color={primary} density={0.015} velocity={0.2} />
@@ -91,7 +114,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 				style={{
 					justifyContent: "center",
 					alignItems: "center",
-					fontFamily: '"Inter", "Noto Sans JP", sans-serif',
+					fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
 					color: "white",
 				}}
 			>
@@ -102,8 +125,13 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 					<ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
 				</AbsoluteFill>
 
-				<div style={{ transform: `scale(${scale})`, opacity, zIndex: 120, display: "flex", flexDirection: "column", alignItems: "center" }}>
-					<div style={{ transform: `scale(${pulseScale})`, marginBottom: 30, position: "relative" }}>
+				<div style={{ zIndex: 120, display: "flex", flexDirection: "column", alignItems: "center" }}>
+					<div style={{ 
+						transform: `scale(${rankScale * pulseScale})`, 
+						opacity: rankOpacity,
+						marginBottom: 30, 
+						position: "relative" 
+					}}>
 						<div style={{ 
 							position: "absolute", 
 							top: "50%", 
@@ -121,7 +149,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 								fontSize: 300, 
 								margin: 0, 
 								color: "#FFFFFF", 
-								textShadow: `0 0 40px ${primary}, 0 0 80px ${primary}`, 
+								textShadow: `0 0 20px ${primary}, 0 0 40px ${primary}`,
 								fontWeight: 900,
 								fontStyle: "italic", 
 								lineHeight: 0.8,
@@ -139,11 +167,13 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 						borderRadius: "50%",
 						overflow: "hidden",
 						border: "10px solid #FFFFFF", 
-						boxShadow: `0 0 0 8px ${primary}, 0 0 100px ${glow}, 0 50px 100px rgba(0,0,0,0.9)`, 
+						boxShadow: `0 0 0 8px ${primary}, 0 0 40px ${glow}, 0 20px 40px rgba(0,0,0,0.8)`,
 						position: "relative",
 						backgroundColor: "#000",
 						zIndex: 5,
-						marginTop: 10
+						marginTop: 10,
+						transform: `scale(${imageScale}) rotate(${imageRotate}deg)`,
+						opacity: imageOpacity
 					}}>
 						{liver.saved_to ? (
 							<Img
@@ -152,7 +182,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 							/>
 						) : (
 							<Img
-								src={liver.image_url}
+								src={liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url)}
 								style={{ width: "100%", height: "100%", objectFit: "cover" }}
 							/>
 						)}
@@ -161,11 +191,12 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 					<h2 style={{ 
 						fontSize: 100, 
 						marginTop: 50, 
-						textShadow: `0 0 30px ${glow}, 0 4px 10px black`, 
+						textShadow: `0 0 20px ${glow}, 0 4px 10px black`,
 						fontWeight: 900,
-						fontFamily: '"Inter", sans-serif',
+						fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
 						color: "#fff",
-						opacity: interpolate(frame, [0, 20], [0, 1])
+						transform: `translateY(${nameY}px)`,
+						opacity: nameOpacity
 					}}>
 						{liver.nickname}
 					</h2>
@@ -193,8 +224,18 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 					<AbsoluteFill style={{ zIndex: 8, pointerEvents: "none", mixBlendMode: "screen" }}>
 						<div style={{
 							position: "absolute", top: "50%", left: "50%", transform: `translate(-50%, -50%) rotate(${frame}deg)`,
-							width: 2000, height: 2000,
-							background: "conic-gradient(from 0deg, transparent 0deg, rgba(255, 215, 0, 0.1) 20deg, transparent 40deg)",
+							width: 1500, height: 1500,
+							// Optimized: Use radial gradient strip or simple border instead of heavy conic gradient
+							background: "radial-gradient(circle, rgba(255,215,0,0) 40%, rgba(255,215,0,0.1) 50%, rgba(255,215,0,0) 60%)",
+							border: "2px dashed rgba(255,215,0,0.3)",
+							borderRadius: "50%",
+						}} />
+						{/* Add another light ring for effect */}
+						<div style={{
+							position: "absolute", top: "50%", left: "50%", transform: `translate(-50%, -50%) rotate(-${frame * 0.5}deg)`,
+							width: 1200, height: 1200,
+							border: "1px solid rgba(255,215,0,0.1)",
+							borderRadius: "50%",
 						}} />
 					</AbsoluteFill>
 				</>
@@ -213,7 +254,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 
 			<AbsoluteFill
 				style={{
-					background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%)",
+					background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.5) 100%)",
 					pointerEvents: "none",
 					zIndex: 200,
 				}}

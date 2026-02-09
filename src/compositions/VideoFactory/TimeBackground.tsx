@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import {
 	AbsoluteFill,
+	OffthreadVideo, // Added
 	interpolate,
 	random,
 	staticFile,
@@ -38,9 +39,10 @@ interface MusicParticle {
 interface Props {
 	particleCount?: number;
 	overlayColor?: string; // Optional tint for Top 3 (Gold/Silver/Bronze)
+	hideBackground?: boolean; // New: Skip the solid gradient background
 }
 
-export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayColor }) => {
+export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayColor, hideBackground }) => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const imageRef = useRef<HTMLImageElement | null>(null);
 	const { width, height } = useVideoConfig();
@@ -49,7 +51,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 	// Load the 3x3 grid music icons image
 	useEffect(() => {
 		const img = new Image();
-		img.src = staticFile("video-factory/images/neon_instruments_grid.png");
+		img.src = staticFile("video-factory/images/neon_instruments_grid.webp");
 		img.onload = () => {
 			imageRef.current = img;
 		};
@@ -154,7 +156,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 
 				ctx.save();
 				// Pulse alpha on beat - very moderated
-				ctx.globalAlpha = (0.3 + Math.sin(frame * 0.03 + p.floatOffset) * 0.1) * (1 + pulse * 0.1);
+				ctx.globalAlpha = (0.55 + Math.sin(frame * 0.03 + p.floatOffset) * 0.1) * (1 + pulse * 0.1);
 				ctx.translate(screenX, screenY);
 				ctx.rotate(p.rotation + frame * p.rotationSpeed);
 				
@@ -163,75 +165,94 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 				ctx.fillStyle = "rgba(5, 10, 25, 0.5)"; 
 				ctx.fillRect(-size / 2, -size / 2, size, size);
 
-				// Icon with Glow - subtle pulse
-				ctx.filter = `contrast(1.1) brightness(${1.1 + pulse * 0.2}) saturate(${1.1 + pulse * 0.2})`;
-				ctx.globalCompositeOperation = "screen"; 
-				ctx.drawImage(
-					icons,
-					col * spriteW, row * spriteH, spriteW, spriteH,
-					-size / 2, -size / 2, size, size
-				);
-				
-				ctx.restore();
-			});
-		}
+						// filter: `contrast(1.1) brightness(${1.1 + pulse * 0.2}) saturate(${1.1 + pulse * 0.2})`, // Canvas filter removed
+						// globalCompositeOperation: "screen" // Removed
+						ctx.globalCompositeOperation = "source-over"; // Explicitly standard
+						ctx.drawImage(
+							icons,
+							col * spriteW, row * spriteH, spriteW, spriteH,
+							-size / 2, -size / 2, size, size
+						);
+						
+						ctx.restore();
+					});
+				}
+		
+			}, [frame, width, height, trails, musicParticles, pulse]);
+		
+			const formatDigits = (val: number) => val.toString().padStart(2, "0");
+			const hours = formatDigits(Math.floor(frame / 3600) % 24);
+			const mins = formatDigits(Math.floor(frame / 60) % 60);
+			const secs = formatDigits(frame % 60);
+			const ms = formatDigits(Math.floor((frame % 30) * 3.33));
+		
+			const timerPulse = 0.1 + pulse * 0.15;
+		
+			return (
+				<AbsoluteFill>
+					{/* base video layer (byakko) */}
+					<AbsoluteFill style={{ zIndex: -1 }}>
+						<OffthreadVideo
+							src={staticFile("assets/backgrounds/byakko.mp4")}
+							style={{ 
+								width: "100%", 
+								height: "100%", 
+								objectFit: "cover",
+								objectPosition: "center",
+								transform: "scale(1.3)"
+							}}
+						/>
+						{/* Dark overlay to balance video and HUD */}
+						<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.5)" }} />
+					</AbsoluteFill>
 
-	}, [frame, width, height, trails, musicParticles, pulse]);
-
-	const formatDigits = (val: number) => val.toString().padStart(2, "0");
-	const hours = formatDigits(Math.floor(frame / 3600) % 24);
-	const mins = formatDigits(Math.floor(frame / 60) % 60);
-	const secs = formatDigits(frame % 60);
-	const ms = formatDigits(Math.floor((frame % 30) * 3.33));
-
-	const timerPulse = 0.1 + pulse * 0.15;
-
-	return (
-		<AbsoluteFill style={{ 
-			background: "linear-gradient(160deg, #020815 0%, #051a3a 50%, #080215 100%)" 
-		}}>
-			{/* CENTRAL GLOW - Pulses with music */}
-			<AbsoluteFill
-				style={{
-					background: `radial-gradient(circle, rgba(0, 240, 255, ${0.2 + pulse * 0.2}) 0%, transparent 70%)`,
-					pointerEvents: "none",
-				}}
-			/>
-
-			{/* Large Timer Background */}
-			<AbsoluteFill
-				style={{
-					justifyContent: "center",
-					alignItems: "center",
-					opacity: timerPulse,
-					pointerEvents: "none",
-				}}
-			>
-				<div
-					style={{
-						fontSize: 500,
-						fontWeight: 900,
-						fontFamily: "Impact, sans-serif",
-						color: "#00f0ff",
-						filter: `blur(${3 - pulse * 1}px) drop-shadow(0 0 ${30 + pulse * 30}px #00f0ff)`,
-						letterSpacing: "-0.05em",
-						transform: `scale(${1.3 + pulse * 0.05}) skewX(-10deg)`,
-						whiteSpace: "nowrap",
-					}}
-				>
-					{hours}:{mins}:{secs}:{ms}
-				</div>
-			</AbsoluteFill>
-
-			<canvas
-				ref={canvasRef}
-				width={width}
-				height={height}
-				style={{ width: "100%", height: "100%" }}
-			/>
-
-			{/* Audio Visualizer Style Lines (Bottom) - Driven by pulse */}
-			<AbsoluteFill style={{ top: "auto", height: 300, bottom: 50, opacity: 0.4 }}>
+					{!hideBackground && (
+						<AbsoluteFill style={{ 
+							background: "linear-gradient(160deg, rgba(2, 8, 21, 0.8) 0%, rgba(5, 26, 58, 0.6) 50%, rgba(8, 2, 21, 0.8) 100%)" 
+						}} />
+					)}
+					{/* CENTRAL GLOW - Pulses with music */}
+					<AbsoluteFill
+						style={{
+							background: `radial-gradient(circle, rgba(0, 240, 255, ${0.2 + pulse * 0.2}) 0%, transparent 70%)`,
+							pointerEvents: "none",
+						}}
+					/>
+		
+					{/* Large Timer Background */}
+					<AbsoluteFill
+						style={{
+							justifyContent: "center",
+							alignItems: "center",
+							opacity: timerPulse,
+							pointerEvents: "none",
+						}}
+					>
+						<div
+							style={{
+								fontSize: 500,
+								fontWeight: 900,
+								fontFamily: "Impact, sans-serif",
+								color: "#00f0ff",
+								// filter: `blur(${3 - pulse * 1}px) drop-shadow(0 0 ${30 + pulse * 30}px #00f0ff)`, // REMOVED
+								letterSpacing: "-0.05em",
+								transform: `scale(${1.3 + pulse * 0.05}) skewX(-10deg)`,
+								whiteSpace: "nowrap",
+							}}
+						>
+							{hours}:{mins}:{secs}:{ms}
+						</div>
+					</AbsoluteFill>
+		
+					<canvas
+						ref={canvasRef}
+						width={width}
+						height={height}
+						style={{ width: "100%", height: "100%" }}
+					/>
+		
+					{/* Audio Visualizer Style Lines (Bottom) - Driven by pulse */}
+			<AbsoluteFill style={{ top: "auto", height: 300, bottom: 50, opacity: 0.6 }}> {/* Increased opacity */}
 				<div style={{ display: "flex", gap: 10, alignItems: "flex-end", height: "100%", padding: "0 100px" }}>
 					{Array.from({ length: 40 }).map((_, i) => {
 						const h = interpolate(Math.sin(frame * 0.1 + i), [-1, 1], [15, 100]) * (1 + pulse * 0.4);
@@ -240,7 +261,8 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 								flex: 1, 
 								height: h, 
 								background: `linear-gradient(to top, #00f0ff, transparent)`,
-								boxShadow: pulse > 0.5 ? `0 0 20px #00f0ff` : "none",
+								// Efficient simple box shadow on container or use simple border
+								borderTop: "2px solid rgba(0, 240, 255, 0.5)", 
 								borderRadius: "10px 10px 0 0",
                                 transition: "height 0.1s ease-out"
 							}} />
@@ -248,6 +270,22 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 					})}
 				</div>
 			</AbsoluteFill>
+
+			{/* ADDED: Global Neon Overlay - Efficient "Glow" for everything */}
+			<AbsoluteFill style={{
+				background: `radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.15) 0%, transparent 70%)`,
+				mixBlendMode: "screen", // Global blend is okay, per-particle is bad
+				pointerEvents: "none",
+				zIndex: 5,
+			}} />
+			
+			{/* ADDED: Scanline effect for "Cyber" feel (very lightweight) */}
+			<AbsoluteFill style={{
+				background: "linear-gradient(to bottom, rgba(255,255,255,0.03) 50%, transparent 50%)",
+				backgroundSize: "100% 4px",
+				pointerEvents: "none",
+				zIndex: 6,
+			}} />
 
 			<AbsoluteFill
 				style={{
@@ -261,8 +299,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 				<AbsoluteFill
 					style={{
 						backgroundColor: overlayColor,
-						mixBlendMode: "overlay",
-						opacity: 0.6,
+						opacity: 0.3,
 					}}
 				/>
 			)}

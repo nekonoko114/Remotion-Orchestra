@@ -7,7 +7,6 @@ import type { Liver } from "./types";
 
 const RANKING_DATA = RANKING_DATA_JSON as Liver[];
 import { EndingLogo } from "./EndingLogo";
-import { FireBackground } from "./FireBackground";
 import { OpeningTitle } from "./OpeningTitle";
 import { RankingGroup } from "./RankingGroup";
 import { TopRankReveal } from "./TopRankReveal";
@@ -57,9 +56,6 @@ export const RankingVideo = () => {
 			/>
 			
 			<AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
-				{/* Background persists throughout the entire video */}
-				<FireBackground />
-
 				{/* Sequenced Content: Opening -> Ranking with TRANSITIONS */}
 				<TransitionSeries>
 					{/* 1. Opening Title */}

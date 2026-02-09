@@ -1,0 +1,26 @@
+[
+  {
+    "scene": "scene_12_aquarium",
+    "filename": "scene_12.png",
+    "prompt": "Anime style illustration, cel shading. A beautiful Japanese girl with silver hair and purple eyes, wearing a mystic blue dress, looking at jellyfish tank in an aquarium, simple 2D anime background, blue lighting but not realistic, clean lines, aspect ratio 16:9.",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_14_library",
+    "filename": "scene_14.png",
+    "prompt": "Anime style illustration, flat colors, cel shading. A beautiful Japanese girl with silver hair and purple eyes, wearing glasses and a thick cardigan, braid hair style, whispering secretively in a library, simple anime background, clean lines, aspect ratio 16:9.",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_16_theater",
+    "filename": "scene_16.png",
+    "prompt": "Anime style illustration, cel shading. A beautiful Japanese girl with silver hair and purple eyes, in a movie theater holding popcorn, excited expression, face illuminated by screen but strictly 2D anime style, clean lines, aspect ratio 16:9.",
+    "aspect_ratio": "16:9"
+  },
+  {
+    "scene": "scene_18_rainy",
+    "filename": "scene_18.png",
+    "prompt": "Anime style illustration, flat colors. A beautiful Japanese girl with silver hair and purple eyes, looking out a window on a rainy day, loose t-shirt, melancholic but cute, simple anime rain effect, clean lines, aspect ratio 16:9.",
+    "aspect_ratio": "16:9"
+  }
+]

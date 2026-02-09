@@ -20,7 +20,7 @@ const FONT_SIZE = 70;
 // 	weights: ['900'],
 //     ignoreTooManyRequestsWarning: true,
 // });
-const fontFamily = '"Noto Sans JP", sans-serif';
+const fontFamily = '"Zen Maru Gothic", sans-serif';
 
 interface WordData {
 	word: string;
