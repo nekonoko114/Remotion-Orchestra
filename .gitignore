@@ -9,3 +9,20 @@ out
 *.mp4
 output/
 build/
+
+# Python
+venv-whisper/
+__pycache__/
+
+# Logs
+*.txt
+
+# Temporary/Generated items in root
+still.png
+reo.png
+reo1.png
+temp_kimitonara.wav
+
+# Assets - Audio and Generated
+public/assets/audio/music/*.mp3
+public/assets/generated/
