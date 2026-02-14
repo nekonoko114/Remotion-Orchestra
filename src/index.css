@@ -11,6 +11,24 @@ body {
   padding: 0;
 }
 
+@font-face {
+  font-family: 'Zen Maru Gothic Black';
+  src: url('./fonts/ZenMaruGothic-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Alumni Sans';
+  src: url('./fonts/AlumniSans-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: '851MkPOP_101';
+  src: url('./fonts/851MkPOP_101.ttf') format('truetype');
+}
 /* 3D Metallic Gold Effect (Hyper Saturated & Neon) */
 .metallic-gold {
   background: linear-gradient(

@@ -24,7 +24,7 @@ interface BattlePlayer {
 const MOCK_JOL_PLAYER: BattlePlayer = {
 	name: "J.O.L Creator",
 	id: "jol_creator_01",
-	image: staticFile("video-factory/images/logo/logo.webp"), 
+	image: staticFile("video-factory/images/logo/logo.png"), 
 	color: "#00E5FF", // Cyan Water
 	glowColor: "#00B0FF",
 };
@@ -32,7 +32,7 @@ const MOCK_JOL_PLAYER: BattlePlayer = {
 const MOCK_OPPONENT: BattlePlayer = {
 	name: "Ocean Queen",
 	id: "ocean_queen_77",
-	image: staticFile("video-factory/images/logo/logo.webp"),
+	image: staticFile("video-factory/images/logo/logo.png"),
 	color: "#1DE9B6", // Turquoise
 	glowColor: "#00BFA5",
 };
@@ -553,7 +553,7 @@ export const BattleWater: React.FC = () => {
 							transform: `scale(${interpolate(frame - startEnd, [5, 25], [0.5, 1], { easing: Easing.out(Easing.back(1.5)) })})`,
 							margin: "40px 0"
 						}}>
-							<Img src={staticFile("video-factory/images/logo/logo.webp")} style={{ width: 600, filter: "drop-shadow(0 0 30px #00E5FF)" }} />
+							<Img src={staticFile("video-factory/images/logo/logo.png")} style={{ width: 600, filter: "drop-shadow(0 0 30px #00E5FF)" }} />
 						</div>
 						<div style={{ opacity: interpolate(frame - startEnd, [15, 35], [0, 1]) }}>
 							<h2 style={{ fontSize: 60, color: "white", fontWeight: 900 }}>海の底で待っている</h2>

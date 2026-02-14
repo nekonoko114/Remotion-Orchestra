@@ -11,4 +11,8 @@ import { enableTailwind } from "@remotion/tailwind-v4";
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
 Config.setDelayRenderTimeoutInMilliseconds(120000); // 120 seconds
-Config.overrideWebpackConfig(enableTailwind);
+import { enableSkia } from "@remotion/skia/enable";
+
+Config.overrideWebpackConfig((currentConfiguration) => {
+  return enableSkia(enableTailwind(currentConfiguration));
+});

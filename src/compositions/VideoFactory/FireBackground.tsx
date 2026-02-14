@@ -111,7 +111,7 @@ export const FireBackground: React.FC = () => {
 			<AbsoluteFill style={{ overflow: "hidden" }}>
 				<Img
 					src={staticFile(
-						"video-factory/images/generated/opening_luxury_fire.webp",
+						"video-factory/images/generated/opening_luxury_fire.png",
 					)}
 					style={{
 						width: "100%",

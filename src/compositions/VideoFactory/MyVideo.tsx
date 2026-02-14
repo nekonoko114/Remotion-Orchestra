@@ -27,7 +27,7 @@ export const MyVideo = () => {
 		extrapolateRight: "clamp",
 	});
 
-	const logoPath = staticFile("video-factory/images/logo/logo.webp");
+	const logoPath = staticFile("video-factory/images/logo/logo.png");
 
 	const audioPath = staticFile("video-factory/audio/Over_Speed.mp3");
 

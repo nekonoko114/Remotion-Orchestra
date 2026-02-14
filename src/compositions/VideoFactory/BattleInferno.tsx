@@ -26,7 +26,7 @@ interface BattlePlayer {
 const MOCK_JOL_PLAYER: BattlePlayer = {
 	name: "J.O.L Creator",
 	id: "jol_creator_01",
-	image: staticFile("video-factory/images/logo/logo.webp"), 
+	image: staticFile("video-factory/images/logo/logo.png"), 
 	color: "#ff2000",
 	glowColor: "#ff0000",
 };
@@ -34,7 +34,7 @@ const MOCK_JOL_PLAYER: BattlePlayer = {
 const MOCK_OPPONENT: BattlePlayer = {
 	name: "Inferno Lord",
 	id: "inferno_lord_666",
-	image: staticFile("video-factory/images/logo/logo.webp"),
+	image: staticFile("video-factory/images/logo/logo.png"),
 	color: "#ffaa00",
 	glowColor: "#ff5500",
 };
@@ -321,7 +321,7 @@ export const BattleInferno: React.FC = () => {
 								zIndex: 500,
 								opacity: interpolate(frame - startMatchup - 10, [0, 2, 12], [0, 1, 0]) 
 							}}>
-								<Img src={staticFile("video-factory/images/vfx/screen_crack.webp")} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "invert(0.2) sepia(1) saturate(5) hue-rotate(-20deg)" }} />
+								<Img src={staticFile("video-factory/images/vfx/screen_crack.png")} style={{ width: "100%", height: "100%", objectFit: "cover", filter: "invert(0.2) sepia(1) saturate(5) hue-rotate(-20deg)" }} />
 							</AbsoluteFill>
 						</>
 					)}
@@ -430,7 +430,7 @@ export const BattleInferno: React.FC = () => {
 							transform: `scale(${interpolate(frame - startEnd, [5, 25], [0.5, 1], { easing: Easing.out(Easing.back(1.5)) })})`,
 							margin: "40px 0"
 						}}>
-							<Img src={staticFile("video-factory/images/logo/logo.webp")} style={{ width: 600, filter: "drop-shadow(0 0 50px #ff0000) sepia(1) saturate(10) hue-rotate(-30deg)" }} />
+							<Img src={staticFile("video-factory/images/logo/logo.png")} style={{ width: 600, filter: "drop-shadow(0 0 50px #ff0000) sepia(1) saturate(10) hue-rotate(-30deg)" }} />
 						</div>
 						<div style={{ opacity: interpolate(frame - startEnd, [15, 35], [0, 1]) }}>
 							<h2 style={{ fontSize: 65, color: "white", fontWeight: 900, textShadow: "0 5px 15px rgba(0,0,0,1)" }}>地獄の戦いを見届けよ</h2>

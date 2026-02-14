@@ -1,67 +1,60 @@
 {
-	"title": "雨の日に出会った不思議な少女",
-	"concept": "雨の日に不思議な少女と出会い、自己発見の旅を通じて内面的な成長を遂げる物語。",
-	"timeline": [
-		{
-			"id": 1,
-			"label": "Intro: Reflective Rain",
-			"effect": "dim_and_focus",
-			"text_primary": "雨の音が静かに街を包む",
-			"text_secondary": "灰色の空、反射する水たまり",
-			"color_theme": "monochrome_highlight",
-			"duration_frames": 150,
-			"start_frame": 0,
-			"end_frame": 150
-		},
-		{
-			"id": 2,
-			"label": "Development: Mysterious Encounter",
-			"effect": "camera_shake_with_particles",
-			"text_primary": "傘の無い不思議な少女がそこに立っていた",
-			"text_secondary": "彼女の周りだけ雨が降らない",
-			"color_theme": "vibrant_magenta",
-			"duration_frames": 150,
-			"start_frame": 150,
-			"end_frame": 300
-		},
-		{
-			"id": 3,
-			"label": "Development: Inner Conflict",
-			"effect": "zoom_and_glitch",
-			"text_primary": "彼女の存在に引き込まれるが、心に不安が渦巻く",
-			"text_secondary": "自分を疑い、揺れ動く感情",
-			"color_theme": "electric_gold",
-			"duration_frames": 150,
-			"start_frame": 300,
-			"end_frame": 450
-		},
-		{
-			"id": 4,
-			"label": "Climax: Dreamlike Connection",
-			"effect": "awakening_flash",
-			"text_primary": "彼女と目が合った瞬間、世界が広がる",
-			"text_secondary": "心の奥に響く声が聞こえる",
-			"color_theme": "fire_and_ice",
-			"duration_frames": 150,
-			"start_frame": 450,
-			"end_frame": 600
-		},
-		{
-			"id": 5,
-			"label": "Conclusion: Epilogue of Enlightenment",
-			"effect": "split_vertical_slide",
-			"text_primary": "少女は微笑み、ゆっくりと消えた",
-			"text_secondary": "新たな視点で雨の街を歩き出す",
-			"color_theme": "neon_blue",
-			"duration_frames": 150,
-			"start_frame": 600,
-			"end_frame": 750
-		}
-	],
-	"asset_prompts": {
-		"music": "Compose an evocative and ethereal piece consisting of gentle piano melodies and ambient rain sounds, subtly changing in tone to reflect inner turmoil and resolution.",
-		"sfx": "Sound effects of gentle rain, soft footsteps, and a faint whispering voice on the wind.",
-		"video": "An urban scene soaked in rain, highlighting reflections on puddles. The mysterious girl stands, radiating an ethereal glow, and the environment around her shows subtle visual shifts from mundane to ethereal, representing the protagonist's perspective changes.",
-		"voice": "彼女の瞳に映る世界の広がり。その変化を心に深く刻み、新しい日常が始まる。"
-	}
+  "title": "春の訪れ、再会の鼓動",
+  "concept": "凍てつく冬の静寂が溶け、色彩が溢れ出す瞬間に訪れる奇跡の再会。モノクロームの世界が鮮やかな春へと変貌するドラマチックな構成。",
+  "timeline": [
+    {
+      "id": 1,
+      "label": "winter_silence",
+      "effect": "dim_and_focus",
+      "transition": "CrossDissolve",
+      "text_primary": "止まっていた時間",
+      "text_secondary": "凍てつく風の中で",
+      "color_theme": "monochrome_highlight",
+      "duration_frames": 150,
+      "start_frame": 0,
+      "end_frame": 150
+    },
+    {
+      "id": 2,
+      "label": "first_thaw",
+      "effect": "awakening_flash",
+      "transition": "CircularReveal",
+      "text_primary": "鼓動の予感",
+      "text_secondary": "雪解けの雫が光る",
+      "color_theme": "electric_gold",
+      "duration_frames": 150,
+      "start_frame": 150,
+      "end_frame": 300
+    },
+    {
+      "id": 3,
+      "label": "the_reunion",
+      "effect": "camera_shake_with_particles",
+      "transition": "ZoomBlurTransition",
+      "text_primary": "ようやく、巡り合う",
+      "text_secondary": "舞い散る花びらとともに",
+      "color_theme": "vibrant_magenta",
+      "duration_frames": 150,
+      "start_frame": 300,
+      "end_frame": 450
+    },
+    {
+      "id": 4,
+      "label": "eternal_spring",
+      "effect": "split_vertical_slide",
+      "transition": "FlashTransition",
+      "text_primary": "新しい季節の始まり",
+      "text_secondary": "二人の物語が、再び動き出す",
+      "color_theme": "fire_and_ice",
+      "duration_frames": 150,
+      "start_frame": 450,
+      "end_frame": 600
+    }
+  ],
+  "asset_prompts": {
+    "music": "Starts with a melancholic solo piano, gradually layering with warm violin strings and light orchestral percussion to create an uplifting and emotional spring theme.",
+    "sfx": "Cold winter wind fading out, soft ice cracking sounds, birds chirping, gentle rustling of cherry blossom petals, and a heartbeat sound at the moment of reunion.",
+    "video": "Cinematic 4K visuals shifting from macro shots of frost on glass to blooming cherry blossoms in slow motion, soft sunlight bokeh, and two silhouettes reaching out to each other.",
+    "voice": "凍てつく時は終わり、世界は光を取り戻した。ずっと待っていた、この瞬間を。春の風が、私たちを再び引き合わせた。"
+  }
 }

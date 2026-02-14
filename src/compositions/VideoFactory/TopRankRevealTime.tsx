@@ -18,6 +18,8 @@ import { AdjustmentLayerTime as AdjustmentLayer } from "./AdjustmentLayerTime";
 import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
 
+// Verified build status
+
 const BPM = 128;
 
 type Props = {
@@ -88,20 +90,15 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000" }}>
-			{/* Rank-specific Generated Video Background */}
 			<AbsoluteFill>
 				<Video
-					src={staticFile(
-						liver.username === "ritu_1115" || liver.nickname === "じんや"
-							? "assets/backgrounds/Can_i_move_202602041609_l613b.mp4" 
-							: `assets/backgrounds/rank_${rank}_bg.mp4`
-					)}
+					src={staticFile(`assets/backgrounds/rank_${rank}_bg.mp4`)}
 					style={{ 
 						width: "100%", 
 						height: "100%", 
 						objectFit: "cover",
 						objectPosition: "center",
-						transform: (liver.username === "ritu_1115" || liver.nickname === "じんや") ? "scale(1.3)" : "none"
+						transform: (liver.username === "ritu_1115" || liver.nickname === "じんや") ? "scale(1.3)" : "scale(1.1)"
 					}}
 					loop
 					muted
@@ -109,14 +106,14 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.4)" }} />
 			</AbsoluteFill>
 
-			<TimeBackground overlayColor={primary + "33"} hideBackground />
+			<TimeBackground overlayColor={primary + "33"} hideBackground hideBaseVideo />
 			<AdjustmentLayer rank={rank} beatPulse={pulse} />
 			
 			<AbsoluteFill
 				style={{
 					justifyContent: "center",
 					alignItems: "center",
-					fontFamily: '"Impact", sans-serif',
+					fontFamily: '"Mochiy Pop One", sans-serif',
 					color: "white",
 				}}
 			>
@@ -138,10 +135,11 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 						color: "#FFFFFF", 
 						textShadow: `0 0 30px ${primary}, 0 0 60px ${primary}`, 
 						fontWeight: 900,
-						fontStyle: "italic", 
-						lineHeight: 0.8,
+						fontStyle: "normal", 
+						lineHeight: 1,
 						transform: `scale(${rankScale * pulseScale})`,
-						opacity: rankOpacity
+						opacity: rankOpacity,
+						fontFamily: '"Mochiy Pop One", sans-serif',
 					}}>
 						{title}
 					</h1>

@@ -1,18 +1,11 @@
 import { Composition } from "remotion";
-import scenarioData from "./ai_scenario.json";
 import { CatsAdventure } from "./compositions/CatsAdventure";
-import { CyberpunkBattle } from "./compositions/CyberpunkBattle";
-import { JumpCutComposition } from "./compositions/LiverFormatter/JumpCutComposition";
-import liverFormatterSubtitles from "./compositions/LiverFormatter/subtitles.json";
-import { calculateCuts } from "./compositions/LiverFormatter/utils/calculate-cuts";
-import { AutoCutComposition } from "./compositions/TikTokLiver/AutoCut/AutoCutComposition";
-import { CatRabbitEnjoy } from "./compositions/TikTokLiver/Automation/CatRabbitEnjoy";
-import { TikTokBattle } from "./compositions/TikTokLiver/Battle/TikTokBattle";
-import { RankingComposition } from "./compositions/TikTokLiver/Ranking/RankingComposition";
 import { EffectsCatalog } from "./compositions/VFXLibrary/EffectsCatalog";
 import { JsonDrivenVideo } from "./compositions/VFXLibrary/JsonDrivenVideo";
 import { ThreeDTextScene } from "./compositions/VFXLibrary/ThreeDTextScene";
 import { VFXShowreel } from "./compositions/VFXLibrary/VFXShowreel";
+
+
 import { MyVideo } from "./compositions/VideoFactory/MyVideo";
 import {
   ENDING_SEC,
@@ -32,17 +25,24 @@ import {
   TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
 } from "./compositions/VideoFactory/RankingTime";
 import { BattleCrystal } from "./compositions/VideoFactory/BattleCrystal";
-import { BattleInferno } from "./compositions/VideoFactory/BattleInferno";
 import { BattleWater } from "./compositions/VideoFactory/BattleWater";
 import { BattleKawaii } from "./compositions/VideoFactory/BattleKawaii";
 import { AssetCatalog } from "./compositions/VideoFactory/Assets/Catalog";
-import { LuxuryGoldLoop } from "./compositions/AssetGenerator/Gold/LuxuryGoldLoop";
 import { NarandaMamadeMV } from "./compositions/NarandaMamade";
+import { SoregayasashisaMV } from "./compositions/Soregayasashisa";
 import narandaMamadeMusicAnalysis from "./compositions/NarandaMamade/music_analysis.json";
+import { GsapExample, GsapExampleSchema } from "./components/GsapExample";
+import { MorphExample } from "./components/MorphExample";
+import { TextMorphExample } from "./components/TextMorphExample";
+import { KaleidaMorph } from "./components/KaleidaMorph";
+import { NovaShowMV } from "./components/NovaShowMV";
+import { AdoStyleLyric } from "./components/AdoStyleLyric";
+import { NovaLyricMaster } from "./components/NovaLyricMaster";
+import { KimitonaraComposition } from "./compositions/Kimitonara";
+import { SkillsShowcase } from "./compositions/SkillsShowcase";
 import "./index.css";
 import React from "react";
 
-const LIVER_FORMATTER_FPS = 30;
 const JOL_RANKING_FPS = 30;
 
 // Calculate Vertical Duration
@@ -58,19 +58,10 @@ const JOL_RANKING_DURATION_TIME =
     TOP_RANK_SEC_TIME * 3 +
     ENDING_SEC_TIME) *
     JOL_RANKING_FPS -
-  5 * TRANSITION_FRAMES_TIME;
+  6 * TRANSITION_FRAMES_TIME;
 
 export const RemotionRoot: React.FC = () => {
-  // LiverFormatter Duration Calculation
-  const liverFormatterDuration = React.useMemo(() => {
-    const words = liverFormatterSubtitles.words.map((w: any) => ({
-      ...w,
-      segmentId: 0,
-    }));
-    const clips = calculateCuts(words);
-    const totalSeconds = clips.reduce((acc, clip) => acc + clip.duration, 0);
-    return Math.ceil(totalSeconds * LIVER_FORMATTER_FPS);
-  }, []);
+
 
   return (
     <>
@@ -106,6 +97,14 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1920}
         height={1080}
+      />
+      <Composition
+        id="GeminiScenarioVideo"
+        component={JsonDrivenVideo}
+        durationInFrames={600}
+        fps={30}
+        width={1080}
+        height={1920}
       />
       {/* Imported from video-factory-v1 */}
       <Composition
@@ -176,6 +175,90 @@ export const RemotionRoot: React.FC = () => {
         id="NarandaMamadeMV"
         component={NarandaMamadeMV}
         durationInFrames={Math.ceil(narandaMamadeMusicAnalysis.duration * 30)}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="soregayasashisa"
+        component={SoregayasashisaMV}
+        durationInFrames={6800} // ~226 seconds
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="GSAP-Showcase"
+        component={GsapExample}
+        schema={GsapExampleSchema}
+        durationInFrames={150}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{
+          text: "NOVA x GSAP x GEMINI"
+        }}
+      />
+      <Composition
+        id="MORPH-Showcase"
+        component={MorphExample}
+        durationInFrames={120} // 4秒
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="TEXT-MORPH-Showcase"
+        component={TextMorphExample}
+        durationInFrames={180} // 6秒
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="KALEIDA-MORPH-Showcase"
+        component={KaleidaMorph}
+        durationInFrames={180} // 6秒
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="NOVA-SHOW-MV"
+        component={NovaShowMV}
+        durationInFrames={15 * 8} // 歌詞8セット分
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="ADO-LYRIC-Showcase"
+        component={AdoStyleLyric}
+        durationInFrames={30 * 4} // 歌詞4種類分
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="NOVA-LYRIC-MASTER"
+        component={NovaLyricMaster}
+        durationInFrames={45 * 4} // 4つの歌詞セクション
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="Kimitonara"
+        component={KimitonaraComposition}
+        durationInFrames={30 * 222} // 3分42秒
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="SkillsShowcase"
+        component={SkillsShowcase}
+        durationInFrames={2695} // 1795 + 900 (MV)
         fps={30}
         width={1920}
         height={1080}

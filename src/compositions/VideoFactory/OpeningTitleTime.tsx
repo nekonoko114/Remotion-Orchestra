@@ -3,11 +3,9 @@ import {
 	AbsoluteFill,
 	interpolate,
 	random,
-	staticFile,
 	spring,
 	useCurrentFrame,
 	useVideoConfig,
-	Video,
 } from "remotion";
 import { LensFlare } from "../../components/effects/LensFlare";
 import { ImpactEffect } from "./ImpactEffect";
@@ -111,25 +109,14 @@ export const OpeningTitleTime: React.FC = () => {
 				justifyContent: "center",
 				alignItems: "center",
 				flexDirection: "column",
-				background: "#000",
+				background: "transparent", // Changed from #000 to transparent to let root TimeBackground show
 				transform: `translate(${totalShakeX}px, ${totalShakeY}px)`,
 			}}
 		>
-			{/* 1. BACKGROUND LAYER: Time Theme */}
+			{/* 1. BACKGROUND LAYER: Time Theme - Handled by Root TimeBackground now */
+			/* Video removed to prevent double rendering */
+			}
 			<AbsoluteFill style={{ zIndex: 0 }}>
-				<Video
-					src={staticFile("assets/backgrounds/byakko.mp4")}
-					style={{ 
-						width: "100%", 
-						height: "100%", 
-						objectFit: "cover",
-						objectPosition: "center",
-						transform: "scale(1.3)"
-					}}
-					loop
-					muted
-				/>
-				
 				{/* Global Cyan Tint Overlay */}
 				<AbsoluteFill 
 					style={{

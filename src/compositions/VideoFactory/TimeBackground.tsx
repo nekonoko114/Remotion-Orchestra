@@ -10,6 +10,8 @@ import {
 } from "remotion";
 import { useBeatValue } from "./utils/beat-sync";
 
+// Verified build status
+
 const TRAIL_COUNT = 20;
 const MUSIC_SYMBOL_COUNT = 10; // Reduced count because icons are larger now
 const SPRITE_ROWS = 3;
@@ -40,9 +42,10 @@ interface Props {
 	particleCount?: number;
 	overlayColor?: string; // Optional tint for Top 3 (Gold/Silver/Bronze)
 	hideBackground?: boolean; // New: Skip the solid gradient background
+	hideBaseVideo?: boolean; // New: Skip the underlying video (byakko) for performance or custom bg
 }
 
-export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayColor, hideBackground }) => {
+export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayColor, hideBackground, hideBaseVideo = false }) => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const imageRef = useRef<HTMLImageElement | null>(null);
 	const { width, height } = useVideoConfig();
@@ -51,7 +54,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 	// Load the 3x3 grid music icons image
 	useEffect(() => {
 		const img = new Image();
-		img.src = staticFile("video-factory/images/neon_instruments_grid.webp");
+		img.src = staticFile("video-factory/images/neon_instruments_grid.png");
 		img.onload = () => {
 			imageRef.current = img;
 		};
@@ -191,22 +194,24 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 			return (
 				<AbsoluteFill>
 					{/* base video layer (byakko) */}
-					<AbsoluteFill style={{ zIndex: -1 }}>
-						<OffthreadVideo
-							src={staticFile("assets/backgrounds/byakko.mp4")}
-							style={{ 
-								width: "100%", 
-								height: "100%", 
-								objectFit: "cover",
-								objectPosition: "center",
-								transform: "scale(1.3)"
-							}}
-						/>
-						{/* Dark overlay to balance video and HUD */}
-						<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.5)" }} />
-					</AbsoluteFill>
+					{!hideBaseVideo && (
+						<AbsoluteFill style={{ zIndex: -1 }}>
+							<OffthreadVideo
+								src={staticFile("assets/backgrounds/byakko.mp4")}
+								style={{ 
+									width: "100%", 
+									height: "100%", 
+									objectFit: "cover",
+									objectPosition: "center",
+									transform: "scale(1.1)"
+								}}
+							/>
+							{/* Dark overlay to balance video and HUD */}
+							<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0)" }} />
+						</AbsoluteFill>
+					)}
 
-					{!hideBackground && (
+					{!hideBackground && hideBaseVideo && (
 						<AbsoluteFill style={{ 
 							background: "linear-gradient(160deg, rgba(2, 8, 21, 0.8) 0%, rgba(5, 26, 58, 0.6) 50%, rgba(8, 2, 21, 0.8) 100%)" 
 						}} />

@@ -46,7 +46,7 @@ export const EndingLogo: React.FC = () => {
 					}}
 				>
 					<Img
-						src={staticFile("video-factory/images/logo/logo.webp")}
+						src={staticFile("video-factory/images/logo/logo.png")}
 						style={{
 							width: "100%",
 							objectFit: "contain",

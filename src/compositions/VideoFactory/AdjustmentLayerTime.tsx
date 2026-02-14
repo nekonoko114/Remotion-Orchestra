@@ -12,12 +12,12 @@ export const AdjustmentLayerTime: React.FC<Props> = ({ rank, beatPulse = 0 }) =>
 		// Time Theme: Cyan, Magenta, Purple
 		if (rank === 1) return { tint: "#00f0ff", contrast: 1.2, saturate: 1.5, brightness: 1.1 };
 		if (rank === 2) return { tint: "#ff00ff", contrast: 1.1, saturate: 1.4, brightness: 1.05 };
-		if (rank === 3) return { tint: "#7000ff", contrast: 1.15, saturate: 1.3, brightness: 1.05 };
-		return { tint: "#ffffff", contrast: 1, saturate: 1, brightness: 1 };
+		if (rank === 3) return { tint: "#7000ff", contrast: 1.1, saturate: 1.2, brightness: 1.05 };
+		return { tint: "#00f0ff", contrast: 1, saturate: 1.1, brightness: 1 };
 	};
 
 	const theme = getTheme();
-	const isGlitching = random(frame) < 0.05; 
+	const isGlitching = random(frame) < 0.02; 
 	const shiftY = isGlitching ? Math.floor(random(frame + 1) * 20) : 0;
 
 	// Subtle pulse glow

@@ -473,7 +473,7 @@ export const BattleKawaii: React.FC = () => {
 				<AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
 					<div style={{ textAlign: "center", opacity: interpolate(frame - startEnd, [0, 20], [0, 1]) }}>
 						<h2 style={{ fontSize: 80, color: "#FF69B4" }}>COMING SOON</h2>
-						<Img src={staticFile("video-factory/images/logo/logo.webp")} style={{ width: 500, marginTop: 40 }} />
+						<Img src={staticFile("video-factory/images/logo/logo.png")} style={{ width: 500, marginTop: 40 }} />
 					</div>
 				</AbsoluteFill>
 			</Sequence>

@@ -25,7 +25,7 @@ export const EndingLogoTime: React.FC = () => {
 		<AbsoluteFill style={{ backgroundColor: "#000", zIndex: 5000 }}>
 			{/* 1. BACKGROUND LAYER (No opacity fade) */}
 			<AbsoluteFill style={{ zIndex: 1 }}>
-				<TimeBackground />
+				<TimeBackground hideBaseVideo />
 				
 				{/* Brightening Gradient Overlay (Blue/Cyan) */}
 				<AbsoluteFill 
@@ -102,7 +102,7 @@ export const EndingLogoTime: React.FC = () => {
 					}}
 				>
 					<Img
-						src={staticFile("video-factory/images/logo/logo.webp")}
+						src={staticFile("video-factory/images/logo/logo.png")}
 						style={{
 							width: "100%",
 							height: "auto",

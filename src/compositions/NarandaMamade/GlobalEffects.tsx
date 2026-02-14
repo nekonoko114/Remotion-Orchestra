@@ -1,93 +1,97 @@
-import React from 'react';
-import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, useCurrentFrame, interpolate, Easing } from 'remotion';
 
 interface GlobalEffectsProps {
     transitionFrames?: number[];
+    audioPower?: number;
 }
 
-export const GlobalEffects: React.FC<GlobalEffectsProps> = ({ transitionFrames = [] }) => {
+export const GlobalEffects: React.FC<GlobalEffectsProps> = ({ transitionFrames = [], audioPower = 0 }) => {
     const frame = useCurrentFrame();
+
+    // 青春カラー：パステルブルーとグリーン
+    const pastelBlue = 'rgba(162, 210, 255, 0.2)'; 
+    const pastelGreen = 'rgba(185, 228, 201, 0.2)';
 
     return (
         <AbsoluteFill style={{ 
             pointerEvents: 'none', 
             zIndex: 100,
-            filter: `contrast(1.05) saturate(1.1)`, // Global Polish
+            // 修正：全体へのfilter適用は非常に重いため削除
         }}>
-            {/* 0. Global Chromatic Aberration (Subtle Dreamy Feel) */}
+            {/* 0. Seishun Gradient (Soft Atmosphere) */}
             <AbsoluteFill style={{
                 zIndex: 0,
-                opacity: 0.15,
-                background: 'transparent',
-                boxShadow: 'inset 2px 0 10px rgba(255,0,0,0.3), inset -2px 0 10px rgba(0,255,255,0.3)',
+                background: `linear-gradient(135deg, ${pastelBlue} 0%, transparent 50%, ${pastelGreen} 100%)`,
+                opacity: 0.4,
             }} />
-             {/* --- RICH VISUAL EFFECTS (High Quality Polish) --- */}
             
-            {/* 1. Cinematic Vignette (Adds depth and focus to center) */}
+            {/* 1. Soft Cinematic Vignette (Not Black, but Deep Greenish Blue) */}
             <AbsoluteFill style={{
-                background: 'radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.5) 100%)',
+                background: 'radial-gradient(circle at center, transparent 60%, rgba(20, 40, 40, 0.3) 100%)',
                 zIndex: 1,
             }} />
 
-            {/* 2. Color Grading Overlay (Unifies tones with Nova's Purple/Blue) - LIGHTENED */}
-            <AbsoluteFill style={{
-                background: 'linear-gradient(to bottom right, rgba(155, 93, 229, 0.08), transparent 50%, rgba(20, 0, 60, 0.1))',
-                zIndex: 2,
-                mixBlendMode: 'overlay', // Blends nicely with the brightened image
-            }} />
-
-            {/* 3. Ambient Light (Subtle "Breathing" Glow) */}
-            <AbsoluteFill style={{ zIndex: 3, opacity: 0.4 }}>
+            {/* 2. Sunlight / Komorebi Effect (木漏れ日のような光の粒子) */}
+            <AbsoluteFill style={{ 
+                zIndex: 2, 
+                opacity: 0.2 
+            }}>
                  <div style={{
                      position: 'absolute',
-                     top: '-20%',
-                     left: '-20%',
-                     width: '140%',
-                     height: '140%',
-                     background: 'radial-gradient(circle at 50% 30%, rgba(255,255,255,0.1), transparent 60%)',
-                     transform: `scale(${1 + Math.sin(frame * 0.03) * 0.05})`, // Slow breath
+                     top: '-10%',
+                     left: '-10%',
+                     width: '120%',
+                     height: '120%',
+                     background: 'radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4), transparent 50%), radial-gradient(circle at 70% 80%, rgba(185, 228, 201, 0.3), transparent 60%)',
+                     transform: `translate(${Math.sin(frame * 0.005) * 50}px, ${Math.cos(frame * 0.005) * 30}px) scale(${1 + Math.sin(frame * 0.01) * 0.05})`, 
+                     filter: 'blur(40px)',
                  }} />
             </AbsoluteFill>
 
-            {/* SAFE VISIBLE BORDER - Standard CSS Border */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    border: '25px solid rgba(155, 93, 229, 0.7)', // Solid Purple Frame
-                    boxSizing: 'border-box',
-                    zIndex: 4,
-                    boxShadow: 'inset 0 0 15px rgba(255, 255, 255, 0.4)',
-                }} 
-            />
+            {/* 3. Elegant Frame (Friendship Pastels) */}
+            <div style={{
+                position: 'absolute',
+                top: 0, left: 0, right: 0, bottom: 0,
+                border: '12px solid',
+                borderImageSource: `linear-gradient(45deg, rgba(162, 210, 255, 0.3), rgba(185, 228, 201, 0.3))`,
+                borderImageSlice: 1,
+                boxSizing: 'border-box',
+                zIndex: 4,
+            }} />
 
-            {/* Inner Accent Line */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 25,
-                    left: 25,
-                    right: 25,
-                    bottom: 25,
-                    border: '3px solid rgba(255, 255, 255, 0.6)', // Silver/White Line
-                    zIndex: 21,
-                    borderRadius: '2px',
-                }}
-             />
-            {/* 4. Scene Transition Flashes */}
+            {/* 4. Elegant Transition Glows (Mixing Blue/Green) */}
             {transitionFrames.map((tFrame, i) => {
                 const diff = frame - tFrame;
-                if (diff < 0 || diff > 20) return null;
-                // Quick flash that fades
-                const flashOpacity = (1 - (diff / 20)) * 0.3;
+                if (diff < -15 || diff > 45) return null;
+                
+                const opacity = interpolate(
+                    diff,
+                    [-15, 0, 45],
+                    [0, 0.45, 0], // 少しだけ光を強く
+                    {
+                        easing: Easing.out(Easing.quad),
+                        extrapolateLeft: 'clamp',
+                        extrapolateRight: 'clamp',
+                    }
+                );
+
+                const scale = interpolate(
+                    diff,
+                    [-15, 45],
+                    [0.98, 1.15],
+                    { easing: Easing.out(Easing.ease) }
+                );
+
+                // 交替で色を変えるか、ミックスする
+                const glowColor = i % 2 === 0 ? 'rgba(162, 210, 255, 0.7)' : 'rgba(185, 228, 201, 0.7)';
+
                 return (
-                    <AbsoluteFill key={`flash-${i}-${tFrame}`} style={{
-                        backgroundColor: 'white',
-                        opacity: flashOpacity,
+                    <AbsoluteFill key={`trans-${i}-${tFrame}`} style={{
                         zIndex: 50,
+                        opacity,
+                        background: `radial-gradient(circle at 50% 50%, ${glowColor}, transparent 80%)`,
+                        transform: `scale(${scale})`,
+                        mixBlendMode: 'screen',
                     }} />
                 );
             })}
