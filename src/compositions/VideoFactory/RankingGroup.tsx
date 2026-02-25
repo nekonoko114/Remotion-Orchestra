@@ -39,8 +39,29 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 
 	return (
 		<AbsoluteFill>
-			{/* Replaced per user request: "Same background as Opening for 10-4" */}
-			<OpeningBackground />
+			{/* Replaced per user request: "Temple/Shrine of Dark Knights for 10-4" */}
+			<AbsoluteFill style={{ backgroundColor: "#000" }}>
+				<Img 
+					src={staticFile(
+						title.includes("10") 
+							? "assets/backgrounds/dark_temple_bg_top10.png"
+							: "assets/backgrounds/dark_temple_bg_top6.png"
+					)}
+					style={{
+						width: "100%",
+						height: "100%",
+						objectFit: "cover",
+						opacity: 0.6, // 少し暗くして文字を目立たせる
+					}}
+				/>
+				{/* さらに暗黒感を増すための漆黒グラデーション */}
+				<AbsoluteFill
+					style={{
+						background: "radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.9) 100%)",
+						pointerEvents: "none",
+					}}
+				/>
+			</AbsoluteFill>
 			
 			<AbsoluteFill
 				style={{
