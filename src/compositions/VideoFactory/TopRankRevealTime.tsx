@@ -112,71 +112,81 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
 			{/* 魔法陣演出エリア (背景) */}
 			<AbsoluteFill style={{ zIndex: 10, overflow: "hidden" }}>
-				{magicCirclesData.map((m, i) => (
-					<React.Fragment key={i}>
-						{/* 魔法陣本体 */}
-						<div
-							style={{
-								position: "absolute",
-								left: "50%",
-								top: "50%",
-								width: m.size,
-								height: m.size,
-								marginLeft: -m.size / 2 + m.x,
-								marginTop: -m.size / 2 + m.y,
-								transform: `rotate(${frame * m.rotationSpeed * m.rotationDir}deg) scale(${entrance})`,
-								opacity: m.opacity * entrance,
-								filter: `blur(${m.blur}px) brightness(1.5)`,
-								zIndex: 2,
-							}}
-						>
-							<Img 
-								src={staticFile(`assets/magic/${m.asset}`)} 
-								style={{ width: "100%", height: "100%", objectFit: "contain" }}
-							/>
-						</div>
+				{magicCirclesData.map((m, i) => {
+					// 0.3秒ずつのスタッガーディレイを計算
+					const delayFrames = i * 0.3 * fps;
+					const circleEntrance = spring({
+						frame: localFrame - delayFrames,
+						fps,
+						config: { damping: 12, stiffness: 100 },
+					});
 
-						{/* 魔法陣から放たれる輝光 (Light Burst/Rays) */}
-						<div
-							style={{
-								position: "absolute",
-								left: "50%",
-								top: "50%",
-								width: m.size * 2,
-								height: m.size * 2,
-								marginLeft: -m.size + m.x,
-								marginTop: -m.size + m.y,
-								background: `radial-gradient(circle, ${primary}66 0%, transparent 70%)`,
-								transform: `scale(${entrance * (1 + pulse * 0.1)})`,
-								opacity: m.opacity * 0.4 * entrance * (0.8 + Math.sin(frame / 5) * 0.2),
-								filter: "blur(40px)",
-								zIndex: 1,
-							}}
-						/>
-						
-						{/* 放射状の光の筋 (Rays) */}
-						{[...new Array(12)].map((_, j) => (
+					return (
+						<React.Fragment key={i}>
+							{/* 魔法陣本体 */}
 							<div
-								key={`ray-${i}-${j}`}
 								style={{
 									position: "absolute",
 									left: "50%",
 									top: "50%",
-									width: 4,
-									height: m.size * 1.5,
-									marginLeft: -2 + m.x,
-									marginTop: -m.size * 0.75 + m.y,
-									backgroundColor: primary,
-									boxShadow: `0 0 20px ${primary}`,
-									transform: `rotate(${j * 30 + frame * 0.2 * m.rotationDir}deg) scaleY(${entrance})`,
-									opacity: m.opacity * 0.3 * entrance,
-									filter: "blur(2px)",
-									zIndex: 0,
+									width: m.size,
+									height: m.size,
+									marginLeft: -m.size / 2 + m.x,
+									marginTop: -m.size / 2 + m.y,
+									transform: `rotate(${frame * m.rotationSpeed * m.rotationDir}deg) scale(${circleEntrance})`,
+									opacity: m.opacity * circleEntrance,
+									filter: `blur(${m.blur}px) brightness(1.5)`,
+									zIndex: 2,
+								}}
+							>
+								<Img 
+									src={staticFile(`assets/magic/${m.asset}`)} 
+									style={{ width: "100%", height: "100%", objectFit: "contain" }}
+								/>
+							</div>
+
+							{/* 魔法陣から放たれる輝光 (Light Burst/Rays) */}
+							<div
+								style={{
+									position: "absolute",
+									left: "50%",
+									top: "50%",
+									width: m.size * 2,
+									height: m.size * 2,
+									marginLeft: -m.size + m.x,
+									marginTop: -m.size + m.y,
+									background: `radial-gradient(circle, ${primary}66 0%, transparent 70%)`,
+									transform: `scale(${circleEntrance * (1 + pulse * 0.1)})`,
+									opacity: m.opacity * 0.4 * circleEntrance * (0.8 + Math.sin(frame / 5) * 0.2),
+									filter: "blur(40px)",
+									zIndex: 1,
 								}}
 							/>
-						))}
-					</React.Fragment>
-				))}
+							
+							{/* 放射状の光の筋 (Rays) */}
+							{[...new Array(12)].map((_, j) => (
+								<div
+									key={`ray-${i}-${j}`}
+									style={{
+										position: "absolute",
+										left: "50%",
+										top: "50%",
+										width: 4,
+										height: m.size * 1.5,
+										marginLeft: -2 + m.x,
+										marginTop: -m.size * 0.75 + m.y,
+										backgroundColor: primary,
+										boxShadow: `0 0 20px ${primary}`,
+										transform: `rotate(${j * 30 + frame * 0.2 * m.rotationDir}deg) scaleY(${circleEntrance})`,
+										opacity: m.opacity * 0.3 * circleEntrance,
+										filter: "blur(2px)",
+										zIndex: 0,
+									}}
+								/>
+							))}
+						</React.Fragment>
+					);
+				})}
 			</AbsoluteFill>
 
 			{/* 紙吹雪演出 */}
