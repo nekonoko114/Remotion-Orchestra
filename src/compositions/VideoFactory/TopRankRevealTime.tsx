@@ -50,39 +50,48 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	});
 
 	const nameEntrance = spring({
-		frame: localFrame - 22,
+		frame: localFrame - 25,
 		fps,
 		config: { damping: 14, stiffness: 120 },
 	});
 
+	// タイプライター演出
+	const nameLength = liver.nickname.length;
+	const charsVisible = Math.floor(interpolate(localFrame - 25, [0, 20], [0, nameLength], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
+	const displayedName = liver.nickname.slice(0, charsVisible);
+
 	// Dynamics based on music
-	const imageScale = interpolate(frame, [0, 15], [0.8, 1.0], {
+	const imageScale = interpolate(frame, [0, 20], [0.7, 1.05], {
 		extrapolateRight: "clamp",
-	}) * (1 + pulse * 0.002);
-	const imageOpacity = interpolate(frame, [0, 10], [0, 1]);
+	}) * (1 + pulse * 0.005);
+	const imageOpacity = interpolate(frame, [0, 15], [0, 1]);
 	
-	const nameY = interpolate(nameEntrance, [0, 1], [100, 0]);
+	const nameY = interpolate(nameEntrance, [0, 1], [50, 0]);
 	const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
 	
-	const flashOpacity = interpolate(frame, [0, 5, 20], [0, 0.8, 0], { extrapolateRight: "clamp" });
+	const flashOpacity = interpolate(frame, [0, 5, 25], [0, 0.9, 0], { extrapolateRight: "clamp" });
 	
-	const pulseScale = 1 + pulse * 0.001;
+	const pulseScale = 1 + pulse * 0.002;
 
-	// 魔法陣のランダム配置データを作成
+	// 魔法陣のランダム配置データを作成 (重なりすぎを防ぐため個数を3個に調整)
 	const magicCirclesData = useMemo(() => {
-		return [...new Array(5)].map((_, i) => {
+		return [...new Array(3)].map((_, i) => {
 			const seed = `magic-${rank}-${i}`;
-			const size = 400 + random(seed + "size") * 600;
-			const x = (random(seed + "x") - 0.5) * width * 0.8;
-			const y = (random(seed + "y") - 0.5) * height * 0.6;
+			const size = 600 + random(seed + "size") * 400; // 少し大きく
+			// 配置範囲を分散させる
+			const angle = (i / 3) * Math.PI * 2 + random(seed + "ang") * 0.5;
+			const radius = 300 + random(seed + "rad") * 200;
+			const x = Math.cos(angle) * radius;
+			const y = Math.sin(angle) * radius;
+			
 			const rotationDir = random(seed + "dir") > 0.5 ? 1 : -1;
-			const rotationSpeed = 0.5 + random(seed + "speed") * 1.5;
+			const rotationSpeed = 0.3 + random(seed + "speed") * 0.7;
 			const asset = MAGIC_CIRCLES[Math.floor(random(seed + "asset") * MAGIC_CIRCLES.length)];
-			const opacity = 0.3 + random(seed + "opacity") * 0.4;
-			const blur = 2 + random(seed + "blur") * 8;
+			const opacity = 0.4 + random(seed + "opacity") * 0.3;
+			const blur = 1 + random(seed + "blur") * 4;
 			return { size, x, y, rotationDir, rotationSpeed, asset, opacity, blur };
 		});
-	}, [rank, width, height]);
+	}, [rank]);
 
 	const getRankColors = (r: number) => {
 		if (r === 1) return { primary: "#d000ff", glow: "rgba(208, 0, 255, 0.8)" };
@@ -197,44 +206,55 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 					/>
 				</div>
 
-				{/* ライバー画像 */}
+				{/* ライバー画像 - もっと大きく、フレームを豪華に */}
 				<div style={{
 					position: "relative",
-					width: 700,
-					height: 700,
+					width: 850,
+					height: 850,
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "center",
-					marginTop: 30,
-					transform: `scale(${imageScale}) rotateX(15deg)`,
+					marginTop: 10,
+					transform: `scale(${imageScale}) rotateX(10deg)`,
 					opacity: imageOpacity
 				}}>
-					{/* 背面のネオンリング */}
-					{[...new Array(3)].map((_, i) => (
+					{/* 外側の装飾フレーム (回転する豪華な枠) */}
+					{[...new Array(4)].map((_, i) => (
 						<div 
 							key={i}
 							style={{
 								position: "absolute",
-								width: 650 + i * 40,
-								height: 650 + i * 40,
-								borderRadius: "50%",
-								border: `2px solid ${primary}`,
-								boxShadow: `0 0 30px ${glow}`,
-								opacity: 0.6 - i * 0.2,
-								transform: `rotate(${frame * (i + 1) * 0.5}deg)`,
+								width: 780 + i * 35,
+								height: 780 + i * 35,
+								borderRadius: i % 2 === 0 ? "20%" : "50%",
+								border: `${3 - i * 0.5}px solid ${primary}`,
+								boxShadow: `0 0 40px ${glow}, inset 0 0 20px ${glow}`,
+								opacity: 0.8 - i * 0.15,
+								transform: `rotate(${frame * (i % 2 === 0 ? 0.3 : -0.2) * (i + 1)}deg)`,
 							}} 
 						/>
 					))}
+					
+					{/* 強い後光レイヤー */}
+					<div style={{
+						position: "absolute",
+						width: 900,
+						height: 900,
+						background: `radial-gradient(circle, ${primary}99 0%, transparent 70%)`,
+						opacity: 0.4 + pulse * 0.2,
+						filter: "blur(60px)",
+					}} />
 
 					<div style={{
-						width: 600,
-						height: 600,
+						width: 750,
+						height: 750,
 						borderRadius: "50%",
 						overflow: "hidden",
-						border: `6px solid ${primary}`, 
-						boxShadow: `0 0 100px ${glow}`, 
+						border: `8px solid white`, 
+						boxShadow: `0 0 120px ${primary}, 0 0 40px white`, 
 						position: "relative",
 						backgroundColor: "#000",
+						zIndex: 5,
 					}}>
 						<Img
 							src={
@@ -245,23 +265,25 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 							style={{ width: "100%", height: "100%", objectFit: "cover" }}
 						/>
 						<AbsoluteFill style={{ 
-							background: `radial-gradient(circle, transparent 30%, ${primary}55 100%)`,
+							background: `radial-gradient(circle, transparent 20%, ${primary}66 100%)`,
 							mixBlendMode: "screen"
 						}} />
 					</div>
 				</div>
 
-				{/* ニックネーム */}
+				{/* ニックネーム - タイプライター */}
 				<h2 style={{ 
-					fontSize: 90, 
-					marginTop: 40, 
-					textShadow: `0 0 30px ${glow}, 0 0 60px ${glow}`, 
+					fontSize: 100, 
+					marginTop: 30, 
+					textShadow: `0 0 30px ${glow}, 0 0 60px ${glow}, 0 0 100px ${primary}`, 
 					fontWeight: 900,
 					color: "#fff",
 					opacity: nameOpacity,
 					transform: `translateY(${nameY}px)`,
+					letterSpacing: "4px",
+					minHeight: "120px",
 				}}>
-					{liver.nickname}
+					{displayedName}
 				</h2>
 			</AbsoluteFill>
 
