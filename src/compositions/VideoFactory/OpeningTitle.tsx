@@ -138,7 +138,10 @@ export const OpeningTitle: React.FC = () => {
 
 			{/* Impact Flash (Enhanced Brightness) & Lightning */}
 			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
-				<LightningBolt color="#FF0000" intensity={3} thickness={15} />
+				{/* 黒い雷を下敷きにして、少しだけ細い赤い雷を重ねることで「赤黒い雷」を表現 */}
+				<LightningBolt color="#000000" intensity={3} thickness={20} />
+				<LightningBolt color="#FF0000" intensity={3} thickness={10} />
+				
 				{frame > 5 && frame < 15 && (
 					<ImpactEffect color="#FF0000" intensity="high" />
 				)}

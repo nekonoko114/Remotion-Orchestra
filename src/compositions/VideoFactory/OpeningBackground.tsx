@@ -35,10 +35,10 @@ export const OpeningBackground: React.FC = () => {
 				}}
 			/>
 
-			{/* Vignette for depth (Darker for dark knight theme) */}
+			{/* Vignette for depth (Pitch Black for Dark Knight theme) */}
 			<AbsoluteFill
 				style={{
-					background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.85) 100%)",
+					background: "radial-gradient(circle, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.95) 100%)",
 					pointerEvents: "none",
 					zIndex: 2,
 				}}
