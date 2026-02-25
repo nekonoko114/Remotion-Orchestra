@@ -6,8 +6,6 @@ import {
   wipeTransition,
   spinTransition,
   zoomTransition,
-  glitchTransition,
-  flareTransition,
 } from "./CustomTransitions";
 import { EndingLogoTime as EndingLogo } from "./EndingLogoTime";
 import { OpeningTitleTime as OpeningTitle } from "./OpeningTitleTime";
@@ -16,17 +14,22 @@ import { TopRankRevealTime as TopRankReveal } from "./TopRankRevealTime";
 import { useBeatValue } from "./utils/beat-sync";
 import { TimeBackground } from "./TimeBackground";
 
-const BPM = 128;
-const BGM_SOURCE = staticFile("assets/audio/music/Night_Howling.mp3");
+const BPM = 180;
+const BGM_SOURCE = staticFile("assets/audio/music/Breathe-Loud.mp3");
 const BGM_START_FROM = 0.0; // Seconds
 
 // Export duration constants for Root.tsx
-export const OPENING_SEC = 7;
-export const GROUP_SEC = 5;
-export const TOP_RANK_SEC = 5.5;
-export const ENDING_SEC = 5;
-export const TRANSITION_FRAMES = 15;
+// 180 BPM, 30fps -> 1 beat = 10 frames.
+// 8.0s = 240 frames = 24 beats (6 measures)
+export const OPENING_SEC = 8.0;
+// 5.333...s = 160 frames = 16 beats (4 measures)
+export const GROUP_SEC = 160 / 30;
+export const TOP_RANK_SEC = 160 / 30;
+export const ENDING_SEC = 160 / 30;
+export const TRANSITION_FRAMES = 10; // Exactly 1 beat
 
+
+import { CinematicBorder } from "./CinematicBorder";
 
 export const RankingTime = (props: { data?: Liver[] }) => {
 	const { fps } = useVideoConfig();
@@ -52,6 +55,12 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 		<AbsoluteFill>
 			<TimeBackground />
 			<Audio src={BGM_SOURCE} loop startFrom={BGM_START_FROM * fps} />
+            
+            {/* PERSISTENT BORDER OVERLAY */}
+            <CinematicBorder 
+                color="#ff0000" 
+                glowColor="rgba(255, 0, 0, 0.6)" 
+            />
 
 			<AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
 				{/* Sequenced Content: Opening -> Ranking with TRANSITIONS */}

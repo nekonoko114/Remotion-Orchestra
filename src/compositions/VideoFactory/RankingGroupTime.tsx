@@ -10,7 +10,7 @@ type Props = {
 	hideRank?: boolean; // ランクバッジを非表示にする（TopRankReveal用）
 };
 
-const BPM = 128;
+const BPM = 180;
 
 export const RankingGroupTime: React.FC<Props> = ({
 	title,
@@ -131,10 +131,10 @@ export const RankingGroupTime: React.FC<Props> = ({
 								transform: `translateX(${liverX}px) scale(${liverScale}) rotateY(${Math.sin(frame / 60) * 5}deg)`,
 								opacity: liverOpacity,
 								boxShadow: isHighlight
-									? "0 0 50px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1)"
+									? "0 0 50px rgba(255, 0, 0, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1)"
 									: "0 4px 15px rgba(0,0,0,0.5)",
 								border: isHighlight
-									? "3px solid rgba(255, 215, 0, 0.5)"
+									? "3px solid rgba(255, 0, 0, 0.5)"
 									: "1px solid rgba(255,255,255,0.1)",
 								position: "relative", // Needed for absolute background
 								overflow: "hidden", // Clip the blur

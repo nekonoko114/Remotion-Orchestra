@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame, interpolate } from "remotion";
+import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 
 type Props = {
     color: string;
@@ -8,38 +8,95 @@ type Props = {
 
 export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
     const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
     
     // Subtle breathing for the glow
     const breath = Math.sin(frame * 0.05) * 0.2 + 1;
 
+    // Spark animation logic
+    const inset = 10;
+    const innerWidth = width - inset * 2;
+    const innerHeight = height - inset * 2;
+    const perimeter = (innerWidth + innerHeight) * 2;
+    
+    // Speed: 1 cycle every 3 seconds (approx 90 frames at 30fps)
+    const speed = 15; // pixels per frame approx
+    const progress = (frame * speed) % perimeter;
+    
+    let sparkX = inset;
+    let sparkY = inset;
+    
+    if (progress < innerWidth) {
+        // Top edge: left to right
+        sparkX = inset + progress;
+        sparkY = inset;
+    } else if (progress < innerWidth + innerHeight) {
+        // Right edge: top to bottom
+        sparkX = inset + innerWidth;
+        sparkY = inset + (progress - innerWidth);
+    } else if (progress < innerWidth * 2 + innerHeight) {
+        // Bottom edge: right to left
+        sparkX = inset + innerWidth - (progress - (innerWidth + innerHeight));
+        sparkY = inset + innerHeight;
+    } else {
+        // Left edge: bottom to top
+        sparkX = inset;
+        sparkY = inset + innerHeight - (progress - (innerWidth * 2 + innerHeight));
+    }
+
     return (
         <AbsoluteFill style={{ pointerEvents: "none", zIndex: 150 }}>
+            {/* Main Red Border */}
             <div
                 style={{
                     position: "absolute",
-                    inset: 20, // 20px offset from edge
-                    border: "15px solid rgba(255, 255, 255, 0.9)", // White inner border
+                    inset: inset,
+                    border: `4px solid ${color}`,
                     boxShadow: `
                         0 0 20px ${glowColor}, 
                         inset 0 0 20px ${glowColor},
-                        0 0 60px ${color},
-                        inset 0 0 60px ${color}
-                    `, // Double glow (inner/outer)
-                    borderRadius: "30px", // Rounded corners for modern feel
+                        0 0 40px ${color},
+                        inset 0 0 40px ${color}
+                    `,
+                    borderRadius: "0px",
                     filter: `brightness(${breath})`,
-                    opacity: 0.8
+                    opacity: 0.9
+                }}
+            />
+
+            {/* Moving Cyan Spark */}
+            <div
+                style={{
+                    position: "absolute",
+                    left: sparkX - 30, // Center the 30px spark
+                    top: sparkY - 30,
+                    width: 60,
+                    height: 60,
+                    background: "#ff6600ff",
+                    borderRadius: "50%",
+                    boxShadow: `
+                        0 0 30px #ff6a00ff,
+                        0 0 60px #ff3700ff,
+                        0 0 100px #ff3c00ff
+                    `,
+                    zIndex: 10,
                 }}
             />
             
-            {/* Corner Accents (Optional, for more "Tech" feel) */}
-            <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-                <defs>
-                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor={color} stopOpacity="0.8" />
-                        <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-                    </linearGradient>
-                </defs>
-            </svg>
+            {/* Optional Trail for spark (Visual polish) */}
+            <div
+                style={{
+                    position: "absolute",
+                    left: sparkX - 10,
+                    top: sparkY - 10,
+                    width: 20,
+                    height: 20,
+                    background: "white",
+                    borderRadius: "50%",
+                    filter: "blur(5px)",
+                    zIndex: 11,
+                }}
+            />
         </AbsoluteFill>
     );
 };

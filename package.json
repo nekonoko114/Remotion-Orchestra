@@ -13,12 +13,10 @@
 		"@remotion/google-fonts": "4.0.421",
 		"@remotion/lambda": "4.0.421",
 		"@remotion/media-utils": "4.0.421",
-		"@remotion/skia": "4.0.421",
 		"@remotion/tailwind-v4": "4.0.421",
 		"@remotion/three": "4.0.421",
 		"@remotion/transitions": "4.0.421",
 		"@remotion/zod-types": "4.0.421",
-		"@shopify/react-native-skia": "1.12.4",
 		"@tailwindcss/postcss": "^4.1.18",
 		"@types/opentype.js": "^1.3.9",
 		"@types/three": "^0.182.0",
@@ -47,7 +45,6 @@
 		"@types/react": "18.2.0",
 		"@types/react-dom": "18.2.0",
 		"@types/web": "0.0.166",
-		"canvaskit-wasm": "0.40.0",
 		"prettier": "3.6.0",
 		"typescript": "5.9.3"
 	},
@@ -61,7 +58,6 @@
 	},
 	"pnpm": {
 		"trustedDependencies": [
-			"@shopify/react-native-skia",
 			"@biomejs/biome",
 			"esbuild"
 		],

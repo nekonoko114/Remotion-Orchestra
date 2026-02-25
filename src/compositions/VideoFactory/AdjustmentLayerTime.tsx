@@ -10,10 +10,10 @@ export const AdjustmentLayerTime: React.FC<Props> = ({ rank, beatPulse = 0 }) =>
 
 	const getTheme = () => {
 		// Time Theme: Cyan, Magenta, Purple
-		if (rank === 1) return { tint: "#00f0ff", contrast: 1.2, saturate: 1.5, brightness: 1.1 };
-		if (rank === 2) return { tint: "#ff00ff", contrast: 1.1, saturate: 1.4, brightness: 1.05 };
-		if (rank === 3) return { tint: "#7000ff", contrast: 1.1, saturate: 1.2, brightness: 1.05 };
-		return { tint: "#00f0ff", contrast: 1, saturate: 1.1, brightness: 1 };
+		if (rank === 1) return { tint: "#ff0000", contrast: 1.2, saturate: 1.5, brightness: 1.1 };
+		if (rank === 2) return { tint: "#ff4400", contrast: 1.1, saturate: 1.4, brightness: 1.05 };
+		if (rank === 3) return { tint: "#cc0000", contrast: 1.1, saturate: 1.2, brightness: 1.05 };
+		return { tint: "#ff0000", contrast: 1, saturate: 1.1, brightness: 1 };
 	};
 
 	const theme = getTheme();
@@ -77,7 +77,7 @@ export const AdjustmentLayerTime: React.FC<Props> = ({ rank, beatPulse = 0 }) =>
 			{/* Digital Scanlines */}
 			<AbsoluteFill
 				style={{
-					background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.05) 2px, rgba(0, 240, 255, 0.05) 4px)",
+					background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.05) 2px, rgba(255, 0, 0, 0.05) 4px)",
 					zIndex: 103,
 					opacity: 0.3,
 				}}

@@ -1,4 +1,4 @@
-import { AbsoluteFill, useCurrentFrame, staticFile, OffthreadVideo, Loop } from "remotion";
+import { AbsoluteFill, staticFile, Video, Loop } from "remotion";
 import React, { useMemo } from "react";
 
 type Props = {
@@ -40,7 +40,7 @@ export const LuxuryGoldBackground: React.FC<Props> = ({
 			{/* 2. PRE-RENDERED LUXURY ASSET (Particles & God Rays) */}
 			{/* This single video layer replaces 3000+ calculated particles */}
 			<Loop durationInFrames={300}>
-				<OffthreadVideo
+				<Video
 					src={staticFile(`assets/backgrounds/${videoFile}`)}
 					style={{
 						width: "100%",
@@ -48,6 +48,7 @@ export const LuxuryGoldBackground: React.FC<Props> = ({
 						objectFit: "cover",
 						zIndex: 1,
 					}}
+					muted
 				/>
 			</Loop>
 			

@@ -6,7 +6,7 @@ import {
 	staticFile,
 	useCurrentFrame,
 	useVideoConfig,
-	OffthreadVideo,
+	Video,
 	Easing,
 } from "remotion";
 import { Confetti } from "../../components/effects/Confetti";
@@ -89,7 +89,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 			{/* <LuxuryGoldBackground color={primary} secondaryColor={secondary} /> */}
 			{/* Rank-specific Generated Video Background */}
 			<AbsoluteFill>
-				<OffthreadVideo
+				<Video
 					src={staticFile(
 						`assets/backgrounds/rank_${rank}_bg.mp4`
 					)}
@@ -100,6 +100,8 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 						objectPosition: "center",
 						transform: "none"
 					}}
+					muted
+					loop
 				/>
 				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.2)" }} />
 			</AbsoluteFill>

@@ -49,44 +49,45 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
 
 	// 2. RGB Split Logic (Stylized color separation on beat)
 	const aberration = (beatPulse || 0) * 15;
-	const redShift = aberration;
-	const blueShift = -aberration;
 
 	const glitchFilter = isGlitching
 		? `hue-rotate(${random(frame) * 20}deg) blur(1px)`
-		: "none";
+		: "";
+
+	// Combine base grading and glitch into a single filter string
+	const combinedFilter = `contrast(${beatContrast}) saturate(${theme.saturate}) brightness(${beatBrightness}) ${glitchFilter}`.trim();
 
 	return (
 		<AbsoluteFill style={{ pointerEvents: "none", overflow: "hidden" }}>
-			{/* Base Grading & Contrast Pumping */}
+			{/* Single optimized backdrop-filter layer for base grading */}
 			<AbsoluteFill
 				style={{
-					backdropFilter: `contrast(${beatContrast}) saturate(${theme.saturate}) brightness(${beatBrightness}) ${glitchFilter}`,
+					backdropFilter: combinedFilter,
 					zIndex: 100,
 					transform: `translate(${shiftX}px, ${shiftY}px) scale(${1 + (beatPulse || 0) * 0.01})`,
 				}}
 			/>
 
-			{/* RGB Split Overlays (Channel Separation) */}
+			{/* RGB Split Overlays - Simplified to color overlays instead of expensive backdrop-filters */}
 			{(beatPulse || 0) > 0.1 && (
 				<>
-					{/* Red Channel Shift */}
+					{/* Red Channel overlay */}
 					<AbsoluteFill
 						style={{
-							backdropFilter: `contrast(1.5) brightness(1.2) hue-rotate(-10deg)`,
-							transform: `translateX(${redShift}px)`,
+							backgroundColor: "rgba(255, 0, 0, 0.2)",
+							transform: `translateX(${aberration}px)`,
 							mixBlendMode: "screen",
-							opacity: (beatPulse || 0) * 0.6,
+							opacity: (beatPulse || 0) * 0.4,
 							zIndex: 105,
 						}}
 					/>
-					{/* Blue/Cyan Channel Shift */}
+					{/* Cyan Channel overlay */}
 					<AbsoluteFill
 						style={{
-							backdropFilter: `contrast(1.5) brightness(1.2) hue-rotate(10deg)`,
-							transform: `translateX(${blueShift}px)`,
+							backgroundColor: "rgba(0, 255, 255, 0.2)",
+							transform: `translateX(${-aberration}px)`,
 							mixBlendMode: "screen",
-							opacity: (beatPulse || 0) * 0.6,
+							opacity: (beatPulse || 0) * 0.4,
 							zIndex: 105,
 						}}
 					/>

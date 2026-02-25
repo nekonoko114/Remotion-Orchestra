@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import {
 	AbsoluteFill,
-	OffthreadVideo, // Added
 	interpolate,
 	random,
 	staticFile,
@@ -16,7 +15,7 @@ const TRAIL_COUNT = 20;
 const MUSIC_SYMBOL_COUNT = 10; // Reduced count because icons are larger now
 const SPRITE_ROWS = 3;
 const SPRITE_COLS = 3;
-const BPM = 128;
+const BPM = 180;
 
 interface LightTrail {
 	x: number;
@@ -63,14 +62,14 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 	const trails = useMemo(() => {
 		const t: LightTrail[] = [];
 		for (let i = 0; i < TRAIL_COUNT; i++) {
-			const isCyan = random(`color-${i}`) < 0.7;
+			const isRed = random(`color-${i}`) < 0.7;
 			t.push({
 				x: (random(`x-${i}`) - 0.5) * width * 4,
 				y: (random(`y-${i}`) - 0.5) * height * 4,
 				z: random(`z-${i}`) * 5000,
 				speedZ: random(`sz-${i}`) * 60 + 40,
 				length: random(`len-${i}`) * 1200 + 800,
-				color: isCyan ? "#00f0ff" : "#00ffaa",
+				color: isRed ? "#ff0000" : "#ff4400",
 				width: random(`w-${i}`) * 3 + 1,
 			});
 		}
@@ -193,33 +192,15 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 		
 			return (
 				<AbsoluteFill>
-					{/* base video layer (byakko) */}
-					{!hideBaseVideo && (
-						<AbsoluteFill style={{ zIndex: -1 }}>
-							<OffthreadVideo
-								src={staticFile("assets/backgrounds/byakko.mp4")}
-								style={{ 
-									width: "100%", 
-									height: "100%", 
-									objectFit: "cover",
-									objectPosition: "center",
-									transform: "scale(1.1)"
-								}}
-							/>
-							{/* Dark overlay to balance video and HUD */}
-							<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0)" }} />
-						</AbsoluteFill>
-					)}
-
-					{!hideBackground && hideBaseVideo && (
+					{!hideBackground && (
 						<AbsoluteFill style={{ 
-							background: "linear-gradient(160deg, rgba(2, 8, 21, 0.8) 0%, rgba(5, 26, 58, 0.6) 50%, rgba(8, 2, 21, 0.8) 100%)" 
+							background: "black" 
 						}} />
 					)}
 					{/* CENTRAL GLOW - Pulses with music */}
 					<AbsoluteFill
 						style={{
-							background: `radial-gradient(circle, rgba(0, 240, 255, ${0.2 + pulse * 0.2}) 0%, transparent 70%)`,
+							background: `radial-gradient(circle, rgba(255, 0, 0, ${0.2 + pulse * 0.2}) 0%, transparent 70%)`,
 							pointerEvents: "none",
 						}}
 					/>
@@ -238,7 +219,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 								fontSize: 500,
 								fontWeight: 900,
 								fontFamily: "Impact, sans-serif",
-								color: "#00f0ff",
+								color: "#ff0000",
 								// filter: `blur(${3 - pulse * 1}px) drop-shadow(0 0 ${30 + pulse * 30}px #00f0ff)`, // REMOVED
 								letterSpacing: "-0.05em",
 								transform: `scale(${1.3 + pulse * 0.05}) skewX(-10deg)`,
@@ -265,9 +246,9 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 							<div key={i} style={{ 
 								flex: 1, 
 								height: h, 
-								background: `linear-gradient(to top, #00f0ff, transparent)`,
+								background: `linear-gradient(to top, #ff0000, transparent)`,
 								// Efficient simple box shadow on container or use simple border
-								borderTop: "2px solid rgba(0, 240, 255, 0.5)", 
+								borderTop: "2px solid rgba(255, 0, 0, 0.5)", 
 								borderRadius: "10px 10px 0 0",
                                 transition: "height 0.1s ease-out"
 							}} />
@@ -278,7 +259,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 
 			{/* ADDED: Global Neon Overlay - Efficient "Glow" for everything */}
 			<AbsoluteFill style={{
-				background: `radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.15) 0%, transparent 70%)`,
+				background: `radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.15) 0%, transparent 70%)`,
 				mixBlendMode: "screen", // Global blend is okay, per-particle is bad
 				pointerEvents: "none",
 				zIndex: 5,
@@ -286,7 +267,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 			
 			{/* ADDED: Scanline effect for "Cyber" feel (very lightweight) */}
 			<AbsoluteFill style={{
-				background: "linear-gradient(to bottom, rgba(255,255,255,0.03) 50%, transparent 50%)",
+				background: "linear-gradient(to bottom, rgba(255,0,0,0.03) 50%, transparent 50%)",
 				backgroundSize: "100% 4px",
 				pointerEvents: "none",
 				zIndex: 6,

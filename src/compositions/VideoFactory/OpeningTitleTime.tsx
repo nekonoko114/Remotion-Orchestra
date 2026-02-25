@@ -8,8 +8,9 @@ import {
 	useVideoConfig,
 } from "remotion";
 import { LensFlare } from "../../components/effects/LensFlare";
-import { ImpactEffect } from "./ImpactEffect";
+import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
 import { TextShine } from "./TextShine";
+import { useBeatValue } from "./utils/beat-sync";
 
 // HIGH-GLOW Metallic Text Component (Cyan/Blue Theme)
 const ShinyText: React.FC<{
@@ -21,9 +22,8 @@ const ShinyText: React.FC<{
 }> = ({
 	text,
 	fontSize,
-	className,
 	delay,
-	glowColor = "rgba(0, 240, 255, 0.4)", // Default to Cyan/Blue glow
+	glowColor = "rgba(255, 0, 0, 0.4)", // Default to Red glow
 }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
@@ -87,9 +87,9 @@ const ShinyText: React.FC<{
 };
 
 export const OpeningTitleTime: React.FC = () => {
-    // ... existing hook calls ...
 	const frame = useCurrentFrame();
 	const { width } = useVideoConfig();
+	const { pulse, beatIndex } = useBeatValue(180);
 
 	const getShake = (delay: number) => {
 		if (frame < delay || frame > delay + 10) return 0;
@@ -109,24 +109,19 @@ export const OpeningTitleTime: React.FC = () => {
 				justifyContent: "center",
 				alignItems: "center",
 				flexDirection: "column",
-				background: "transparent", // Changed from #000 to transparent to let root TimeBackground show
+				background: "transparent",
 				transform: `translate(${totalShakeX}px, ${totalShakeY}px)`,
 			}}
 		>
-			{/* 1. BACKGROUND LAYER: Time Theme - Handled by Root TimeBackground now */
-			/* Video removed to prevent double rendering */
-			}
 			<AbsoluteFill style={{ zIndex: 0 }}>
-				{/* Global Cyan Tint Overlay */}
 				<AbsoluteFill 
 					style={{
-						background: "radial-gradient(circle at center, rgba(0, 240, 255, 0.15) 0%, transparent 80%)",
+						background: "radial-gradient(circle at center, rgba(255, 0, 0, 0.15) 0%, transparent 80%)",
 						mixBlendMode: "screen",
 					}}
 				/>
 			</AbsoluteFill>
 
-			{/* 2. GOD RAYS (Cyan/Blue - "Time" Energy) */}
 			<div
 				style={{
 					position: "absolute",
@@ -135,13 +130,13 @@ export const OpeningTitleTime: React.FC = () => {
 					background:
 						`conic-gradient(from ${rayRotate}deg, 
                             transparent 0deg, 
-                            rgba(0, 240, 255, 0.3) 20deg, 
+                            rgba(255, 0, 0, 0.3) 20deg, 
                             transparent 40deg, 
-                            rgba(0, 100, 255, 0.3) 60deg, 
+                            rgba(255, 60, 0, 0.3) 60deg, 
                             transparent 80deg, 
-                            rgba(0, 240, 255, 0.3) 100deg, 
+                            rgba(255, 0, 0, 0.3) 100deg, 
                             transparent 120deg, 
-                            rgba(0, 100, 255, 0.3) 140deg, 
+                            rgba(255, 60, 0, 0.3) 140deg, 
                             transparent 160deg
                         )`,
 					zIndex: 1,
@@ -156,11 +151,14 @@ export const OpeningTitleTime: React.FC = () => {
 
 			{/* Impact Flash (Cyan/White) */}
 			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
-				{frame > 5 && frame < 15 && (
-					<ImpactEffect color="#00f0ff" intensity="high" />
+				{/* 初期インパクト (1ビート目) */}
+				{frame >= 10 && frame < 20 && (
+					<ImpactEffect color="#ff0000" intensity="high" />
 				)}
-				{frame > 50 && frame < 65 && (
-					<ImpactEffect color="#ffffff" intensity="high" />
+				
+				{/* BPM 180 に同期したビート毎のインパクト (4拍毎に強調) */}
+				{beatIndex >= 4 && beatIndex % 4 === 0 && pulse > 0.6 && (
+					<ImpactEffect color="#ffffff" intensity="normal" />
 				)}
 			</AbsoluteFill>
 
@@ -178,41 +176,41 @@ export const OpeningTitleTime: React.FC = () => {
 				<ShinyText
 					text="J.O.L"
 					fontSize={260}
-					className="metallic-diamond"
+					className="metallic-red"
 					delay={10}
-					glowColor="rgba(0, 220, 255, 0.7)"
+					glowColor="rgba(255, 0, 0, 0.7)"
 				/>
 				
 				<ShinyText
 					text="2026年1月度"
 					fontSize={140}
-					className="metallic-silver"
-					delay={25}
-					glowColor="rgba(220, 220, 255, 0.5)"
+					className="metallic-red"
+					delay={30}
+					glowColor="rgba(255, 50, 0, 0.5)"
 				/>
 
 				<ShinyText
 					text="月間配信時間"
 					fontSize={140}
-					className="metallic-silver"
-					delay={35}
-					glowColor="rgba(220, 220, 255, 0.5)"
+					className="metallic-red"
+					delay={40}
+					glowColor="rgba(255, 50, 0, 0.5)"
 				/>
 
 				<ShinyText
 					text="ランキング"
 					fontSize={160}
-					className="metallic-diamond"
-					delay={45}
-					glowColor="rgba(0, 240, 255, 0.6)"
+					className="metallic-red"
+					delay={50}
+					glowColor="rgba(255, 0, 0, 0.6)"
 				/>
 
 				<ShinyText
 					text="結果発表!"
 					fontSize={160}
-					className="metallic-diamond"
-					delay={55}
-					glowColor="rgba(0, 255, 255, 0.9)"
+					className="metallic-red"
+					delay={60}
+					glowColor="rgba(255, 0, 0, 0.9)"
 				/>
 			</div>
 
@@ -221,7 +219,7 @@ export const OpeningTitleTime: React.FC = () => {
 				<LensFlare
 					opacity={0.7}
 					scale={1.5}
-					color="#00f0ff"
+					color="#ff0000"
 					intensity={1.2}
 				/>
 			</AbsoluteFill>

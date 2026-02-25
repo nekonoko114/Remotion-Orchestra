@@ -14,7 +14,7 @@ export const Scene3_Park: React.FC = () => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "black", opacity }}>
 			<Img
-				src={staticFile("images/generated/CatsAdventure/scene_3.webp")}
+				src={staticFile("images/generated/CatsAdventure/scene_3.png")}
 				style={{ width: "100%", height: "100%", objectFit: "cover" }}
 			/>
 			<div

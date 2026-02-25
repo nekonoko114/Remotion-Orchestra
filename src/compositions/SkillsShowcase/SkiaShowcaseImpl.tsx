@@ -1,29 +1,42 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useCurrentFrame, useVideoConfig } from 'remotion';
-import { Circle, Paint, Group, SweepGradient, vec, Fill } from "@shopify/react-native-skia";
-import { SkiaCanvas } from "@remotion/skia";
 
 export const SkiaShowcaseImpl: React.FC = () => {
     const frame = useCurrentFrame();
     const { width, height, durationInFrames } = useVideoConfig();
 
-    const center = useMemo(() => vec(width / 2, height / 2), [width, height]);
     const rotation = (frame / durationInFrames) * 360;
 
     return (
-        <SkiaCanvas width={width} height={height}>
-            <Fill color="black" />
-            <Group origin={center} transform={[{ rotate: rotation / 180 * Math.PI }]}>
-                <Circle cx={center.x} cy={center.y} r={300}>
-                    <Paint>
-                        <SweepGradient
-                            c={center}
-                            colors={["cyan", "magenta", "yellow", "cyan"]}
-                        />
-                    </Paint>
-                </Circle>
-            </Group>
-            <Circle cx={center.x} cy={center.y} r={200} color="black" />
-        </SkiaCanvas>
+        <div style={{
+            width,
+            height,
+            backgroundColor: 'black',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'relative',
+            overflow: 'hidden'
+        }}>
+            {/* The rotating gradient ring */}
+            <div style={{
+                position: 'absolute',
+                width: 600, // 300 radius * 2
+                height: 600,
+                borderRadius: '50%',
+                background: 'conic-gradient(cyan, magenta, yellow, cyan)',
+                transform: `rotate(${rotation}deg)`,
+                willChange: 'transform'
+            }} />
+            
+            {/* The inner black circle to create the ring effect */}
+            <div style={{
+                position: 'absolute',
+                width: 400, // 200 radius * 2
+                height: 400,
+                borderRadius: '50%',
+                backgroundColor: 'black'
+            }} />
+        </div>
     );
 };

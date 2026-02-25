@@ -1,5 +1,5 @@
 import React from 'react';
-import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
+import { SkiaOverlay as SkiaOverlayImpl } from './SkiaOverlayImpl';
 
 interface SkiaOverlayProps {
     audioPower: number;
@@ -7,10 +7,6 @@ interface SkiaOverlayProps {
 
 export const SkiaOverlay: React.FC<SkiaOverlayProps> = (props) => {
     return (
-        <WithSkiaWeb
-            getComponent={() => import('./SkiaOverlayImpl').then((mod) => ({ default: mod.SkiaOverlay }))}
-            fallback={null}
-            componentProps={props}
-        />
+        <SkiaOverlayImpl {...props} />
     );
 };

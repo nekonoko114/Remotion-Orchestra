@@ -8,7 +8,6 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 	Easing,
-	Video,
 } from "remotion";
 import { ParticleBurst } from "../../components/effects/ParticleBurst";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
@@ -20,7 +19,7 @@ import type { Liver } from "./types";
 
 // Verified build status
 
-const BPM = 128;
+const BPM = 180;
 
 type Props = {
 	rank: number;
@@ -78,9 +77,9 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	const driftY = Math.cos(frame / 12) * pulse * 10;
 
 	const getRankColors = (r: number) => {
-		if (r === 1) return { primary: "#00f0ff", glow: "rgba(0, 240, 255, 0.8)" };
-		if (r === 2) return { primary: "#ff00ff", glow: "rgba(255, 0, 255, 0.8)" };
-		if (r === 3) return { primary: "#7000ff", glow: "rgba(112, 0, 255, 0.8)" };
+		if (r === 1) return { primary: "#ff0000", glow: "rgba(255, 0, 0, 0.8)" };
+		if (r === 2) return { primary: "#ff4400", glow: "rgba(255, 68, 0, 0.8)" };
+		if (r === 3) return { primary: "#cc0000", glow: "rgba(204, 0, 0, 0.8)" };
 		return { primary: "#fff", glow: "transparent" };
 	};
 
@@ -91,18 +90,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000" }}>
 			<AbsoluteFill>
-				<Video
-					src={staticFile(`assets/backgrounds/rank_${rank}_bg.mp4`)}
-					style={{ 
-						width: "100%", 
-						height: "100%", 
-						objectFit: "cover",
-						objectPosition: "center",
-						transform: (liver.username === "ritu_1115" || liver.nickname === "じんや") ? "scale(1.3)" : "scale(1.1)"
-					}}
-					loop
-					muted
-				/>
 				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.4)" }} />
 			</AbsoluteFill>
 

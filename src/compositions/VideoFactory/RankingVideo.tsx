@@ -50,7 +50,7 @@ export const RankingVideo = () => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#1a1a1a" }}>
 			<Audio
-				src={staticFile("assets/audio/music/Night_Howling.mp3")}
+				src={staticFile("assets/audio/music/炎の挑戦.mp3")}
 				loop
 				startFrom={Math.floor(BGM_START_FROM * fps)}
 			/>

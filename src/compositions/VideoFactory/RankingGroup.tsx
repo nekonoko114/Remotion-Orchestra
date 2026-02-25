@@ -93,7 +93,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 									padding: itemPadding,
 									borderRadius: 100,
 									border: "4px solid #FFD700",
-									transform: `translateX(${interpolate(liverEntrance, [0, 1], [1000, 0])}px)`,
+									transform: `translateY(${interpolate(liverEntrance, [0, 1], [-1000, 0])}px)`,
 									opacity: interpolate(liverEntrance, [0, 0.4], [0, 1]),
 									position: "relative", // Needed for absolute background
 									overflow: "hidden", // Clip the blur

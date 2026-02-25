@@ -78,8 +78,6 @@ export const KimitonaraComposition: React.FC = () => {
             {/* Front Chorus Lyrics (Parallax: Faster, In Front of Character) */}
             <ChorusLyrics subtitles={subtitles} layer="front" />
 
-            {/* <SkiaChorusLyrics /> */}
-
             <Audio src={music} />
 
             {/* 映画風の黒帯 */}
