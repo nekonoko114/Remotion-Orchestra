@@ -23,7 +23,7 @@ import { AdjustmentLayer } from "./AdjustmentLayer";
 import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
 
-const BPM = 128;
+const BPM = 160;
 
 type Props = {
 	rank: number;
@@ -73,11 +73,11 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 
 	// Rank specific styles
 	const getRankColors = (r: number) => {
-		// Reference Image Match: Primary colors for Glow/Border, but Text is WHITE.
-		if (r === 1) return { primary: "#FFD700", secondary: "#DAA520", glow: "rgba(255,215,0,0.8)" };
-		if (r === 2) return { primary: "#C0C0C0", secondary: "#708090", glow: "rgba(192,192,192,0.8)" };
-		if (r === 3) return { primary: "#CD7F32", secondary: "#8B4513", glow: "rgba(205,127,50,0.8)" };
-		return { primary: "#fff", secondary: "#ccc", glow: "transparent" };
+		// Dark Knight Theme: Primary Red, Secondary Gold, Glow Deep Red/Gold
+		if (r === 1) return { primary: "#FF0000", secondary: "#FFD700", glow: "rgba(255,0,0,0.8)" }; // 1位: 真紅×黄金
+		if (r === 2) return { primary: "#8B0000", secondary: "#C0C0C0", glow: "rgba(139,0,0,0.8)" }; // 2位: 暗赤×銀
+		if (r === 3) return { primary: "#A52A2A", secondary: "#CD7F32", glow: "rgba(165,42,42,0.8)" }; // 3位: 鈍い赤×銅
+		return { primary: "#8B0000", secondary: "#ccc", glow: "transparent" };
 	};
 
 	const { primary, secondary, glow } = getRankColors(rank);
@@ -103,7 +103,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 					muted
 					loop
 				/>
-				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.2)" }} />
+				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.6)" }} /> {/* 背景をより暗く（暗黒ベース） */}
 			</AbsoluteFill>
 
 			<AdjustmentLayer rank={rank} beatPulse={pulse} />
@@ -141,7 +141,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 							transform: "translate(-50%, -50%)", 
 							width: 500, 
 							height: 500, 
-							background: `radial-gradient(circle, ${glow} 0%, transparent 70%)`, 
+							background: `radial-gradient(circle, ${glow} 0%, transparent 60%)`, 
 							opacity: 0.8,
 							zIndex: -1
 						}} />

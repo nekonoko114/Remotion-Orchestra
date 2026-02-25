@@ -11,7 +11,7 @@ type Props = {
 	hideRank?: boolean; // ランクバッジを非表示にする（TopRankReveal用）
 };
 
-const BPM = 180;
+const BPM = 160;
 
 export const RankingGroupTime: React.FC<Props> = ({
 	title,

@@ -9,13 +9,13 @@ import {
 } from "remotion";
 
 const COLORS = [
-	"#f1c40f",
-	"#e74c3c",
-	"#3498db",
-	"#2ecc71",
-	"#9b59b6",
-	"#e67e22",
-	"#fff",
+	"#FFD700", // Gold
+	"#FF0000", // Red
+	"#8B0000", // Dark Red
+	"#000000", // Black
+	"#333333", // Dark Gray
+	"#C0C0C0", // Silver
+	"#FFFFFF", // White (for contrast)
 ];
 
 interface ConfettiProps {

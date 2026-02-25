@@ -14,8 +14,8 @@ import { TopRankRevealTime as TopRankReveal } from "./TopRankRevealTime";
 import { useBeatValue } from "./utils/beat-sync";
 import { TimeBackground } from "./TimeBackground";
 
-const BPM = 180;
-const BGM_SOURCE = staticFile("assets/audio/music/Breathe-Loud.mp3");
+const BPM = 160;
+const BGM_SOURCE = staticFile("assets/audio/music/Blastwave.mp3");
 const BGM_START_FROM = 0.0; // Seconds
 
 // Export duration constants for Root.tsx

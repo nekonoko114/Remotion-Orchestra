@@ -15,7 +15,7 @@ const TRAIL_COUNT = 20;
 const MUSIC_SYMBOL_COUNT = 10; // Reduced count because icons are larger now
 const SPRITE_ROWS = 3;
 const SPRITE_COLS = 3;
-const BPM = 180;
+const BPM = 160;
 
 interface LightTrail {
 	x: number;

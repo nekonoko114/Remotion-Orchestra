@@ -75,6 +75,7 @@ export const OpeningTitleTime: React.FC = () => {
     const glitchOffset = 0;
 
     // Timing Constants
+    const BPM = 160;
     const transitionFrame = 180; // 6 seconds (White flash timing)
 
     // BACKGROUND WIGGLE & FIXED ZOOM

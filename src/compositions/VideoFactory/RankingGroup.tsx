@@ -56,11 +56,13 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 					style={{
 						position: "absolute",
 						top: 120,
-						fontSize: 140,
-						fontFamily: "Impact, sans-serif",
-						fontWeight: "bold",
+						fontSize: 120, // Adjusted from 140 to 120
+						// Dark knight style for typography
+						fontFamily: "'Segoe UI', Roboto, sans-serif",
+						fontWeight: "900",
 						textAlign: "center",
 						margin: 0,
+						textShadow: "0 5px 15px rgba(255,0,0,0.8)", // 赤のオーラ
 					}}
 				>
 					{title}
@@ -90,9 +92,10 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 									display: "flex",
 									alignItems: "center",
 									gap: 40, // More gap between elements
-									padding: itemPadding,
 									borderRadius: 100,
-									border: "4px solid #FFD700",
+									border: "4px solid #8B0000", // Dark Red border
+									boxShadow: "0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.8)", // 赤の光と黒のシャドウ
+									backgroundColor: "rgba(0,0,0,0.7)", // 背景を黒透過に
 									transform: `translateY(${interpolate(liverEntrance, [0, 1], [-1000, 0])}px)`,
 									opacity: interpolate(liverEntrance, [0, 0.4], [0, 1]),
 									position: "relative", // Needed for absolute background
@@ -125,7 +128,14 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 								{/* Left Unit: Rank (Top) + Icon (Bottom) */}
 								<div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: rankWidth, gap: 10, position: "relative", zIndex: 1 }}>
 									{/* Rank Number */}
-									<div style={{ fontSize: rankFontSize, fontWeight: 900, color: "#FFD700", textAlign: 'center', lineHeight: 1 }}>
+									<div style={{ 
+										fontSize: rankFontSize, 
+										fontWeight: 900, 
+										color: "#FFD700", // Gold
+										textAlign: 'center', 
+										lineHeight: 1,
+										textShadow: "0 2px 10px rgba(255,0,0,0.8)" // Red shadow to pop out
+									}}>
 										{liver.rank}th
 									</div>
 									

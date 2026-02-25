@@ -13,7 +13,7 @@ type Props = {
 // This component spawns particles at center and shoots them 360 degrees.
 export const ParticleBurst: React.FC<Props> = ({ 
     count = 50, 
-    colors = ["#FFF", "#FFD700"],
+    colors = ["#FF0000", "#FFD700", "#8B0000", "#FFFFFF"],
     x = 500,
     y = 500,
     speed = 1

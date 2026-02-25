@@ -17,11 +17,11 @@ export const OpeningBackground: React.FC = () => {
 				loop
 			/>
 
-			{/* Effect 1: Cinematic Lens Flare (Warm tones to match red) */}
+			{/* Effect 1: Cinematic Lens Flare (Gold tones for dark knight theme) */}
 			<LensFlare 
-				color="#e6ffaaff" 
-				opacity={0.4} 
-				intensity={0.6} 
+				color="#FFD700" 
+				opacity={0.5} 
+				intensity={0.8} 
 				scale={1.5}
 			/>
 
@@ -35,10 +35,10 @@ export const OpeningBackground: React.FC = () => {
 				}}
 			/>
 
-			{/* Vignette for depth */}
+			{/* Vignette for depth (Darker for dark knight theme) */}
 			<AbsoluteFill
 				style={{
-					background: "radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%)",
+					background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.85) 100%)",
 					pointerEvents: "none",
 					zIndex: 2,
 				}}

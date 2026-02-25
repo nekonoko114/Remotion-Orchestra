@@ -17,7 +17,7 @@ import { Confetti } from "./Confetti";
 import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
 
-const BPM = 180;
+const BPM = 160;
 
 // 魔法陣アセットのリスト
 const MAGIC_CIRCLES = [

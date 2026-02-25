@@ -78,12 +78,13 @@ const ShinyText: React.FC<{
 					letterSpacing: "0.1em",
 					lineHeight: 1.1,
 					fontFamily: "system-ui, -apple-system, sans-serif",
-					// Add even more contrast to colors
-					filter: "brightness(1.5) contrast(1.2)",
-					// CHROMATIC ABERRATION TEXT SHADOW
+					// Add even more contrast to colors for dark theme
+					filter: "brightness(1.5) contrast(1.5)",
+					// CHROMATIC ABERRATION TEXT SHADOW - Dark Knight style (Red & Gold)
 					textShadow: `
-						${chromDist}px 0 rgba(255, 0, 0, 0.5), 
-						-${chromDist}px 0 rgba(0, 255, 255, 0.5)
+						${chromDist}px 0 rgba(255, 0, 0, 0.6), 
+						-${chromDist}px 0 rgba(255, 215, 0, 0.4),
+						0 10px 20px rgba(0, 0, 0, 0.8)
 					`
 				}}
 			>
@@ -136,7 +137,7 @@ export const OpeningTitle: React.FC = () => {
 			{/* Impact Flash (Enhanced Brightness) */}
 			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
 				{frame > 5 && frame < 15 && (
-					<ImpactEffect color="#fff" intensity="high" />
+					<ImpactEffect color="#FF0000" intensity="high" />
 				)}
 				{frame > 50 && frame < 65 && (
 					<ImpactEffect color="#FFD700" intensity="high" />
@@ -155,9 +156,9 @@ export const OpeningTitle: React.FC = () => {
 				<ShinyText
 					text="J.O.L"
 					fontSize={230}
-					className="metallic-white"
+					className="metallic-gold"
 					delay={5}
-					glowColor="rgba(200,220,255,0.6)"
+					glowColor="rgba(255,0,0,0.6)"
 				/>
 
 				<div
@@ -171,16 +172,16 @@ export const OpeningTitle: React.FC = () => {
 					<ShinyText
 						text="2026年1月度"
 						fontSize={100}
-						className="metallic-diamond"
+						className="metallic-white"
 						delay={15}
-						glowColor="rgba(0,255,255,0.3)"
+						glowColor="rgba(255,0,0,0.3)"
 					/>
 					<ShinyText
 						text="月間ダイヤモンド"
 						fontSize={110}
-						className="metallic-diamond"
+						className="metallic-gold"
 						delay={25}
-						glowColor="rgba(0,255,255,0.3)"
+						glowColor="rgba(255,0,0,0.3)"
 					/>
 				</div>
 
