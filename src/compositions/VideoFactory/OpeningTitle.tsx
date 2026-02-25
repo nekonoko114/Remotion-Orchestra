@@ -9,6 +9,8 @@ import {
 	staticFile,
 } from "remotion";
 import { ImpactEffect } from "./ImpactEffect";
+import { NeonGlowText } from "../../components/effects/NeonGlowText";
+import { LightningBolt } from "../../components/effects/LightningBolt";
 
 // HIGH-GLOW Metallic Text Component
 const ShinyText: React.FC<{
@@ -134,8 +136,9 @@ export const OpeningTitle: React.FC = () => {
 				/>
 			</AbsoluteFill>
 
-			{/* Impact Flash (Enhanced Brightness) */}
+			{/* Impact Flash (Enhanced Brightness) & Lightning */}
 			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
+				<LightningBolt color="#FF0000" intensity={1.5} thickness={4} />
 				{frame > 5 && frame < 15 && (
 					<ImpactEffect color="#FF0000" intensity="high" />
 				)}
@@ -153,12 +156,10 @@ export const OpeningTitle: React.FC = () => {
 					alignItems: "center",
 				}}
 			>
-				<ShinyText
+				<NeonGlowText
 					text="J.O.L"
 					fontSize={230}
-					className="metallic-gold"
-					delay={5}
-					glowColor="rgba(255,0,0,0.6)"
+					color="#FF0000"
 				/>
 
 				<div
@@ -169,35 +170,27 @@ export const OpeningTitle: React.FC = () => {
 						alignItems: "center",
 					}}
 				>
-					<ShinyText
+					<NeonGlowText
 						text="2026年1月度"
 						fontSize={100}
-						className="metallic-white"
-						delay={15}
-						glowColor="rgba(255,0,0,0.3)"
+						color="#FF0000"
 					/>
-					<ShinyText
+					<NeonGlowText
 						text="月間ダイヤモンド"
 						fontSize={110}
-						className="metallic-gold"
-						delay={25}
-						glowColor="rgba(255,0,0,0.3)"
+						color="#FFD700"
 					/>
 				</div>
 
-				<ShinyText
+				<NeonGlowText
 					text="ランキング"
 					fontSize={160}
-					className="metallic-white"
-					delay={35}
-					glowColor="rgba(255,255,255,0.4)"
+					color="#FF0000"
 				/>
-				<ShinyText
+				<NeonGlowText
 					text="結果発表！"
 					fontSize={190}
-					className="metallic-white"
-					delay={50}
-					glowColor="rgba(255,215,0,0.5)"
+					color="#FFD700"
 				/>
 			</div>
 
