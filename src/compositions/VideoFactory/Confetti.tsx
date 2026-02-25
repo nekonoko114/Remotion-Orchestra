@@ -34,9 +34,9 @@ export const Confetti: React.FC<{ count?: number; colors?: string[] }> = ({
 				size: 10 + random(seed + "size") * 15,
 				color: colors[Math.floor(random(seed + "color") * colors.length)],
 				rotation: random(seed + "rot") * 360,
-				speedX: (random(seed + "sx") - 0.5) * 4,
-				speedY: 2 + random(seed + "sy") * 5,
-				spin: (random(seed + "spin") - 0.5) * 10,
+				speedX: (random(seed + "sx") - 0.5) * 6, // 少し横への広がりも強化
+				speedY: 6 + random(seed + "sy") * 10, // 2+5 -> 6+10 に向上
+				spin: (random(seed + "spin") - 0.5) * 15, // 回転も速く
 			};
 		});
 	}, [count, colors, width, height]);

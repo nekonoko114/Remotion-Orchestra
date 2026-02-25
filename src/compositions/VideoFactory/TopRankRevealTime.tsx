@@ -85,7 +85,7 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 			const y = Math.sin(angle) * radius;
 			
 			const rotationDir = random(seed + "dir") > 0.5 ? 1 : -1;
-			const rotationSpeed = 0.3 + random(seed + "speed") * 0.7;
+			const rotationSpeed = 0.2 + random(seed + "speed") * 2.5; // 0.3+0.7 -> 0.2+2.5 に拡大
 			const asset = MAGIC_CIRCLES[Math.floor(random(seed + "asset") * MAGIC_CIRCLES.length)];
 			const opacity = 0.4 + random(seed + "opacity") * 0.3;
 			const blur = 1 + random(seed + "blur") * 4;
