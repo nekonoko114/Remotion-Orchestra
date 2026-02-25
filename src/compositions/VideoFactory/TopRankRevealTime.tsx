@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
 	AbsoluteFill,
 	Img,
 	interpolate,
 	spring,
+	random,
 	useCurrentFrame,
 	staticFile,
 	useVideoConfig,
@@ -12,10 +13,20 @@ import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
 import { TimeBackground } from "./TimeBackground";
 import { CinematicBorder } from "./CinematicBorder";
 import { MorphingTitle } from "./MorphingTitle";
+import { Confetti } from "./Confetti";
 import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
 
 const BPM = 180;
+
+// 魔法陣アセットのリスト
+const MAGIC_CIRCLES = [
+	"magic-circle-blue.png",
+	"magic-circle-green.png",
+	"magic-circle-orange.png",
+	"magic-circle-red.png",
+	"magic-circle-yellow.png",
+];
 
 type Props = {
 	rank: number;
@@ -25,13 +36,19 @@ type Props = {
 
 export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, width, height } = useVideoConfig();
 
 	const { pulse } = useBeatValue(BPM);
 	
 	const snapReduction = pulse * 0.05;
 	const localFrame = frame - snapReduction;
 	
+	const entrance = spring({
+		frame: localFrame,
+		fps,
+		config: { damping: 12, stiffness: 100 },
+	});
+
 	const nameEntrance = spring({
 		frame: localFrame - 22,
 		fps,
@@ -43,19 +60,29 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 		extrapolateRight: "clamp",
 	}) * (1 + pulse * 0.002);
 	const imageOpacity = interpolate(frame, [0, 10], [0, 1]);
-	const imageRotate = 0; // Disabled rotate for top ranks
 	
-	const nameY = interpolate(nameEntrance, [0, 1], [150, 0]);
+	const nameY = interpolate(nameEntrance, [0, 1], [100, 0]);
 	const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
 	
-	// Entrance Flash (Neon Leak style)
 	const flashOpacity = interpolate(frame, [0, 5, 20], [0, 0.8, 0], { extrapolateRight: "clamp" });
 	
 	const pulseScale = 1 + pulse * 0.001;
-	
-	// Rhythmic Drift
-	const driftX = 0;
-	const driftY = 0;
+
+	// 魔法陣のランダム配置データを作成
+	const magicCirclesData = useMemo(() => {
+		return [...new Array(5)].map((_, i) => {
+			const seed = `magic-${rank}-${i}`;
+			const size = 400 + random(seed + "size") * 600;
+			const x = (random(seed + "x") - 0.5) * width * 0.8;
+			const y = (random(seed + "y") - 0.5) * height * 0.6;
+			const rotationDir = random(seed + "dir") > 0.5 ? 1 : -1;
+			const rotationSpeed = 0.5 + random(seed + "speed") * 1.5;
+			const asset = MAGIC_CIRCLES[Math.floor(random(seed + "asset") * MAGIC_CIRCLES.length)];
+			const opacity = 0.3 + random(seed + "opacity") * 0.4;
+			const blur = 2 + random(seed + "blur") * 8;
+			return { size, x, y, rotationDir, rotationSpeed, asset, opacity, blur };
+		});
+	}, [rank, width, height]);
 
 	const getRankColors = (r: number) => {
 		if (r === 1) return { primary: "#d000ff", glow: "rgba(208, 0, 255, 0.8)" };
@@ -67,131 +94,185 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	if (!liver) return null;
 
 	return (
-		<AbsoluteFill style={{ backgroundColor: "#000" }}>
-			<AbsoluteFill>
-				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.4)" }} />
-			</AbsoluteFill>
-
+		<AbsoluteFill style={{ backgroundColor: "#000", overflow: "hidden" }}>
 			<TimeBackground overlayColor={primary + "33"} hideBackground hideBaseVideo />
 			
+			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
+				<ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
+			</AbsoluteFill>
+
+			{/* 魔法陣演出エリア (背景) */}
+			<AbsoluteFill style={{ zIndex: 10, overflow: "hidden" }}>
+				{magicCirclesData.map((m, i) => (
+					<React.Fragment key={i}>
+						{/* 魔法陣本体 */}
+						<div
+							style={{
+								position: "absolute",
+								left: "50%",
+								top: "50%",
+								width: m.size,
+								height: m.size,
+								marginLeft: -m.size / 2 + m.x,
+								marginTop: -m.size / 2 + m.y,
+								transform: `rotate(${frame * m.rotationSpeed * m.rotationDir}deg) scale(${entrance})`,
+								opacity: m.opacity * entrance,
+								filter: `blur(${m.blur}px) brightness(1.5)`,
+								zIndex: 2,
+							}}
+						>
+							<Img 
+								src={staticFile(`assets/magic/${m.asset}`)} 
+								style={{ width: "100%", height: "100%", objectFit: "contain" }}
+							/>
+						</div>
+
+						{/* 魔法陣から放たれる輝光 (Light Burst/Rays) */}
+						<div
+							style={{
+								position: "absolute",
+								left: "50%",
+								top: "50%",
+								width: m.size * 2,
+								height: m.size * 2,
+								marginLeft: -m.size + m.x,
+								marginTop: -m.size + m.y,
+								background: `radial-gradient(circle, ${primary}66 0%, transparent 70%)`,
+								transform: `scale(${entrance * (1 + pulse * 0.1)})`,
+								opacity: m.opacity * 0.4 * entrance * (0.8 + Math.sin(frame / 5) * 0.2),
+								filter: "blur(40px)",
+								zIndex: 1,
+							}}
+						/>
+						
+						{/* 放射状の光の筋 (Rays) */}
+						{[...new Array(12)].map((_, j) => (
+							<div
+								key={`ray-${i}-${j}`}
+								style={{
+									position: "absolute",
+									left: "50%",
+									top: "50%",
+									width: 4,
+									height: m.size * 1.5,
+									marginLeft: -2 + m.x,
+									marginTop: -m.size * 0.75 + m.y,
+									backgroundColor: primary,
+									boxShadow: `0 0 20px ${primary}`,
+									transform: `rotate(${j * 30 + frame * 0.2 * m.rotationDir}deg) scaleY(${entrance})`,
+									opacity: m.opacity * 0.3 * entrance,
+									filter: "blur(2px)",
+									zIndex: 0,
+								}}
+							/>
+						))}
+					</React.Fragment>
+				))}
+			</AbsoluteFill>
+
+			{/* 紙吹雪演出 */}
+			<AbsoluteFill style={{ zIndex: 110 }}>
+				<Confetti count={150} colors={[primary, "#ffffff", "#ffd700", "#ff0080"]} />
+			</AbsoluteFill>
+
+			{/* メインコンテンツエリア */}
 			<AbsoluteFill
 				style={{
-					justifyContent: "center",
+					display: "flex",
+					flexDirection: "column",
 					alignItems: "center",
 					fontFamily: '"Mochiy Pop One", sans-serif',
 					color: "white",
+					zIndex: 120,
 				}}
 			>
-				<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
-					<ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
-				</AbsoluteFill>
-
-				<div style={{ 
-					transform: `translate(${driftX}px, ${driftY}px)`, 
-					zIndex: 120, 
-					display: "flex", 
-					flexDirection: "column", 
-					alignItems: "center" 
-				}}>
-					{/* Rank Title Animation (Morphing) */}
+				{/* カウントアップ数字 (タイトル) - 画面上部に配置 */}
+				<div style={{ marginTop: 80, transform: `scale(${pulseScale})` }}>
 					<MorphingTitle
 						text={title}
-						fontSize={250}
+						fontSize={220}
 						style={{
-							zIndex: 130,
 							textShadow: `0 0 30px ${primary}, 0 0 60px ${primary}`,
-							transform: `scale(${pulseScale})`,
 						}}
 					/>
-
-					{/* Liver Image Animation with Background Frame */}
-					<div style={{
-						position: "relative",
-						width: 800,
-						height: 800,
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						marginTop: 40,
-						transform: `scale(${imageScale}) rotate(${imageRotate}deg) rotateX(20deg)`,
-						opacity: imageOpacity
-					}}>
-						{/* Background Design Frame (High Speed Rotating Diamond) */}
-						<div style={{
-							position: "absolute",
-							width: "90%",
-							height: "90%",
-							border: `12px solid ${primary}`,
-							transform: `rotate(0deg)`,
-							opacity: 0.3,
-							boxShadow: `0 0 50px ${glow}`,
-							borderRadius: "10%",
-						}} />
-
-						{/* 5-Layer Neon Rings (No pulsing) */}
-						{[...new Array(5)].map((_, i) => (
-							<div 
-								key={i}
-								style={{
-									position: "absolute",
-									width: 710 + i * 25,
-									height: 710 + i * 25,
-									borderRadius: "50%",
-									border: `1.5px solid ${primary}`,
-									boxShadow: `0 0 20px ${glow}`,
-									opacity: 0.7 - i * 0.12,
-								}} 
-							/>
-						))}
-
-						{/* Main Image Container */}
-						<div style={{
-							width: 700,
-							height: 700,
-							borderRadius: "50%",
-							overflow: "hidden",
-							border: `5px solid ${primary}`, 
-							boxShadow: `0 0 80px ${glow}`, 
-							position: "relative",
-							backgroundColor: "#000",
-						}}>
-							<Img
-								src={
-									liver.saved_to 
-										? staticFile(liver.saved_to)
-										: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
-								}
-								style={{ width: "100%", height: "100%", objectFit: "cover" }}
-							/>
-							
-							<AbsoluteFill style={{ 
-								background: `radial-gradient(circle, transparent 40%, ${primary}44 100%)`,
-								mixBlendMode: "screen"
-							}} />
-						</div>
-					</div>
-
-					<h2 style={{ 
-						fontSize: 80, 
-						marginTop: 20, 
-						textShadow: `0 0 20px ${glow}`, 
-						fontWeight: 900,
-						color: "#fff",
-						opacity: nameOpacity,
-						transform: `translateY(${nameY}px)`,
-					}}>
-						{liver.nickname}
-					</h2>
 				</div>
 
-				<AbsoluteFill style={{ 
-					backgroundColor: "white", 
-					opacity: flashOpacity, 
-					pointerEvents: "none",
-					zIndex: 1000,
-					mixBlendMode: "overlay"
-				}} />
+				{/* ライバー画像 */}
+				<div style={{
+					position: "relative",
+					width: 700,
+					height: 700,
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					marginTop: 30,
+					transform: `scale(${imageScale}) rotateX(15deg)`,
+					opacity: imageOpacity
+				}}>
+					{/* 背面のネオンリング */}
+					{[...new Array(3)].map((_, i) => (
+						<div 
+							key={i}
+							style={{
+								position: "absolute",
+								width: 650 + i * 40,
+								height: 650 + i * 40,
+								borderRadius: "50%",
+								border: `2px solid ${primary}`,
+								boxShadow: `0 0 30px ${glow}`,
+								opacity: 0.6 - i * 0.2,
+								transform: `rotate(${frame * (i + 1) * 0.5}deg)`,
+							}} 
+						/>
+					))}
+
+					<div style={{
+						width: 600,
+						height: 600,
+						borderRadius: "50%",
+						overflow: "hidden",
+						border: `6px solid ${primary}`, 
+						boxShadow: `0 0 100px ${glow}`, 
+						position: "relative",
+						backgroundColor: "#000",
+					}}>
+						<Img
+							src={
+								liver.saved_to 
+									? staticFile(liver.saved_to)
+									: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+							}
+							style={{ width: "100%", height: "100%", objectFit: "cover" }}
+						/>
+						<AbsoluteFill style={{ 
+							background: `radial-gradient(circle, transparent 30%, ${primary}55 100%)`,
+							mixBlendMode: "screen"
+						}} />
+					</div>
+				</div>
+
+				{/* ニックネーム */}
+				<h2 style={{ 
+					fontSize: 90, 
+					marginTop: 40, 
+					textShadow: `0 0 30px ${glow}, 0 0 60px ${glow}`, 
+					fontWeight: 900,
+					color: "#fff",
+					opacity: nameOpacity,
+					transform: `translateY(${nameY}px)`,
+				}}>
+					{liver.nickname}
+				</h2>
 			</AbsoluteFill>
+
+			{/* 全体のフラッシュ演出 */}
+			<AbsoluteFill style={{ 
+				backgroundColor: "white", 
+				opacity: flashOpacity, 
+				pointerEvents: "none",
+				zIndex: 1000,
+				mixBlendMode: "overlay"
+			}} />
 
 			<CinematicBorder color={primary} glowColor={glow} />
 		</AbsoluteFill>
