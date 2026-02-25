@@ -7,16 +7,6 @@ import {
 	useVideoConfig,
 } from "remotion";
 
-type Particle = {
-	x: number;
-	y: number;
-	size: number;
-	color: string;
-	rotation: number;
-	speedX: number;
-	speedY: number;
-	spin: number;
-};
 
 export const Confetti: React.FC<{ count?: number; colors?: string[] }> = ({
 	count = 100,

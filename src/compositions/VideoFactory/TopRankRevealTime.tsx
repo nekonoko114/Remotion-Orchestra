@@ -36,18 +36,13 @@ type Props = {
 
 export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	const frame = useCurrentFrame();
-	const { fps, width, height } = useVideoConfig();
+	const { fps } = useVideoConfig();
 
 	const { pulse } = useBeatValue(BPM);
 	
 	const snapReduction = pulse * 0.05;
 	const localFrame = frame - snapReduction;
 	
-	const entrance = spring({
-		frame: localFrame,
-		fps,
-		config: { damping: 12, stiffness: 100 },
-	});
 
 	const nameEntrance = spring({
 		frame: localFrame - 25,
