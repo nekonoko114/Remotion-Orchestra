@@ -148,6 +148,16 @@ export const RankingVideo = () => {
 				</TransitionSeries.Sequence>
 			</TransitionSeries>
 			</AbsoluteFill>
+
+			{/* RED GLOWING BORDER (Dark Knight Theme) */}
+			<AbsoluteFill
+				style={{
+					pointerEvents: "none",
+					border: "15px solid #FF0000",
+					boxShadow: "inset 0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.8)",
+					zIndex: 9999, // Ensure it sits on top of everything
+				}}
+			/>
 		</AbsoluteFill>
 	);
 };
