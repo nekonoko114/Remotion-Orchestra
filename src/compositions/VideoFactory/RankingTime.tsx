@@ -49,7 +49,7 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 	const timing = linearTiming({ durationInFrames: TRANSITION_DURATION });
 
 	const { pulse } = useBeatValue(BPM);
-	const beatScale = 1 + pulse * 0.008;
+	const beatScale = 1 + pulse * 0.001;
 
 	return (
 		<AbsoluteFill>
@@ -58,8 +58,8 @@ export const RankingTime = (props: { data?: Liver[] }) => {
             
             {/* PERSISTENT BORDER OVERLAY */}
             <CinematicBorder 
-                color="#ff0000" 
-                glowColor="rgba(255, 0, 0, 0.6)" 
+                color="#d000ff" 
+                glowColor="rgba(208, 0, 255, 0.6)" 
             />
 
 			<AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
@@ -79,7 +79,7 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 				{/* 2. Group: 10位〜7位 */}
 				<TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
 					<RankingGroup
-						title={"TOP\n10~7"}
+						title={"TOP10~7"}
 						livers={RANKING_DATA.filter((d) => d.rank >= 7 && d.rank <= 10)}
 					/>
 				</TransitionSeries.Sequence>
@@ -93,7 +93,7 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 				{/* 3. Group: 6位〜4位 */}
 				<TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
 					<RankingGroup
-						title={"TOP\n6~4"}
+						title={"TOP6~4"}
 						livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 6)}
 					/>
 				</TransitionSeries.Sequence>

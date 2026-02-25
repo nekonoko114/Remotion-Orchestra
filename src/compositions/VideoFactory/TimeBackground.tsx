@@ -69,7 +69,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 				z: random(`z-${i}`) * 5000,
 				speedZ: random(`sz-${i}`) * 60 + 40,
 				length: random(`len-${i}`) * 1200 + 800,
-				color: isRed ? "#ff0000" : "#ff4400",
+				color: isRed ? "#d000ff" : "#a200ff",
 				width: random(`w-${i}`) * 3 + 1,
 			});
 		}
@@ -108,16 +108,16 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 		// 1. Draw Light Trails
 		ctx.globalCompositeOperation = "screen";
 		trails.forEach((t) => {
-			// Pulse speed on beats - significantly moderated
-			const beatSpeed = t.speedZ * (1 + pulse * 0.15);
+			// Pulse speed on beats - highly moderated
+			const beatSpeed = t.speedZ * (1 + pulse * 0.01);
 			let currZ = (t.z - frame * beatSpeed) % 5000;
 			if (currZ < 0) currZ += 5000;
 
 			const alpha = interpolate(currZ, [0, 800, 4000, 5000], [0, 0.3, 0.3, 0]);
 			if (alpha <= 0) return;
 
-			// Pulse width on beats - moderated
-			ctx.lineWidth = t.width * (1 + pulse * 0.2);
+			// Pulse width on beats - highly moderated
+			ctx.lineWidth = t.width * (1 + pulse * 0.01);
 			ctx.strokeStyle = t.color;
 			ctx.globalAlpha = alpha;
 
@@ -145,8 +145,8 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 				const screenX = p.x + driftX;
 				const screenY = p.y + driftY + bobY;
 				
-				// Larger size for visibility, pulse on beat - very moderated
-				const size = 180 * p.scale * (1 + pulse * 0.05); 
+				// Larger size for visibility, pulse on beat - minimal
+				const size = 180 * p.scale * (1 + pulse * 0.005); 
 
 				// Morph/Glitch Selection - faster on beats
 				const glitchSpeed = Math.max(5, 45 * (1 - pulse)); 
@@ -157,8 +157,8 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 				const row = Math.floor(symbolIndex / SPRITE_COLS);
 
 				ctx.save();
-				// Pulse alpha on beat - very moderated
-				ctx.globalAlpha = (0.55 + Math.sin(frame * 0.03 + p.floatOffset) * 0.1) * (1 + pulse * 0.1);
+				// Pulse alpha on beat - minimal
+				ctx.globalAlpha = (0.55 + Math.sin(frame * 0.03 + p.floatOffset) * 0.1) * (1 + pulse * 0.01);
 				ctx.translate(screenX, screenY);
 				ctx.rotate(p.rotation + frame * p.rotationSpeed);
 				
@@ -188,7 +188,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 			const secs = formatDigits(frame % 60);
 			const ms = formatDigits(Math.floor((frame % 30) * 3.33));
 		
-			const timerPulse = 0.1 + pulse * 0.15;
+			const timerPulse = 0.1 + pulse * 0.05;
 		
 			return (
 				<AbsoluteFill>
@@ -200,7 +200,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 					{/* CENTRAL GLOW - Pulses with music */}
 					<AbsoluteFill
 						style={{
-							background: `radial-gradient(circle, rgba(255, 0, 0, ${0.2 + pulse * 0.2}) 0%, transparent 70%)`,
+							background: `radial-gradient(circle, rgba(208, 0, 255, ${0.2 + pulse * 0.1}) 0%, transparent 70%)`,
 							pointerEvents: "none",
 						}}
 					/>
@@ -219,10 +219,10 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 								fontSize: 500,
 								fontWeight: 900,
 								fontFamily: "Impact, sans-serif",
-								color: "#ff0000",
+								color: "#d000ff",
 								// filter: `blur(${3 - pulse * 1}px) drop-shadow(0 0 ${30 + pulse * 30}px #00f0ff)`, // REMOVED
 								letterSpacing: "-0.05em",
-								transform: `scale(${1.3 + pulse * 0.05}) skewX(-10deg)`,
+								transform: `scale(${1.3 + pulse * 0.005}) skewX(-10deg)`,
 								whiteSpace: "nowrap",
 							}}
 						>
@@ -241,14 +241,14 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 			<AbsoluteFill style={{ top: "auto", height: 300, bottom: 50, opacity: 0.6 }}> {/* Increased opacity */}
 				<div style={{ display: "flex", gap: 10, alignItems: "flex-end", height: "100%", padding: "0 100px" }}>
 					{Array.from({ length: 40 }).map((_, i) => {
-						const h = interpolate(Math.sin(frame * 0.1 + i), [-1, 1], [15, 100]) * (1 + pulse * 0.4);
+						const h = interpolate(Math.sin(frame * 0.1 + i), [-1, 1], [15, 100]) * (1 + pulse * 0.02);
 						return (
 							<div key={i} style={{ 
 								flex: 1, 
 								height: h, 
-								background: `linear-gradient(to top, #ff0000, transparent)`,
+								background: `linear-gradient(to top, #d000ff, transparent)`,
 								// Efficient simple box shadow on container or use simple border
-								borderTop: "2px solid rgba(255, 0, 0, 0.5)", 
+								borderTop: "2px solid rgba(208, 0, 255, 0.5)", 
 								borderRadius: "10px 10px 0 0",
                                 transition: "height 0.1s ease-out"
 							}} />
@@ -259,7 +259,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 
 			{/* ADDED: Global Neon Overlay - Efficient "Glow" for everything */}
 			<AbsoluteFill style={{
-				background: `radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.15) 0%, transparent 70%)`,
+				background: `radial-gradient(circle at 50% 50%, rgba(208, 0, 255, 0.15) 0%, transparent 70%)`,
 				mixBlendMode: "screen", // Global blend is okay, per-particle is bad
 				pointerEvents: "none",
 				zIndex: 5,
@@ -267,7 +267,7 @@ export const TimeBackground: React.FC<Props> = ({ particleCount = 20, overlayCol
 			
 			{/* ADDED: Scanline effect for "Cyber" feel (very lightweight) */}
 			<AbsoluteFill style={{
-				background: "linear-gradient(to bottom, rgba(255,0,0,0.03) 50%, transparent 50%)",
+				background: "linear-gradient(to bottom, rgba(208,0,255,0.03) 50%, transparent 50%)",
 				backgroundSize: "100% 4px",
 				pointerEvents: "none",
 				zIndex: 6,

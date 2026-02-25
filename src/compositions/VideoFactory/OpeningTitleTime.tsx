@@ -1,238 +1,162 @@
 import type React from "react";
 import {
 	AbsoluteFill,
-	interpolate,
 	random,
-	spring,
 	useCurrentFrame,
-	useVideoConfig,
+	Video,
+	staticFile,
+	interpolate,
 } from "remotion";
 import { LensFlare } from "../../components/effects/LensFlare";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
-import { TextShine } from "./TextShine";
-import { useBeatValue } from "./utils/beat-sync";
+import { useBeatValue } from "./utils/beat-sync"; 
+import { CinematicBorder } from "./CinematicBorder";
 
-// HIGH-GLOW Metallic Text Component (Cyan/Blue Theme)
-const ShinyText: React.FC<{
+const OPENING_VIDEO = staticFile("assets/backgrounds/nobvflare.mp4");
+
+// DIGITAL GLITCH TYPEWRITER Component
+const DigitalTypewriter: React.FC<{
 	text: string;
 	fontSize: number;
-	className: string; // Kept for interface compatibility but mostly overridden
-	delay: number;
-	glowColor?: string;
-}> = ({
-	text,
-	fontSize,
-	delay,
-	glowColor = "rgba(255, 0, 0, 0.4)", // Default to Red glow
-}) => {
+	delay: number; // In frames
+	duration: number; // In frames
+	color?: string;
+    yOffset: number;
+}> = ({ text, fontSize, delay, duration, color = "#d000ff", yOffset }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	if (frame < delay) return null;
 
-	const spr = spring({
-		frame: frame - delay,
-		fps,
-		config: { damping: 12, stiffness: 100, mass: 0.8 },
-	});
-
-	const scale = interpolate(spr, [0, 1], [4, 1]);
-	const opacity = interpolate(spr, [0, 0.3], [0, 1], {
-		extrapolateRight: "clamp",
-	});
+	const progress = Math.min(1, (frame - delay) / duration);
+	const charCount = Math.floor(text.length * progress);
+	const visibleText = text.substring(0, charCount);
+	
+	// Glitch effect for the current character
+	const isGlitching = progress < 1 && charCount < text.length;
+	const glitchChars = "01!@#$%^&*()_+<>{}[]";
+	const glitchChar = isGlitching 
+		? glitchChars[Math.floor(random(frame) * glitchChars.length)]
+		: "";
 
 	return (
 		<div
 			style={{
-				transform: `scale(${scale})`,
-				opacity,
-				position: "relative",
+                position: "absolute",
+                top: `calc(50% + ${yOffset}px)`,
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+				fontFamily: "system-ui, -apple-system, sans-serif",
+				fontSize,
+				fontWeight: 900,
+				color: "#fff",
+				textShadow: `0 0 15px ${color}, 0 0 30px ${color}88`,
+				display: "flex",
+				alignItems: "center",
+                whiteSpace: "nowrap",
 			}}
 		>
-			{/* PHYSICAL GLOW LAYER (Hidden behind text but creates massive bloom) */}
-			<div
-				style={{
-					position: "absolute",
-					top: "50%",
-					left: "50%",
-					transform: "translate(-50%, -50%)",
-					width: "120%",
-					height: "100%",
-					background: `radial-gradient(circle, ${glowColor} 0%, transparent 70%)`,
-					filter: "blur(40px)",
-					zIndex: -1,
-					opacity: interpolate(spr, [0.5, 1], [0, 1]),
-				}}
-			/>
-
-            {/* RICH TEXT UPGRADE: TextShine + Solid White + Strong Shadow */}
-            <TextShine delay={delay + 5} duration={45} color="white">
-                <h1
-                    style={{
-                        fontSize,
-                        fontWeight: 900,
-                        margin: 0,
-                        textAlign: "center",
-                        letterSpacing: "0.1em",
-                        lineHeight: 1.1,
-                        fontFamily: "system-ui, -apple-system, sans-serif",
-                        color: "#FFFFFF",
-                        textShadow: `0 0 20px ${glowColor}, 0 0 50px ${glowColor}`, 
-                        filter: "drop-shadow(0px 5px 10px rgba(0,0,0,0.8))", // Add depth
-                    }}
-                >
-                    {text}
-                </h1>
-            </TextShine>
+			{visibleText}
+			{isGlitching && (
+				<span style={{ opacity: 0.8, color: "#e088ff" }}>{glitchChar}</span>
+			)}
+			{/* Digital cursor */}
+			{((progress < 1) || (Math.floor(frame / 5) % 2 === 0)) && (
+				<div style={{ width: 15, height: fontSize * 0.8, background: color, marginLeft: 8, boxShadow: `0 0 10px ${color}` }} />
+			)}
 		</div>
 	);
 };
 
 export const OpeningTitleTime: React.FC = () => {
 	const frame = useCurrentFrame();
-	const { width } = useVideoConfig();
 	const { pulse, beatIndex } = useBeatValue(180);
 
-	const getShake = (delay: number) => {
-		if (frame < delay || frame > delay + 10) return 0;
-		const progress = frame - delay;
-		return (random(`shake-${delay}-${frame}`) - 0.5) * 40 * (1 - progress / 10);
-	};
+    // Alternative BPM Expression: Rhythmic Color Aberration Glitch
+    const glitchStr = 0;
+    const glitchOffset = 0;
 
-	const totalShakeX = getShake(10) + getShake(25) + getShake(40) + getShake(55);
-	const totalShakeY = getShake(11) + getShake(26) + getShake(41) + getShake(56);
+    // Timing Constants
+    const transitionFrame = 180; // 6 seconds (White flash timing)
 
-	// Rotation for God Rays
-	const rayRotate = frame * 0.2;
+    // BACKGROUND WIGGLE & FIXED ZOOM
+    // Fixed zoom to cover edges (original source might be small)
+    const videoScale = 1.5; 
+
+    // Wiggle (shaking) - Constant subtle shake + big punch at explosion
+    const baseWiggle = 5;
+    const explosionWiggle = interpolate(frame, [transitionFrame, transitionFrame + 5, transitionFrame + 40], [0, 35, 0], {
+        extrapolateLeft: "clamp",
+        extrapolateRight: "clamp",
+    });
+    const wiggleIntensity = baseWiggle + explosionWiggle;
+    
+    const wiggleX = (random(`wiggle-x-${frame}`) - 0.5) * wiggleIntensity;
+    const wiggleY = (random(`wiggle-y-${frame}`) - 0.5) * wiggleIntensity;
 
 	return (
-		<AbsoluteFill
-			style={{
-				justifyContent: "center",
-				alignItems: "center",
-				flexDirection: "column",
-				background: "transparent",
-				transform: `translate(${totalShakeX}px, ${totalShakeY}px)`,
-			}}
-		>
-			<AbsoluteFill style={{ zIndex: 0 }}>
-				<AbsoluteFill 
-					style={{
-						background: "radial-gradient(circle at center, rgba(255, 0, 0, 0.15) 0%, transparent 80%)",
-						mixBlendMode: "screen",
-					}}
-				/>
-			</AbsoluteFill>
+		<AbsoluteFill style={{ 
+            background: "#000", 
+            overflow: "hidden",
+            filter: glitchStr > 0 ? `drop-shadow(${glitchOffset}px 0 rgba(255,0,0,0.5)) drop-shadow(${-glitchOffset}px 0 rgba(0,0,255,0.5))` : "none"
+        }}>
+            {/* BACKGROUND VIDEO */}
+            <AbsoluteFill style={{ 
+                zIndex: 0,
+                transform: `scale(${videoScale}) translate(${wiggleX}px, ${wiggleY}px)`,
+            }}>
+                <Video 
+                    src={OPENING_VIDEO}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        filter: "brightness(1.2) contrast(1.1) saturate(1.1)",
+                    }}
+                    muted
+                    loop
+                />
+                {/* Overlay to ensure text readability - Made much lighter */}
+                <AbsoluteFill 
+                    style={{
+                        background: "rgba(0,0,0,0.15)",
+                        mixBlendMode: "multiply",
+                    }}
+                />
+            </AbsoluteFill>
 
-			<div
-				style={{
-					position: "absolute",
-					width: width * 2,
-					height: width * 2,
-					background:
-						`conic-gradient(from ${rayRotate}deg, 
-                            transparent 0deg, 
-                            rgba(255, 0, 0, 0.3) 20deg, 
-                            transparent 40deg, 
-                            rgba(255, 60, 0, 0.3) 60deg, 
-                            transparent 80deg, 
-                            rgba(255, 0, 0, 0.3) 100deg, 
-                            transparent 120deg, 
-                            rgba(255, 60, 0, 0.3) 140deg, 
-                            transparent 160deg
-                        )`,
-					zIndex: 1,
-					top: "50%",
-					left: "50%",
-					transform: `translate(-50%, -50%)`,
-					filter: "blur(80px)",
-					mixBlendMode: "screen",
-					opacity: 0.8,
-				}}
-			/>
-
-			{/* Impact Flash (Cyan/White) */}
+			{/* Impact Flash & Wiggle Logic */}
 			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
-				{/* 初期インパクト (1ビート目) */}
-				{frame >= 10 && frame < 20 && (
-					<ImpactEffect color="#ff0000" intensity="high" />
-				)}
-				
-				{/* BPM 180 に同期したビート毎のインパクト (4拍毎に強調) */}
 				{beatIndex >= 4 && beatIndex % 4 === 0 && pulse > 0.6 && (
 					<ImpactEffect color="#ffffff" intensity="normal" />
 				)}
+                {/* 6秒時点のアクセントフラッシュ */}
+                {frame >= transitionFrame && frame < transitionFrame + 20 && (
+                    <ImpactEffect color="#ffffff" intensity="high" />
+                )}
 			</AbsoluteFill>
 
-			{/* SUPER BRIGHT TEXTS (Metallic Silver/Blue) */}
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					gap: 15,
-					alignItems: "center",
-					zIndex: 10,
-					marginTop: -50, // Slight offset to center the larger stack
-				}}
-			>
-				<ShinyText
-					text="J.O.L"
-					fontSize={260}
-					className="metallic-red"
-					delay={10}
-					glowColor="rgba(255, 0, 0, 0.7)"
-				/>
-				
-				<ShinyText
-					text="2026年1月度"
-					fontSize={140}
-					className="metallic-red"
-					delay={30}
-					glowColor="rgba(255, 50, 0, 0.5)"
-				/>
+            {/* TYPEWRITER PHASE (Stay visible throughout) */}
+            <div style={{ position: "absolute", width: "100%", height: "100%", zIndex: 50 }}>
+                <DigitalTypewriter text="J.O.L" fontSize={260} delay={0} duration={30} yOffset={-380} />
+                <DigitalTypewriter text="2026年2月度" fontSize={130} delay={30} duration={30} yOffset={-120} />
+                <DigitalTypewriter text="月間配信時間" fontSize={130} delay={60} duration={30} yOffset={60} />
+                <DigitalTypewriter text="ランキング" fontSize={160} delay={90} duration={30} yOffset={250} />
+                <DigitalTypewriter text="結果発表!" fontSize={160} delay={120} duration={30} yOffset={440} />
+            </div>
 
-				<ShinyText
-					text="月間配信時間"
-					fontSize={140}
-					className="metallic-red"
-					delay={40}
-					glowColor="rgba(255, 50, 0, 0.5)"
-				/>
-
-				<ShinyText
-					text="ランキング"
-					fontSize={160}
-					className="metallic-red"
-					delay={50}
-					glowColor="rgba(255, 0, 0, 0.6)"
-				/>
-
-				<ShinyText
-					text="結果発表!"
-					fontSize={160}
-					className="metallic-red"
-					delay={60}
-					glowColor="rgba(255, 0, 0, 0.9)"
-				/>
-			</div>
-
-			{/* LENS FLARE */}
+			{/* LENS FLARE / GLOW */}
 			<AbsoluteFill style={{ zIndex: 20, pointerEvents: "none" }}>
 				<LensFlare
-					opacity={0.7}
-					scale={1.5}
-					color="#ff0000"
-					intensity={1.2}
+					opacity={pulse * 0.02}
+					scale={1.1}
+					color="#d000ff"
+					intensity={0.8}
 				/>
 			</AbsoluteFill>
 
-			{/* Final Cinematic Bloom */}
-			<AbsoluteFill
-				style={{
-					background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 90%)",
-					zIndex: 99,
-					pointerEvents: "none",
-					mixBlendMode: "overlay",
-				}}
-			/>
+			{/* CINEMATIC BORDER (Always on top) */}
+            <div style={{ position: "absolute", width: "100%", height: "100%", zIndex: 80 }}>
+			    <CinematicBorder color="#d000ff" glowColor="rgba(208, 0, 255, 0.5)" />
+            </div>
 		</AbsoluteFill>
 	);
 };

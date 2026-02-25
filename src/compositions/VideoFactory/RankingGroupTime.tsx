@@ -1,5 +1,6 @@
 import { AbsoluteFill, Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
+import { MorphingTitle } from "./MorphingTitle";
 import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
 
@@ -22,18 +23,6 @@ export const RankingGroupTime: React.FC<Props> = ({
 	const { fps } = useVideoConfig();
 	const { pulse } = useBeatValue(BPM);
 
-	const titleSpr = spring({
-		frame,
-		fps,
-		config: { damping: 10, stiffness: 200, mass: 0.6 },
-	});
-
-	// Power Slam Scale: Start massive and slam down
-	const titleScale = interpolate(titleSpr, [0, 1], [4, 1]);
-	const titleOpacity = interpolate(titleSpr, [0, 0.4], [0, 1]);
-	// Vertical slide is less important than the slam, but keep it subtle
-	const titleY = interpolate(titleSpr, [0, 1], [100, 0]);
-
 	// Impact Shake: Just at the moment of landing (around frame 5-15)
 	const shakePower = interpolate(frame, [5, 15], [30, 0], { extrapolateRight: 'clamp' });
 	const shakeX = (random(`shake-${frame}`) - 0.5) * shakePower;
@@ -48,7 +37,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 		<AbsoluteFill style={{ 
 			justifyContent: "center", 
 			alignItems: "center",
-			transform: `translateX(${shakeX}px) scale(${1 + pulse * 0.01})`
+			transform: `translateX(${shakeX}px) scale(${1 + pulse * 0.005})`,
 		}}>
 			{/* Impact Glow Burst Overlay */}
 			{glowOpacity > 0 && (
@@ -61,25 +50,17 @@ export const RankingGroupTime: React.FC<Props> = ({
 					}}
 				/>
 			)}
-			{/* タイトル */}
-			<h1
-				className="metallic-gold"
+			{/* タイトル (モーフィング演出) */}
+			<MorphingTitle
+				text={title}
+				fontSize={isHighlight ? 120 : 180}
+				className="metallic-purple"
 				style={{
 					position: "absolute",
-					top: 100,
-					fontSize: isHighlight ? 100 : 160,
-					fontFamily: "Impact, sans-serif",
-					fontWeight: "bold",
-					letterSpacing: "0.1em",
-					textAlign: "center",
-					whiteSpace: "pre-line",
-					lineHeight: 1.0,
-					transform: `scale(${titleScale}) translateY(${titleY}px)`,
-					opacity: titleOpacity,
+					top: 200,
+					zIndex: 20,
 				}}
-			>
-				{title}
-			</h1>
+			/>
 
 			{/* ライバーリストを表示するエリア */}
 			<div
@@ -97,6 +78,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 				{livers.map((liver, index) => {
 					// Staggered Spring Logic: Reverse order (10 -> 7)
 					// Delay is based on reverse index
+					// Staggered Spring Logic: Reverse order (10 -> 7)
 					const reverseIndex = livers.length - 1 - index;
 					const liverSpr = spring({
 						frame: frame - STAGGER_DELAY * reverseIndex - 10, // Start after title slam
@@ -104,9 +86,9 @@ export const RankingGroupTime: React.FC<Props> = ({
 						config: { damping: 15, stiffness: 100 },
 					});
 
-					const liverX = interpolate(liverSpr, [0, 1], [200, 0]);
+					const liverY = interpolate(liverSpr, [0, 1], [-100, 0]);
 					const liverOpacity = interpolate(liverSpr, [0, 1], [0, 1]);
-					const liverScale = interpolate(liverSpr, [0, 1], [0.95, 1]);
+					const liverScale = interpolate(liverSpr, [0, 1], [0.8, 1]); // Slightly smaller for better drop feel
 
 					// Highlight Sizing
 					const iconSize = isHighlight ? 450 : 150; // iconSize reduced for stack
@@ -127,14 +109,14 @@ export const RankingGroupTime: React.FC<Props> = ({
 								width: "100%",
 								padding: isHighlight ? "60px 40px" : "20px 30px",
 								borderRadius: 20,
-								// Entrance + Wobble Animation
-								transform: `translateX(${liverX}px) scale(${liverScale}) rotateY(${Math.sin(frame / 60) * 5}deg)`,
+								// Entrance (Dropdown) + Wobble Animation
+								transform: `translateY(${liverY}px) scale(${liverScale}) ${liver.rank <= 3 ? "" : `rotateY(${Math.sin(frame / 60) * 5}deg)`}`,
 								opacity: liverOpacity,
 								boxShadow: isHighlight
-									? "0 0 50px rgba(255, 0, 0, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1)"
+									? "0 0 50px rgba(208, 0, 255, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1)"
 									: "0 4px 15px rgba(0,0,0,0.5)",
 								border: isHighlight
-									? "3px solid rgba(255, 0, 0, 0.5)"
+									? "3px solid rgba(208, 0, 255, 0.5)"
 									: "1px solid rgba(255,255,255,0.1)",
 								position: "relative", // Needed for absolute background
 								overflow: "hidden", // Clip the blur
@@ -153,7 +135,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 							</AbsoluteFill>
 
 							{/* Dark overlay for readability */}
-							<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.15)" }} />
+							<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.15)" ,border: "10px solid rgba(208, 0, 255, 0.5)", filter: "blur(4px)"}} />
 								{/* Row content */}
 								<div
 									style={{
@@ -203,6 +185,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 													boxShadow: "0 0 20px rgba(0,0,0,0.5)",
 													flexShrink: 0,
 													backgroundColor: "#ccc",
+													
 												}}
 											>
 												<Img
@@ -215,6 +198,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 														width: "100%",
 														height: "100%",
 														objectFit: "cover",
+														border: "4px solid white",
 													}}
 												/>
 											</div>
@@ -227,7 +211,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 											{/* 順位バッジ */}
 											{!hideRank && (
 												<div
-													className="metallic-gold"
+													className="metallic-purple"
 													style={{
 														fontSize: 120,
 														fontWeight: "bold",

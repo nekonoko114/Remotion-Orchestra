@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const ImpactEffectTime: React.FC<Props> = ({
-	color = "#ff0000",
+	color = "#d000ff",
 	intensity = "normal",
 	beatPulse = 0,
 }) => {

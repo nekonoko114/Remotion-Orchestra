@@ -1,14 +1,17 @@
 import React from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
+import { useBeatValue } from "./utils/beat-sync";
 
 type Props = {
     color: string;
     glowColor: string;
 };
 
+
 export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
     const frame = useCurrentFrame();
     const { width, height } = useVideoConfig();
+    const { pulse } = useBeatValue(180);
     
     // Subtle breathing for the glow
     const breath = Math.sin(frame * 0.05) * 0.2 + 1;
@@ -58,7 +61,6 @@ export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
                         0 0 40px ${color},
                         inset 0 0 40px ${color}
                     `,
-                    borderRadius: "0px",
                     filter: `brightness(${breath})`,
                     opacity: 0.9
                 }}
@@ -72,13 +74,14 @@ export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
                     top: sparkY - 30,
                     width: 60,
                     height: 60,
-                    background: "#ff6600ff",
+                    background: "#00ccff",
                     borderRadius: "50%",
                     boxShadow: `
-                        0 0 30px #ff6a00ff,
-                        0 0 60px #ff3700ff,
-                        0 0 100px #ff3c00ff
+                        0 0 30px #00ccff,
+                        0 0 60px #d000ff,
+                        0 0 100px #d000ff
                     `,
+                    transform: `scale(${1 + pulse * 0.3})`,
                     zIndex: 10,
                 }}
             />

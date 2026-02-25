@@ -1,23 +1,19 @@
-
+import React from "react";
 import {
 	AbsoluteFill,
 	Img,
 	interpolate,
 	spring,
-	staticFile,
 	useCurrentFrame,
+	staticFile,
 	useVideoConfig,
-	Easing,
 } from "remotion";
-import { ParticleBurst } from "../../components/effects/ParticleBurst";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
 import { TimeBackground } from "./TimeBackground";
 import { CinematicBorder } from "./CinematicBorder";
-import { AdjustmentLayerTime as AdjustmentLayer } from "./AdjustmentLayerTime";
+import { MorphingTitle } from "./MorphingTitle";
 import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
-
-// Verified build status
 
 const BPM = 180;
 
@@ -33,36 +29,21 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
 	const { pulse } = useBeatValue(BPM);
 	
-	// 4. Time Snap Effect
-	const snapReduction = pulse * 0.4;
+	const snapReduction = pulse * 0.05;
 	const localFrame = frame - snapReduction;
 	
-	// 1. Staggered Entrance Timings (Sequential Reveal with higher "snap")
-	const rankEntrance = spring({
-		frame: localFrame,
-		fps,
-		config: { damping: 10, stiffness: 180 }, // Much faster snap for sequence start
-	});
-
-	const imageEntrance = spring({
-		frame: localFrame - 10, // Faster interval
-		fps,
-		config: { damping: 12, stiffness: 150 },
-	});
-
 	const nameEntrance = spring({
 		frame: localFrame - 22,
 		fps,
 		config: { damping: 14, stiffness: 120 },
 	});
 
-	// Reveal Animations Logic (Larger ranges for more velocity)
-	const rankScale = interpolate(rankEntrance, [0, 1], [8, 1], { easing: Easing.out(Easing.back(2)) });
-	const rankOpacity = interpolate(rankEntrance, [0, 0.3], [0, 1]);
-	
-	const imageScale = interpolate(imageEntrance, [0, 1], [3, 1], { easing: Easing.out(Easing.exp) });
-	const imageRotate = interpolate(imageEntrance, [0, 1], [-60, 0]);
-	const imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]);
+	// Dynamics based on music
+	const imageScale = interpolate(frame, [0, 15], [0.8, 1.0], {
+		extrapolateRight: "clamp",
+	}) * (1 + pulse * 0.002);
+	const imageOpacity = interpolate(frame, [0, 10], [0, 1]);
+	const imageRotate = 0; // Disabled rotate for top ranks
 	
 	const nameY = interpolate(nameEntrance, [0, 1], [150, 0]);
 	const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
@@ -70,17 +51,15 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	// Entrance Flash (Neon Leak style)
 	const flashOpacity = interpolate(frame, [0, 5, 20], [0, 0.8, 0], { extrapolateRight: "clamp" });
 	
-	const pulseScale = 1 + pulse * 0.04; 
+	const pulseScale = 1 + pulse * 0.001;
 	
 	// Rhythmic Drift
-	const driftX = Math.sin(frame / 10) * pulse * 15;
-	const driftY = Math.cos(frame / 12) * pulse * 10;
+	const driftX = 0;
+	const driftY = 0;
 
 	const getRankColors = (r: number) => {
-		if (r === 1) return { primary: "#ff0000", glow: "rgba(255, 0, 0, 0.8)" };
-		if (r === 2) return { primary: "#ff4400", glow: "rgba(255, 68, 0, 0.8)" };
-		if (r === 3) return { primary: "#cc0000", glow: "rgba(204, 0, 0, 0.8)" };
-		return { primary: "#fff", glow: "transparent" };
+		if (r === 1) return { primary: "#d000ff", glow: "rgba(208, 0, 255, 0.8)" };
+		return { primary: "#a200ff", glow: "rgba(162, 0, 255, 0.8)" };
 	};
 
 	const { primary, glow } = getRankColors(rank);
@@ -94,7 +73,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 			</AbsoluteFill>
 
 			<TimeBackground overlayColor={primary + "33"} hideBackground hideBaseVideo />
-			<AdjustmentLayer rank={rank} beatPulse={pulse} />
 			
 			<AbsoluteFill
 				style={{
@@ -115,53 +93,84 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 					flexDirection: "column", 
 					alignItems: "center" 
 				}}>
-					{/* Rank Title Animation */}
-					<h1 style={{ 
-						fontSize: 250, 
-						margin: 0, 
-						color: "#FFFFFF", 
-						textShadow: `0 0 30px ${primary}, 0 0 60px ${primary}`, 
-						fontWeight: 900,
-						fontStyle: "normal", 
-						lineHeight: 1,
-						transform: `scale(${rankScale * pulseScale})`,
-						opacity: rankOpacity,
-						fontFamily: '"Mochiy Pop One", sans-serif',
-					}}>
-						{title}
-					</h1>
+					{/* Rank Title Animation (Morphing) */}
+					<MorphingTitle
+						text={title}
+						fontSize={250}
+						style={{
+							zIndex: 130,
+							textShadow: `0 0 30px ${primary}, 0 0 60px ${primary}`,
+							transform: `scale(${pulseScale})`,
+						}}
+					/>
 
-					{/* Liver Image Animation */}
+					{/* Liver Image Animation with Background Frame */}
 					<div style={{
-						width: 700,
-						height: 700,
-						borderRadius: "50%",
-						overflow: "hidden",
-						border: `5px solid ${primary}`, 
-						boxShadow: `0 0 80px ${glow}`, 
 						position: "relative",
-						backgroundColor: "#000",
+						width: 800,
+						height: 800,
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
 						marginTop: 40,
 						transform: `scale(${imageScale}) rotate(${imageRotate}deg) rotateX(20deg)`,
 						opacity: imageOpacity
 					}}>
-						<Img
-							src={
-								liver.saved_to 
-									? staticFile(liver.saved_to)
-									: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
-							}
-							style={{ width: "100%", height: "100%", objectFit: "cover" }}
-						/>
-						
-						{/* Subtle Inner Glow Overlay */}
-						<AbsoluteFill style={{ 
-							background: `radial-gradient(circle, transparent 40%, ${primary}44 100%)`,
-							mixBlendMode: "screen"
+						{/* Background Design Frame (High Speed Rotating Diamond) */}
+						<div style={{
+							position: "absolute",
+							width: "90%",
+							height: "90%",
+							border: `12px solid ${primary}`,
+							transform: `rotate(0deg)`,
+							opacity: 0.3,
+							boxShadow: `0 0 50px ${glow}`,
+							borderRadius: "10%",
 						}} />
+
+						{/* 5-Layer Neon Rings (No pulsing) */}
+						{[...new Array(5)].map((_, i) => (
+							<div 
+								key={i}
+								style={{
+									position: "absolute",
+									width: 710 + i * 25,
+									height: 710 + i * 25,
+									borderRadius: "50%",
+									border: `1.5px solid ${primary}`,
+									boxShadow: `0 0 20px ${glow}`,
+									opacity: 0.7 - i * 0.12,
+								}} 
+							/>
+						))}
+
+						{/* Main Image Container */}
+						<div style={{
+							width: 700,
+							height: 700,
+							borderRadius: "50%",
+							overflow: "hidden",
+							border: `5px solid ${primary}`, 
+							boxShadow: `0 0 80px ${glow}`, 
+							position: "relative",
+							backgroundColor: "#000",
+						}}>
+							<Img
+								src={
+									liver.saved_to 
+										? staticFile(liver.saved_to)
+										: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+								}
+								style={{ width: "100%", height: "100%", objectFit: "cover" }}
+							/>
+							
+							<AbsoluteFill style={{ 
+								background: `radial-gradient(circle, transparent 40%, ${primary}44 100%)`,
+								mixBlendMode: "screen"
+							}} />
+						</div>
 					</div>
 
-					{/* Nickname Entrance */}
 					<h2 style={{ 
 						fontSize: 80, 
 						marginTop: 20, 
@@ -175,7 +184,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 					</h2>
 				</div>
 
-				{/* Global Flash Effect on Entrance */}
 				<AbsoluteFill style={{ 
 					backgroundColor: "white", 
 					opacity: flashOpacity, 
@@ -186,16 +194,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 			</AbsoluteFill>
 
 			<CinematicBorder color={primary} glowColor={glow} />
-
-			<AbsoluteFill style={{ zIndex: 110, pointerEvents: "none" }}>
-				<ParticleBurst 
-					count={30} 
-					colors={[primary, "#fff"]} 
-					x={540} 
-					y={960}
-					speed={5}
-				/>
-			</AbsoluteFill>
 		</AbsoluteFill>
 	);
 };
