@@ -55,14 +55,33 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 		config: { damping: 15, stiffness: 120 },
 	});
 
-	// Reveal Animations (Larger initial values for "impact")
+	// --------------------------------------------------------
+	// Reveal Animations (Rank-Specific logic)
+	// --------------------------------------------------------
+	
 	const rankScale = interpolate(rankEntrance, [0, 1], [10, 1], { easing: Easing.out(Easing.back(2)) });
 	const rankOpacity = interpolate(rankEntrance, [0, 0.3], [0, 1]);
 	
-	const imageScale = interpolate(imageEntrance, [0, 1], [2, 1], { easing: Easing.out(Easing.exp) });
-	const imageRotate = interpolate(imageEntrance, [0, 1], [-45, 0]);
-	const imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]);
-	
+	// Default values
+	let imageScale = 1;
+	let imageRotate = 0;
+	let imageY = 0;
+	let imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]); // Baseline opacity
+
+	if (rank === 3) {
+		// 3位: ③ インパクト・グローフラッシュ (シンプルなScale + ガツンとOpacity)
+		imageScale = interpolate(imageEntrance, [0, 1], [0.5, 1], { easing: Easing.out(Easing.back(2.5)) });
+		imageOpacity = interpolate(imageEntrance, [0, 0.2, 1], [0, 1, 1]);
+	} else if (rank === 2) {
+		// 2位: ② アッパー・スライド (Translate Y)
+		imageY = interpolate(imageEntrance, [0, 1], [800, 0], { easing: Easing.out(Easing.exp) });
+		// Slightly overshoot then settle
+	} else if (rank === 1) {
+		// 1位: ① スパイラル・ズームイン (Scale + Rotate)
+		imageScale = interpolate(imageEntrance, [0, 1], [0, 1], { easing: Easing.out(Easing.back(1.5)) });
+		imageRotate = interpolate(imageEntrance, [0, 1], [-720, 0], { easing: Easing.out(Easing.exp) });
+	}
+
 	const nameY = interpolate(nameEntrance, [0, 1], [100, 0]);
 	const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
 
