@@ -129,7 +129,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 						transform: `scale(${bgScale})`
 					}}
 				/>
-				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.3)" }} /> {/* 背景をより暗く（暗黒ベース） */}
+				<AbsoluteFill style={{ backgroundColor: rank === 1 ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.0)" }} /> {/* 2位3位は暗くないように */}
 			</AbsoluteFill>
 
 			<AdjustmentLayer rank={rank} beatPulse={pulse} />
@@ -300,7 +300,9 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 
 			<AbsoluteFill
 				style={{
-					background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.2) 100%)",
+					background: rank === 1 
+						? "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.2) 100%)"
+						: "radial-gradient(circle, transparent 40%, rgba(0,0,0,0.05) 100%)",
 					pointerEvents: "none",
 					zIndex: 200,
 				}}

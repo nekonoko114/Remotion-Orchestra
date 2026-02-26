@@ -20,16 +20,16 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
 		if (rank === 2)
 			return {
 				tint: "#A0C0FF",
-				contrast: 1.15,
+				contrast: 1.1,
 				saturate: 1.25,
-				brightness: 1.05,
+				brightness: 1.2,
 			};
 		if (rank === 3)
 			return {
 				tint: "#FF8C00",
-				contrast: 1.2,
+				contrast: 1.1,
 				saturate: 1.3,
-				brightness: 1.05,
+				brightness: 1.2,
 			};
 		return { tint: "#ffffff", contrast: 1, saturate: 1, brightness: 1 };
 	};
