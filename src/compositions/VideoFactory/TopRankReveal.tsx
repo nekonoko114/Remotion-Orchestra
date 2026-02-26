@@ -62,24 +62,28 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 	const rankScale = interpolate(rankEntrance, [0, 1], [10, 1], { easing: Easing.out(Easing.back(2)) });
 	const rankOpacity = interpolate(rankEntrance, [0, 0.3], [0, 1]);
 	
-	// Default values
-	let imageScale = 1;
-	let imageRotate = 0;
-	let imageY = 0;
-	let imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]); // Baseline opacity
+	// ベースの「弾けるような登場」は全順位共通で残す（これが「ドカン！」の正体）
+	let imageScale = interpolate(imageEntrance, [0, 1], [2, 1], { easing: Easing.out(Easing.exp) });
+	let imageRotate = interpolate(imageEntrance, [0, 1], [-45, 0]);
+	let imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]);
+	let imageY = 0; // 追加のY軸移動用
 
+	// 更に順位ごとにトランジションを「上乗せ」する
 	if (rank === 3) {
-		// 3位: ③ インパクト・グローフラッシュ (シンプルなScale + ガツンとOpacity)
-		imageScale = interpolate(imageEntrance, [0, 1], [0.5, 1], { easing: Easing.out(Easing.back(2.5)) });
-		imageOpacity = interpolate(imageEntrance, [0, 0.2, 1], [0, 1, 1]);
+		// 3位: ③ インパクト・グローフラッシュ (シンプルなScale + ガツンとOpacityをより強調)
+		imageScale = interpolate(imageEntrance, [0, 1], [0.1, 1], { easing: Easing.out(Easing.back(3)) }); // より小さくから弾ける
+		// Rotateはなし（ストレートにドン！）
+		imageRotate = 0; 
 	} else if (rank === 2) {
 		// 2位: ② アッパー・スライド (Translate Y)
-		imageY = interpolate(imageEntrance, [0, 1], [800, 0], { easing: Easing.out(Easing.exp) });
-		// Slightly overshoot then settle
+		imageY = interpolate(imageEntrance, [0, 1], [800, 0], { easing: Easing.out(Easing.back(1.5)) });
+		// 突き上げ感を出すためにScaleは少し抑えめにする
+		imageScale = interpolate(imageEntrance, [0, 1], [0.5, 1], { easing: Easing.out(Easing.exp) });
+		imageRotate = 0;
 	} else if (rank === 1) {
 		// 1位: ① スパイラル・ズームイン (Scale + Rotate)
-		imageScale = interpolate(imageEntrance, [0, 1], [0, 1], { easing: Easing.out(Easing.back(1.5)) });
-		imageRotate = interpolate(imageEntrance, [0, 1], [-720, 0], { easing: Easing.out(Easing.exp) });
+		imageScale = interpolate(imageEntrance, [0, 1], [0, 1], { easing: Easing.out(Easing.back(2)) });
+		imageRotate = interpolate(imageEntrance, [0, 1], [-1080, 0], { easing: Easing.out(Easing.exp) }); // 3回転！
 	}
 
 	const nameY = interpolate(nameEntrance, [0, 1], [100, 0]);
