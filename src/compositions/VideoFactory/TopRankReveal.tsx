@@ -187,8 +187,8 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 					</div>
 
 					<div style={{
-						width: 640,
-						height: 640,
+						width: 896, // 640 * 1.4
+						height: 896,
 						borderRadius: "50%",
 						overflow: "hidden",
 						border: "10px solid #FFFFFF", 
