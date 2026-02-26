@@ -244,7 +244,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 			{rank === 1 && (
 				<>
 					<AbsoluteFill style={{ zIndex: 120, pointerEvents: "none" }}>
-						<LightningBolt color={primary} thickness={6} />
+						<LightningBolt color={primary} thickness={20} />
 					</AbsoluteFill>
 					<AbsoluteFill style={{ zIndex: 8, pointerEvents: "none", mixBlendMode: "screen" }}>
 						<div style={{
