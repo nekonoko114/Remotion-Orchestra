@@ -8,7 +8,6 @@ import {
 } from "remotion";
 import { ImpactEffect } from "./ImpactEffect";
 import { NeonGlowText } from "../../components/effects/NeonGlowText";
-import { LightningBolt } from "../../components/effects/LightningBolt";
 
 // HIGH-GLOW Metallic Text Component
 // ... (existing imports)
@@ -72,9 +71,29 @@ export const OpeningTitle: React.FC = () => {
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
-						gap: "20px",
+						gap: "10px",
 					}}
 				>
+					<ImpactEffect delay={0}>
+						<NeonGlowText 
+							text="J.O.L" 
+							fontSize={230} 
+							color="#FF0000"
+							glowColor="#CC0000"
+							delay={5}
+						/>
+					</ImpactEffect>
+
+					<ImpactEffect delay={15}>
+						<NeonGlowText 
+							text="ダイヤモンド" 
+							fontSize={120} 
+							color="#00f2ff"
+							glowColor="#0088ff"
+							delay={20}
+						/>
+					</ImpactEffect>
+
 					<div
 						style={{
 							display: "flex",
@@ -82,42 +101,19 @@ export const OpeningTitle: React.FC = () => {
 							gap: "40px",
 						}}
 					>
-						<ImpactEffect delay={10}>
+						<ImpactEffect delay={30}>
 							<NeonGlowText 
-								text="TOP" 
+								text="RANKING" 
 								fontSize={160} 
 								color="#FFD700"
 								glowColor="#FF8C00"
-								delay={15}
-							/>
-						</ImpactEffect>
-						
-						<div 
-							style={{
-								width: "120px",
-								height: "120px",
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-								transform: `rotate(${frame * 2}deg)`,
-							}}
-						>
-							<LightningBolt color="#FFD700" size={100} />
-						</div>
-
-						<ImpactEffect delay={20}>
-							<NeonGlowText 
-								text="RANKING" 
-								fontSize={140} 
-								color="#FFD700"
-								glowColor="#FF8C00"
-								delay={25}
+								delay={35}
 							/>
 						</ImpactEffect>
 					</div>
 
-					<div style={{ marginTop: "10px" }}>
-						<ImpactEffect delay={40}>
+					<div style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+						<ImpactEffect delay={45}>
 							<h2
 								style={{
 									color: "#FFF",
@@ -129,8 +125,18 @@ export const OpeningTitle: React.FC = () => {
 									opacity: 0.8,
 								}}
 							>
-								FEBRUARY 2026
+								2026年2月
 							</h2>
+						</ImpactEffect>
+
+						<ImpactEffect delay={60}>
+							<NeonGlowText 
+								text="結果発表" 
+								fontSize={180} 
+								color="#FFD700"
+								glowColor="#FF8C00"
+								delay={65}
+							/>
 						</ImpactEffect>
 					</div>
 				</div>
