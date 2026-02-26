@@ -6,7 +6,6 @@ import {
 	staticFile,
 	useCurrentFrame,
 	useVideoConfig,
-	Video,
 	Easing,
 } from "remotion";
 import { Confetti } from "../../components/effects/Confetti";
@@ -34,7 +33,13 @@ type Props = {
 export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 	// Podium3D component removed as it was not needed.
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, durationInFrames } = useVideoConfig();
+
+	// Ken Burns Effect for Background
+	const bgScale = interpolate(frame, [0, durationInFrames], [1, 1.15], {
+		extrapolateLeft: "clamp",
+		extrapolateRight: "clamp",
+	});
 
 	// 1. Sequence Timings (Higher stiffness for more "snap")
 	const rankEntrance = spring({
@@ -112,19 +117,17 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 			{/* <LuxuryGoldBackground color={primary} secondaryColor={secondary} /> */}
 			{/* Rank-specific Generated Video Background */}
 			<AbsoluteFill>
-				<Video
+				<Img
 					src={staticFile(
-						`assets/backgrounds/rank_${rank}_bg.mp4`
+						`assets/backgrounds/rank_${rank}_bg_new.png`
 					)}
 					style={{ 
 						width: "100%", 
 						height: "100%", 
 						objectFit: "cover",
 						objectPosition: "center",
-						transform: "none"
+						transform: `scale(${bgScale})`
 					}}
-					muted
-					loop
 				/>
 				<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.3)" }} /> {/* 背景をより暗く（暗黒ベース） */}
 			</AbsoluteFill>
@@ -171,10 +174,12 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 						
 						<TextShine color="rgba(255, 255, 255, 0.9)" delay={15} duration={45}>
 							<h1 style={{ 
-								fontSize: 300, 
+								fontSize: rank === 1 ? 380 : 300, 
 								margin: 0, 
-								color: "#FFFFFF", 
-								textShadow: `0 0 20px ${primary}, 0 0 40px ${primary}`,
+								color: rank === 1 ? "#FFD700" : "#FFFFFF", 
+								textShadow: rank === 1 
+									? `0 0 40px ${primary}, 0 0 80px ${primary}, 0 10px 20px rgba(0,0,0,0.8)` 
+									: `0 0 20px ${primary}, 0 0 40px ${primary}`,
 								fontWeight: 900,
 								fontStyle: "italic", 
 								lineHeight: 0.8,
@@ -184,15 +189,31 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 								{title}
 							</h1>
 						</TextShine>
+						{rank === 1 && (
+							<div style={{
+								position: "absolute",
+								top: -150,
+								left: "50%",
+								transform: "translateX(-50%)",
+								fontSize: 180,
+								textShadow: `0 0 30px ${primary}, 0 0 60px ${primary}, 0 10px 20px rgba(0,0,0,0.8)`,
+								animation: "pulse-crown 2s infinite alternate", // もしCSSがあれば適用させる（無ければ静止）
+								zIndex: 10,
+							}}>
+								👑
+							</div>
+						)}
 					</div>
 
 					<div style={{
-						width: 896, // 640 * 1.4
-						height: 896,
+						width: rank === 1 ? 1000 : 896, // 1位は少し大きく
+						height: rank === 1 ? 1000 : 896,
 						borderRadius: "50%",
 						overflow: "hidden",
-						border: "10px solid #FFFFFF", 
-						boxShadow: `0 0 0 8px ${primary}, 0 0 40px ${glow}, 0 20px 40px rgba(0,0,0,0.8)`,
+						border: rank === 1 ? "15px solid #FFD700" : "10px solid #FFFFFF", // 1位は金枠
+						boxShadow: rank === 1 
+							? `0 0 0 15px ${primary}, 0 0 80px ${glow}, 0 20px 60px rgba(0,0,0,0.9)`
+							: `0 0 0 8px ${primary}, 0 0 40px ${glow}, 0 20px 40px rgba(0,0,0,0.8)`,
 						position: "relative",
 						backgroundColor: "#000",
 						zIndex: 5,

@@ -6,7 +6,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from "remotion";
-import { FireBackground } from "./FireBackground";
+import { Video } from "remotion";
 
 export const EndingLogo: React.FC = () => {
 	const frame = useCurrentFrame();
@@ -26,7 +26,20 @@ export const EndingLogo: React.FC = () => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000" }}>
 			<AbsoluteFill>
-				<FireBackground />
+				<Video
+					src={staticFile("assets/backgrounds/daiamond-month.mp4")}
+					style={{
+						width: "100%",
+						height: "100%",
+						objectFit: "cover",
+						objectPosition: "center",
+						filter: "brightness(0.5) contrast(1.2)", // オープニングより少し暗め
+					}}
+					startFrom={0}
+					playbackRate={1.5}
+					muted
+					loop
+				/>
 			</AbsoluteFill>
 
 			<AbsoluteFill
