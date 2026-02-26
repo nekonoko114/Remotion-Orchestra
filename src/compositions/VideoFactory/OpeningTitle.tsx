@@ -15,18 +15,16 @@ import { LightningBolt } from "../../components/effects/LightningBolt";
 export const OpeningTitle: React.FC = () => {
 	const frame = useCurrentFrame();
 
-	const getShake = (delay: number) => {
-		// 常時揺れるように、持続時間を長く設定
-		const shakeDuration = 60; // 約2秒
-		if (frame < delay || frame > delay + shakeDuration) return 0;
-		const progress = (frame - delay) / shakeDuration;
-		// 強度を調整 (80 -> 14.4) ※ユーザーの1.4の要望を反映
-		return (random(`shake-${delay}-${frame}`) - 0.5) * 14.4 * (1 - progress);
-	};
+	// フレームに応じて強度を動的に計算 (ユーザー指定: 65f:1.8, 150f:3.8, 190f:5.0)
+	const intensity = interpolate(
+		frame,
+		[0, 65, 150, 190, 210],
+		[1.0, 1.8, 3.8, 5.0, 5.5],
+		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+	);
 
-	// 7秒の尺に合わせてさらにポイントを追加
-	const totalShakeX = getShake(0) + getShake(15) + getShake(30) + getShake(45) + getShake(60) + getShake(80) + getShake(100) + getShake(120) + getShake(140) + getShake(160);
-	const totalShakeY = getShake(1) + getShake(16) + getShake(31) + getShake(46) + getShake(61) + getShake(81) + getShake(101) + getShake(121) + getShake(141) + getShake(161);
+	const totalShakeX = (random(`shake-x-${frame}`) - 0.5) * intensity * 10; // 視認性を考慮して10倍（以前の14.4との整合性）
+	const totalShakeY = (random(`shake-y-${frame}`) - 0.5) * intensity * 10;
 
 	return (
 		<AbsoluteFill
