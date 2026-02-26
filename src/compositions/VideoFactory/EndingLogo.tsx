@@ -2,6 +2,7 @@ import {
 	AbsoluteFill,
 	Img,
 	interpolate,
+	spring,
 	staticFile,
 	useCurrentFrame,
 	useVideoConfig,
@@ -10,7 +11,7 @@ import { Video } from "remotion";
 
 export const EndingLogo: React.FC = () => {
 	const frame = useCurrentFrame();
-	const { durationInFrames } = useVideoConfig();
+	const { fps, durationInFrames } = useVideoConfig();
 
 	const opacity = interpolate(
 		frame,
@@ -21,6 +22,15 @@ export const EndingLogo: React.FC = () => {
 
 	const scale = interpolate(frame, [0, durationInFrames], [1.0, 1.1], {
 		extrapolateRight: "clamp",
+	});
+
+	const logoSpring = spring({
+		frame: frame - 10, // 少し遅れて登場
+		fps,
+		config: {
+			damping: 14,
+			mass: 0.8,
+		},
 	});
 
 	return (
@@ -51,7 +61,7 @@ export const EndingLogo: React.FC = () => {
 			>
 				<div
 					style={{
-						transform: `scale(${scale})`,
+						transform: `scale(${scale * logoSpring})`,
 						width: 1080,
 						display: "flex",
 						justifyContent: "center",
