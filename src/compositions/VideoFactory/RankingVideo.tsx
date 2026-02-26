@@ -16,7 +16,7 @@ import { useBeatValue } from "./utils/beat-sync";
 const BPM = 152;
 
 // Export duration constants for Root.tsx
-export const OPENING_SEC = 5;
+export const OPENING_SEC = 7;
 export const GROUP_SEC = 5;
 export const TOP_RANK_SEC = 5.6; // ~12 beats exactly
 export const GRID_BRIDGE_SEC = 8; // 8 seconds bridge
