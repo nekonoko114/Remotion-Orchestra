@@ -9,6 +9,7 @@ import { VFXShowreel } from "./compositions/VFXLibrary/VFXShowreel";
 import { MyVideo } from "./compositions/VideoFactory/MyVideo";
 import {
   ENDING_SEC,
+  GRID_BRIDGE_SEC,
   GROUP_SEC,
   LAST_TRANSITION_FRAMES,
   OPENING_SEC,
@@ -47,9 +48,9 @@ const JOL_RANKING_FPS = 30;
 
 // Calculate Vertical Duration
 const JOL_RANKING_DURATION_VERTICAL =
-  (OPENING_SEC + GROUP_SEC * 2 + TOP_RANK_SEC * 3 + ENDING_SEC) *
+  (OPENING_SEC + GROUP_SEC * 2 + GRID_BRIDGE_SEC + TOP_RANK_SEC * 3 + ENDING_SEC) *
     JOL_RANKING_FPS -
-  (5 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
+  (6 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
 
 // Calculate Time Duration (Correctly using its own 7s opening)
 const JOL_RANKING_DURATION_TIME =

@@ -10,6 +10,7 @@ import { EndingLogo } from "./EndingLogo";
 import { OpeningTitle } from "./OpeningTitle";
 import { RankingGroup } from "./RankingGroup";
 import { TopRankReveal } from "./TopRankReveal";
+import { GridBridge } from "./GridBridge";
 import { useBeatValue } from "./utils/beat-sync";
 
 const BPM = 152;
@@ -18,6 +19,7 @@ const BPM = 152;
 export const OPENING_SEC = 5;
 export const GROUP_SEC = 5;
 export const TOP_RANK_SEC = 5.6; // ~12 beats exactly
+export const GRID_BRIDGE_SEC = 8; // 8 seconds bridge
 export const ENDING_SEC = 5;
 export const TRANSITION_FRAMES = 14; // Exactly half a beat (28/2)
 export const LAST_TRANSITION_FRAMES = 10;
@@ -31,6 +33,7 @@ export const RankingVideo = () => {
 	const OPENING_DURATION = OPENING_SEC * fps;
 	const GROUP_DURATION = GROUP_SEC * fps;
 	const TOP_RANK_DURATION = TOP_RANK_SEC * fps;
+	const GRID_BRIDGE_DURATION = GRID_BRIDGE_SEC * fps;
 	const ENDING_DURATION = ENDING_SEC * fps;
 	const TRANSITION_DURATION = TRANSITION_FRAMES;
 	const LAST_TRANSITION_DURATION = LAST_TRANSITION_FRAMES;
@@ -91,7 +94,17 @@ export const RankingVideo = () => {
 					/>
 				</TransitionSeries.Sequence>
 
-				{/* Transition 3: Group 2 -> 3rd Place */}
+				<TransitionSeries.Transition
+					presentation={transition}
+					timing={timing}
+				/>
+
+				{/* NEW: Grid Bridge (3x3 Grid Reveal) */}
+				<TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
+					<GridBridge />
+				</TransitionSeries.Sequence>
+
+				{/* Transition from Bridge to 3rd Place */}
 				<TransitionSeries.Transition
 					presentation={transition}
 					timing={timing}
