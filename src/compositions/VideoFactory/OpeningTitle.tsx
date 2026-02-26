@@ -20,8 +20,8 @@ export const OpeningTitle: React.FC = () => {
 		const shakeDuration = 60; // 約2秒
 		if (frame < delay || frame > delay + shakeDuration) return 0;
 		const progress = (frame - delay) / shakeDuration;
-		// 強度を大幅にアップ (40 -> 80)
-		return (random(`shake-${delay}-${frame}`) - 0.5) * 80 * (1 - progress);
+		// 強度を調整 (80 -> 14.4) ※ユーザーの1.4の要望を反映
+		return (random(`shake-${delay}-${frame}`) - 0.5) * 14.4 * (1 - progress);
 	};
 
 	// 7秒の尺に合わせてさらにポイントを追加
@@ -50,7 +50,7 @@ export const OpeningTitle: React.FC = () => {
 						filter: "brightness(0.7) contrast(1.2)",
 					}}
 					startFrom={0}
-					playbackRate={1.5}
+					playbackRate={1.8}
 					muted
 				/>
 				{/* OVERLAY VIGNETTE */}
@@ -97,16 +97,13 @@ export const OpeningTitle: React.FC = () => {
 							style={{
 								width: "120px",
 								height: "120px",
-								backgroundColor: "#FFD700",
-								borderRadius: "50%",
 								display: "flex",
 								justifyContent: "center",
 								alignItems: "center",
-								boxShadow: "0 0 40px rgba(255, 215, 0, 0.6)",
 								transform: `rotate(${frame * 2}deg)`,
 							}}
 						>
-							<LightningBolt color="#000" size={80} />
+							<LightningBolt color="#FFD700" size={100} />
 						</div>
 
 						<ImpactEffect delay={20}>
