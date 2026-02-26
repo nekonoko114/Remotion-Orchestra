@@ -84,8 +84,8 @@ export const OpeningTitle: React.FC = () => {
 					>
 						<ImpactEffect delay={10}>
 							<NeonGlowText 
-								text="MONTHLY" 
-								fontSize={140} 
+								text="TOP" 
+								fontSize={160} 
 								color="#FFD700"
 								glowColor="#FF8C00"
 								delay={15}
