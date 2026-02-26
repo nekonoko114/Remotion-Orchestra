@@ -8,6 +8,7 @@ import {
 	useCurrentFrame,
 	staticFile,
 	useVideoConfig,
+	Video,
 } from "remotion";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
 import { TimeBackground } from "./TimeBackground";
@@ -68,21 +69,23 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	
 	const pulseScale = 1 + pulse * 0.002;
 
-	// 魔法陣のランダム配置データを作成 (重なりすぎを防ぐため個数を3個に調整)
+	// 魔法陣のランダム配置データを作成
 	const magicCirclesData = useMemo(() => {
-		return [...new Array(3)].map((_, i) => {
+		const count = rank === 1 ? 5 : 3;
+		return [...new Array(count)].map((_, i) => {
 			const seed = `magic-${rank}-${i}`;
 			const size = 600 + random(seed + "size") * 400; // 少し大きく
 			// 配置範囲を分散させる
-			const angle = (i / 3) * Math.PI * 2 + random(seed + "ang") * 0.5;
+			const angle = (i / count) * Math.PI * 2 + random(seed + "ang") * 0.5;
 			const radius = 300 + random(seed + "rad") * 200;
 			const x = Math.cos(angle) * radius;
 			const y = Math.sin(angle) * radius;
 			
 			const rotationDir = random(seed + "dir") > 0.5 ? 1 : -1;
 			const rotationSpeed = 0.2 + random(seed + "speed") * 2.5; // 0.3+0.7 -> 0.2+2.5 に拡大
-			const asset = MAGIC_CIRCLES[Math.floor(random(seed + "asset") * MAGIC_CIRCLES.length)];
-			const opacity = 0.4 + random(seed + "opacity") * 0.3;
+			// 1位(count=5)の場合は全色を被りなく使用する
+			const asset = count === 5 ? MAGIC_CIRCLES[i % MAGIC_CIRCLES.length] : MAGIC_CIRCLES[Math.floor(random(seed + "asset") * MAGIC_CIRCLES.length)];
+			const opacity = rank === 1 ? 0.8 + random(seed + "opacity") * 0.2 : 0.4 + random(seed + "opacity") * 0.3;
 			const blur = 1 + random(seed + "blur") * 4;
 			return { size, x, y, rotationDir, rotationSpeed, asset, opacity, blur };
 		});
@@ -100,6 +103,21 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000", overflow: "hidden" }}>
 			<TimeBackground overlayColor={primary + "33"} hideBackground hideBaseVideo />
+			
+			{/* Rank 1 Magic Background Video (behind magic circles) */}
+			{rank === 1 && (
+				<AbsoluteFill style={{ zIndex: 5, mixBlendMode: "screen" }}>
+					<Video 
+						src={staticFile("assets/backgrounds/magic-right.mp4")}
+						style={{
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+							opacity: 0.8,
+						}}
+					/>
+				</AbsoluteFill>
+			)}
 			
 			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 100 }}>
 				<ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
@@ -130,7 +148,9 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 									marginTop: -m.size / 2 + m.y,
 									transform: `rotate(${frame * m.rotationSpeed * m.rotationDir}deg) scale(${circleEntrance})`,
 									opacity: m.opacity * circleEntrance,
-									filter: `blur(${m.blur}px) brightness(1.5)`,
+									filter: rank === 1 
+										? `blur(${m.blur}px) brightness(2.0) drop-shadow(0 0 30px ${primary})` 
+										: `blur(${m.blur}px) brightness(1.5)`,
 									zIndex: 2,
 								}}
 							>
@@ -152,7 +172,7 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 									marginTop: -m.size + m.y,
 									background: `radial-gradient(circle, ${primary}66 0%, transparent 70%)`,
 									transform: `scale(${circleEntrance * (1 + pulse * 0.1)})`,
-									opacity: m.opacity * 0.4 * circleEntrance * (0.8 + Math.sin(frame / 5) * 0.2),
+									opacity: rank === 1 ? m.opacity * 0.5 * circleEntrance : m.opacity * 0.4 * circleEntrance * (0.8 + Math.sin(frame / 5) * 0.2),
 									filter: "blur(40px)",
 									zIndex: 1,
 								}}
@@ -278,8 +298,8 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
 				{/* ニックネーム - タイプライター */}
 				<h2 style={{ 
-					fontSize: 100, 
-					marginTop: 30, 
+					fontSize: rank === 1 ? 100 : 80, 
+					marginTop: rank === 1 ? 30 : 20, 
 					textShadow: `0 0 30px ${glow}, 0 0 60px ${glow}, 0 0 100px ${primary}`, 
 					fontWeight: 900,
 					color: "#fff",

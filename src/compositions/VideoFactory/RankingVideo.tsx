@@ -1,8 +1,7 @@
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { flip } from "@remotion/transitions/flip";
 import { slide } from "@remotion/transitions/slide";
-import { AbsoluteFill, useVideoConfig, Audio, staticFile, useCurrentFrame, interpolate, interpolateColors } from "remotion";
-import { useMemo } from "react";
+import { AbsoluteFill, useVideoConfig, Audio, staticFile } from "remotion";
 import RANKING_DATA_JSON from "./data.json";
 import type { Liver } from "./types";
 
@@ -29,33 +28,6 @@ const BGM_START_FROM = 0; // 秒単位で指定。
 
 export const RankingVideo = () => {
 	const { fps } = useVideoConfig();
-	const frame = useCurrentFrame();
-
-	const borderColor = useMemo(() => {
-		if (frame >= 720) {
-			return "#FF0000"; // 720fr以降はずっと赤
-		}
-
-		// 720未満：BPM/6 の速度で回転
-		let h = 0;
-		for (let i = 0; i < frame; i++) {
-			h += ((BPM / 6) / 60 / fps) * 360;
-		}
-		const normalColor = `hsl(${h % 360}, 100%, 50%)`;
-		
-		// 720に向けた赤への滑らかな遷移（690fr〜720fr）
-		if (frame > 690) {
-			const progress = interpolate(frame, [690, 720], [0, 1], {
-				extrapolateLeft: "clamp",
-				extrapolateRight: "clamp",
-			});
-			return interpolateColors(progress, [0, 1], [normalColor, "#FF0000"]);
-		}
-		
-		return normalColor;
-	}, [frame, fps]);
-
-	const boxShadowColor = borderColor;
 
 	// Duration Logic (Frames)
 	const OPENING_DURATION = OPENING_SEC * fps;
@@ -190,12 +162,12 @@ export const RankingVideo = () => {
 			</TransitionSeries>
 			</AbsoluteFill>
 
-			{/* RGB GLOWING BORDER synchronized at 60% of BPM */}
+			{/* RED GLOWING BORDER (Dark Knight Theme) */}
 			<AbsoluteFill
 				style={{
 					pointerEvents: "none",
-					border: `15px solid ${borderColor}`,
-					boxShadow: `inset 0 0 50px ${boxShadowColor}, 0 0 50px ${boxShadowColor}`,
+					border: "15px solid #FF0000",
+					boxShadow: "inset 0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.8)",
 					zIndex: 9999, // Ensure it sits on top of everything
 				}}
 			/>

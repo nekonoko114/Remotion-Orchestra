@@ -63,7 +63,7 @@ export const EndingLogo: React.FC = () => {
 				<div
 					style={{
 						transform: `scale(${scale * logoSpring})`,
-						width: 1080,
+						width: 800,
 						display: "flex",
 						justifyContent: "center",
 						alignItems: "center",

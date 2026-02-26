@@ -5,6 +5,7 @@ import {
 	staticFile,
 	useCurrentFrame,
 	useVideoConfig,
+	Video,
 } from "remotion";
 import { TimeBackground } from "./TimeBackground";
 
@@ -27,6 +28,20 @@ export const EndingLogoTime: React.FC = () => {
 			<AbsoluteFill style={{ zIndex: 1 }}>
 				<TimeBackground hideBaseVideo />
 				
+				{/* Purple Loop Background */}
+				<AbsoluteFill>
+					<Video 
+						src={staticFile("assets/backgrounds/purple_loop.mp4")}
+						loop
+						style={{
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+							opacity: 0.8,
+						}}
+					/>
+				</AbsoluteFill>
+
 				{/* Brightening Gradient Overlay (Blue/Cyan) */}
 				<AbsoluteFill 
 					style={{
@@ -92,7 +107,7 @@ export const EndingLogoTime: React.FC = () => {
 				<div
 					style={{
 						position: "relative",
-						width: 1080,
+						width: 800,
 						display: "flex",
 						justifyContent: "center",
 						alignItems: "center",
@@ -102,7 +117,7 @@ export const EndingLogoTime: React.FC = () => {
 					}}
 				>
 					<Img
-						src={staticFile("video-factory/images/logo/logo.png")}
+						src={staticFile("jol-logo-800.png")}
 						style={{
 							width: "100%",
 							height: "auto",

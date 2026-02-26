@@ -20,6 +20,9 @@ importers:
       '@react-three/fiber':
         specifier: ^8.17.10
         version: 8.18.0(@types/react@18.2.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(three@0.182.0)
+      '@remotion/animation-utils':
+        specifier: 4.0.421
+        version: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@remotion/cli':
         specifier: 4.0.421
         version: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -29,12 +32,21 @@ importers:
       '@remotion/lambda':
         specifier: 4.0.421
         version: 4.0.421(@remotion/bundler@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@remotion/lottie':
+        specifier: 4.0.421
+        version: 4.0.421(lottie-web@5.13.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@remotion/media-utils':
         specifier: 4.0.421
         version: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@remotion/skia':
+      '@remotion/motion-blur':
         specifier: 4.0.421
-        version: 4.0.421(@shopify/react-native-skia@1.12.4(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@remotion/noise':
+        specifier: 4.0.421
+        version: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@remotion/preload':
+        specifier: 4.0.421
+        version: 4.0.421
       '@remotion/tailwind-v4':
         specifier: 4.0.421
         version: 4.0.421(@remotion/bundler@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.9.3)(webpack@5.105.0)
@@ -47,9 +59,6 @@ importers:
       '@remotion/zod-types':
         specifier: 4.0.421
         version: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(zod@3.22.3)
-      '@shopify/react-native-skia':
-        specifier: 1.12.4
-        version: 1.12.4(react@18.2.0)
       '@tailwindcss/postcss':
         specifier: ^4.1.18
         version: 4.1.18
@@ -89,6 +98,9 @@ importers:
       opentype.js:
         specifier: ^1.3.4
         version: 1.3.4
+      playwright:
+        specifier: ^1.58.2
+        version: 1.58.2
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -129,9 +141,6 @@ importers:
       '@types/web':
         specifier: 0.0.166
         version: 0.0.166
-      canvaskit-wasm:
-        specifier: 0.40.0
-        version: 0.40.0
       prettier:
         specifier: 3.6.0
         version: 3.6.0
@@ -924,6 +933,12 @@ packages:
       react-native:
         optional: true
 
+  '@remotion/animation-utils@4.0.421':
+    resolution: {integrity: sha512-lgAM6U9pUmZCsTADrCdZvWsOFQkqhrn0igOZ317qqpsU45LZoqX0XNb1I2EMR0+8yPTwqXQnaMIHpxj8hQlguA==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
   '@remotion/bundler@4.0.421':
     resolution: {integrity: sha512-3udLfwmgJeO6r0bZZ+mkSFYJ7qTWp93lQvo5W2H091uXbGl00r7DI4pfnMQQhLAubwPq+XTWd0jgp5JMhLe2cQ==}
     peerDependencies:
@@ -986,6 +1001,13 @@ packages:
   '@remotion/licensing@4.0.421':
     resolution: {integrity: sha512-kSbssnwkTXDxtY/PXzu9Q6mFt9jmgNN6wygZxxH6gy01lzua1ucivSZOSrrdRRbtF0kk3BZ4EqOqW5D5ovyHXA==}
 
+  '@remotion/lottie@4.0.421':
+    resolution: {integrity: sha512-Bo7rqP9vUivuBkgdrOmgsVW5njXctgZhVDPlz4W4d5Q2m6Fgcvcgubc6of1tC0EQWcrMGpDYKsoO+CvAjXR8HA==}
+    peerDependencies:
+      lottie-web: ^5
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
   '@remotion/media-parser@4.0.421':
     resolution: {integrity: sha512-Pv/63mN4gnG5hP2+7ldWy67u2FoIOmN3lijEzk3w/e4b5dvJp+kWcXGbUszePbDxFF0NnJrP4clj6iLLB0M9bw==}
 
@@ -995,6 +1017,15 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
+  '@remotion/motion-blur@4.0.421':
+    resolution: {integrity: sha512-joioP3PQUhibpdZIOu8exWVTns69Qg+mO23NN8RRJWDj8gcfmNexCLytonzdaN8uAS4OcARnqXjP+FYCaSzbwQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@remotion/noise@4.0.421':
+    resolution: {integrity: sha512-SDFcon25JnOhHyTAKJI0Wws1ZH3jORalkvgK4A80mRNkDF6+kK4dTEuLfCN9ph78gmnb8WXN5IZ8u2wluZpo6g==}
+
   '@remotion/paths@4.0.421':
     resolution: {integrity: sha512-YFMf589aqN5OY0LifNyeDBDH9G59Ns24g31c/59E7MZs3QiKSDOasYuFgTJZCK4sKHwlhJ4DcH7d4BC/6y3GJw==}
 
@@ -1003,6 +1034,9 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
+
+  '@remotion/preload@4.0.421':
+    resolution: {integrity: sha512-0IzCeQ3jD3C81aKo7CsVCILanH8NalZg5AEkdmMh1kiSmmYhGnds8cOE32ljLXPeEahqqFcivaqoITetRtrSrQ==}
 
   '@remotion/renderer@4.0.421':
     resolution: {integrity: sha512-QYfnSq69HOHI9n3Z2lLyNK8liha2d0je6h5UnFO4Wi7WSQi5ZSey0aCkL6Mva6x5ckX/eAm8dptKUpnJWLY5uw==}
@@ -1019,13 +1053,6 @@ packages:
   '@remotion/shapes@4.0.421':
     resolution: {integrity: sha512-qBKbo2/KlKi9wsxvtpt4uwI+HzW30ylTaSBT3nlpPKXrkA43lEMQrr5ZaDM5IZmIWe+jcg/xxlvvmVm1AGDJUQ==}
     peerDependencies:
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-
-  '@remotion/skia@4.0.421':
-    resolution: {integrity: sha512-A4DKoeVKFbRGw6GRHNQ9Us+YxbvJU6pl0G1nejUYY1Gv/EyH9p2VDx29dzS+p84wgkSL2DPSdmbj5ZSt6p3NXw==}
-    peerDependencies:
-      '@shopify/react-native-skia': '>=0.1.191'
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
@@ -1077,19 +1104,6 @@ packages:
     resolution: {integrity: sha512-PBU1+OLZjUNF88XFwKKbfi7+uLKIxN9MSpxjpJHokOumOdDUnpqJv2zs/TwSBkIPFKFd40Crk+FFZk4VT0fw3A==}
     peerDependencies:
       zod: 3.22.3
-
-  '@shopify/react-native-skia@1.12.4':
-    resolution: {integrity: sha512-8QDIBKSU7XB3Lc1kAv4jSFddTQK8AE+1AEoJnQLNllsiex1gufLQ8kN7rs9zii+iboSY8tYKT7ocV+5cE2Exdw==}
-    hasBin: true
-    peerDependencies:
-      react: '>=18.0 <19.0.0'
-      react-native: '>=0.64 <0.78.0'
-      react-native-reanimated: '>=2.0.0'
-    peerDependenciesMeta:
-      react-native:
-        optional: true
-      react-native-reanimated:
-        optional: true
 
   '@smithy/abort-controller@4.0.1':
     resolution: {integrity: sha512-fiUIYgIgRjMWznk6iLJz35K2YxSLHzLBA/RC6lBrKfQ8fHbPfvk7Pk9UvpKoHgJjI18MnbPuEju53zcVy6KF1g==}
@@ -1602,9 +1616,6 @@ packages:
   '@webassemblyjs/wast-printer@1.14.1':
     resolution: {integrity: sha512-kPSSXE6De1XOR820C90RIo2ogvZG+c3KiHzqUoO/F34Y2shGzesfqv7o57xrxovZJH/MetF5UjroJ/R/3isoiw==}
 
-  '@webgpu/types@0.1.21':
-    resolution: {integrity: sha512-pUrWq3V5PiSGFLeLxoGqReTZmiiXwY3jRkIG5sLLKjyqNxrwm/04b4nw7LSmGWJcKk59XOM/YRTUwOzo4MMlow==}
-
   '@webgpu/types@0.1.69':
     resolution: {integrity: sha512-RPmm6kgRbI8e98zSD3RVACvnuktIja5+yLgDAkTmxLr90BEwdTXRQWNLF3ETTTyH/8mKhznZuN5AveXYFEsMGQ==}
 
@@ -1745,9 +1756,6 @@ packages:
 
   caniuse-lite@1.0.30001766:
     resolution: {integrity: sha512-4C0lfJ0/YPjJQHagaE9x2Elb69CIqEPZeG0anQt9SIvIoOH4a4uaRl73IavyO+0qZh6MDLH//DrXThEYKHkmYA==}
-
-  canvaskit-wasm@0.40.0:
-    resolution: {integrity: sha512-Od2o+ZmoEw9PBdN/yCGvzfu0WVqlufBPEWNG452wY7E9aT8RBE+ChpZF526doOlg7zumO4iCS+RAeht4P0Gbpw==}
 
   chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
@@ -2061,6 +2069,11 @@ packages:
 
   fs-monkey@1.0.3:
     resolution: {integrity: sha512-cybjIfiiE+pTWicSCLFHSrXZ6EilF30oh91FDP9S2B051prEa7QWfrVTQm10/dDpswBDXZugPa1Ogu8Yh+HV0Q==}
+
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
 
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
@@ -2414,6 +2427,9 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
+  lottie-web@5.13.0:
+    resolution: {integrity: sha512-+gfBXl6sxXMPe8tKQm7qzLnUy5DUPJPKIyRHwtpCpyUEYjHYRJC/5gjUvdkuO2c3JllrPtHXH5UJJK8LRYl5yQ==}
+
   lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
@@ -2564,6 +2580,16 @@ packages:
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
+
+  playwright-core@1.58.2:
+    resolution: {integrity: sha512-yZkEtftgwS8CsfYo7nm0KE8jsvm6i/PTgVtB8DL726wNf6H2IMsDuxCpJj59KDaxCtSnrWan2AeDqM7JBaultg==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.58.2:
+    resolution: {integrity: sha512-vA30H8Nvkq/cPBnNw4Q8TWz1EJyqgpuinBcHET0YVJVFldr8JDNiU9LaWAE1KqSkRYazuaBhTpB5ZzShOezQ6A==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   postcss-attribute-case-insensitive@7.0.1:
     resolution: {integrity: sha512-Uai+SupNSqzlschRyNx3kbCTWgY/2hcwtHEI/ej2LJWc9JJ77qKgGptd8DHwY1mXtZ7Aoh4z4yxfwMBue9eNgw==}
@@ -2941,6 +2967,9 @@ packages:
 
   signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
+
+  simplex-noise@4.0.1:
+    resolution: {integrity: sha512-zl/+bdSqW7HJOQ0oDbxrNYaF4F5ik0i7M6YOYmEoIJNtg16NpvWaTTM1Y7oV/7T0jFljawLgYPS81Uu2rsfo1A==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -4539,6 +4568,12 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  '@remotion/animation-utils@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      remotion: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+
   '@remotion/bundler@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@remotion/media-parser': 4.0.421
@@ -4647,6 +4682,13 @@ snapshots:
 
   '@remotion/licensing@4.0.421': {}
 
+  '@remotion/lottie@4.0.421(lottie-web@5.13.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      lottie-web: 5.13.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      remotion: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+
   '@remotion/media-parser@4.0.421': {}
 
   '@remotion/media-utils@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
@@ -4658,6 +4700,20 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       remotion: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
+  '@remotion/motion-blur@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      remotion: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+
+  '@remotion/noise@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      remotion: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      simplex-noise: 4.0.1
+    transitivePeerDependencies:
+      - react
+      - react-dom
+
   '@remotion/paths@4.0.421': {}
 
   '@remotion/player@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
@@ -4665,6 +4721,8 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       remotion: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+
+  '@remotion/preload@4.0.421': {}
 
   '@remotion/renderer@4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
@@ -4713,13 +4771,6 @@ snapshots:
       '@remotion/paths': 4.0.421
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-
-  '@remotion/skia@4.0.421(@shopify/react-native-skia@1.12.4(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
-    dependencies:
-      '@shopify/react-native-skia': 1.12.4(react@18.2.0)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      remotion: 4.0.421(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
   '@remotion/streaming@4.0.421': {}
 
@@ -4824,12 +4875,6 @@ snapshots:
     transitivePeerDependencies:
       - react
       - react-dom
-
-  '@shopify/react-native-skia@1.12.4(react@18.2.0)':
-    dependencies:
-      canvaskit-wasm: 0.40.0
-      react: 18.2.0
-      react-reconciler: 0.27.0(react@18.2.0)
 
   '@smithy/abort-controller@4.0.1':
     dependencies:
@@ -5472,8 +5517,6 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@xtuc/long': 4.2.2
 
-  '@webgpu/types@0.1.21': {}
-
   '@webgpu/types@0.1.69': {}
 
   '@xtuc/ieee754@1.2.0': {}
@@ -5614,10 +5657,6 @@ snapshots:
       three: 0.182.0
 
   caniuse-lite@1.0.30001766: {}
-
-  canvaskit-wasm@0.40.0:
-    dependencies:
-      '@webgpu/types': 0.1.21
 
   chrome-trace-event@1.0.4: {}
 
@@ -5934,6 +5973,9 @@ snapshots:
 
   fs-monkey@1.0.3: {}
 
+  fsevents@2.3.2:
+    optional: true
+
   function-bind@1.1.2: {}
 
   get-intrinsic@1.3.0:
@@ -6236,6 +6278,8 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
+  lottie-web@5.13.0: {}
+
   lru-cache@6.0.0:
     dependencies:
       yallist: 4.0.0
@@ -6377,6 +6421,14 @@ snapshots:
   performance-now@2.1.0: {}
 
   picocolors@1.1.1: {}
+
+  playwright-core@1.58.2: {}
+
+  playwright@1.58.2:
+    dependencies:
+      playwright-core: 1.58.2
+    optionalDependencies:
+      fsevents: 2.3.2
 
   postcss-attribute-case-insensitive@7.0.1(postcss@8.5.1):
     dependencies:
@@ -6827,6 +6879,8 @@ snapshots:
       side-channel-weakmap: 1.0.2
 
   signal-exit@3.0.7: {}
+
+  simplex-noise@4.0.1: {}
 
   sisteransi@1.0.5: {}
 

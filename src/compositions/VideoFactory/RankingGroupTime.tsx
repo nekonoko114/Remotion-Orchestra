@@ -1,6 +1,6 @@
 import { AbsoluteFill, Img, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
-import { MorphingTitle } from "./MorphingTitle";
+import { Typewriter } from "../../components/effects/Typewriter";
 import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
 
@@ -50,17 +50,24 @@ export const RankingGroupTime: React.FC<Props> = ({
 					}}
 				/>
 			)}
-			{/* タイトル (モーフィング演出) */}
-			<MorphingTitle
-				text={title}
-				fontSize={isHighlight ? 120 : 180}
-				className="metallic-purple"
-				style={{
-					position: "absolute",
-					top: 200,
-					zIndex: 20,
-				}}
-			/>
+			{/* タイトル (タイピング演出・魔法ネオン) */}
+			<div style={{
+				position: "absolute",
+				top: 150,
+				zIndex: 20,
+			}}>
+				<Typewriter 
+					text={title} 
+					speed={3}
+					style={{
+						fontSize: isHighlight ? 120 : 180,
+						fontWeight: "bold",
+						color: "#e0e0ff",
+						textShadow: "0 0 10px #b82bff, 0 0 20px #e066ff, 0 0 40px #b82bff",
+						fontFamily: "sans-serif",
+					}}
+				/>
+			</div>
 
 			{/* ライバーリストを表示するエリア */}
 			<div
@@ -83,12 +90,13 @@ export const RankingGroupTime: React.FC<Props> = ({
 					const liverSpr = spring({
 						frame: frame - STAGGER_DELAY * reverseIndex - 10, // Start after title slam
 						fps,
-						config: { damping: 15, stiffness: 100 },
+						config: { damping: 10, stiffness: 150 }, // Bouncier and faster
 					});
 
-					const liverY = interpolate(liverSpr, [0, 1], [-100, 0]);
-					const liverOpacity = interpolate(liverSpr, [0, 1], [0, 1]);
-					const liverScale = interpolate(liverSpr, [0, 1], [0.8, 1]); // Slightly smaller for better drop feel
+					// Deep drop from top (-800px), faster fade-in, slamming down from 2x scale
+					const liverY = interpolate(liverSpr, [0, 1], [-800, 0]);
+					const liverOpacity = interpolate(liverSpr, [0, 0.3], [0, 1], { extrapolateRight: "clamp" });
+					const liverScale = interpolate(liverSpr, [0, 1], [1.8, 1]);
 
 					// Highlight Sizing
 					const iconSize = isHighlight ? 450 : 150; // iconSize reduced for stack
