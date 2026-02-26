@@ -12,7 +12,7 @@ import { RankingGroup } from "./RankingGroup";
 import { TopRankReveal } from "./TopRankReveal";
 import { useBeatValue } from "./utils/beat-sync";
 
-const BPM = 160;
+const BPM = 152;
 
 // Export duration constants for Root.tsx
 export const OPENING_SEC = 5;
@@ -50,7 +50,7 @@ export const RankingVideo = () => {
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#1a1a1a" }}>
 			<Audio
-				src={staticFile("assets/audio/music/Blastwave.mp3")}
+				src={staticFile("assets/audio/music/Break_the_Shell.mp3")}
 				loop
 				startFrom={Math.floor(BGM_START_FROM * fps)}
 			/>

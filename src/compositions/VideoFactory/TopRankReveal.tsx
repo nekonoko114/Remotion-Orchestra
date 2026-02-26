@@ -23,7 +23,7 @@ import { AdjustmentLayer } from "./AdjustmentLayer";
 import { useBeatValue } from "./utils/beat-sync";
 import type { Liver } from "./types";
 
-const BPM = 160;
+const BPM = 152;
 
 type Props = {
 	rank: number;
@@ -44,13 +44,13 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 	});
 
 	const imageEntrance = spring({
-		frame: frame - 12, // Slightly tighter timing
+		frame: frame - Math.floor(fps * 0.9), // 0.9秒後に登場
 		fps,
 		config: { damping: 12, stiffness: 140 },
 	});
 
 	const nameEntrance = spring({
-		frame: frame - 25,
+		frame: frame - Math.floor(fps * 1.2), // 1.2秒後に名前が登場
 		fps,
 		config: { damping: 15, stiffness: 120 },
 	});
@@ -197,7 +197,7 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 						backgroundColor: "#000",
 						zIndex: 5,
 						marginTop: 10,
-						transform: `scale(${imageScale}) rotate(${imageRotate}deg)`,
+						transform: `scale(${imageScale}) rotate(${imageRotate}deg) translateY(${imageY}px)`,
 						opacity: imageOpacity
 					}}>
 						{liver.saved_to ? (
