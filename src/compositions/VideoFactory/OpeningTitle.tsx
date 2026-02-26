@@ -9,11 +9,7 @@ import {
 import { ImpactEffect } from "./ImpactEffect";
 import { NeonGlowText } from "../../components/effects/NeonGlowText";
 
-// HIGH-GLOW Metallic Text Component
-// ... (existing imports)
-
 export const OpeningTitle: React.FC = () => {
-	const frame = useCurrentFrame();
 
 	// フレームに応じて強度を動的に計算 (ユーザー指定: 65f:1.8, 150f:3.8, 190f:5.0)
 	const intensity = interpolate(
