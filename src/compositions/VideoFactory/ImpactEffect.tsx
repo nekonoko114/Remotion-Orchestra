@@ -3,6 +3,7 @@ import {
 	AbsoluteFill,
 	Easing,
 	interpolate,
+	random,
 	useCurrentFrame,
 } from "remotion";
 
