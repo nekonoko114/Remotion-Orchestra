@@ -1,5 +1,6 @@
 import {
 	AbsoluteFill,
+	interpolate,
 	random,
 	useCurrentFrame,
 	Video,
@@ -23,8 +24,8 @@ export const OpeningTitle: React.FC = () => {
 		{ extrapolateLeft: "clamp", extrapolateRight: "clamp" }
 	);
 
-	const totalShakeX = (random(`shake-x-${frame}`) - 0.5) * intensity * 10; // 視認性を考慮して10倍（以前の14.4との整合性）
-	const totalShakeY = (random(`shake-y-${frame}`) - 0.5) * intensity * 10;
+	const totalShakeX = (random(`shake-x-${frame}`) - 0.5) * intensity;
+	const totalShakeY = (random(`shake-y-${frame}`) - 0.5) * intensity;
 
 	return (
 		<AbsoluteFill

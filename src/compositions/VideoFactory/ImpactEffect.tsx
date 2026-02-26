@@ -1,8 +1,8 @@
+import type React from "react";
 import {
 	AbsoluteFill,
 	Easing,
 	interpolate,
-	random,
 	useCurrentFrame,
 } from "remotion";
 
@@ -10,35 +10,34 @@ type Props = {
 	color?: string; // Optional color tint (e.g. Gold)
 	intensity?: "normal" | "high"; // "high" for top ranks
 	beatPulse?: number; // 0.0 to 1.0 pulse from BGM
+	delay?: number;
+	children?: React.ReactNode;
 };
 
 export const ImpactEffect: React.FC<Props> = ({
 	color = "white",
 	intensity = "normal",
 	beatPulse = 0,
+	delay = 0,
+	children,
 }) => {
 	const frame = useCurrentFrame();
+	const relativeFrame = frame - delay;
+
+	if (relativeFrame < 0) return (
+		<AbsoluteFill style={{ pointerEvents: "none" }}>
+			{children}
+		</AbsoluteFill>
+	);
 
 	// 1. Flash Effect
-	const flashOpacity = interpolate(frame, [0, 5, 20], [0.8, 1, 0], {
+	const flashOpacity = interpolate(relativeFrame, [0, 5, 20], [0.8, 1, 0], {
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
-	}) /* + (beatPulse || 0) * 0.3 */; // Removed beat sync
+	});
 
 	// 2. Shockwave Rings
-	// Multiple rings for high intensity
 	const rings = intensity === "high" ? [0, 5, 10] : [0];
-
-	// 3. Rays / Sunburst (Rotating)
-	// Only for high intensity or colored
-	const showRays = intensity === "high";
-	const rayRotation = interpolate(frame, [0, 30], [0, 45]);
-	const rayOpacity = interpolate(frame, [0, 10, 25], [0, 1, 0], {
-		extrapolateRight: "clamp",
-	});
-	const rayScale = interpolate(frame, [0, 20], [0.5, 1.5], {
-		extrapolateRight: "clamp",
-	});
 
 	return (
 		<AbsoluteFill
@@ -46,33 +45,37 @@ export const ImpactEffect: React.FC<Props> = ({
 				pointerEvents: "none",
 				justifyContent: "center",
 				alignItems: "center",
+				flexDirection: "column",
 			}}
 		>
+			{/* Original Children */}
+			{children}
+
 			{/* Background Flash Color Tint */}
 			{intensity === "high" && (
 				<AbsoluteFill
 					style={{
 						backgroundColor: color,
-						opacity: flashOpacity * 0.5, // Subtle tint
+						opacity: flashOpacity * 0.5,
 						mixBlendMode: "screen",
+						zIndex: -1,
 					}}
 				/>
 			)}
 
-			{/* White Flash Overlay (Sharpness) */}
+			{/* White Flash Overlay */}
 			<AbsoluteFill
 				style={{
 					backgroundColor: "white",
 					opacity: flashOpacity,
 					mixBlendMode: "overlay",
+					zIndex: -1,
 				}}
 			/>
 
-			{/* Rays removed for speed */}
-
 			{/* Expanding Rings */}
-			{rings.map((delay, i) => {
-				const ringFrame = frame - delay;
+			{rings.map((rDelay, i) => {
+				const ringFrame = relativeFrame - rDelay;
 				if (ringFrame < 0) return null;
 
 				const ringScale = interpolate(ringFrame, [0, 20], [0, 2.5], {
@@ -100,17 +103,17 @@ export const ImpactEffect: React.FC<Props> = ({
 				);
 			})}
 
-			{/* Particles (Simple Dust) - Adds chaotic energy */}
+			{/* Particles */}
 			{intensity === "high" &&
 				new Array(12).fill(0).map((_, i) => {
 					const seed = i * 123;
 					const angle = random(seed) * 360;
 					const speed = random(seed + 1) * 10 + 10;
 
-					const distance = interpolate(frame, [0, 20], [0, speed * 20], {
+					const distance = interpolate(relativeFrame, [0, 20], [0, speed * 20], {
 						easing: Easing.out(Easing.quad),
 					});
-					const particleOpacity = interpolate(frame, [0, 10, 25], [1, 1, 0]);
+					const particleOpacity = interpolate(relativeFrame, [0, 10, 25], [1, 1, 0]);
 					const particleSize = random(seed + 2) * 20 + 10;
 
 					return (
