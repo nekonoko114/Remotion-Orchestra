@@ -117,7 +117,7 @@ export const OpeningTitle: React.FC = () => {
 							<h2
 								style={{
 									color: "#FFF",
-									fontSize: "60px",
+									fontSize: "100px",
 									fontWeight: "900",
 									margin: 0,
 									letterSpacing: "0.5em",

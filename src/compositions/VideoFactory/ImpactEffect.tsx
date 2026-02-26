@@ -25,9 +25,9 @@ export const ImpactEffect: React.FC<Props> = ({
 	const relativeFrame = frame - delay;
 
 	if (relativeFrame < 0) return (
-		<AbsoluteFill style={{ pointerEvents: "none" }}>
+		<div style={{ opacity: 0, pointerEvents: "none" }}>
 			{children}
-		</AbsoluteFill>
+		</div>
 	);
 
 	// 1. Flash Effect
@@ -40,98 +40,100 @@ export const ImpactEffect: React.FC<Props> = ({
 	const rings = intensity === "high" ? [0, 5, 10] : [0];
 
 	return (
-		<AbsoluteFill
-			style={{
-				pointerEvents: "none",
-				justifyContent: "center",
-				alignItems: "center",
-				flexDirection: "column",
-			}}
-		>
-			{/* Original Children */}
-			{children}
+		<>
+			<AbsoluteFill
+				style={{
+					pointerEvents: "none",
+					justifyContent: "center",
+					alignItems: "center",
+					flexDirection: "column",
+					zIndex: 100,
+				}}
+			>
+				{/* Background Flash Color Tint */}
+				{intensity === "high" && (
+					<AbsoluteFill
+						style={{
+							backgroundColor: color,
+							opacity: flashOpacity * 0.5,
+							mixBlendMode: "screen",
+							zIndex: -1,
+						}}
+					/>
+				)}
 
-			{/* Background Flash Color Tint */}
-			{intensity === "high" && (
+				{/* White Flash Overlay */}
 				<AbsoluteFill
 					style={{
-						backgroundColor: color,
-						opacity: flashOpacity * 0.5,
-						mixBlendMode: "screen",
+						backgroundColor: "white",
+						opacity: flashOpacity,
+						mixBlendMode: "overlay",
 						zIndex: -1,
 					}}
 				/>
-			)}
 
-			{/* White Flash Overlay */}
-			<AbsoluteFill
-				style={{
-					backgroundColor: "white",
-					opacity: flashOpacity,
-					mixBlendMode: "overlay",
-					zIndex: -1,
-				}}
-			/>
+				{/* Expanding Rings */}
+				{rings.map((rDelay, i) => {
+					const ringFrame = relativeFrame - rDelay;
+					if (ringFrame < 0) return null;
 
-			{/* Expanding Rings */}
-			{rings.map((rDelay, i) => {
-				const ringFrame = relativeFrame - rDelay;
-				if (ringFrame < 0) return null;
-
-				const ringScale = interpolate(ringFrame, [0, 20], [0, 2.5], {
-					easing: Easing.out(Easing.ease),
-					extrapolateRight: "clamp",
-				});
-				const ringOpacity = interpolate(ringFrame, [0, 10, 20], [1, 0.5, 0], {
-					extrapolateRight: "clamp",
-				});
-
-				return (
-					<div
-						key={i}
-						style={{
-							width: 1000,
-							height: 1000,
-							borderRadius: "50%",
-							border: `${50}px solid ${i === 0 ? "white" : color}`,
-							transform: `scale(${ringScale})`,
-							opacity: ringOpacity,
-							boxShadow: `0 0 ${50}px ${color}, inset 0 0 50px ${color}`,
-							position: "absolute",
-						}}
-					/>
-				);
-			})}
-
-			{/* Particles */}
-			{intensity === "high" &&
-				new Array(12).fill(0).map((_, i) => {
-					const seed = i * 123;
-					const angle = random(seed) * 360;
-					const speed = random(seed + 1) * 10 + 10;
-
-					const distance = interpolate(relativeFrame, [0, 20], [0, speed * 20], {
-						easing: Easing.out(Easing.quad),
+					const ringScale = interpolate(ringFrame, [0, 20], [0, 2.5], {
+						easing: Easing.out(Easing.ease),
+						extrapolateRight: "clamp",
 					});
-					const particleOpacity = interpolate(relativeFrame, [0, 10, 25], [1, 1, 0]);
-					const particleSize = random(seed + 2) * 20 + 10;
+					const ringOpacity = interpolate(ringFrame, [0, 10, 20], [1, 0.5, 0], {
+						extrapolateRight: "clamp",
+					});
 
 					return (
 						<div
 							key={i}
 							style={{
-								position: "absolute",
-								width: particleSize,
-								height: particleSize,
+								width: 1000,
+								height: 1000,
 								borderRadius: "50%",
-								background: color,
-								opacity: particleOpacity,
-								transform: `rotate(${angle}deg) translateX(${distance}px)`,
-								boxShadow: `0 0 10px ${color}`,
+								border: `${50}px solid ${i === 0 ? "white" : color}`,
+								transform: `scale(${ringScale})`,
+								opacity: ringOpacity,
+								boxShadow: `0 0 ${50}px ${color}, inset 0 0 50px ${color}`,
+								position: "absolute",
 							}}
 						/>
 					);
 				})}
-		</AbsoluteFill>
+
+				{/* Particles */}
+				{intensity === "high" &&
+					new Array(12).fill(0).map((_, i) => {
+						const seed = i * 123;
+						const angle = random(seed) * 360;
+						const speed = random(seed + 1) * 10 + 10;
+
+						const distance = interpolate(relativeFrame, [0, 20], [0, speed * 20], {
+							easing: Easing.out(Easing.quad),
+						});
+						const particleOpacity = interpolate(relativeFrame, [0, 10, 25], [1, 1, 0]);
+						const particleSize = random(seed + 2) * 20 + 10;
+
+						return (
+							<div
+								key={i}
+								style={{
+									position: "absolute",
+									width: particleSize,
+									height: particleSize,
+									borderRadius: "50%",
+									background: color,
+									opacity: particleOpacity,
+									transform: `rotate(${angle}deg) translateX(${distance}px)`,
+									boxShadow: `0 0 10px ${color}`,
+								}}
+							/>
+						);
+					})}
+			</AbsoluteFill>
+			{/* Original Children positioned correctly by parent layout */}
+			{children}
+		</>
 	);
 };
