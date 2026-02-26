@@ -98,7 +98,7 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
 			<AbsoluteFill
 				style={{
 					background:
-						"radial-gradient(circle, transparent 50%, rgba(0,0,0,0.6) 100%)",
+						"radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.6) 100%)",
 					zIndex: 101,
 					mixBlendMode: "multiply",
 				}}

@@ -54,7 +54,7 @@ export const OpeningTitle: React.FC = () => {
 				{/* OVERLAY VIGNETTE */}
 				<AbsoluteFill 
 					style={{
-						background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%)",
+						background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.4) 100%)",
 					}}
 				/>
 			</AbsoluteFill>

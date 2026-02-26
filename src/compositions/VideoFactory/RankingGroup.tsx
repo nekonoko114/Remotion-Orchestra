@@ -9,7 +9,6 @@ import {
 	useVideoConfig,
 } from "remotion";
 import type { Liver } from "./types";
-import { OpeningBackground } from "./OpeningBackground";
 
 type Props = {
 	title: string;
@@ -31,7 +30,6 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 
 	const is3Group = livers.length === 3;
 	const gap = is3Group ? 80 : 60;
-	const itemPadding = is3Group ? "30px 40px" : "30px 50px";
 	const rankFontSize = is3Group ? 90 : 70; // Adjusted for stacking
 	const rankWidth = is3Group ? 200 : 160; // Widened for icon + rank stack
 	const iconSize = is3Group ? 200 : 150; // Slightly smaller to fit stack
@@ -51,13 +49,13 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 						width: "100%",
 						height: "100%",
 						objectFit: "cover",
-						opacity: 0.6, // 少し暗くして文字を目立たせる
+						opacity: 0.8, // 文字を目立たせつつ明るさを維持
 					}}
 				/>
-				{/* さらに暗黒感を増すための漆黒グラデーション */}
+				{/* 漆黒感を維持しつつ暗すぎないグラデーション */}
 				<AbsoluteFill
 					style={{
-						background: "radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.9) 100%)",
+						background: "radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%)",
 						pointerEvents: "none",
 					}}
 				/>
@@ -116,7 +114,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 									borderRadius: 100,
 									border: "4px solid #8B0000", // Dark Red border
 									boxShadow: "0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.8)", // 赤の光と黒のシャドウ
-									backgroundColor: "rgba(0,0,0,0.7)", // 背景を黒透過に
+									backgroundColor: "rgba(0,0,0,0.4)", // 背景を黒透過に
 									transform: `translateY(${interpolate(liverEntrance, [0, 1], [-1000, 0])}px)`,
 									opacity: interpolate(liverEntrance, [0, 0.4], [0, 1]),
 									position: "relative", // Needed for absolute background
@@ -144,7 +142,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 								</AbsoluteFill>
 
 								{/* Dark overlay for readability */}
-								<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.4)" }} />
+								<AbsoluteFill style={{ backgroundColor: "rgba(0,0,0,0.2)" }} />
 
 								{/* Left Unit: Rank (Top) + Icon (Bottom) */}
 								<div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: rankWidth, gap: 10, position: "relative", zIndex: 1 }}>
