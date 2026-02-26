@@ -45,7 +45,7 @@ export const OpeningTitle: React.FC = () => {
 						filter: "brightness(0.7) contrast(1.2)",
 					}}
 					startFrom={0}
-					playbackRate={2.7}
+					playbackRate={2.3}
 					muted
 				/>
 				{/* OVERLAY VIGNETTE */}

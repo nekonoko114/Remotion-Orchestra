@@ -46,7 +46,7 @@ export const EndingLogo: React.FC = () => {
 						filter: "brightness(0.5) contrast(1.2)", // オープニングより少し暗め
 					}}
 					startFrom={0}
-					playbackRate={2.7}
+					playbackRate={2.3}
 					muted
 					loop
 				/>
