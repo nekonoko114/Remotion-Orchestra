@@ -43,6 +43,7 @@ export const OpeningTitle: React.FC = () => {
 						objectFit: "cover",
 						objectPosition: "center",
 						filter: "brightness(0.7) contrast(1.2)",
+						transform: "scale(1.15)", // VEOのウォーターマークを枠外に隠すため拡大
 					}}
 					startFrom={0}
 					playbackRate={2.3}

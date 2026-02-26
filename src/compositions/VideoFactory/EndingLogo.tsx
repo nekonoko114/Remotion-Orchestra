@@ -44,9 +44,10 @@ export const EndingLogo: React.FC = () => {
 						objectFit: "cover",
 						objectPosition: "center",
 						filter: "brightness(0.5) contrast(1.2)", // オープニングより少し暗め
+						transform: "scale(1.15)", // VEOのウォーターマークを枠外に隠すため拡大
 					}}
 					startFrom={0}
-					playbackRate={2.3}
+					playbackRate={2.7}
 					muted
 					loop
 				/>
