@@ -8,7 +8,7 @@ import {
 	useVideoConfig,
 	Easing,
 } from "remotion";
-import RANKING_DATA_JSON from "./data.json";
+import RANKING_DATA_JSON from "./data-time.json";
 import FETCHED_USERS_JSON from "../../../jol-liver.json";
 import type { Liver } from "./types";
 
@@ -24,14 +24,14 @@ type FetchedUser = {
 
 const FETCHED_USERS = FETCHED_USERS_JSON as FetchedUser[];
 
-const BPM = 152;
+const BPM = 160;
 
-export const GridBridge: React.FC = () => {
+export const GridBridgeTime: React.FC = () => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 
-	// 1. Timing setup based on BPM 152
-	const beatFrames = (60 / BPM) * fps;
+	// 1. Timing setup based on BPM 160
+	const beatFrames = (60 / BPM) * fps; // 11.25 frames per beat
 	
 	// Ensure TOP 10 data is prioritized and formatted
 	const top10Items = RANKING_DATA.map(liver => {
@@ -71,39 +71,40 @@ export const GridBridge: React.FC = () => {
 		}));
 
 	// Combine them. To make the grid look mixed, we can interleave them or just append.
-	// Let's just append and rely on the grid wrapping.
 	const combinedItems = [...top10Items, ...otherUsers];
 
-	// Split into 3 rows
-	const rows: any[][] = [[], [], []];
+	// Split into 3 columns instead of rows
+	const columns: any[][] = [[], [], []];
 	combinedItems.forEach((item, index) => {
-		const rowIndex = index % 3;
-		rows[rowIndex].push(item);
+		const colIndex = index % 3;
+		columns[colIndex].push(item);
 	});
 
 	// Overall tilt
 	const rotation = -6;
 	
 	// "Gathering" logic for Top 3 (Ranks 1, 2, 3)
-	const getGatherOffset = (rowIndex: number, rank: number) => {
+	const getGatherOffset = (colIndex: number, rank: number) => {
 		if (rank > 3) return { x: 0, y: 0 };
 		
-		const gatherProgress = interpolate(frame, [beatFrames * 6, beatFrames * 14], [0, 1], {
+        // Grid animation total duration is about 8 seconds (240 frames)
+        // Gathering starts around beat 12 (135 frames) and ends at beat 18 (202 frames)
+		const gatherProgress = interpolate(frame, [beatFrames * 12, beatFrames * 18], [0, 1], {
 			easing: Easing.out(Easing.back(2)),
 			extrapolateLeft: "clamp",
 			extrapolateRight: "clamp",
 		});
 
-		// Move towards middle row (rowIndex 1)
-		let offsetY = 0;
-		if (rowIndex === 0) offsetY = gatherProgress * 200;
-		if (rowIndex === 2) offsetY = -gatherProgress * 200;
+		// Move towards middle column (colIndex 1)
+		let offsetX = 0;
+		if (colIndex === 0) offsetX = gatherProgress * 300;
+		if (colIndex === 2) offsetX = -gatherProgress * 300;
 		
-		return { x: 0, y: offsetY };
+		return { x: offsetX, y: 0 };
 	};
 
-	const rowHeight = 1900 / 3; 
-	const itemWidth = 500; 
+	const columnWidth = 1080 / 3; 
+	const itemHeight = 500; 
 	const gap = 20;
 
 	return (
@@ -112,40 +113,43 @@ export const GridBridge: React.FC = () => {
 				style={{
 					transform: `rotate(${rotation}deg) scale(1.4)`, // 元のスケールに戻す
 					display: "flex",
-					flexDirection: "column",
+					flexDirection: "row", // Horizontal layout for the columns
 					justifyContent: "center",
 					alignItems: "center",
 				}}
 			>
-				{rows.map((rowItems, rowIndex) => {
-					// 画像をループさせるため配列を繰り返す (約20枚/行を2周させる)
-					const rowLong = [...rowItems, ...rowItems]; 
-					const totalRowWidth = rowItems.length * (itemWidth + gap); // 1セットの長さを全体の幅とする
+				{columns.map((columnItems, colIndex) => {
+					// 画像をループさせるため配列を繰り返す (約20枚/列を2周させる)
+					const columnLong = [...columnItems, ...columnItems]; 
+					const totalColumnHeight = columnItems.length * (itemHeight + gap); // 1セットの長さを全体の高さとする
 					
-					// 行ごとのスピードと方向
-					const speed = rowIndex % 2 === 0 ? 8 : 10; 
-					const direction = rowIndex % 2 === 0 ? -1 : 1;
+					// 列ごとのスピードと方向
+					// スピードを数値（現在は16と20）で調整できます。数値を大きくすると速くなります。
+					const speed = colIndex % 2 === 0 ? 20 : 24; 
+					const direction = colIndex % 2 === 0 ? -1 : 1;
 					
 					// 継続的な移動
-					const baseOffset = (frame * speed * direction) % totalRowWidth;
+					const baseOffset = (frame * speed * direction) % totalColumnHeight;
 
 					return (
 						<div
-							key={rowIndex}
+							key={colIndex}
 							style={{
 								display: "flex",
-								height: rowHeight,
-								transform: `translateX(${baseOffset - totalRowWidth/2}px)`,
+								flexDirection: "column", // Vertical layout for items in a column
+								width: columnWidth,
+								transform: `translateY(${baseOffset - totalColumnHeight/2}px)`,
 								gap: gap,
-								marginBottom: 20,
+								marginRight: 20,
 								whiteSpace: "nowrap",
 							}}
 						>
-							{rowLong.map((item, colIndex) => {
-								const { y: oy } = getGatherOffset(rowIndex, item.rank);
+							{columnLong.map((item, rowIndex) => {
+								const { x: ox } = getGatherOffset(colIndex, item.rank);
 								const isTop3 = item.rank <= 3;
 								
-								const opacity = isTop3 ? 1 : interpolate(frame, [beatFrames * 15, beatFrames * 18], [1, 0.75], { 
+								// Dim non-top-3 images after gathering
+								const opacity = isTop3 ? 1 : interpolate(frame, [beatFrames * 16, beatFrames * 20], [1, 0.75], { 
 									extrapolateLeft: "clamp",
 									extrapolateRight: "clamp" 
 								});
@@ -165,12 +169,12 @@ export const GridBridge: React.FC = () => {
 
 								return (
 									<div
-										key={colIndex}
+										key={rowIndex}
 										style={{
-											width: itemWidth,
-											height: rowHeight - 40,
+											width: columnWidth - 40,
+											height: itemHeight,
 											position: "relative",
-											transform: `translate(0, ${oy}px)`,
+											transform: `translate(${ox}px, 0)`,
 											opacity,
 											borderRadius: 20,
 											flexShrink: 0, 
@@ -240,11 +244,9 @@ export const GridBridge: React.FC = () => {
 			
 			<AbsoluteFill style={{
 				backgroundColor: "#fff",
-				opacity: interpolate(frame, [beatFrames * 18, beatFrames * 20], [0, 1], { extrapolateLeft: "clamp" }),
+				opacity: interpolate(frame, [beatFrames * 18, beatFrames * 21], [0, 1], { extrapolateLeft: "clamp" }),
 				pointerEvents: "none"
 			}} />
 		</AbsoluteFill>
 	);
 };
-
-

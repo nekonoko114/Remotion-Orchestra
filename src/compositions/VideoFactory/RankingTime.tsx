@@ -11,6 +11,7 @@ import { EndingLogoTime as EndingLogo } from "./EndingLogoTime";
 import { OpeningTitleTime as OpeningTitle } from "./OpeningTitleTime";
 import { RankingGroupTime as RankingGroup } from "./RankingGroupTime";
 import { TopRankRevealTime as TopRankReveal } from "./TopRankRevealTime";
+import { GridBridgeTime } from "./GridBridgeTime";
 import { useBeatValue } from "./utils/beat-sync";
 import { TimeBackground } from "./TimeBackground";
 
@@ -22,6 +23,7 @@ const BGM_START_FROM = 0.0; // Seconds
 // 180 BPM, 30fps -> 1 beat = 10 frames.
 // 8.0s = 240 frames = 24 beats (6 measures)
 export const OPENING_SEC = 8.0;
+export const GRID_BRIDGE_SEC = 8.0;
 // 5.333...s = 160 frames = 16 beats (4 measures)
 export const GROUP_SEC = 160 / 30;
 export const TOP_RANK_SEC = 160 / 30;
@@ -40,6 +42,7 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 	// Duration Logic (Frames)
 	const OPENING_DURATION = OPENING_SEC * fps;
 	const GROUP_DURATION = GROUP_SEC * fps;
+	const GRID_BRIDGE_DURATION = GRID_BRIDGE_SEC * fps;
 	const TOP_RANK_DURATION = TOP_RANK_SEC * fps;
 	const ENDING_DURATION = ENDING_SEC * fps;
 	const TRANSITION_DURATION = TRANSITION_FRAMES;
@@ -98,9 +101,20 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 					/>
 				</TransitionSeries.Sequence>
 
-				{/* Transition 3: Group 2 -> 3rd Place (WIPE from Top) */}
+				{/* Transition 3: Group 2 -> Grid (WIPE from Top) */}
 				<TransitionSeries.Transition
 					presentation={wipeTransition({ direction: "from-top" })}
+					timing={timing}
+				/>
+
+				{/* NEW: Grid Bridge Time (3x1 Grid Reveal vertically) */}
+				<TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
+					<GridBridgeTime />
+				</TransitionSeries.Sequence>
+
+				{/* Transition from Bridge to 3rd Place */}
+				<TransitionSeries.Transition
+					presentation={wipeTransition({ direction: "from-bottom" })}
 					timing={timing}
 				/>
 

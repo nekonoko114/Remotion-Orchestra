@@ -108,15 +108,18 @@ export const zoomTransition = (options: {
       const exitScale = interpolate(presentationProgress, [0, 1], [1, 2]);
       const exitOpacity = interpolate(presentationProgress, [0, 1], [1, 0]);
 
+      // Motion Blur: peaks in the middle of the transition
+      const blurAmount = interpolate(presentationProgress, [0, 0.5, 1], [0, 20, 0]);
+
       if (!entering) return exiting as React.ReactElement;
       if (!exiting) return entering as React.ReactElement;
 
       return (
         <AbsoluteFill>
-          <AbsoluteFill style={{ transform: `scale(${exitScale})`, opacity: exitOpacity }}>
+          <AbsoluteFill style={{ transform: `scale(${exitScale})`, opacity: exitOpacity, filter: `blur(${blurAmount}px)` }}>
             {exiting}
           </AbsoluteFill>
-          <AbsoluteFill style={{ transform: `scale(${enterScale})`, opacity: enterOpacity }}>
+          <AbsoluteFill style={{ transform: `scale(${enterScale})`, opacity: enterOpacity, filter: `blur(${blurAmount}px)` }}>
             {entering}
           </AbsoluteFill>
         </AbsoluteFill>
@@ -145,6 +148,9 @@ export const spinTransition = (): TransitionPresentation<any> => {
       const exitOpacity = interpolate(presentationProgress, [0, 0.5], [1, 0]);
       const enterOpacity = interpolate(presentationProgress, [0.5, 1], [0, 1]);
 
+      // Spin Motion Blur: peaks during the fastest part of the rotation
+      const blurAmount = interpolate(presentationProgress, [0, 0.5, 1], [0, 30, 0]);
+
       if (!entering) return exiting as React.ReactElement;
       if (!exiting) return entering as React.ReactElement;
 
@@ -153,6 +159,7 @@ export const spinTransition = (): TransitionPresentation<any> => {
           <AbsoluteFill style={{ 
               transform: `rotate(${rotation}deg) scale(${scale})`, 
               opacity: exitOpacity,
+              filter: `blur(${blurAmount}px)`,
               zIndex: 1 
           }}>
             {exiting}
@@ -160,6 +167,7 @@ export const spinTransition = (): TransitionPresentation<any> => {
           <AbsoluteFill style={{ 
               transform: `rotate(${rotation - 360}deg) scale(${scale})`, 
               opacity: enterOpacity,
+              filter: `blur(${blurAmount}px)`,
               zIndex: 2
           }}>
             {entering}

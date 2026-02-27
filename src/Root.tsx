@@ -24,6 +24,7 @@ import {
   TOP_RANK_SEC as TOP_RANK_SEC_TIME,
   ENDING_SEC as ENDING_SEC_TIME,
   TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
+  GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
 } from "./compositions/VideoFactory/RankingTime";
 import { BattleCrystal } from "./compositions/VideoFactory/BattleCrystal";
 import { BattleWater } from "./compositions/VideoFactory/BattleWater";
@@ -56,10 +57,11 @@ const JOL_RANKING_DURATION_VERTICAL =
 const JOL_RANKING_DURATION_TIME =
   (OPENING_SEC_TIME +
     GROUP_SEC_TIME * 2 +
+    GRID_BRIDGE_SEC_TIME +
     TOP_RANK_SEC_TIME * 3 +
     ENDING_SEC_TIME) *
     JOL_RANKING_FPS -
-  6 * TRANSITION_FRAMES_TIME;
+  7 * TRANSITION_FRAMES_TIME;
 
 export const RemotionRoot: React.FC = () => {
 
