@@ -7,15 +7,19 @@ import {
 	useVideoConfig,
 	Video,
 } from "remotion";
-import { TimeBackground } from "./TimeBackground";
 
 export const EndingLogoTime: React.FC = () => {
 	const frame = useCurrentFrame();
 	const { durationInFrames, width } = useVideoConfig();
+	const scaleFactor = width / 1080;
 
 	// Removed unused opacity interpolate
 
 	const scale = interpolate(frame, [0, durationInFrames], [1.0, 1.1], {
+		extrapolateRight: "clamp",
+	});
+
+	const bgScale = interpolate(frame, [0, durationInFrames], [1.0, 1.2], {
 		extrapolateRight: "clamp",
 	});
 
@@ -26,9 +30,21 @@ export const EndingLogoTime: React.FC = () => {
 		<AbsoluteFill style={{ backgroundColor: "#000", zIndex: 5000 }}>
 			{/* 1. BACKGROUND LAYER (No opacity fade) */}
 			<AbsoluteFill style={{ zIndex: 1 }}>
-				<TimeBackground hideBaseVideo />
+				{/* Component Bottom: rank_3_bg.webp */}
+				<AbsoluteFill>
+					<Img 
+						src={staticFile("assets/backgrounds/rank_3_bg.webp")}
+						style={{
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+							filter: "brightness(0.5)",
+							transform: `scale(${bgScale})`,
+						}}
+					/>
+				</AbsoluteFill>
 				
-				{/* Purple Loop Background */}
+				{/* Middle: purple_loop.mp4 (Luminance Key via Screen Blend) */}
 				<AbsoluteFill>
 					<Video 
 						src={staticFile("assets/backgrounds/purple_loop.mp4")}
@@ -37,7 +53,8 @@ export const EndingLogoTime: React.FC = () => {
 							width: "100%",
 							height: "100%",
 							objectFit: "cover",
-							opacity: 0.8,
+							mixBlendMode: "screen",
+							filter: "contrast(1.5) brightness(0.9)",
 						}}
 					/>
 				</AbsoluteFill>
@@ -45,7 +62,8 @@ export const EndingLogoTime: React.FC = () => {
 				{/* Brightening Gradient Overlay (Blue/Cyan) */}
 				<AbsoluteFill 
 					style={{
-						background: "radial-gradient(circle at center, rgba(0, 240, 255, 0.2) 0%, transparent 80%)",
+						background: "radial-gradient(circle at center, rgba(160, 0, 255, 0.15) 0%, transparent 80%)",
+						mixBlendMode: "screen",
 					}}
 				/>
 			</AbsoluteFill>
@@ -72,7 +90,7 @@ export const EndingLogoTime: React.FC = () => {
 					top: "50%",
 					left: "50%",
 					transform: `translate(-50%, -50%) scale(${scale})`,
-					filter: "blur(80px)",
+					filter: `blur(${80 * scaleFactor}px)`,
 					mixBlendMode: "screen",
 					opacity: 0.8,
 				}}
@@ -91,15 +109,15 @@ export const EndingLogoTime: React.FC = () => {
 				<div
 					style={{
 						position: "absolute",
-						width: 1200,
-						height: 1200,
+						width: 1200 * scaleFactor,
+						height: 1200 * scaleFactor,
 						background:
 							"radial-gradient(circle, rgba(0, 240, 255, 0.4) 0%, rgba(0, 50, 255, 0.1) 40%, transparent 70%)",
 						top: "50%",
 						left: "50%",
 						transform: `translate(-50%, -50%) scale(${scale})`,
 						mixBlendMode: "screen",
-						filter: "blur(60px)",
+						filter: `blur(${60 * scaleFactor}px)`,
 					}}
 				/>
 
@@ -107,12 +125,12 @@ export const EndingLogoTime: React.FC = () => {
 				<div
 					style={{
 						position: "relative",
-						width: 800,
+						width: 800 * scaleFactor,
 						display: "flex",
 						justifyContent: "center",
 						alignItems: "center",
 						transform: `scale(${scale})`,
-						filter: "drop-shadow(0px 20px 60px rgba(0, 0, 0, 1)) drop-shadow(0px 0px 30px rgba(0, 240, 255, 0.2))",
+						filter: `drop-shadow(0px ${20 * scaleFactor}px ${60 * scaleFactor}px rgba(0, 0, 0, 1)) drop-shadow(0px 0px ${30 * scaleFactor}px rgba(0, 240, 255, 0.2))`,
 						zIndex: 9001,
 					}}
 				>

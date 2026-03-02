@@ -35,19 +35,30 @@ export const EndingLogo: React.FC = () => {
 
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000" }}>
+			{/* BASE BACKGROUND */}
 			<AbsoluteFill>
-				<Video
-					src={staticFile("assets/backgrounds/daiamond-month.mp4")}
+				<Img
+					src={staticFile("assets/backgrounds/dark_temple_bg_top6.png")}
 					style={{
 						width: "100%",
 						height: "100%",
 						objectFit: "cover",
-						objectPosition: "center",
-						filter: "brightness(0.5) contrast(1.2)", // オープニングより少し暗め
-						transform: "scale(1.15)", // VEOのウォーターマークを枠外に隠すため拡大
+						filter: "brightness(0.6)",
 					}}
-					startFrom={0}
-					playbackRate={2.7}
+				/>
+			</AbsoluteFill>
+
+			{/* MIDDLE LAYER - RED LOOP with Luminance Key (Screen) */}
+			<AbsoluteFill>
+				<Video
+					src={staticFile("assets/backgrounds/red_loop.mp4")}
+					style={{
+						width: "100%",
+						height: "100%",
+						objectFit: "cover",
+						mixBlendMode: "screen",
+						filter: "contrast(1.5) brightness(0.8)", // 黒をより沈ませて透過度を上げる
+					}}
 					muted
 					loop
 				/>
