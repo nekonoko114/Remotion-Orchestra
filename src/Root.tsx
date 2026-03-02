@@ -123,8 +123,8 @@ export const RemotionRoot: React.FC = () => {
         component={RankingTime}
         durationInFrames={Math.ceil(JOL_RANKING_DURATION_TIME)}
         fps={JOL_RANKING_FPS}
-        width={1080}
-        height={1920}
+        width={2160}
+        height={3840}
       />
       <Composition
         id="JOL-Video"
@@ -161,7 +161,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-Battle-Kawaii"
         component={BattleKawaii}
-        durationInFrames={684}
+        durationInFrames={780}
         fps={30}
         width={1080}
         height={1920}
