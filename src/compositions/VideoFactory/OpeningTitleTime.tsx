@@ -6,6 +6,7 @@ import {
 	Video,
 	staticFile,
 	interpolate,
+	useVideoConfig,
 } from "remotion";
 import { LensFlare } from "../../components/effects/LensFlare";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
@@ -68,6 +69,8 @@ const DigitalTypewriter: React.FC<{
 
 export const OpeningTitleTime: React.FC = () => {
 	const frame = useCurrentFrame();
+	const { width } = useVideoConfig();
+	const scale = width / 1080;
 	const { pulse, beatIndex } = useBeatValue(180);
 
     // Alternative BPM Expression: Rhythmic Color Aberration Glitch
@@ -83,8 +86,8 @@ export const OpeningTitleTime: React.FC = () => {
     const videoScale = 1.5; 
 
     // Wiggle (shaking) - Constant subtle shake + big punch at explosion
-    const baseWiggle = 5;
-    const explosionWiggle = interpolate(frame, [transitionFrame, transitionFrame + 5, transitionFrame + 40], [0, 35, 0], {
+    const baseWiggle = 5 * scale;
+    const explosionWiggle = interpolate(frame, [transitionFrame, transitionFrame + 5, transitionFrame + 40], [0, 35 * scale, 0], {
         extrapolateLeft: "clamp",
         extrapolateRight: "clamp",
     });
@@ -137,18 +140,18 @@ export const OpeningTitleTime: React.FC = () => {
 
             {/* TYPEWRITER PHASE (Stay visible throughout) */}
             <div style={{ position: "absolute", width: "100%", height: "100%", zIndex: 50 }}>
-                <DigitalTypewriter text="J.O.L" fontSize={260} delay={0} duration={30} yOffset={-380} />
-                <DigitalTypewriter text="2026年2月度" fontSize={130} delay={30} duration={30} yOffset={-120} />
-                <DigitalTypewriter text="月間配信時間" fontSize={130} delay={60} duration={30} yOffset={60} />
-                <DigitalTypewriter text="ランキング" fontSize={160} delay={90} duration={30} yOffset={250} />
-                <DigitalTypewriter text="結果発表!" fontSize={160} delay={120} duration={30} yOffset={440} />
+                <DigitalTypewriter text="J.O.L" fontSize={260 * scale} delay={0} duration={30} yOffset={-380 * scale} />
+                <DigitalTypewriter text="2026年2月度" fontSize={130 * scale} delay={30} duration={30} yOffset={-120 * scale} />
+                <DigitalTypewriter text="月間配信時間" fontSize={130 * scale} delay={60} duration={30} yOffset={60 * scale} />
+                <DigitalTypewriter text="ランキング" fontSize={160 * scale} delay={90} duration={30} yOffset={250 * scale} />
+                <DigitalTypewriter text="結果発表!" fontSize={160 * scale} delay={120} duration={30} yOffset={440 * scale} />
             </div>
 
 			{/* LENS FLARE / GLOW */}
 			<AbsoluteFill style={{ zIndex: 20, pointerEvents: "none" }}>
 				<LensFlare
 					opacity={pulse * 0.02}
-					scale={1.1}
+					scale={1.1 * scale}
 					color="#d000ff"
 					intensity={0.8}
 				/>

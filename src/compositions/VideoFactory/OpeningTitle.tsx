@@ -36,7 +36,7 @@ export const OpeningTitle: React.FC = () => {
 			{/* BACKGROUND LAYER - Diamond Month Video */}
 			<AbsoluteFill style={{ zIndex: -1 }}>
 				<Video
-					src={staticFile("assets/backgrounds/daiamond-month.mp4")}
+					src={staticFile("assets/backgrounds/fire-ulf.mp4")}
 					style={{ 
 						width: "100%", 
 						height: "100%", 
@@ -46,7 +46,7 @@ export const OpeningTitle: React.FC = () => {
 						transform: "scale(1.15)", // VEOのウォーターマークを枠外に隠すため拡大
 					}}
 					startFrom={0}
-					playbackRate={2.3}
+					playbackRate={1}
 					muted
 				/>
 				{/* OVERLAY VIGNETTE */}
