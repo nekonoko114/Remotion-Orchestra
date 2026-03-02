@@ -72,7 +72,10 @@ export const GridBridge: React.FC = () => {
 
 	// Combine them. To make the grid look mixed, we can interleave them or just append.
 	// Let's just append and rely on the grid wrapping.
-	const combinedItems = [...top10Items, ...otherUsers];
+	// 均一にするため、3の倍数に切り捨てます
+	const combinedItemsRaw = [...top10Items, ...otherUsers];
+	const uniformCount = Math.floor(combinedItemsRaw.length / 3) * 3;
+	const combinedItems = combinedItemsRaw.slice(0, uniformCount);
 
 	// Split into 3 rows
 	const rows: any[][] = [[], [], []];
@@ -123,7 +126,7 @@ export const GridBridge: React.FC = () => {
 					const totalRowWidth = rowItems.length * (itemWidth + gap); // 1セットの長さを全体の幅とする
 					
 					// 行ごとのスピードと方向
-					const speed = rowIndex % 2 === 0 ? 8 : 10; 
+					const speed = rowIndex % 2 === 0 ? 30 : 35; 
 					const direction = rowIndex % 2 === 0 ? -1 : 1;
 					
 					// 継続的な移動

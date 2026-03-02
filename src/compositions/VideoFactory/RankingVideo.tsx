@@ -19,8 +19,8 @@ const BPM = 152;
 export const OPENING_SEC = 7;
 export const GROUP_SEC = 5;
 export const TOP_RANK_SEC = 5.6; // ~12 beats exactly
-export const GRID_BRIDGE_SEC = 8; // 8 seconds bridge
-export const ENDING_SEC = 5;
+export const GRID_BRIDGE_SEC = 4; // 4 seconds bridge
+export const ENDING_SEC = 2.5;
 export const TRANSITION_FRAMES = 14; // Exactly half a beat (28/2)
 export const LAST_TRANSITION_FRAMES = 10;
 

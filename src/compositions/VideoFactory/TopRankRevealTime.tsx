@@ -8,7 +8,6 @@ import {
 	useCurrentFrame,
 	staticFile,
 	useVideoConfig,
-	Video,
 } from "remotion";
 import { ImpactEffectTime as ImpactEffect } from "./ImpactEffectTime";
 import { TimeBackground } from "./TimeBackground";
@@ -37,7 +36,7 @@ type Props = {
 
 export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, width } = useVideoConfig();
 
 	const { pulse } = useBeatValue(BPM);
 	
@@ -98,24 +97,39 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
 	const { primary, glow } = getRankColors(rank);
 
+	// Breathing zoom effect for background
+	const bgScale = interpolate(
+		Math.sin(frame * 0.04), // Slightly faster breathing
+		[-1, 1],
+		[1, 1.08] // Slightly more zoom
+	);
+
 	if (!liver) return null;
+
+	const magicalBg = rank <= 3 ? staticFile(`assets/backgrounds/rank_${rank}_magical_bg.png`) : null;
 
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000", overflow: "hidden" }}>
 			<TimeBackground overlayColor={primary + "33"} hideBackground hideBaseVideo />
 			
-			{/* Rank 1 Magic Background Video (behind magic circles) */}
-			{rank === 1 && (
-				<AbsoluteFill style={{ zIndex: 5, mixBlendMode: "screen" }}>
-					<Video 
-						src={staticFile("assets/backgrounds/magic-right.mp4")}
+			{/* Magical Background for TOP 3 */}
+			{magicalBg && (
+				<AbsoluteFill style={{ zIndex: 5 }}>
+					<Img 
+						src={magicalBg}
 						style={{
 							width: "100%",
 							height: "100%",
 							objectFit: "cover",
-							opacity: 0.8,
+							transform: `scale(${bgScale})`,
+							opacity: 0.85, // Richer appearance
 						}}
 					/>
+					{/* Gradient overlay to blend with the scene - adjusted for 4K and better contrast */}
+					<AbsoluteFill style={{
+						background: `radial-gradient(circle at center, transparent 20%, #000 100%)`,
+						opacity: 0.5,
+					}} />
 				</AbsoluteFill>
 			)}
 			
@@ -209,108 +223,108 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 				<Confetti count={150} colors={[primary, "#ffffff", "#ffd700", "#ff0080"]} />
 			</AbsoluteFill>
 
-			{/* メインコンテンツエリア */}
-			<AbsoluteFill
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					fontFamily: '"Mochiy Pop One", sans-serif',
-					color: "white",
-					zIndex: 120,
-				}}
-			>
-				{/* カウントアップ数字 (タイトル) - 画面上部に配置 */}
-				<div style={{ marginTop: 80, transform: `scale(${pulseScale})` }}>
-					<MorphingTitle
-						text={title}
-						fontSize={220}
+	return (
+		<AbsoluteFill
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				fontFamily: '"Mochiy Pop One", sans-serif',
+				color: "white",
+				zIndex: 120,
+			}}
+		>
+			{/* カウントアップ数字 (タイトル) - 画面上部に配置 */}
+			<div style={{ marginTop: 80 * (width / 1080), transform: `scale(${pulseScale})` }}>
+				<MorphingTitle
+					text={title}
+					fontSize={220 * (width / 1080)}
+					style={{
+						textShadow: `0 0 ${30 * (width / 1080)}px ${primary}, 0 0 ${60 * (width / 1080)}px ${primary}`,
+					}}
+				/>
+			</div>
+
+			{/* ライバー画像 - もっと大きく、フレームを豪華に */}
+			<div style={{
+				position: "relative",
+				width: 850 * (width / 1080),
+				height: 850 * (width / 1080),
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				marginTop: 10 * (width / 1080),
+				transform: `scale(${imageScale}) rotateX(10deg)`,
+				opacity: imageOpacity
+			}}>
+				{/* 外側の装飾フレーム (回転する豪華な枠) */}
+				{[...new Array(4)].map((_, i) => (
+					<div 
+						key={i}
 						style={{
-							textShadow: `0 0 30px ${primary}, 0 0 60px ${primary}`,
-						}}
+							position: "absolute",
+							width: (780 + i * 35) * (width / 1080),
+							height: (780 + i * 35) * (width / 1080),
+							borderRadius: i % 2 === 0 ? "20%" : "50%",
+							border: `${(3 - i * 0.5) * (width / 1080)}px solid ${primary}`,
+							boxShadow: `0 0 ${40 * (width / 1080)}px ${glow}, inset 0 0 ${20 * (width / 1080)}px ${glow}`,
+							opacity: 0.8 - i * 0.15,
+							transform: `rotate(${frame * (i % 2 === 0 ? 0.3 : -0.2) * (i + 1)}deg)`,
+						}} 
 					/>
-				</div>
-
-				{/* ライバー画像 - もっと大きく、フレームを豪華に */}
+				))}
+				
+				{/* 強い後光レイヤー */}
 				<div style={{
+					position: "absolute",
+					width: 900 * (width / 1080),
+					height: 900 * (width / 1080),
+					background: `radial-gradient(circle, ${primary}99 0%, transparent 70%)`,
+					opacity: 0.4 + pulse * 0.2,
+					filter: `blur(${60 * (width / 1080)}px)`,
+				}} />
+
+				<div style={{
+					width: 750 * (width / 1080),
+					height: 750 * (width / 1080),
+					borderRadius: "50%",
+					overflow: "hidden",
+					border: `${8 * (width / 1080)}px solid white`, 
+					boxShadow: `0 0 ${120 * (width / 1080)}px ${primary}, 0 0 ${40 * (width / 1080)}px white`, 
 					position: "relative",
-					width: 850,
-					height: 850,
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-					marginTop: 10,
-					transform: `scale(${imageScale}) rotateX(10deg)`,
-					opacity: imageOpacity
+					backgroundColor: "#000",
+					zIndex: 5,
 				}}>
-					{/* 外側の装飾フレーム (回転する豪華な枠) */}
-					{[...new Array(4)].map((_, i) => (
-						<div 
-							key={i}
-							style={{
-								position: "absolute",
-								width: 780 + i * 35,
-								height: 780 + i * 35,
-								borderRadius: i % 2 === 0 ? "20%" : "50%",
-								border: `${3 - i * 0.5}px solid ${primary}`,
-								boxShadow: `0 0 40px ${glow}, inset 0 0 20px ${glow}`,
-								opacity: 0.8 - i * 0.15,
-								transform: `rotate(${frame * (i % 2 === 0 ? 0.3 : -0.2) * (i + 1)}deg)`,
-							}} 
-						/>
-					))}
-					
-					{/* 強い後光レイヤー */}
-					<div style={{
-						position: "absolute",
-						width: 900,
-						height: 900,
-						background: `radial-gradient(circle, ${primary}99 0%, transparent 70%)`,
-						opacity: 0.4 + pulse * 0.2,
-						filter: "blur(60px)",
+					<Img
+						src={
+							liver.saved_to 
+								? staticFile(liver.saved_to)
+								: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
+						}
+						style={{ width: "100%", height: "100%", objectFit: "cover" }}
+					/>
+					<AbsoluteFill style={{ 
+						background: `radial-gradient(circle, transparent 20%, ${primary}66 100%)`,
+						mixBlendMode: "screen"
 					}} />
-
-					<div style={{
-						width: 750,
-						height: 750,
-						borderRadius: "50%",
-						overflow: "hidden",
-						border: `8px solid white`, 
-						boxShadow: `0 0 120px ${primary}, 0 0 40px white`, 
-						position: "relative",
-						backgroundColor: "#000",
-						zIndex: 5,
-					}}>
-						<Img
-							src={
-								liver.saved_to 
-									? staticFile(liver.saved_to)
-									: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
-							}
-							style={{ width: "100%", height: "100%", objectFit: "cover" }}
-						/>
-						<AbsoluteFill style={{ 
-							background: `radial-gradient(circle, transparent 20%, ${primary}66 100%)`,
-							mixBlendMode: "screen"
-						}} />
-					</div>
 				</div>
+			</div>
 
-				{/* ニックネーム - タイプライター */}
-				<h2 style={{ 
-					fontSize: rank === 1 ? 100 : 80, 
-					marginTop: rank === 1 ? 30 : 20, 
-					textShadow: `0 0 30px ${glow}, 0 0 60px ${glow}, 0 0 100px ${primary}`, 
-					fontWeight: 900,
-					color: "#fff",
-					opacity: nameOpacity,
-					transform: `translateY(${nameY}px)`,
-					letterSpacing: "4px",
-					minHeight: "120px",
-				}}>
-					{displayedName}
-				</h2>
-			</AbsoluteFill>
+			{/* ニックネーム - タイプライター */}
+			<h2 style={{ 
+				fontSize: (rank === 1 ? 100 : 80) * (width / 1080), 
+				marginTop: (rank === 1 ? 30 : 20) * (width / 1080), 
+				textShadow: `0 0 ${30 * (width / 1080)}px ${glow}, 0 0 ${60 * (width / 1080)}px ${glow}, 0 0 ${100 * (width / 1080)}px ${primary}`, 
+				fontWeight: 900,
+				color: "#fff",
+				opacity: nameOpacity,
+				transform: `translateY(${nameY * (width / 1080)}px)`,
+				letterSpacing: `${4 * (width / 1080)}px`,
+				minHeight: `${120 * (width / 1080)}px`,
+			}}>
+				{displayedName}
+			</h2>
+		</AbsoluteFill>
 
 			{/* 全体のフラッシュ演出 */}
 			<AbsoluteFill style={{ 

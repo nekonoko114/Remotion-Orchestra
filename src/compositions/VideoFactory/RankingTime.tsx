@@ -22,12 +22,12 @@ const BGM_START_FROM = 0.0; // Seconds
 // Export duration constants for Root.tsx
 // 180 BPM, 30fps -> 1 beat = 10 frames.
 // 8.0s = 240 frames = 24 beats (6 measures)
-export const OPENING_SEC = 8.0;
+export const OPENING_SEC = 6.0;
 export const GRID_BRIDGE_SEC = 8.0;
 // 5.333...s = 160 frames = 16 beats (4 measures)
 export const GROUP_SEC = 160 / 30;
 export const TOP_RANK_SEC = 160 / 30;
-export const ENDING_SEC = 160 / 30;
+export const ENDING_SEC = 2.5;
 export const TRANSITION_FRAMES = 10; // Exactly 1 beat
 
 

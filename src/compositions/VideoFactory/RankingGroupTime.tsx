@@ -20,11 +20,12 @@ export const RankingGroupTime: React.FC<Props> = ({
 	hideRank,
 }) => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, width } = useVideoConfig();
+	const scale = width / 1080;
 	const { pulse } = useBeatValue(BPM);
 
 	// Impact Shake: Just at the moment of landing (around frame 5-15)
-	const shakePower = interpolate(frame, [5, 15], [30, 0], { extrapolateRight: 'clamp' });
+	const shakePower = interpolate(frame, [5, 15], [30 * scale, 0], { extrapolateRight: 'clamp' });
 	const shakeX = (random(`shake-${frame}`) - 0.5) * shakePower;
 
 	// Glow Burst intensity
@@ -53,17 +54,17 @@ export const RankingGroupTime: React.FC<Props> = ({
 			{/* タイトル (タイピング演出・魔法ネオン) */}
 			<div style={{
 				position: "absolute",
-				top: 150,
+				top: 150 * scale,
 				zIndex: 20,
 			}}>
 				<Typewriter 
 					text={title} 
 					speed={3}
 					style={{
-						fontSize: isHighlight ? 120 : 180,
+						fontSize: (isHighlight ? 120 : 180) * scale,
 						fontWeight: "bold",
 						color: "#e0e0ff",
-						textShadow: "0 0 10px #b82bff, 0 0 20px #e066ff, 0 0 40px #b82bff",
+						textShadow: `0 0 ${10 * scale}px #b82bff, 0 0 ${20 * scale}px #e066ff, 0 0 ${40 * scale}px #b82bff`,
 						fontFamily: "sans-serif",
 					}}
 				/>
@@ -74,7 +75,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 				style={{
 					display: "flex",
 					flexDirection: isHighlight ? "column" : "column", // Highlight is basically single item anyway
-					gap: isHighlight ? 40 : 60, // Increase gap for highlight
+					gap: (isHighlight ? 40 : 60) * scale, // Increase gap for highlight
 					width: isHighlight ? "100%" : "90%",
 					top: "50%",
 					left: "50%", // Correctly center horizontally
@@ -94,14 +95,14 @@ export const RankingGroupTime: React.FC<Props> = ({
 					});
 
 					// Deep drop from top (-800px), faster fade-in, slamming down from 2x scale
-					const liverY = interpolate(liverSpr, [0, 1], [-800, 0]);
+					const liverY = interpolate(liverSpr, [0, 1], [-800 * scale, 0]);
 					const liverOpacity = interpolate(liverSpr, [0, 0.3], [0, 1], { extrapolateRight: "clamp" });
 					const liverScale = interpolate(liverSpr, [0, 1], [1.8, 1]);
 
 					// Highlight Sizing
-					const iconSize = isHighlight ? 450 : 150; // iconSize reduced for stack
-					const fontSize = isHighlight ? 100 : 50; // Reduced to 50 for optimal balance
-					const rankWidth = 180;
+					const iconSize = (isHighlight ? 450 : 150) * scale; // iconSize reduced for stack
+					const fontSize = (isHighlight ? 100 : 50) * scale; // Reduced to 50 for optimal balance
+					const rankWidth = 180 * scale;
 
 					// ゆらゆら揺れるアニメーション (Y軸回転)
 					const wobble = Math.sin((frame + index * 10) / 15) * 15; 
@@ -115,17 +116,17 @@ export const RankingGroupTime: React.FC<Props> = ({
 								alignItems: "center",
 								backgroundColor: "rgba(0, 0, 0, 0.6)",
 								width: "100%",
-								padding: isHighlight ? "60px 40px" : "20px 30px",
-								borderRadius: 20,
+								padding: isHighlight ? `${60 * scale}px ${40 * scale}px` : `${20 * scale}px ${30 * scale}px`,
+								borderRadius: 20 * scale,
 								// Entrance (Dropdown) + Wobble Animation
 								transform: `translateY(${liverY}px) scale(${liverScale}) ${liver.rank <= 3 ? "" : `rotateY(${Math.sin(frame / 60) * 5}deg)`}`,
 								opacity: liverOpacity,
 								boxShadow: isHighlight
-									? "0 0 50px rgba(208, 0, 255, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1)"
-									: "0 4px 15px rgba(0,0,0,0.5)",
+									? `0 0 ${50 * scale}px rgba(208, 0, 255, 0.3), inset 0 0 ${20 * scale}px rgba(255, 255, 255, 0.1)`
+									: `0 ${4 * scale}px ${15 * scale}px rgba(0,0,0,0.5)`,
 								border: isHighlight
-									? "3px solid rgba(208, 0, 255, 0.5)"
-									: "1px solid rgba(255,255,255,0.1)",
+									? `${3 * scale}px solid rgba(208, 0, 255, 0.5)`
+									: `${1 * scale}px solid rgba(255,255,255,0.1)`,
 								position: "relative", // Needed for absolute background
 								overflow: "hidden", // Clip the blur
 							}}
@@ -143,7 +144,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 							</AbsoluteFill>
 
 							{/* Dark overlay for readability */}
-							<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.15)" ,border: "10px solid rgba(208, 0, 255, 0.5)", filter: "blur(4px)"}} />
+							<AbsoluteFill style={{ zIndex: -1, backgroundColor: "rgba(0,0,0,0.15)" ,border: `${10 * scale}px solid rgba(208, 0, 255, 0.5)`, filter: `blur(${4 * scale}px)`}} />
 								{/* Row content */}
 								<div
 									style={{
@@ -158,19 +159,19 @@ export const RankingGroupTime: React.FC<Props> = ({
 								>
 									{/* Vertical Stack for Rank and Icon */}
 									{!isHighlight && (
-										<div style={{ 
+											<div style={{ 
 											display: "flex", 
 											flexDirection: "column", 
 											alignItems: "center", 
 											width: rankWidth, 
-											gap: 10,
-											marginRight: 30
+											gap: 10 * scale,
+											marginRight: 30 * scale
 										}}>
 											{/* Rank Number */}
 											<div
 												className="metallic-silver" // Always silver for 10-4
 												style={{
-													fontSize: 70,
+													fontSize: 70 * scale,
 													fontWeight: "bold",
 													textAlign: "center",
 													transform: `rotateY(${wobble}deg)`,
@@ -189,8 +190,8 @@ export const RankingGroupTime: React.FC<Props> = ({
 													height: iconSize,
 													borderRadius: "50%",
 													overflow: "hidden",
-													border: "4px solid white",
-													boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+													border: `${4 * scale}px solid white`,
+													boxShadow: `0 0 ${20 * scale}px rgba(0,0,0,0.5)`,
 													flexShrink: 0,
 													backgroundColor: "#ccc",
 													
@@ -206,7 +207,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 														width: "100%",
 														height: "100%",
 														objectFit: "cover",
-														border: "4px solid white",
+														border: `${4 * scale}px solid white`,
 													}}
 												/>
 											</div>
@@ -221,9 +222,9 @@ export const RankingGroupTime: React.FC<Props> = ({
 												<div
 													className="metallic-purple"
 													style={{
-														fontSize: 120,
+														fontSize: 120 * scale,
 														fontWeight: "bold",
-														marginBottom: 30,
+														marginBottom: 30 * scale,
 														textAlign: "center",
 														transform: `rotateY(${wobble}deg)`,
 														transformStyle: "preserve-3d",
@@ -241,9 +242,9 @@ export const RankingGroupTime: React.FC<Props> = ({
 													height: iconSize,
 													borderRadius: "50%",
 													overflow: "hidden",
-													marginBottom: 30,
-													border: "8px solid white",
-													boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+													marginBottom: 30 * scale,
+													border: `${8 * scale}px solid white`,
+													boxShadow: `0 0 ${20 * scale}px rgba(0,0,0,0.5)`,
 													flexShrink: 0,
 													backgroundColor: "#ccc",
 												}}
@@ -273,7 +274,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 												fontWeight: "bold",
 												color: "white",
 												flex: 1,
-												textShadow: "0 2px 4px rgba(0,0,0,0.8)",
+												textShadow: `0 ${2 * scale}px ${4 * scale}px rgba(0,0,0,0.8)`,
 												fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
 												lineHeight: 1.1,
 												textAlign: "center",
@@ -294,8 +295,8 @@ export const RankingGroupTime: React.FC<Props> = ({
 										color: "white",
 										width: "100%",
 										textAlign: "center",
-										marginTop: 20,
-										textShadow: "0 4px 10px rgba(0,0,0,0.8)",
+										marginTop: 20 * scale,
+										textShadow: `0 ${4 * scale}px ${10 * scale}px rgba(0,0,0,0.8)`,
 										fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
 										lineHeight: 1.1,
 										position: "relative",

@@ -16,14 +16,16 @@ export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
     // Subtle breathing for the glow
     const breath = Math.sin(frame * 0.05) * 0.2 + 1;
 
+    const scale = width / 1080;
+
     // Spark animation logic
-    const inset = 10;
+    const inset = 10 * scale;
     const innerWidth = width - inset * 2;
     const innerHeight = height - inset * 2;
     const perimeter = (innerWidth + innerHeight) * 2;
     
-    // Speed: 1 cycle every 3 seconds (approx 90 frames at 30fps)
-    const speed = 15; // pixels per frame approx
+    // Speed: scale speed too
+    const speed = 15 * scale; 
     const progress = (frame * speed) % perimeter;
     
     let sparkX = inset;
@@ -54,32 +56,32 @@ export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
                 style={{
                     position: "absolute",
                     inset: inset,
-                    border: `4px solid ${color}`,
+                    border: `${4 * scale}px solid ${color}`,
                     boxShadow: `
-                        0 0 20px ${glowColor}, 
-                        inset 0 0 20px ${glowColor},
-                        0 0 40px ${color},
-                        inset 0 0 40px ${color}
+                        0 0 ${20 * scale}px ${glowColor}, 
+                        inset 0 0 ${20 * scale}px ${glowColor},
+                        0 0 ${40 * scale}px ${color},
+                        inset 0 0 ${40 * scale}px ${color}
                     `,
                     filter: `brightness(${breath})`,
                     opacity: 0.9
                 }}
             />
 
-            {/* Moving Cyan Spark */}
+            {/* Moving Purple Spark */}
             <div
                 style={{
                     position: "absolute",
-                    left: sparkX - 30, // Center the 30px spark
-                    top: sparkY - 30,
-                    width: 60,
-                    height: 60,
-                    background: "#00ccff",
+                    left: sparkX - 60 * scale, 
+                    top: sparkY - 60 * scale,
+                    width: 120 * scale,
+                    height: 120 * scale,
+                    background: color,
                     borderRadius: "50%",
                     boxShadow: `
-                        0 0 30px #00ccff,
-                        0 0 60px #d000ff,
-                        0 0 100px #d000ff
+                        0 0 ${60 * scale}px ${color},
+                        0 0 ${120 * scale}px ${color},
+                        0 0 ${200 * scale}px ${color}
                     `,
                     transform: `scale(${1 + pulse * 0.3})`,
                     zIndex: 10,
@@ -90,13 +92,13 @@ export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
             <div
                 style={{
                     position: "absolute",
-                    left: sparkX - 10,
-                    top: sparkY - 10,
-                    width: 20,
-                    height: 20,
+                    left: sparkX - 10 * scale,
+                    top: sparkY - 10 * scale,
+                    width: 20 * scale,
+                    height: 20 * scale,
                     background: "white",
                     borderRadius: "50%",
-                    filter: "blur(5px)",
+                    filter: `blur(${5 * scale}px)`,
                     zIndex: 11,
                 }}
             />
@@ -106,10 +108,12 @@ export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
 
 export const LensFlare: React.FC<{ color: string }> = ({ color }) => {
     const frame = useCurrentFrame();
-    
+    const { width } = useVideoConfig();
+    const scale = width / 1080;
+
     // Movement of light source
-    const moveX = Math.sin(frame * 0.01) * 5;
-    const moveY = Math.cos(frame * 0.015) * 5;
+    const moveX = Math.sin(frame * 0.01) * 5 * scale;
+    const moveY = Math.cos(frame * 0.015) * 5 * scale;
 
     return (
         <AbsoluteFill style={{ pointerEvents: "none", zIndex: 140, mixBlendMode: "screen" }}>
@@ -119,10 +123,10 @@ export const LensFlare: React.FC<{ color: string }> = ({ color }) => {
                 top: "15%",
                 left: "15%",
                 transform: `translate(${moveX}px, ${moveY}px)`,
-                width: 600,
-                height: 600,
+                width: 600 * scale,
+                height: 600 * scale,
                 background: `radial-gradient(circle, #FFFFFF 0%, ${color} 20%, transparent 60%)`,
-                filter: "blur(40px)",
+                filter: `blur(${40 * scale}px)`,
                 opacity: 0.8
             }} />
             
@@ -133,9 +137,9 @@ export const LensFlare: React.FC<{ color: string }> = ({ color }) => {
                 left: "50%",
                 transform: `translate(-50%, ${moveY}px)`,
                 width: "120%",
-                height: 4,
+                height: 4 * scale,
                 background: `linear-gradient(90deg, transparent 0%, ${color} 50%, transparent 100%)`,
-                filter: "blur(2px)",
+                filter: `blur(${2 * scale}px)`,
                 opacity: 0.6
             }} />
             
@@ -145,20 +149,20 @@ export const LensFlare: React.FC<{ color: string }> = ({ color }) => {
                 top: "40%",
                 left: "40%",
                 transform: `translate(${moveX * -2}px, ${moveY * -2}px)`,
-                width: 50,
-                height: 50,
+                width: 50 * scale,
+                height: 50 * scale,
                 borderRadius: "50%",
                 background: "rgba(255, 255, 255, 0.1)",
-                border: `1px solid ${color}`,
-                filter: "blur(2px)"
+                border: `${1 * scale}px solid ${color}`,
+                filter: `blur(${2 * scale}px)`
             }} />
              <div style={{
                 position: "absolute",
                 bottom: "30%",
                 right: "30%",
                 transform: `translate(${moveX * -4}px, ${moveY * -4}px)`,
-                width: 100,
-                height: 100,
+                width: 100 * scale,
+                height: 100 * scale,
                 borderRadius: "50%",
                 background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
                 opacity: 0.2

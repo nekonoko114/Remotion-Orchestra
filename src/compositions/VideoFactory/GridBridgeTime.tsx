@@ -28,7 +28,7 @@ const BPM = 160;
 
 export const GridBridgeTime: React.FC = () => {
 	const frame = useCurrentFrame();
-	const { fps } = useVideoConfig();
+	const { fps, width } = useVideoConfig();
 
 	// 1. Timing setup based on BPM 160
 	const beatFrames = (60 / BPM) * fps; // 11.25 frames per beat
@@ -71,7 +71,10 @@ export const GridBridgeTime: React.FC = () => {
 		}));
 
 	// Combine them. To make the grid look mixed, we can interleave them or just append.
-	const combinedItems = [...top10Items, ...otherUsers];
+	// 均一にするため、3の倍数に切り捨てます
+	const combinedItemsRaw = [...top10Items, ...otherUsers];
+	const uniformCount = Math.floor(combinedItemsRaw.length / 3) * 3;
+	const combinedItems = combinedItemsRaw.slice(0, uniformCount);
 
 	// Split into 3 columns instead of rows
 	const columns: any[][] = [[], [], []];
@@ -97,15 +100,15 @@ export const GridBridgeTime: React.FC = () => {
 
 		// Move towards middle column (colIndex 1)
 		let offsetX = 0;
-		if (colIndex === 0) offsetX = gatherProgress * 300;
-		if (colIndex === 2) offsetX = -gatherProgress * 300;
+		if (colIndex === 0) offsetX = gatherProgress * 300 * (width / 1080);
+		if (colIndex === 2) offsetX = -gatherProgress * 300 * (width / 1080);
 		
 		return { x: offsetX, y: 0 };
 	};
 
-	const columnWidth = 1080 / 3; 
-	const itemHeight = 500; 
-	const gap = 20;
+	const columnWidth = width / 3; 
+	const itemHeight = 500 * (width / 1080); 
+	const gap = 20 * (width / 1080);
 
 	return (
 		<AbsoluteFill style={{ backgroundColor: "#000", overflow: "hidden" }}>
@@ -171,16 +174,16 @@ export const GridBridgeTime: React.FC = () => {
 									<div
 										key={rowIndex}
 										style={{
-											width: columnWidth - 40,
+											width: columnWidth - 40 * (width / 1080),
 											height: itemHeight,
 											position: "relative",
 											transform: `translate(${ox}px, 0)`,
 											opacity,
-											borderRadius: 20,
+											borderRadius: 20 * (width / 1080),
 											flexShrink: 0, 
 											overflow: "hidden",
-											border: isTop3 ? "12px solid #FFD700" : "4px solid #444",
-											boxShadow: isTop3 ? "0 0 50px rgba(255, 215, 0, 0.8)" : "none",
+											border: isTop3 ? `${12 * (width / 1080)}px solid #FFD700` : `${4 * (width / 1080)}px solid #444`,
+											boxShadow: isTop3 ? `0 0 ${50 * (width / 1080)}px rgba(255, 215, 0, 0.8)` : "none",
 											backgroundColor: "#111", // Placeholder for when image takes time to load
 										}}
 									>
@@ -204,13 +207,13 @@ export const GridBridgeTime: React.FC = () => {
 										{!isTop3 && (
 											<div style={{
 												position: "absolute",
-												bottom: 15,
-												left: 15,
-												right: 15,
+												bottom: 15 * (width / 1080),
+												left: 15 * (width / 1080),
+												right: 15 * (width / 1080),
 												color: "white",
-												fontSize: 30,
+												fontSize: 30 * (width / 1080),
 												fontWeight: "bold",
-												textShadow: "0 2px 5px rgba(0,0,0,1)",
+												textShadow: `0 ${2 * (width / 1080)}px ${5 * (width / 1080)}px rgba(0,0,0,1)`,
 												whiteSpace: "nowrap",
 												overflow: "hidden",
 												textOverflow: "ellipsis",
@@ -221,15 +224,15 @@ export const GridBridgeTime: React.FC = () => {
 										{isTop3 && (
 											<div style={{
 												position: "absolute",
-												bottom: 20,
+												bottom: 20 * (width / 1080),
 												left: 0,
 												right: 0,
 												textAlign: "center",
 												backgroundColor: "rgba(0,0,0,0.7)",
 												color: "#FFD700",
-												fontSize: 60,
+												fontSize: 60 * (width / 1080),
 												fontWeight: "bold",
-												padding: "10px 0"
+												padding: `${10 * (width / 1080)}px 0`
 											}}>
 												{item.rank}位
 											</div>
