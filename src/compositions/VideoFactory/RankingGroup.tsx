@@ -15,6 +15,17 @@ type Props = {
 	livers: Liver[];
 };
 
+const getAvatarPosition = (rank: number) => {
+	// Diamond Ranking specific adjustments
+	if (rank === 10) return "center 20%"; // だぁ～み
+	if (rank === 8) return "center 25%";  // やらかしタロー
+	if (rank === 7) return "center 20%";  // yukiんこ
+	if (rank === 6) return "center 15%";  // ユージン
+	if (rank === 5) return "center 10%";  // 一条美月 (アイコンとの重なりを避ける)
+	if (rank === 4) return "center 15%";  // 限界突破まみ
+	return "center";
+};
+
 export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
@@ -130,13 +141,18 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 												width: "100%", 
 												height: "100%", 
 												objectFit: "cover", 
-												objectPosition: liver.rank === 6 ? "center 15%" : "center",
+												objectPosition: getAvatarPosition(liver.rank),
 											}}
 										/>
 									) : (
 										<Img
 											src={liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url)}
-											style={{ width: "100%", height: "100%", objectFit: "cover" }}
+											style={{ 
+												width: "100%", 
+												height: "100%", 
+												objectFit: "cover",
+												objectPosition: getAvatarPosition(liver.rank),
+											}}
 										/>
 									)}
 								</AbsoluteFill>
@@ -179,8 +195,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 												width: "100%", 
 												height: "100%", 
 												objectFit: "cover",
-												// Focus on face for Rank 6
-												objectPosition: liver.rank === 6 ? "center 15%" : "center",
+												objectPosition: getAvatarPosition(liver.rank),
 												transform: liver.rank === 6 ? "scale(1.1)" : "none"
 											}}
 										/>

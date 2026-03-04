@@ -13,6 +13,15 @@ type Props = {
 
 const BPM = 160;
 
+const getAvatarPosition = (rank: number) => {
+	// Stream Time Ranking specific adjustments
+	if (rank === 9) return "center 15%"; // 限界突破まみ
+	if (rank === 8) return "center 20%"; // yukiんこ
+	if (rank === 7) return "center 20%"; // 小悪魔
+	if (rank === 5) return "center 15%"; // ジンヤ (顔を縦に調整)
+	return "center";
+};
+
 export const RankingGroupTime: React.FC<Props> = ({
 	title,
 	livers,
@@ -139,7 +148,12 @@ export const RankingGroupTime: React.FC<Props> = ({
 											? staticFile(liver.saved_to)
 											: (liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url))
 									}
-									style={{ width: "100%", height: "100%", objectFit: "cover" }}
+									style={{ 
+										width: "100%", 
+										height: "100%", 
+										objectFit: "cover",
+										objectPosition: getAvatarPosition(liver.rank),
+									}}
 								/>
 							</AbsoluteFill>
 
@@ -207,6 +221,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 														width: "100%",
 														height: "100%",
 														objectFit: "cover",
+														objectPosition: getAvatarPosition(liver.rank),
 														border: `${4 * scale}px solid white`,
 													}}
 												/>
@@ -259,6 +274,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 														width: "100%",
 														height: "100%",
 														objectFit: "cover",
+														objectPosition: getAvatarPosition(liver.rank),
 													}}
 												/>
 											</div>
