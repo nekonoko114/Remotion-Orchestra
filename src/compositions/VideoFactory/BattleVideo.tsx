@@ -4,7 +4,7 @@ import {
 	Audio,
 	Img,
 	Sequence,
-	Video,
+	OffthreadVideo,
 	interpolate,
 	random,
 	staticFile,
@@ -238,7 +238,7 @@ export const BattleVideo: React.FC = () => {
 								{/* AI Video Background Layer */}
 								{generated_assets.video && (
 									<AbsoluteFill style={{ zIndex: 0, opacity: 0.6 }}>
-										<Video
+										<OffthreadVideo
 											src={staticFile(cleanPath(generated_assets.video))}
 											style={{
 												width: "100%",

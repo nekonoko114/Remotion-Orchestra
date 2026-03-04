@@ -3,7 +3,7 @@ import {
 	interpolate,
 	random,
 	useCurrentFrame,
-	Video,
+	OffthreadVideo,
 	staticFile,
 } from "remotion";
 import { ImpactEffect } from "./ImpactEffect";
@@ -60,7 +60,7 @@ export const OpeningTitle: React.FC = () => {
 		>
 			{/* BACKGROUND LAYER - Diamond Month Video */}
 			<AbsoluteFill style={{ zIndex: -1 }}>
-				<Video
+				<OffthreadVideo
 					src={staticFile("assets/backgrounds/fire-ulf.mp4")}
 					style={{ 
 						width: "100%", 
@@ -144,19 +144,15 @@ export const OpeningTitle: React.FC = () => {
 					<div style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
 						<ImpactEffect delay={45} intensity="soft">
 							<div style={getFocusStyle(50)}>
-								<h2
-									style={{
-										color: "#FFF",
-										fontSize: "100px",
-										fontWeight: "900",
-										margin: 0,
-										letterSpacing: "0.5em",
-										textShadow: "0 5px 15px rgba(0,0,0,1)",
-										opacity: 0.8,
-									}}
-								>
-									2026年2月
-								</h2>
+								<div style={{ transform: "scale(0.8)" }}>
+									<NeonGlowText 
+										text="2026年2月" 
+										fontSize={120} 
+										color="#FFFFFF"
+										glowColor="rgba(255,255,255,0.5)"
+										delay={50}
+									/>
+								</div>
 							</div>
 						</ImpactEffect>
 

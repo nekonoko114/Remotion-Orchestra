@@ -5,7 +5,7 @@ import {
 	staticFile,
 	useCurrentFrame,
 	useVideoConfig,
-	Video,
+	OffthreadVideo,
 } from "remotion";
 
 export const EndingLogoTime: React.FC = () => {
@@ -46,9 +46,8 @@ export const EndingLogoTime: React.FC = () => {
 				
 				{/* Middle: purple_loop.mp4 (Luminance Key via Screen Blend) */}
 				<AbsoluteFill>
-					<Video 
+					<OffthreadVideo 
 						src={staticFile("assets/backgrounds/purple_loop.mp4")}
-						loop
 						style={{
 							width: "100%",
 							height: "100%",

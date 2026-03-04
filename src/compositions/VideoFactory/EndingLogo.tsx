@@ -6,8 +6,8 @@ import {
 	staticFile,
 	useCurrentFrame,
 	useVideoConfig,
+	OffthreadVideo,
 } from "remotion";
-import { Video } from "remotion";
 
 export const EndingLogo: React.FC = () => {
 	const frame = useCurrentFrame();
@@ -50,7 +50,7 @@ export const EndingLogo: React.FC = () => {
 
 			{/* MIDDLE LAYER - RED LOOP with Luminance Key (Screen) */}
 			<AbsoluteFill>
-				<Video
+				<OffthreadVideo
 					src={staticFile("assets/backgrounds/red_loop.mp4")}
 					style={{
 						width: "100%",
@@ -60,7 +60,6 @@ export const EndingLogo: React.FC = () => {
 						filter: "contrast(1.5) brightness(0.8)", // 黒をより沈ませて透過度を上げる
 					}}
 					muted
-					loop
 				/>
 			</AbsoluteFill>
 

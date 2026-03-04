@@ -3,7 +3,7 @@ import {
 	AbsoluteFill,
 	random,
 	useCurrentFrame,
-	Video,
+	OffthreadVideo,
 	staticFile,
 	interpolate,
 	useVideoConfig,
@@ -78,7 +78,6 @@ export const OpeningTitleTime: React.FC = () => {
     const glitchOffset = 0;
 
     // Timing Constants
-    const BPM = 160;
     const transitionFrame = 180; // 6 seconds (White flash timing)
 
     // BACKGROUND WIGGLE & FIXED ZOOM
@@ -107,7 +106,7 @@ export const OpeningTitleTime: React.FC = () => {
                 zIndex: 0,
                 transform: `scale(${videoScale}) translate(${wiggleX}px, ${wiggleY}px)`,
             }}>
-                <Video 
+                <OffthreadVideo 
                     src={OPENING_VIDEO}
                     style={{
                         width: "100%",
@@ -116,7 +115,6 @@ export const OpeningTitleTime: React.FC = () => {
                         filter: "brightness(1.2) contrast(1.1) saturate(1.1)",
                     }}
                     muted
-                    loop
                 />
                 {/* Overlay to ensure text readability - Made much lighter */}
                 <AbsoluteFill 

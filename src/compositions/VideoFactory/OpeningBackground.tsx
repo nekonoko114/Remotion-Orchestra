@@ -1,10 +1,10 @@
-import { AbsoluteFill, Video, staticFile } from "remotion";
+import { AbsoluteFill, OffthreadVideo, staticFile } from "remotion";
 import { LensFlare } from "../../components/effects/LensFlare";
 
 export const OpeningBackground: React.FC = () => {
 	return (
 		<AbsoluteFill style={{ zIndex: -1 }}>
-			<Video
+			<OffthreadVideo
 				src={staticFile("assets/backgrounds/red_loop.mp4")}
 				style={{
 					width: "100%",
@@ -14,7 +14,6 @@ export const OpeningBackground: React.FC = () => {
 					transform: "scale(1.5)",
 				}}
 				muted
-				loop
 			/>
 
 			{/* Effect 1: Cinematic Lens Flare (Gold tones for dark knight theme) */}
