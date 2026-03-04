@@ -9,7 +9,7 @@ import {
 
 type Props = {
 	color?: string; // Optional color tint (e.g. Gold)
-	intensity?: "normal" | "high"; // "high" for top ranks
+	intensity?: "normal" | "high" | "soft"; // "high" for top ranks, "soft" for subtle opening
 	beatPulse?: number; // 0.0 to 1.0 pulse from BGM
 	delay?: number;
 	children?: React.ReactNode;
@@ -32,13 +32,14 @@ export const ImpactEffect: React.FC<Props> = ({
 	);
 
 	// 1. Flash Effect
-	const flashOpacity = interpolate(relativeFrame, [0, 5, 20], [0.8, 1, 0], {
+	const baseFlash = intensity === "soft" ? 0.4 : 0.8;
+	const flashOpacity = interpolate(relativeFrame, [0, 5, 20], [baseFlash, 1 * baseFlash, 0], {
 		extrapolateLeft: "clamp",
 		extrapolateRight: "clamp",
 	});
 
 	// 2. Shockwave Rings
-	const rings = intensity === "high" ? [0, 5, 10] : [0];
+	const rings = intensity === "high" ? [0, 5, 10] : intensity === "soft" ? [] : [0];
 
 	return (
 		<>

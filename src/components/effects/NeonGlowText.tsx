@@ -23,41 +23,8 @@ export const NeonGlowText: React.FC<NeonGlowTextProps> = ({
 	const frame = useCurrentFrame();
 	const { fps } = useVideoConfig();
 
-	// 登場時のアニメーション (scale)
-	const spr = spring({
-		frame: frame - delay,
-		fps,
-		config: { damping: 12, stiffness: 100 },
-	});
-
-	const scale = interpolate(spr, [0, 1], [4, 1]);
-	const entranceOpacity = interpolate(spr, [0, 0.3], [0, 1]);
-
-	// ネオンの点滅をシミュレートする不透明度の計算
-	const flickerOpacity = flicker
-		? interpolate(
-				Math.sin(frame * 0.5) * Math.random(),
-				[-1, 0.8, 1],
-				[0.9, 0.95, 1], 
-				{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-			)
-		: 1;
-
-	const bigFlicker = flicker && Math.random() > 0.98 ? 0.3 : 1;
-
+	const characters = text.split("");
 	const finalGlowColor = glowColor || color;
-
-	// 重厚なネオン感を出すための多層シャドウ
-	const textShadow = `
-        0 0 5px #fff,
-        0 0 10px #fff,
-        0 0 20px ${finalGlowColor},
-        0 0 40px ${finalGlowColor},
-        0 0 80px ${finalGlowColor},
-        0 0 90px ${finalGlowColor},
-        0 0 100px ${finalGlowColor},
-        0 0 150px ${finalGlowColor}
-    `;
 
 	return (
 		<div
@@ -65,26 +32,111 @@ export const NeonGlowText: React.FC<NeonGlowTextProps> = ({
 				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
-				opacity: entranceOpacity * flickerOpacity * bigFlicker,
-				transform: `scale(${scale})`,
+				flexWrap: "nowrap",
 				...style,
 			}}
 		>
-			<h1
-				style={{
-					color: color,
-					fontSize,
-					fontFamily: "Arial, sans-serif",
-					fontWeight: 900,
-					textAlign: "center",
-					textTransform: "uppercase",
-					textShadow,
-					margin: 0,
-					lineHeight: 1.1,
-				}}
-			>
-				{text}
-			</h1>
+			{characters.map((char, i) => {
+				const charDelay = delay + i * 2; // 2 frames stagger
+				const relativeFrame = frame - charDelay;
+
+				// 登場時のアニメーション (spring)
+				const spr = spring({
+					frame: relativeFrame,
+					fps,
+					config: { damping: 12, stiffness: 100 },
+				});
+
+				const scale = interpolate(spr, [0, 1], [3, 1]);
+				const entranceOpacity = interpolate(spr, [0, 0.4], [0, 1]);
+
+				// RGB Split / Chromatic Aberration Effect (Entrance Glitch)
+				const glitchOffset = interpolate(relativeFrame, [0, 10], [10, 0], {
+					extrapolateRight: "clamp",
+				});
+				const glitchOpacity = interpolate(relativeFrame, [0, 5, 10], [0.8, 1, 0], {
+					extrapolateRight: "clamp",
+				});
+
+				// ネオンの点滅
+				const flickerOpacity = flicker
+					? interpolate(
+							Math.sin(frame * 0.5 + i) * Math.random(),
+							[-1, 0.8, 1],
+							[0.9, 0.95, 1], 
+							{ extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+						)
+					: 1;
+
+				const bigFlicker = flicker && Math.random() > 0.98 ? 0.3 : 1;
+
+				// 重厚なネオン感を出すための多層シャドウ
+				const baseShadow = `
+					0 0 5px #fff,
+					0 0 10px #fff,
+					0 0 20px ${finalGlowColor},
+					0 0 40px ${finalGlowColor},
+					0 0 80px ${finalGlowColor}
+				`;
+
+				return (
+					<div
+						key={i}
+						style={{
+							position: "relative",
+							display: "inline-block",
+							opacity: entranceOpacity * flickerOpacity * bigFlicker,
+							transform: `scale(${scale})`,
+							margin: i === 0 ? 0 : "0 2px",
+						}}
+					>
+						{/* RGB Split Layers (Experimental Glitch) */}
+						{relativeFrame >= 0 && relativeFrame < 10 && (
+							<>
+								<div style={{
+									position: "absolute",
+									top: 0,
+									left: -glitchOffset,
+									color: "#ff0000",
+									opacity: glitchOpacity * 0.5,
+									zIndex: -1,
+									fontSize,
+									fontWeight: 900,
+									fontFamily: "Arial, sans-serif",
+								}}>{char}</div>
+								<div style={{
+									position: "absolute",
+									top: 0,
+									left: glitchOffset,
+									color: "#0000ff",
+									opacity: glitchOpacity * 0.5,
+									zIndex: -1,
+									fontSize,
+									fontWeight: 900,
+									fontFamily: "Arial, sans-serif",
+								}}>{char}</div>
+							</>
+						)}
+
+						<h1
+							style={{
+								color: color,
+								fontSize,
+								fontFamily: "Arial, sans-serif",
+								fontWeight: 900,
+								textAlign: "center",
+								textTransform: "uppercase",
+								textShadow: baseShadow,
+								margin: 0,
+								lineHeight: 1.1,
+								whiteSpace: "pre",
+							}}
+						>
+							{char === " " ? "\u00A0" : char}
+						</h1>
+					</div>
+				);
+			})}
 		</div>
 	);
 };

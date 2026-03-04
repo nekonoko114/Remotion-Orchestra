@@ -1,92 +1,82 @@
 [
   {
-    "rank": 1,
-    "username": "donbeikun9999",
-    "image_url": "https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/ae4e6bf3353c0b5b6d360929f1d4ad06~tplv-tiktokx-cropcenter:1080:1080.jpeg",
-    "saved_to": "assets/images-01/donbeikun9999.jpeg",
-    "ok": true,
+    "id": "donbeikun9999",
     "nickname": "☠️やらかしタロー☠️",
-    "signature": "仲間が居ることに感謝"
+    "score": 1000000,
+    "image_url": "assets/avatars/donbeikun9999.jpg",
+    "rank": 1,
+    "saved_to": ""
   },
   {
+    "id": "2161646824",
+    "nickname": "まゆみ♥️💗💛",
+    "score": 900000,
+    "image_url": "assets/avatars/2161646824.jpg",
     "rank": 2,
-    "username": "ceo1014",
-    "image_url": "https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/15f98967642e9226aae4524a00906240~tplv-tiktokx-cropcenter:1080:1080.jpeg",
-    "saved_to": "assets/images-01/ceo1014.jpeg",
-    "ok": true,
+    "saved_to": ""
+  },
+  {
+    "id": "ceo1014",
     "nickname": "🦁CEO🦁🎗️",
-    "signature": "ＪＯＬ所属。広島県福山市！シンファ！配信時間①6:30②18:15③21:00前後〜定期配信中。日月は不定期です。⭐️似顔絵描きます！アイコンフレーム作成！配信用静止画作成！"
-  },
-  {
+    "score": 850000,
+    "image_url": "assets/avatars/ceo1014.jpg",
     "rank": 3,
-    "username": "naoko2373",
-    "image_url": "assets/images-01/naoko2373.jpg",
-    "saved_to": "assets/images-01/naoko2373.jpg",
-    "ok": true,
-    "nickname": "オカンnaoko🐞🐬🎽🐈️✨️",
-    "signature": null
+    "saved_to": ""
   },
   {
-    "rank": 4,
-    "username": "t.o.p_u_jin_",
-    "image_url": "https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/4d46715338b1e9f459641d8ba10279a8~tplv-tiktokx-cropcenter:1080:1080.jpeg",
-    "saved_to": "assets/images-01/t.o.p_u_jin_.jpeg",
-    "ok": true,
+    "id": "t.o.p_u_jin_",
     "nickname": "🔆≒ユージン≒🔆",
-    "signature": "【J.O.L】 所属　\n画像・実写配信　山形の人💁‍♂️\n雑談×バトル　福山の声マネ(要望あれば)🙆‍♂️\n【DM返信❌】\n⏬お得なwebチャージ⏬"
+    "score": 800000,
+    "image_url": "assets/images-01/t.o.p_u_jin_.jpeg",
+    "rank": 4,
+    "saved_to": "assets/images-01/t.o.p_u_jin_.jpeg"
   },
   {
+    "id": "ritu_1115",
+    "nickname": "ジンヤ",
+    "score": 750000,
+    "image_url": "assets/avatars/ritu_1115.jpg",
     "rank": 5,
-    "username": "ikkurrex7ja",
-    "image_url": "https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/4251338d3672d2bd7e22ac6cdc7f709c~tplv-tiktokx-cropcenter:1080:1080.jpeg",
-    "saved_to": "assets/images-01/ikkurrex7ja.jpeg",
-    "ok": true,
-    "nickname": "⛩️奏良『そら』",
-    "signature": "平日は18時半以降から1時間くらいの配信、土日は朝9時から17時くらいまで配信してます。\n北海道から元気にお届け٩(ˊᗜˋ*)و\n\n宜しくお願いいたしますm(_ _)m"
+    "saved_to": ""
   },
   {
-    "rank": 6,
-    "username": "ritu_1115",
-    "image_url": "video-factory/images/logo/logo.png",
-    "saved_to": "video-factory/images/logo/logo.png",
-    "ok": true,
-    "nickname": "じんや",
-    "signature": "kyoto🇯🇵×🇰🇷"
-  },
-  {
-    "rank": 7,
-    "username": "l5332541",
-    "image_url": "https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/7b71c308bb60c061261c86a1c7a7fa7e~tplv-tiktokx-cropcenter:1080:1080.jpeg",
-    "saved_to": "assets/images-01/l5332541.jpeg",
-    "ok": true,
+    "id": "l5332541",
     "nickname": "🌸さくら🌸",
-    "signature": "初めまして🔰さくらです🙇‍♀️配信時間朝と夕方たまにゲリラ夜です🤭マイペースで配信してます🥰雑談andバトルです🥰DMは控えさせていただきます🙇‍♀️ 2025 進撃バトル２０位👏"
+    "score": 700000,
+    "image_url": "assets/avatars/l5332541.jpg",
+    "rank": 6,
+    "saved_to": ""
   },
   {
+    "id": "koakumachiyan",
+    "nickname": "小悪魔",
+    "score": 650000,
+    "image_url": "assets/avatars/koakumachiyan_new.png",
+    "rank": 7,
+    "saved_to": ""
+  },
+  {
+    "id": "yyuukkii0402",
+    "nickname": "yukiんこ😈",
+    "score": 600000,
+    "image_url": "assets/avatars/yyuukkii0402.jpg",
     "rank": 8,
-    "username": "xx.3kidsmam.xx",
-    "image_url": "https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/dbd5cacf133057d480c11387641b7d88~tplv-tiktokx-cropcenter:1080:1080.jpeg",
-    "saved_to": "assets/images-01/xx.3kidsmam.xx.jpeg",
-    "ok": true,
-    "nickname": "3児の母ゆき❄️💚",
-    "signature": "推しマ→❄️💚【雑談⚔️バトル枠です】\n中3🥊小2🦖年長👸3人シングルマザー\n💊鬱.ASD.ADHD.パニック障害ご了承下さい\n✨発達支援教育士取得\nスッピン界隈"
+    "saved_to": ""
   },
   {
-    "rank": 9,
-    "username": "mrm0115",
-    "image_url": "https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/cc65ad99d03bb320d43fe6de43f688ca~tplv-tiktokx-cropcenter:1080:1080.jpeg",
-    "saved_to": "assets/images-01/mrm0115.jpeg",
-    "ok": true,
+    "id": "mrm0115",
     "nickname": "限界突破まみ🎽",
-    "signature": "岡山県🍑エンタメバトル枠⚔️2児のシンママです❤朝10時30頃から配信しています🫶遊びに来て下さい😊昨年新人王ゴールド部門50位入賞❣️事務所イベ、バトル賞、JOL賞受賞🏅"
+    "score": 550000,
+    "image_url": "assets/avatars/mrm0115.jpg",
+    "rank": 9,
+    "saved_to": ""
   },
   {
+    "id": "haaaachan0927",
+    "nickname": "はーちゃんママ🌺",
+    "score": 500000,
+    "image_url": "assets/avatars/haaaachan0927.jpg",
     "rank": 10,
-    "username": "user9577863834239",
-    "image_url": "https://p16-sign-sg.tiktokcdn.com/tos-alisg-avt-0068/f9c2726ce57749ebb0e934e4548d5224~tplv-tiktokx-cropcenter:1080:1080.jpeg",
-    "saved_to": "assets/images-01/user9577863834239.jpeg",
-    "ok": true,
-    "nickname": "マッサ画伯です👍",
-    "signature": "鬱病とADHDがあります。看護師です。休職していましたが今はパートで働いています。"
+    "saved_to": ""
   }
 ]
