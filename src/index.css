@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -12,22 +12,22 @@ body {
 }
 
 @font-face {
-  font-family: 'Zen Maru Gothic Black';
-  src: url('./fonts/ZenMaruGothic-Black.ttf') format('truetype');
+  font-family: "Zen Maru Gothic Black";
+  src: url("./fonts/ZenMaruGothic-Black.ttf") format("truetype");
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Alumni Sans';
-  src: url('./fonts/AlumniSans-BlackItalic.ttf') format('truetype');
+  font-family: "Alumni Sans";
+  src: url("./fonts/AlumniSans-BlackItalic.ttf") format("truetype");
   font-weight: 900;
   font-style: italic;
 }
 
 @font-face {
-  font-family: '851MkPOP_101';
-  src: url('./fonts/851MkPOP_101.ttf') format('truetype');
+  font-family: "851MkPOP_101";
+  src: url("./fonts/851MkPOP_101.ttf") format("truetype");
 }
 /* 3D Metallic Gold Effect (Hyper Saturated & Neon) */
 .metallic-gold {
@@ -187,11 +187,11 @@ body {
 .text-sparkle-cute {
   background: linear-gradient(
     110deg,
-    #9b5de5 20%, /* Purple */
-    #e0ccff 30%, /* Light Purple */
-    #ffffff 45%, /* White Glint */
-    #b388eb 60%, /* Medium Purple */
-    #9b5de5 80%  /* Purple */
+    #9b5de5 20% /* Purple */,
+    #e0ccff 30% /* Light Purple */,
+    #ffffff 45% /* White Glint */,
+    #b388eb 60% /* Medium Purple */,
+    #9b5de5 80% /* Purple */
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -199,8 +199,8 @@ body {
   color: transparent;
 
   /* Intense Sparkle Glow (White & Pink for Contrast) */
+  /* Inner crisp highlight */
   text-shadow:
-    /* Inner crisp highlight */
     0px 0px 2px rgba(255, 255, 255, 1.0),
     /* Soft bright glow */
     0px 0px 10px rgba(255, 200, 255, 0.9),

@@ -1,1 +1,4120 @@
-{"text": "\u4eba\u6df7\u307f\u3092\u907f\u3051\u308b\u307f\u305f\u3044\u306b\u5c11\u3057\u3060\u3051\u6b69\u5e45\u3092\u843d\u3068\u3059\u6d3e\u624b\u306a\u8a00\u8449\u306f\u9078\u3070\u306a\u3044\u3067\u3082\u76ee\u7dda\u306f\u3061\u3083\u3093\u3068\u5408\u3063\u3066\u308b\u5197\u8ac7\u306b\u9003\u3052\u305f\u6c88\u9ed9\u306e\u5f8c\u8ab0\u306b\u3082\u6c17\u3065\u304b\u308c\u306a\u3044\u3068\u3053\u308d\u3067\u6b69\u3044\u305f\u307e\u307e\u305d\u3063\u3068\u57cb\u3081\u308b\u3088\u3046\u306a\u305d\u3093\u306a\u4ed5\u8349\u304c\u6b8b\u3063\u3066\u308b\u5927\u4e08\u592b\u3068\u306f\u805e\u304b\u306a\u3044\u3067\u7b54\u3048\u304c\u51fa\u308b\u307e\u3067\u5f85\u3066\u308b\u4eba\u6b63\u3057\u3055\u3088\u308a\u3082\u5f31\u304f\u3092\u9078\u3076\u7656\u304c\u3042\u308b\u307f\u305f\u3044\u3060\u50b7\u3064\u3051\u306a\u3044\u305f\u3081\u3058\u3083\u306a\u304f\u9003\u3052\u306a\u3044\u305f\u3081\u306e\u30c1\u30fc\u30e0\u541b\u305d\u306e\u610f\u5473\u3092\u5f8c\u304b\u3089\u77e5\u308b\u3053\u3068\u306b\u306a\u308b\u5f37\u304f\u898b\u305b\u305f\u3044\u308f\u3051\u3058\u3083\u306a\u3044\u5f31\u3055\u3092\u96a0\u3059\u3067\u3082\u306a\u3044\u305f\u3060\u7121\u7406\u3092\u3057\u306a\u3044\u8ddd\u96e2\u3067\u96a3\u306b\u7acb\u3063\u3066\u3044\u308b\u6c17\u3065\u3051\u3070\u3082\u3046\u52a9\u3051\u3089\u308c\u3066\u308b\u5f62\u3092\u6301\u305f\u306a\u3044\u307e\u307e\u3067\u62b1\u304d\u3057\u3081\u308b\u3088\u308a\u3082\u5148\u306b\u547c\u5438\u3092\u5408\u308f\u305b\u3066\u304f\u308b\u540d\u524d\u3092\u3064\u3051\u306a\u3044\u307e\u307e\u3067\u4f55\u3082\u6c42\u3081\u305a\u306b\u5b88\u3089\u308c\u3066\u3044\u305f\u3053\u3068\u306b\u5f8c\u3067\u6c17\u3065\u304f\u96e8\u304c\u964d\u308a\u305d\u3046\u306a\u7a7a\u3092\u898b\u4e0a\u3052\u3066\u4f55\u3082\u8a00\u308f\u306a\u3044\u5098\u3092\u5dee\u3057\u51fa\u3059\u4ee3\u308f\u308a\u306b\u4e00\u6b69\u5f71\u3092\u5bc4\u305b\u308b\u671f\u5f85\u3057\u306a\u3044\u632f\u308a\u304c\u4e0a\u624b\u3067\u5931\u671b\u3082\u3057\u306a\u3044\u9854\u3067\u305d\u308c\u3067\u3082\u3061\u3083\u3093\u3068\u4eba\u3092\u4fe1\u3058\u3066\u3044\u308b\u5f37\u304f\u898b\u305b\u308b\u5fc5\u8981\u3082\u306a\u304f\u5f31\u3055\u3092\u96a0\u3059\u3053\u3068\u3082\u306a\u304f\u305f\u3060\u81ea\u5206\u306e\u901f\u5ea6\u3067\u540c\u3058\u65b9\u3092\u5411\u3044\u3066\u308b\u8a00\u8449\u3088\u308a\u5148\u306b\u652f\u3048\u3066\u304f\u308b\u97f3\u3092\u7acb\u3066\u306a\u3044\u307e\u307e\u3067\u89e6\u308c\u305f\u3053\u3068\u3055\u3048\u5fd8\u308c\u308b\u307b\u3069\u81ea\u7136\u306b\u5bc4\u308a\u6dfb\u3046\u7b54\u3048\u3092\u6025\u304c\u306a\u3044\u307e\u307e\u3067\u9078\u3076\u81ea\u7531\u3054\u3068\u5dee\u3057\u51fa\u3055\u308c\u3066\u3044\u305f\u3053\u3068\u3092\u4eca\u306b\u306a\u3063\u3066\u77e5\u308b\u512a\u3057\u3044\u3063\u3066\u8a00\u8449\u3058\u3083\u8db3\u308a\u306a\u3044\u7406\u7531\u304c\u4eca\u306a\u3089\u5c11\u3057\u308f\u304b\u308b\u596a\u308f\u306a\u3044\u3053\u3068\u6c7a\u3081\u3064\u3051\u306a\u3044\u3053\u3068\u4fe1\u3058\u3066\u5f85\u3064\u3053\u3068\u8e0f\u307f\u8fbc\u307e\u305a\u306b\u5bc4\u308a\u6dfb\u3046\u3084\u308a\u65b9\u5883\u754c\u7dda\u3092\u8d8a\u3048\u305a\u306b\u89e6\u308c\u306a\u3044\u3053\u3068\u3067\u8fd1\u304f\u306b\u3044\u308b\u5149\u3089\u306a\u3044\u307e\u307e\u3067\u751f\u6d3b\u306e\u4e00\u90e8\u307f\u305f\u3044\u306b\u5f53\u305f\u308a\u524d\u3068\u3057\u3066\u7d9a\u3044\u3066\u3044\u304f\u305d\u308c\u304c\u512a\u3057\u3055\u7279\u5225\u3058\u3083\u306a\u3044\u9854\u3067\u50d5\u306e\u65e5\u5e38\u306e\u89d2\u3092\u9759\u304b\u306b\u4e38\u3081\u308b\u5f8c\u304b\u3089\u80f8\u306b\u97ff\u304f\u305d\u308c\u304c\u512a\u3057\u3055\u6b8b\u3089\u306a\u3044\u306f\u305a\u306a\u306e\u306b\u632f\u308a\u8fd4\u308b\u305f\u3073\u78ba\u304b\u306b\u305d\u3053\u306b\u3042\u308b\u3067\u3082", "segments": [{"id": 0, "seek": 0, "start": 10.64, "end": 13.26, "text": "\u4eba\u6df7\u307f\u3092\u907f\u3051\u308b\u307f\u305f\u3044\u306b", "tokens": [50365, 4035, 48640, 11362, 5998, 3330, 123, 39278, 41258, 4108, 51035], "temperature": 0.0, "avg_logprob": -0.1335312245966314, "compression_ratio": 1.3278688524590163, "no_speech_prob": 7.310693717066385e-12, "words": [{"word": "\u4eba", "start": 10.64, "end": 11.14, "probability": 0.9699311852455139}, {"word": "\u6df7", "start": 11.14, "end": 11.34, "probability": 0.7907119989395142}, {"word": "\u307f", "start": 11.34, "end": 11.48, "probability": 0.9907504916191101}, {"word": "\u3092", "start": 11.48, "end": 11.64, "probability": 0.9935473799705505}, {"word": "\u907f", "start": 11.64, "end": 11.9, "probability": 0.9724639654159546}, {"word": "\u3051\u308b", "start": 11.9, "end": 12.32, "probability": 0.9998249411582947}, {"word": "\u307f\u305f\u3044", "start": 12.32, "end": 12.84, "probability": 0.9951914548873901}, {"word": "\u306b", "start": 12.84, "end": 13.26, "probability": 0.9987552165985107}]}, {"id": 1, "seek": 0, "start": 13.26, "end": 15.76, "text": "\u5c11\u3057\u3060\u3051\u6b69\u5e45\u3092\u843d\u3068\u3059", "tokens": [51035, 15686, 2849, 36215, 4287, 102, 3509, 227, 5998, 30848, 3193, 2659, 51155], "temperature": 0.0, "avg_logprob": -0.1335312245966314, "compression_ratio": 1.3278688524590163, "no_speech_prob": 7.310693717066385e-12, "words": [{"word": "\u5c11", "start": 13.26, "end": 13.58, "probability": 0.6487824320793152}, {"word": "\u3057", "start": 13.58, "end": 13.84, "probability": 0.999910831451416}, {"word": "\u3060\u3051", "start": 13.84, "end": 14.1, "probability": 0.9993690848350525}, {"word": "\u6b69", "start": 14.1, "end": 14.3, "probability": 0.9937864542007446}, {"word": "\u5e45", "start": 14.3, "end": 14.56, "probability": 0.9992524683475494}, {"word": "\u3092", "start": 14.56, "end": 14.98, "probability": 0.9999438524246216}, {"word": "\u843d", "start": 14.98, "end": 15.24, "probability": 0.9994354844093323}, {"word": "\u3068", "start": 15.24, "end": 15.42, "probability": 0.9989411234855652}, {"word": "\u3059", "start": 15.42, "end": 15.76, "probability": 0.9999682903289795}]}, {"id": 2, "seek": 0, "start": 15.76, "end": 18.14, "text": "\u6d3e\u624b\u306a\u8a00\u8449\u306f\u9078\u3070\u306a\u3044", "tokens": [51155, 12136, 122, 11389, 3203, 12009, 46290, 3065, 21625, 13349, 9311, 51274], "temperature": 0.0, "avg_logprob": -0.1335312245966314, "compression_ratio": 1.3278688524590163, "no_speech_prob": 7.310693717066385e-12, "words": [{"word": "\u6d3e", "start": 15.76, "end": 16.02, "probability": 0.994696170091629}, {"word": "\u624b", "start": 16.02, "end": 16.16, "probability": 0.99845290184021}, {"word": "\u306a", "start": 16.16, "end": 16.36, "probability": 0.9999719858169556}, {"word": "\u8a00", "start": 16.36, "end": 16.56, "probability": 0.9998804330825806}, {"word": "\u8449", "start": 16.56, "end": 16.8, "probability": 0.9998551607131958}, {"word": "\u306f", "start": 16.8, "end": 17.02, "probability": 0.9996799230575562}, {"word": "\u9078", "start": 17.02, "end": 17.28, "probability": 0.9999473094940186}, {"word": "\u3070", "start": 17.28, "end": 17.64, "probability": 0.9993568062782288}, {"word": "\u306a\u3044", "start": 17.64, "end": 18.14, "probability": 0.9997345805168152}]}, {"id": 3, "seek": 0, "start": 18.14, "end": 20.42, "text": "\u3067\u3082\u76ee\u7dda\u306f\u3061\u3083\u3093\u3068\u5408\u3063\u3066\u308b", "tokens": [51274, 17783, 11386, 31699, 3065, 35771, 3193, 14245, 45350, 51387], "temperature": 0.0, "avg_logprob": -0.1335312245966314, "compression_ratio": 1.3278688524590163, "no_speech_prob": 7.310693717066385e-12, "words": [{"word": "\u3067\u3082", "start": 18.14, "end": 18.52, "probability": 0.9657766222953796}, {"word": "\u76ee", "start": 18.52, "end": 18.86, "probability": 0.968923032283783}, {"word": "\u7dda", "start": 18.86, "end": 19.06, "probability": 0.9997993111610413}, {"word": "\u306f", "start": 19.06, "end": 19.3, "probability": 0.9999550580978394}, {"word": "\u3061\u3083\u3093", "start": 19.3, "end": 19.56, "probability": 0.9998555183410645}, {"word": "\u3068", "start": 19.56, "end": 19.8, "probability": 0.9998453855514526}, {"word": "\u5408", "start": 19.8, "end": 19.98, "probability": 0.9687612056732178}, {"word": "\u3063\u3066\u308b", "start": 19.98, "end": 20.42, "probability": 0.9943364262580872}]}, {"id": 4, "seek": 0, "start": 20.42, "end": 23.1, "text": "\u5197\u8ac7\u306b\u9003\u3052\u305f\u6c88\u9ed9\u306e\u5f8c", "tokens": [51387, 5676, 245, 48022, 4108, 2215, 225, 26012, 3368, 3308, 230, 6173, 247, 2972, 5661, 51524], "temperature": 0.0, "avg_logprob": -0.1335312245966314, "compression_ratio": 1.3278688524590163, "no_speech_prob": 7.310693717066385e-12, "words": [{"word": "\u5197", "start": 20.42, "end": 20.96, "probability": 0.9955272376537323}, {"word": "\u8ac7", "start": 20.96, "end": 21.24, "probability": 0.9995436072349548}, {"word": "\u306b", "start": 21.24, "end": 21.5, "probability": 0.9999440908432007}, {"word": "\u9003", "start": 21.5, "end": 21.68, "probability": 0.9998064637184143}, {"word": "\u3052", "start": 21.68, "end": 21.8, "probability": 0.9999066591262817}, {"word": "\u305f", "start": 21.8, "end": 21.96, "probability": 0.9917635917663574}, {"word": "\u6c88", "start": 21.96, "end": 22.2, "probability": 0.9322241842746735}, {"word": "\u9ed9", "start": 22.2, "end": 22.48, "probability": 0.9496493935585022}, {"word": "\u306e", "start": 22.48, "end": 22.72, "probability": 0.9963439106941223}, {"word": "\u5f8c", "start": 22.72, "end": 23.1, "probability": 0.6026389598846436}]}, {"id": 5, "seek": 0, "start": 23.1, "end": 25.78, "text": "\u8ab0\u306b\u3082\u6c17\u3065\u304b\u308c\u306a\u3044\u3068\u3053\u308d\u3067", "tokens": [51524, 20757, 4108, 4801, 25870, 487, 98, 3703, 48535, 46001, 2474, 51658], "temperature": 0.0, "avg_logprob": -0.1335312245966314, "compression_ratio": 1.3278688524590163, "no_speech_prob": 7.310693717066385e-12, "words": [{"word": "\u8ab0", "start": 23.1, "end": 23.58, "probability": 0.9978727102279663}, {"word": "\u306b", "start": 23.58, "end": 23.82, "probability": 0.9999525547027588}, {"word": "\u3082", "start": 23.82, "end": 23.98, "probability": 0.9999210834503174}, {"word": "\u6c17", "start": 23.98, "end": 24.16, "probability": 0.9997022747993469}, {"word": "\u3065", "start": 24.16, "end": 24.3, "probability": 0.8622739017009735}, {"word": "\u304b", "start": 24.3, "end": 24.5, "probability": 0.9997487664222717}, {"word": "\u308c\u306a\u3044", "start": 24.5, "end": 24.8, "probability": 0.9997280240058899}, {"word": "\u3068\u3053\u308d", "start": 24.8, "end": 25.32, "probability": 0.9909821152687073}, {"word": "\u3067", "start": 25.32, "end": 25.78, "probability": 0.9999517202377319}]}, {"id": 6, "seek": 0, "start": 25.78, "end": 28.12, "text": "\u6b69\u3044\u305f\u307e\u307e\u305d\u3063\u3068\u57cb\u3081\u308b\u3088\u3046\u306a", "tokens": [51658, 4287, 102, 17679, 2889, 2889, 5040, 13137, 16262, 233, 11429, 4895, 17010, 3203, 51775], "temperature": 0.0, "avg_logprob": -0.1335312245966314, "compression_ratio": 1.3278688524590163, "no_speech_prob": 7.310693717066385e-12, "words": [{"word": "\u6b69", "start": 25.78, "end": 26.12, "probability": 0.7330726683139801}, {"word": "\u3044\u305f", "start": 26.12, "end": 26.34, "probability": 0.8900891542434692}, {"word": "\u307e", "start": 26.34, "end": 26.46, "probability": 0.5334389209747314}, {"word": "\u307e", "start": 26.46, "end": 26.58, "probability": 0.6279078722000122}, {"word": "\u305d", "start": 26.58, "end": 26.8, "probability": 0.7117111682891846}, {"word": "\u3063\u3068", "start": 26.8, "end": 27.08, "probability": 0.9991942048072815}, {"word": "\u57cb", "start": 27.08, "end": 27.3, "probability": 0.9980497360229492}, {"word": "\u3081", "start": 27.3, "end": 27.44, "probability": 0.9999512434005737}, {"word": "\u308b", "start": 27.44, "end": 27.58, "probability": 0.9999194145202637}, {"word": "\u3088\u3046", "start": 27.58, "end": 27.8, "probability": 0.9906901121139526}, {"word": "\u306a", "start": 27.8, "end": 28.12, "probability": 0.9997096657752991}]}, {"id": 7, "seek": 2812, "start": 28.12, "end": 30.54, "text": "\u305d\u3093\u306a\u4ed5\u8349\u304c\u6b8b\u3063\u3066\u308b", "tokens": [50365, 46346, 1550, 243, 31409, 231, 5142, 15976, 233, 45350, 50488], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u305d\u3093\u306a", "start": 28.12, "end": 28.82, "probability": 0.9961394667625427}, {"word": "\u4ed5", "start": 28.82, "end": 29.26, "probability": 0.9874396026134491}, {"word": "\u8349", "start": 29.26, "end": 29.58, "probability": 0.9991794526576996}, {"word": "\u304c", "start": 29.58, "end": 29.78, "probability": 0.9999188184738159}, {"word": "\u6b8b", "start": 29.78, "end": 30.14, "probability": 0.9999462962150574}, {"word": "\u3063\u3066\u308b", "start": 30.14, "end": 30.54, "probability": 0.9962378740310669}]}, {"id": 8, "seek": 2812, "start": 30.54, "end": 33.22, "text": "\u5927\u4e08\u592b\u3068\u306f\u805e\u304b\u306a\u3044\u3067", "tokens": [50488, 44537, 3193, 3065, 25468, 3703, 9311, 2474, 50623], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u5927\u4e08\u592b", "start": 30.54, "end": 31.52, "probability": 0.9481772184371948}, {"word": "\u3068", "start": 31.52, "end": 32.08, "probability": 0.9936578869819641}, {"word": "\u306f", "start": 32.08, "end": 32.34, "probability": 0.9998272061347961}, {"word": "\u805e", "start": 32.34, "end": 32.56, "probability": 0.99793541431427}, {"word": "\u304b", "start": 32.56, "end": 32.74, "probability": 0.9999412298202515}, {"word": "\u306a\u3044", "start": 32.74, "end": 33.02, "probability": 0.9999828338623047}, {"word": "\u3067", "start": 33.02, "end": 33.22, "probability": 0.9998111128807068}]}, {"id": 9, "seek": 2812, "start": 33.22, "end": 35.42, "text": "\u7b54\u3048\u304c\u51fa\u308b\u307e\u3067\u5f85\u3066\u308b\u4eba", "tokens": [50623, 28223, 6474, 5142, 7781, 4895, 28176, 18390, 2996, 4895, 4035, 50732], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u7b54", "start": 33.22, "end": 33.6, "probability": 0.8895542025566101}, {"word": "\u3048", "start": 33.6, "end": 33.82, "probability": 0.9999141693115234}, {"word": "\u304c", "start": 33.82, "end": 33.98, "probability": 0.9999041557312012}, {"word": "\u51fa", "start": 33.98, "end": 34.14, "probability": 0.9999055862426758}, {"word": "\u308b", "start": 34.14, "end": 34.3, "probability": 0.9999481439590454}, {"word": "\u307e\u3067", "start": 34.3, "end": 34.58, "probability": 0.6544159650802612}, {"word": "\u5f85", "start": 34.58, "end": 34.76, "probability": 0.6958413124084473}, {"word": "\u3066", "start": 34.76, "end": 34.92, "probability": 0.9972948431968689}, {"word": "\u308b", "start": 34.92, "end": 35.08, "probability": 0.9994851350784302}, {"word": "\u4eba", "start": 35.08, "end": 35.42, "probability": 0.9971699118614197}]}, {"id": 10, "seek": 2812, "start": 35.42, "end": 40.54, "text": "\u6b63\u3057\u3055\u3088\u308a\u3082\u5f31\u304f\u3092\u9078\u3076\u7656\u304c\u3042\u308b\u307f\u305f\u3044\u3060", "tokens": [50732, 15789, 2849, 6722, 5591, 5095, 4801, 5702, 109, 6134, 5998, 21625, 23441, 6651, 244, 5142, 24719, 41258, 5362, 50995], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u6b63", "start": 35.42, "end": 36.12, "probability": 0.9826377034187317}, {"word": "\u3057", "start": 36.12, "end": 36.34, "probability": 0.9966592788696289}, {"word": "\u3055", "start": 36.34, "end": 36.5, "probability": 0.9998660087585449}, {"word": "\u3088", "start": 36.5, "end": 36.66, "probability": 0.9999394416809082}, {"word": "\u308a", "start": 36.66, "end": 36.8, "probability": 0.9999898672103882}, {"word": "\u3082", "start": 36.8, "end": 37.02, "probability": 0.9998722076416016}, {"word": "\u5f31", "start": 37.02, "end": 37.32, "probability": 0.9817418456077576}, {"word": "\u304f", "start": 37.32, "end": 37.64, "probability": 0.9357618689537048}, {"word": "\u3092", "start": 37.64, "end": 37.9, "probability": 0.943050742149353}, {"word": "\u9078", "start": 37.9, "end": 38.16, "probability": 0.9988037347793579}, {"word": "\u3076", "start": 38.16, "end": 38.5, "probability": 0.9993614554405212}, {"word": "\u7656", "start": 38.5, "end": 38.9, "probability": 0.9935400187969208}, {"word": "\u304c", "start": 38.9, "end": 39.16, "probability": 0.9998871088027954}, {"word": "\u3042\u308b", "start": 39.16, "end": 39.5, "probability": 0.9998788833618164}, {"word": "\u307f\u305f\u3044", "start": 39.5, "end": 39.98, "probability": 0.9998819828033447}, {"word": "\u3060", "start": 39.98, "end": 40.54, "probability": 0.9998767375946045}]}, {"id": 11, "seek": 2812, "start": 40.54, "end": 42.98, "text": "\u50b7\u3064\u3051\u306a\u3044\u305f\u3081\u3058\u3083\u306a\u304f", "tokens": [50995, 41323, 9335, 7625, 9311, 49983, 15339, 40252, 51110], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u50b7", "start": 40.54, "end": 41.1, "probability": 0.9997881054878235}, {"word": "\u3064", "start": 41.1, "end": 41.32, "probability": 0.9868934154510498}, {"word": "\u3051", "start": 41.32, "end": 41.5, "probability": 0.9999281167984009}, {"word": "\u306a\u3044", "start": 41.5, "end": 41.88, "probability": 0.999578058719635}, {"word": "\u305f\u3081", "start": 41.88, "end": 42.22, "probability": 0.976791262626648}, {"word": "\u3058\u3083", "start": 42.22, "end": 42.56, "probability": 0.9997430443763733}, {"word": "\u306a\u304f", "start": 42.56, "end": 42.98, "probability": 0.9998785257339478}]}, {"id": 12, "seek": 2812, "start": 42.98, "end": 45.32, "text": "\u9003\u3052\u306a\u3044\u305f\u3081\u306e\u30c1\u30fc\u30e0\u541b", "tokens": [51110, 2215, 225, 26012, 9311, 49983, 2972, 17794, 44265, 24168, 51228], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u9003", "start": 42.98, "end": 43.44, "probability": 0.9872096478939056}, {"word": "\u3052", "start": 43.44, "end": 43.54, "probability": 0.9999327659606934}, {"word": "\u306a\u3044", "start": 43.54, "end": 43.78, "probability": 0.9998499155044556}, {"word": "\u305f\u3081", "start": 43.78, "end": 44.12, "probability": 0.9996179342269897}, {"word": "\u306e", "start": 44.12, "end": 44.62, "probability": 0.9999126195907593}, {"word": "\u30c1", "start": 44.62, "end": 44.8, "probability": 0.8059760332107544}, {"word": "\u30fc\u30e0", "start": 44.8, "end": 45.06, "probability": 0.9687859416007996}, {"word": "\u541b", "start": 45.06, "end": 45.32, "probability": 0.6897132992744446}]}, {"id": 13, "seek": 2812, "start": 45.32, "end": 49.34, "text": "\u305d\u306e\u610f\u5473\u3092\u5f8c\u304b\u3089\u77e5\u308b\u3053\u3068\u306b\u306a\u308b", "tokens": [51228, 20564, 9042, 17268, 5998, 5661, 11046, 6498, 4895, 13235, 22615, 4895, 51434], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u305d\u306e", "start": 45.32, "end": 45.96, "probability": 0.9979926347732544}, {"word": "\u610f", "start": 45.96, "end": 46.22, "probability": 0.9999376535415649}, {"word": "\u5473", "start": 46.22, "end": 46.32, "probability": 0.9999607801437378}, {"word": "\u3092", "start": 46.32, "end": 46.62, "probability": 0.9999147653579712}, {"word": "\u5f8c", "start": 46.62, "end": 47.2, "probability": 0.9985198378562927}, {"word": "\u304b\u3089", "start": 47.2, "end": 47.6, "probability": 0.9999749660491943}, {"word": "\u77e5", "start": 47.6, "end": 47.86, "probability": 0.9999011754989624}, {"word": "\u308b", "start": 47.86, "end": 48.04, "probability": 0.999962329864502}, {"word": "\u3053\u3068", "start": 48.04, "end": 48.28, "probability": 0.9987362027168274}, {"word": "\u306b\u306a", "start": 48.28, "end": 48.92, "probability": 0.999853253364563}, {"word": "\u308b", "start": 48.92, "end": 49.34, "probability": 0.9999825954437256}]}, {"id": 14, "seek": 2812, "start": 50.699999999999996, "end": 53.36, "text": "\u5f37\u304f\u898b\u305b\u305f\u3044\u308f\u3051\u3058\u3083\u306a\u3044", "tokens": [51434, 22752, 6134, 10470, 13702, 20699, 9206, 7625, 40323, 51632], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u5f37", "start": 50.699999999999996, "end": 51.26, "probability": 0.9991550445556641}, {"word": "\u304f", "start": 51.26, "end": 51.48, "probability": 0.9999905824661255}, {"word": "\u898b", "start": 51.48, "end": 51.64, "probability": 0.9995809197425842}, {"word": "\u305b", "start": 51.64, "end": 51.84, "probability": 0.9996813535690308}, {"word": "\u305f\u3044", "start": 51.84, "end": 52.5, "probability": 0.9996036887168884}, {"word": "\u308f", "start": 52.5, "end": 52.72, "probability": 0.8979707360267639}, {"word": "\u3051", "start": 52.72, "end": 52.94, "probability": 0.9999951124191284}, {"word": "\u3058\u3083\u306a\u3044", "start": 52.94, "end": 53.36, "probability": 0.9997697472572327}]}, {"id": 15, "seek": 2812, "start": 53.36, "end": 55.92, "text": "\u5f31\u3055\u3092\u96a0\u3059\u3067\u3082\u306a\u3044", "tokens": [51632, 5702, 109, 6722, 5998, 10673, 254, 2659, 17783, 9311, 51757], "temperature": 0.0, "avg_logprob": -0.11733936380456995, "compression_ratio": 1.4727272727272727, "no_speech_prob": 6.47439090187274e-12, "words": [{"word": "\u5f31", "start": 53.36, "end": 53.78, "probability": 0.9867573082447052}, {"word": "\u3055", "start": 53.78, "end": 53.98, "probability": 0.9999487400054932}, {"word": "\u3092", "start": 53.98, "end": 54.18, "probability": 0.9999433755874634}, {"word": "\u96a0", "start": 54.18, "end": 54.54, "probability": 0.9995699822902679}, {"word": "\u3059", "start": 54.54, "end": 55.06, "probability": 0.9935684204101562}, {"word": "\u3067\u3082", "start": 55.06, "end": 55.42, "probability": 0.9977546334266663}, {"word": "\u306a\u3044", "start": 55.42, "end": 55.92, "probability": 0.9995827078819275}]}, {"id": 16, "seek": 5592, "start": 55.92, "end": 58.18, "text": "\u305f\u3060\u7121\u7406\u3092\u3057\u306a\u3044\u8ddd\u96e2\u3067", "tokens": [50365, 44519, 16976, 13876, 5998, 2849, 9311, 6563, 251, 32662, 2474, 50488], "temperature": 0.0, "avg_logprob": -0.1668867724282401, "compression_ratio": 0.75, "no_speech_prob": 1.582125229437903e-11, "words": [{"word": "\u305f\u3060", "start": 55.92, "end": 56.3, "probability": 0.9876076579093933}, {"word": "\u7121", "start": 56.3, "end": 56.52, "probability": 0.9972968697547913}, {"word": "\u7406", "start": 56.52, "end": 56.64, "probability": 0.9997666478157043}, {"word": "\u3092", "start": 56.64, "end": 56.8, "probability": 0.9989728927612305}, {"word": "\u3057", "start": 56.8, "end": 57.08, "probability": 0.9996019005775452}, {"word": "\u306a\u3044", "start": 57.08, "end": 57.44, "probability": 0.9999395608901978}, {"word": "\u8ddd", "start": 57.44, "end": 57.78, "probability": 0.9974023103713989}, {"word": "\u96e2", "start": 57.78, "end": 57.9, "probability": 0.999891996383667}, {"word": "\u3067", "start": 57.9, "end": 58.18, "probability": 0.9997846484184265}]}, {"id": 17, "seek": 5818, "start": 58.18, "end": 60.48, "text": "\u96a3\u306b\u7acb\u3063\u3066\u3044\u308b", "tokens": [50365, 10673, 96, 4108, 24409, 6102, 22979, 50488], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u96a3", "start": 58.18, "end": 58.72, "probability": 0.9980821013450623}, {"word": "\u306b", "start": 58.72, "end": 59.02, "probability": 0.9996426105499268}, {"word": "\u7acb", "start": 59.02, "end": 59.34, "probability": 0.9902786612510681}, {"word": "\u3063\u3066", "start": 59.34, "end": 59.94, "probability": 0.9994373917579651}, {"word": "\u3044\u308b", "start": 59.94, "end": 60.48, "probability": 0.999874472618103}]}, {"id": 18, "seek": 5818, "start": 60.48, "end": 63.5, "text": "\u6c17\u3065\u3051\u3070\u3082\u3046\u52a9\u3051\u3089\u308c\u3066\u308b", "tokens": [50488, 25870, 487, 98, 7625, 13349, 16324, 37618, 7625, 5154, 26638, 4895, 50635], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u6c17", "start": 60.48, "end": 61.04, "probability": 0.9410565495491028}, {"word": "\u3065", "start": 61.04, "end": 61.16, "probability": 0.7479570209980011}, {"word": "\u3051", "start": 61.16, "end": 61.34, "probability": 0.9998738765716553}, {"word": "\u3070", "start": 61.34, "end": 61.5, "probability": 0.9999428987503052}, {"word": "\u3082\u3046", "start": 61.5, "end": 61.74, "probability": 0.9932390451431274}, {"word": "\u52a9", "start": 61.74, "end": 62.22, "probability": 0.9609048366546631}, {"word": "\u3051", "start": 62.22, "end": 62.5, "probability": 0.9998325109481812}, {"word": "\u3089", "start": 62.5, "end": 62.66, "probability": 0.9999748468399048}, {"word": "\u308c\u3066", "start": 62.66, "end": 63.18, "probability": 0.9998855590820312}, {"word": "\u308b", "start": 63.18, "end": 63.5, "probability": 0.9925132393836975}]}, {"id": 19, "seek": 5818, "start": 63.5, "end": 65.9, "text": "\u5f62\u3092\u6301\u305f\u306a\u3044\u307e\u307e\u3067", "tokens": [50635, 30900, 5998, 17694, 3368, 9311, 2889, 28176, 50753], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u5f62", "start": 63.5, "end": 64.12, "probability": 0.8726099729537964}, {"word": "\u3092", "start": 64.12, "end": 64.66, "probability": 0.9998167157173157}, {"word": "\u6301", "start": 64.66, "end": 64.76, "probability": 0.9928613305091858}, {"word": "\u305f", "start": 64.76, "end": 64.94, "probability": 0.9998329877853394}, {"word": "\u306a\u3044", "start": 64.94, "end": 65.22, "probability": 0.9999336004257202}, {"word": "\u307e", "start": 65.22, "end": 65.44, "probability": 0.9999209642410278}, {"word": "\u307e\u3067", "start": 65.44, "end": 65.9, "probability": 0.9875868558883667}]}, {"id": 20, "seek": 5818, "start": 65.9, "end": 68.52, "text": "\u62b1\u304d\u3057\u3081\u308b\u3088\u308a\u3082\u5148\u306b", "tokens": [50753, 38382, 7016, 2849, 11429, 4895, 5591, 5095, 4801, 10108, 4108, 50886], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u62b1", "start": 65.9, "end": 66.5, "probability": 0.9949588179588318}, {"word": "\u304d", "start": 66.5, "end": 66.68, "probability": 0.9999500513076782}, {"word": "\u3057", "start": 66.68, "end": 66.9, "probability": 0.9722097516059875}, {"word": "\u3081", "start": 66.9, "end": 67.1, "probability": 0.9999701976776123}, {"word": "\u308b", "start": 67.1, "end": 67.26, "probability": 0.9999692440032959}, {"word": "\u3088", "start": 67.26, "end": 67.46, "probability": 0.9997515082359314}, {"word": "\u308a", "start": 67.46, "end": 67.58, "probability": 0.9999818801879883}, {"word": "\u3082", "start": 67.58, "end": 67.72, "probability": 0.9995993971824646}, {"word": "\u5148", "start": 67.72, "end": 68.1, "probability": 0.9997460246086121}, {"word": "\u306b", "start": 68.1, "end": 68.52, "probability": 0.9999865293502808}]}, {"id": 21, "seek": 5818, "start": 68.52, "end": 71.08, "text": "\u547c\u5438\u3092\u5408\u308f\u305b\u3066\u304f\u308b", "tokens": [50886, 38718, 46431, 5998, 14245, 9206, 47745, 6134, 4895, 50988], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u547c", "start": 68.52, "end": 69.02, "probability": 0.9850644469261169}, {"word": "\u5438", "start": 69.02, "end": 69.24, "probability": 0.9992965459823608}, {"word": "\u3092", "start": 69.24, "end": 69.68, "probability": 0.9999514818191528}, {"word": "\u5408", "start": 69.68, "end": 70.02, "probability": 0.9996953010559082}, {"word": "\u308f", "start": 70.02, "end": 70.14, "probability": 0.9999185800552368}, {"word": "\u305b\u3066", "start": 70.14, "end": 70.38, "probability": 0.9999301433563232}, {"word": "\u304f", "start": 70.38, "end": 70.72, "probability": 0.9941577911376953}, {"word": "\u308b", "start": 70.72, "end": 71.08, "probability": 0.9835493564605713}]}, {"id": 22, "seek": 5818, "start": 71.08, "end": 73.38, "text": "\u540d\u524d\u3092\u3064\u3051\u306a\u3044\u307e\u307e\u3067", "tokens": [51015, 15940, 8945, 5998, 9335, 7625, 9311, 2889, 28176, 51125], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u540d", "start": 71.08, "end": 71.52, "probability": 0.9992161989212036}, {"word": "\u524d", "start": 71.52, "end": 71.84, "probability": 0.9999619722366333}, {"word": "\u3092", "start": 71.84, "end": 72.2, "probability": 0.9999592304229736}, {"word": "\u3064", "start": 72.2, "end": 72.28, "probability": 0.8135812878608704}, {"word": "\u3051", "start": 72.28, "end": 72.44, "probability": 0.999920129776001}, {"word": "\u306a\u3044", "start": 72.44, "end": 72.72, "probability": 0.999806821346283}, {"word": "\u307e", "start": 72.72, "end": 72.94, "probability": 0.9999709129333496}, {"word": "\u307e\u3067", "start": 72.94, "end": 73.38, "probability": 0.999716579914093}]}, {"id": 23, "seek": 5818, "start": 73.38, "end": 75.76, "text": "\u4f55\u3082\u6c42\u3081\u305a\u306b", "tokens": [51125, 11906, 4801, 32718, 11429, 18216, 4108, 51250], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u4f55", "start": 73.38, "end": 74.08, "probability": 0.9984567165374756}, {"word": "\u3082", "start": 74.08, "end": 74.5, "probability": 0.9987208247184753}, {"word": "\u6c42", "start": 74.5, "end": 74.86, "probability": 0.9997815489768982}, {"word": "\u3081", "start": 74.86, "end": 75.16, "probability": 0.9999825954437256}, {"word": "\u305a", "start": 75.16, "end": 75.36, "probability": 0.9999784231185913}, {"word": "\u306b", "start": 75.36, "end": 75.76, "probability": 0.9999549388885498}]}, {"id": 24, "seek": 5818, "start": 75.76, "end": 78.62, "text": "\u5b88\u3089\u308c\u3066\u3044\u305f\u3053\u3068\u306b", "tokens": [51250, 48480, 5154, 26638, 17679, 13235, 4108, 51398], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u5b88", "start": 75.76, "end": 76.28, "probability": 0.9989932179450989}, {"word": "\u3089", "start": 76.28, "end": 76.72, "probability": 0.9998842477798462}, {"word": "\u308c\u3066", "start": 76.72, "end": 77.28, "probability": 0.9999632835388184}, {"word": "\u3044\u305f", "start": 77.28, "end": 77.88, "probability": 0.9876453280448914}, {"word": "\u3053\u3068", "start": 77.88, "end": 78.28, "probability": 0.9959180951118469}, {"word": "\u306b", "start": 78.28, "end": 78.62, "probability": 0.9998389482498169}]}, {"id": 25, "seek": 5818, "start": 78.62, "end": 80.8, "text": "\u5f8c\u3067\u6c17\u3065\u304f", "tokens": [51398, 5661, 2474, 25870, 487, 98, 6134, 51502], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u5f8c", "start": 78.62, "end": 79.08, "probability": 0.9847813844680786}, {"word": "\u3067", "start": 79.08, "end": 79.58, "probability": 0.999735414981842}, {"word": "\u6c17", "start": 79.58, "end": 79.86, "probability": 0.9956657290458679}, {"word": "\u3065", "start": 79.86, "end": 80.22, "probability": 0.9335312247276306}, {"word": "\u304f", "start": 80.22, "end": 80.8, "probability": 0.999881386756897}]}, {"id": 26, "seek": 5818, "start": 81.52, "end": 84.16, "text": "\u96e8\u304c\u964d\u308a\u305d\u3046\u306a\u7a7a\u3092", "tokens": [51502, 35339, 5142, 47421, 5095, 9955, 3203, 23322, 5998, 51667], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u96e8", "start": 81.52, "end": 82.16, "probability": 0.9984371066093445}, {"word": "\u304c", "start": 82.16, "end": 82.46, "probability": 0.9999178647994995}, {"word": "\u964d", "start": 82.46, "end": 82.74, "probability": 0.9999420642852783}, {"word": "\u308a", "start": 82.74, "end": 82.92, "probability": 0.9999071359634399}, {"word": "\u305d\u3046", "start": 82.92, "end": 83.26, "probability": 0.9971027970314026}, {"word": "\u306a", "start": 83.26, "end": 83.48, "probability": 0.9999433755874634}, {"word": "\u7a7a", "start": 83.48, "end": 83.8, "probability": 0.998982846736908}, {"word": "\u3092", "start": 83.8, "end": 84.16, "probability": 0.9999624490737915}]}, {"id": 27, "seek": 5818, "start": 84.16, "end": 86.38, "text": "\u898b\u4e0a\u3052\u3066\u4f55\u3082\u8a00\u308f\u306a\u3044", "tokens": [51667, 10470, 5708, 26012, 2996, 11906, 4801, 12009, 9206, 9311, 51779], "temperature": 0.0, "avg_logprob": -0.1842342866670101, "compression_ratio": 1.4845360824742269, "no_speech_prob": 2.0100834191572048e-11, "words": [{"word": "\u898b", "start": 84.16, "end": 84.48, "probability": 0.9932465553283691}, {"word": "\u4e0a", "start": 84.48, "end": 84.64, "probability": 0.9997639060020447}, {"word": "\u3052", "start": 84.64, "end": 84.76, "probability": 0.999971866607666}, {"word": "\u3066", "start": 84.76, "end": 84.92, "probability": 0.9998807907104492}, {"word": "\u4f55", "start": 84.92, "end": 85.14, "probability": 0.9994643330574036}, {"word": "\u3082", "start": 85.14, "end": 85.4, "probability": 0.9998664855957031}, {"word": "\u8a00", "start": 85.4, "end": 85.58, "probability": 0.9995179176330566}, {"word": "\u308f", "start": 85.58, "end": 85.76, "probability": 0.9998847246170044}, {"word": "\u306a\u3044", "start": 85.76, "end": 86.38, "probability": 0.9997286200523376}]}, {"id": 28, "seek": 8638, "start": 86.38, "end": 88.74, "text": "\u5098\u3092\u5dee\u3057\u51fa\u3059\u4ee3\u308f\u308a\u306b", "tokens": [50365, 161, 3404, 5998, 21679, 2849, 7781, 2659, 19105, 9206, 5095, 4108, 50488], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u5098", "start": 86.38, "end": 87.24, "probability": 0.9894079566001892}, {"word": "\u3092", "start": 87.24, "end": 87.48, "probability": 0.9979023933410645}, {"word": "\u5dee", "start": 87.48, "end": 87.58, "probability": 0.9942873120307922}, {"word": "\u3057", "start": 87.58, "end": 87.72, "probability": 0.9999256134033203}, {"word": "\u51fa", "start": 87.72, "end": 87.9, "probability": 0.9994176626205444}, {"word": "\u3059", "start": 87.9, "end": 88.1, "probability": 0.9998173117637634}, {"word": "\u4ee3", "start": 88.1, "end": 88.26, "probability": 0.9913151860237122}, {"word": "\u308f", "start": 88.26, "end": 88.36, "probability": 0.9982088804244995}, {"word": "\u308a", "start": 88.36, "end": 88.52, "probability": 0.9999954700469971}, {"word": "\u306b", "start": 88.52, "end": 88.74, "probability": 0.9986284971237183}]}, {"id": 29, "seek": 8638, "start": 88.74, "end": 90.52, "text": "\u4e00\u6b69\u5f71\u3092\u5bc4\u305b\u308b", "tokens": [50488, 2257, 4287, 102, 16820, 5998, 4510, 226, 13702, 4895, 50577], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u4e00", "start": 88.74, "end": 89.08, "probability": 0.7584278583526611}, {"word": "\u6b69", "start": 89.08, "end": 89.28, "probability": 0.9991852045059204}, {"word": "\u5f71", "start": 89.28, "end": 89.5, "probability": 0.8774625658988953}, {"word": "\u3092", "start": 89.5, "end": 89.92, "probability": 0.9989591836929321}, {"word": "\u5bc4", "start": 89.92, "end": 90.08, "probability": 0.9910034537315369}, {"word": "\u305b", "start": 90.08, "end": 90.24, "probability": 0.9999035596847534}, {"word": "\u308b", "start": 90.24, "end": 90.52, "probability": 0.999862551689148}]}, {"id": 30, "seek": 8638, "start": 90.52, "end": 93.44, "text": "\u671f\u5f85\u3057\u306a\u3044\u632f\u308a\u304c\u4e0a\u624b\u3067", "tokens": [50577, 16786, 18390, 2849, 9311, 8501, 107, 5095, 5142, 5708, 11389, 2474, 50722], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u671f", "start": 90.52, "end": 91.06, "probability": 0.9401401281356812}, {"word": "\u5f85", "start": 91.06, "end": 91.24, "probability": 0.999354898929596}, {"word": "\u3057", "start": 91.24, "end": 91.48, "probability": 0.9993997812271118}, {"word": "\u306a\u3044", "start": 91.48, "end": 91.86, "probability": 0.9996651411056519}, {"word": "\u632f", "start": 91.86, "end": 92.2, "probability": 0.8722900152206421}, {"word": "\u308a", "start": 92.2, "end": 92.26, "probability": 0.9996795654296875}, {"word": "\u304c", "start": 92.26, "end": 92.48, "probability": 0.9989780187606812}, {"word": "\u4e0a", "start": 92.48, "end": 92.66, "probability": 0.9927687644958496}, {"word": "\u624b", "start": 92.66, "end": 92.92, "probability": 0.9883697032928467}, {"word": "\u3067", "start": 92.92, "end": 93.44, "probability": 0.9992890357971191}]}, {"id": 31, "seek": 8638, "start": 93.44, "end": 95.74, "text": "\u5931\u671b\u3082\u3057\u306a\u3044\u9854\u3067", "tokens": [50722, 28564, 22694, 49412, 9311, 10178, 242, 2474, 50838], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u5931", "start": 93.44, "end": 93.84, "probability": 0.8462562561035156}, {"word": "\u671b", "start": 93.84, "end": 94.22, "probability": 0.9996800422668457}, {"word": "\u3082\u3057", "start": 94.22, "end": 94.56, "probability": 0.997812032699585}, {"word": "\u306a\u3044", "start": 94.56, "end": 94.94, "probability": 0.9999467134475708}, {"word": "\u9854", "start": 94.94, "end": 95.5, "probability": 0.9982469379901886}, {"word": "\u3067", "start": 95.5, "end": 95.74, "probability": 0.9998300075531006}]}, {"id": 32, "seek": 8638, "start": 95.74, "end": 97.18, "text": "\u305d\u308c\u3067\u3082\u3061\u3083\u3093\u3068", "tokens": [50838, 13873, 17783, 35771, 3193, 50888], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u305d\u308c", "start": 95.74, "end": 96.14, "probability": 0.9749453067779541}, {"word": "\u3067\u3082", "start": 96.14, "end": 96.44, "probability": 0.999934196472168}, {"word": "\u3061\u3083\u3093", "start": 96.44, "end": 96.68, "probability": 0.9985747337341309}, {"word": "\u3068", "start": 96.68, "end": 97.18, "probability": 0.999884843826294}]}, {"id": 33, "seek": 8638, "start": 97.18, "end": 99.32, "text": "\u4eba\u3092\u4fe1\u3058\u3066\u3044\u308b", "tokens": [50888, 4035, 5998, 17665, 9257, 2996, 22979, 50988], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u4eba", "start": 97.18, "end": 97.98, "probability": 0.9724030494689941}, {"word": "\u3092", "start": 97.98, "end": 98.24, "probability": 0.9995681643486023}, {"word": "\u4fe1", "start": 98.24, "end": 98.38, "probability": 0.9998782873153687}, {"word": "\u3058", "start": 98.38, "end": 98.64, "probability": 0.999957799911499}, {"word": "\u3066", "start": 98.64, "end": 98.88, "probability": 0.999870777130127}, {"word": "\u3044\u308b", "start": 98.88, "end": 99.32, "probability": 0.9986463189125061}]}, {"id": 34, "seek": 8638, "start": 100.75999999999999, "end": 103.14, "text": "\u5f37\u304f\u898b\u305b\u308b\u5fc5\u8981\u3082\u306a\u304f", "tokens": [50988, 22752, 6134, 10470, 13702, 4895, 28531, 4275, 4801, 40252, 51188], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u5f37", "start": 100.75999999999999, "end": 101.24, "probability": 0.9988382458686829}, {"word": "\u304f", "start": 101.24, "end": 101.46, "probability": 0.999984622001648}, {"word": "\u898b", "start": 101.46, "end": 101.64, "probability": 0.9910100698471069}, {"word": "\u305b", "start": 101.64, "end": 101.8, "probability": 0.999893069267273}, {"word": "\u308b", "start": 101.8, "end": 101.96, "probability": 0.9999688863754272}, {"word": "\u5fc5", "start": 101.96, "end": 102.22, "probability": 0.9999171495437622}, {"word": "\u8981", "start": 102.22, "end": 102.5, "probability": 0.9999295473098755}, {"word": "\u3082", "start": 102.5, "end": 102.72, "probability": 0.9999401569366455}, {"word": "\u306a\u304f", "start": 102.72, "end": 103.14, "probability": 0.9972680807113647}]}, {"id": 35, "seek": 8638, "start": 103.14, "end": 105.48, "text": "\u5f31\u3055\u3092\u96a0\u3059\u3053\u3068\u3082\u306a\u304f", "tokens": [51188, 5702, 109, 6722, 5998, 10673, 254, 2659, 13235, 4801, 40252, 51288], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u5f31", "start": 103.14, "end": 103.6, "probability": 0.8993779718875885}, {"word": "\u3055", "start": 103.6, "end": 103.82, "probability": 0.9999376535415649}, {"word": "\u3092", "start": 103.82, "end": 104.04, "probability": 0.9999212026596069}, {"word": "\u96a0", "start": 104.04, "end": 104.22, "probability": 0.9996569156646729}, {"word": "\u3059", "start": 104.22, "end": 104.46, "probability": 0.9999269247055054}, {"word": "\u3053\u3068", "start": 104.46, "end": 104.7, "probability": 0.991523027420044}, {"word": "\u3082", "start": 104.7, "end": 105.06, "probability": 0.999961256980896}, {"word": "\u306a\u304f", "start": 105.06, "end": 105.48, "probability": 0.9996483325958252}]}, {"id": 36, "seek": 8638, "start": 105.48, "end": 107.4, "text": "\u305f\u3060\u81ea\u5206\u306e\u901f\u5ea6\u3067", "tokens": [51288, 44519, 9722, 6627, 2972, 31217, 13127, 2474, 51388], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u305f\u3060", "start": 105.48, "end": 105.98, "probability": 0.9988487958908081}, {"word": "\u81ea", "start": 105.98, "end": 106.22, "probability": 0.999685525894165}, {"word": "\u5206", "start": 106.22, "end": 106.44, "probability": 0.9999809265136719}, {"word": "\u306e", "start": 106.44, "end": 106.64, "probability": 0.9999315738677979}, {"word": "\u901f", "start": 106.64, "end": 106.92, "probability": 0.9055284261703491}, {"word": "\u5ea6", "start": 106.92, "end": 107.1, "probability": 0.991499125957489}, {"word": "\u3067", "start": 107.1, "end": 107.4, "probability": 0.9999600648880005}]}, {"id": 37, "seek": 8638, "start": 107.4, "end": 109.32, "text": "\u540c\u3058\u65b9\u3092\u5411\u3044\u3066\u308b", "tokens": [51388, 13089, 9257, 9249, 5998, 24282, 18549, 4895, 51488], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u540c", "start": 107.4, "end": 107.64, "probability": 0.998091995716095}, {"word": "\u3058", "start": 107.64, "end": 107.9, "probability": 0.9997227787971497}, {"word": "\u65b9", "start": 107.9, "end": 108.16, "probability": 0.6080268025398254}, {"word": "\u3092", "start": 108.16, "end": 108.42, "probability": 0.8232842087745667}, {"word": "\u5411", "start": 108.42, "end": 108.54, "probability": 0.9969398975372314}, {"word": "\u3044\u3066", "start": 108.54, "end": 108.92, "probability": 0.9997918009757996}, {"word": "\u308b", "start": 108.92, "end": 109.32, "probability": 0.9665625691413879}]}, {"id": 38, "seek": 8638, "start": 110.46, "end": 113.56, "text": "\u8a00\u8449\u3088\u308a\u5148\u306b\u652f\u3048\u3066\u304f\u308b", "tokens": [51488, 12009, 46290, 5591, 5095, 10108, 4108, 24400, 31045, 6134, 4895, 51688], "temperature": 0.0, "avg_logprob": -0.21812057495117188, "compression_ratio": 1.348623853211009, "no_speech_prob": 1.862768619909083e-11, "words": [{"word": "\u8a00", "start": 110.46, "end": 110.94, "probability": 0.9994921684265137}, {"word": "\u8449", "start": 110.94, "end": 111.16, "probability": 0.9999374151229858}, {"word": "\u3088", "start": 111.16, "end": 111.36, "probability": 0.9995167255401611}, {"word": "\u308a", "start": 111.36, "end": 111.46, "probability": 0.999997615814209}, {"word": "\u5148", "start": 111.46, "end": 111.68, "probability": 0.9997333884239197}, {"word": "\u306b", "start": 111.68, "end": 112.0, "probability": 0.9999852180480957}, {"word": "\u652f", "start": 112.0, "end": 112.16, "probability": 0.9986128807067871}, {"word": "\u3048\u3066", "start": 112.16, "end": 112.84, "probability": 0.999313235282898}, {"word": "\u304f", "start": 112.84, "end": 113.18, "probability": 0.9993059635162354}, {"word": "\u308b", "start": 113.18, "end": 113.56, "probability": 0.9997397065162659}]}, {"id": 39, "seek": 11356, "start": 113.56, "end": 115.9, "text": "\u97f3\u3092\u7acb\u3066\u306a\u3044\u307e\u307e\u3067", "tokens": [50365, 18034, 5998, 24409, 2996, 9311, 2889, 28176, 50488], "temperature": 0.0, "avg_logprob": -0.16920706051499096, "compression_ratio": 1.3098591549295775, "no_speech_prob": 2.3153793118901866e-11, "words": [{"word": "\u97f3", "start": 113.56, "end": 114.18, "probability": 0.9364212155342102}, {"word": "\u3092", "start": 114.18, "end": 114.52, "probability": 0.9814148545265198}, {"word": "\u7acb", "start": 114.52, "end": 114.62, "probability": 0.9027630686759949}, {"word": "\u3066", "start": 114.62, "end": 114.76, "probability": 0.999900221824646}, {"word": "\u306a\u3044", "start": 114.76, "end": 115.08, "probability": 0.999035120010376}, {"word": "\u307e", "start": 115.08, "end": 115.44, "probability": 0.9988951086997986}, {"word": "\u307e\u3067", "start": 115.44, "end": 115.9, "probability": 0.9511159658432007}]}, {"id": 40, "seek": 11356, "start": 115.9, "end": 118.5, "text": "\u89e6\u308c\u305f\u3053\u3068\u3055\u3048\u5fd8\u308c\u308b\u307b\u3069", "tokens": [50488, 6758, 99, 35478, 13235, 6722, 6474, 26677, 35367, 29050, 50615], "temperature": 0.0, "avg_logprob": -0.16920706051499096, "compression_ratio": 1.3098591549295775, "no_speech_prob": 2.3153793118901866e-11, "words": [{"word": "\u89e6", "start": 115.9, "end": 116.58, "probability": 0.9547228217124939}, {"word": "\u308c\u305f", "start": 116.58, "end": 116.9, "probability": 0.9987181425094604}, {"word": "\u3053\u3068", "start": 116.9, "end": 117.16, "probability": 0.9644179940223694}, {"word": "\u3055", "start": 117.16, "end": 117.42, "probability": 0.9995638728141785}, {"word": "\u3048", "start": 117.42, "end": 117.6, "probability": 0.9996461868286133}, {"word": "\u5fd8", "start": 117.6, "end": 117.86, "probability": 0.9982598423957825}, {"word": "\u308c\u308b", "start": 117.86, "end": 118.2, "probability": 0.9995656609535217}, {"word": "\u307b\u3069", "start": 118.2, "end": 118.5, "probability": 0.9954480528831482}]}, {"id": 41, "seek": 11356, "start": 118.5, "end": 120.54, "text": "\u81ea\u7136\u306b\u5bc4\u308a\u6dfb\u3046", "tokens": [50615, 9722, 5823, 4108, 4510, 226, 5095, 14176, 119, 2646, 50717], "temperature": 0.0, "avg_logprob": -0.16920706051499096, "compression_ratio": 1.3098591549295775, "no_speech_prob": 2.3153793118901866e-11, "words": [{"word": "\u81ea", "start": 118.5, "end": 118.96, "probability": 0.9550341367721558}, {"word": "\u7136", "start": 118.96, "end": 119.32, "probability": 0.9990993738174438}, {"word": "\u306b", "start": 119.32, "end": 119.64, "probability": 0.9999111890792847}, {"word": "\u5bc4", "start": 119.64, "end": 119.82, "probability": 0.9998021423816681}, {"word": "\u308a", "start": 119.82, "end": 119.94, "probability": 0.9998319149017334}, {"word": "\u6dfb", "start": 119.94, "end": 120.24, "probability": 0.9982242584228516}, {"word": "\u3046", "start": 120.24, "end": 120.54, "probability": 0.9992833733558655}]}, {"id": 42, "seek": 11356, "start": 120.54, "end": 123.44, "text": "\u7b54\u3048\u3092\u6025\u304c\u306a\u3044\u307e\u307e\u3067", "tokens": [50717, 28223, 6474, 5998, 36379, 5142, 9311, 2889, 28176, 50863], "temperature": 0.0, "avg_logprob": -0.16920706051499096, "compression_ratio": 1.3098591549295775, "no_speech_prob": 2.3153793118901866e-11, "words": [{"word": "\u7b54", "start": 120.54, "end": 120.98, "probability": 0.9773406982421875}, {"word": "\u3048", "start": 120.98, "end": 121.22, "probability": 0.9996718168258667}, {"word": "\u3092", "start": 121.22, "end": 121.42, "probability": 0.9809320569038391}, {"word": "\u6025", "start": 121.42, "end": 121.6, "probability": 0.9992357492446899}, {"word": "\u304c", "start": 121.6, "end": 122.08, "probability": 0.9968807697296143}, {"word": "\u306a\u3044", "start": 122.08, "end": 122.58, "probability": 0.9991214871406555}, {"word": "\u307e", "start": 122.58, "end": 122.92, "probability": 0.9997575879096985}, {"word": "\u307e\u3067", "start": 122.92, "end": 123.44, "probability": 0.9997193217277527}]}, {"id": 43, "seek": 11356, "start": 123.44, "end": 125.42, "text": "\u9078\u3076\u81ea\u7531\u3054\u3068", "tokens": [50863, 21625, 23441, 45233, 9991, 3193, 50963], "temperature": 0.0, "avg_logprob": -0.16920706051499096, "compression_ratio": 1.3098591549295775, "no_speech_prob": 2.3153793118901866e-11, "words": [{"word": "\u9078", "start": 123.44, "end": 124.14, "probability": 0.9957051873207092}, {"word": "\u3076", "start": 124.14, "end": 124.44, "probability": 0.9995848536491394}, {"word": "\u81ea\u7531", "start": 124.44, "end": 124.8, "probability": 0.9603140354156494}, {"word": "\u3054", "start": 124.8, "end": 125.16, "probability": 0.8027042746543884}, {"word": "\u3068", "start": 125.16, "end": 125.42, "probability": 0.998598039150238}]}, {"id": 44, "seek": 11356, "start": 125.42, "end": 128.58, "text": "\u5dee\u3057\u51fa\u3055\u308c\u3066\u3044\u305f\u3053\u3068\u3092", "tokens": [50963, 21679, 2849, 7781, 6722, 26638, 17679, 13235, 5998, 51088], "temperature": 0.0, "avg_logprob": -0.16920706051499096, "compression_ratio": 1.3098591549295775, "no_speech_prob": 2.3153793118901866e-11, "words": [{"word": "\u5dee", "start": 125.42, "end": 125.86, "probability": 0.9559652805328369}, {"word": "\u3057", "start": 125.86, "end": 126.02, "probability": 0.9995335340499878}, {"word": "\u51fa", "start": 126.02, "end": 126.14, "probability": 0.9975070357322693}, {"word": "\u3055", "start": 126.14, "end": 126.42, "probability": 0.9999581575393677}, {"word": "\u308c\u3066", "start": 126.42, "end": 126.96, "probability": 0.9992656111717224}, {"word": "\u3044\u305f", "start": 126.96, "end": 127.58, "probability": 0.9985380172729492}, {"word": "\u3053\u3068", "start": 127.58, "end": 128.12, "probability": 0.9911425113677979}, {"word": "\u3092", "start": 128.12, "end": 128.58, "probability": 0.999527096748352}]}, {"id": 45, "seek": 11356, "start": 128.58, "end": 130.5, "text": "\u4eca\u306b\u306a\u3063\u3066\u77e5\u308b", "tokens": [51088, 6480, 22615, 6102, 6498, 4895, 51188], "temperature": 0.0, "avg_logprob": -0.16920706051499096, "compression_ratio": 1.3098591549295775, "no_speech_prob": 2.3153793118901866e-11, "words": [{"word": "\u4eca", "start": 128.58, "end": 128.96, "probability": 0.9589486122131348}, {"word": "\u306b\u306a", "start": 128.96, "end": 129.26, "probability": 0.9975441098213196}, {"word": "\u3063\u3066", "start": 129.26, "end": 129.72, "probability": 0.9998751878738403}, {"word": "\u77e5", "start": 129.72, "end": 130.04, "probability": 0.9980744123458862}, {"word": "\u308b", "start": 130.04, "end": 130.5, "probability": 0.9997698664665222}]}, {"id": 46, "seek": 13050, "start": 130.5, "end": 133.78, "text": "\u512a\u3057\u3044\u3063\u3066\u8a00\u8449\u3058\u3083", "tokens": [50365, 12827, 103, 17121, 6102, 12009, 46290, 15339, 50535], "temperature": 0.0, "avg_logprob": -0.2524867057800293, "compression_ratio": 1.2053571428571428, "no_speech_prob": 2.4177170682149196e-11, "words": [{"word": "\u512a", "start": 130.5, "end": 132.08, "probability": 0.9640615880489349}, {"word": "\u3057\u3044", "start": 132.08, "end": 132.38, "probability": 0.9979642629623413}, {"word": "\u3063\u3066", "start": 132.38, "end": 132.72, "probability": 0.9994458556175232}, {"word": "\u8a00", "start": 132.72, "end": 132.96, "probability": 0.999502420425415}, {"word": "\u8449", "start": 132.96, "end": 133.26, "probability": 0.9998509883880615}, {"word": "\u3058\u3083", "start": 133.26, "end": 133.78, "probability": 0.9980620741844177}]}, {"id": 47, "seek": 13050, "start": 133.78, "end": 136.0, "text": "\u8db3\u308a\u306a\u3044\u7406\u7531\u304c", "tokens": [50535, 37236, 5095, 9311, 13876, 23786, 5142, 50652], "temperature": 0.0, "avg_logprob": -0.2524867057800293, "compression_ratio": 1.2053571428571428, "no_speech_prob": 2.4177170682149196e-11, "words": [{"word": "\u8db3", "start": 133.78, "end": 134.48, "probability": 0.9218706488609314}, {"word": "\u308a", "start": 134.48, "end": 134.62, "probability": 0.9998817443847656}, {"word": "\u306a\u3044", "start": 134.62, "end": 134.9, "probability": 0.9999605417251587}, {"word": "\u7406", "start": 134.9, "end": 135.3, "probability": 0.9993724226951599}, {"word": "\u7531", "start": 135.3, "end": 135.54, "probability": 0.999923586845398}, {"word": "\u304c", "start": 135.54, "end": 136.0, "probability": 0.999708354473114}]}, {"id": 48, "seek": 13050, "start": 136.0, "end": 141.52, "text": "\u4eca\u306a\u3089\u5c11\u3057\u308f\u304b\u308b", "tokens": [50652, 6480, 42540, 15686, 2849, 44054, 4895, 50922], "temperature": 0.0, "avg_logprob": -0.2524867057800293, "compression_ratio": 1.2053571428571428, "no_speech_prob": 2.4177170682149196e-11, "words": [{"word": "\u4eca", "start": 136.0, "end": 137.36, "probability": 0.9000434279441833}, {"word": "\u306a\u3089", "start": 137.36, "end": 138.24, "probability": 0.9998413324356079}, {"word": "\u5c11", "start": 138.24, "end": 139.34, "probability": 0.9992886781692505}, {"word": "\u3057", "start": 139.34, "end": 139.94, "probability": 0.9999018907546997}, {"word": "\u308f\u304b", "start": 139.94, "end": 140.7, "probability": 0.74126797914505}, {"word": "\u308b", "start": 140.7, "end": 141.52, "probability": 0.9999473094940186}]}, {"id": 49, "seek": 13050, "start": 141.52, "end": 143.54, "text": "\u596a\u308f\u306a\u3044\u3053\u3068", "tokens": [50922, 1881, 103, 9206, 9311, 13235, 51018], "temperature": 0.0, "avg_logprob": -0.2524867057800293, "compression_ratio": 1.2053571428571428, "no_speech_prob": 2.4177170682149196e-11, "words": [{"word": "\u596a", "start": 141.52, "end": 142.32, "probability": 0.9981737434864044}, {"word": "\u308f", "start": 142.32, "end": 142.58, "probability": 0.9998077750205994}, {"word": "\u306a\u3044", "start": 142.58, "end": 143.12, "probability": 0.9995793700218201}, {"word": "\u3053\u3068", "start": 143.12, "end": 143.54, "probability": 0.9929043650627136}]}, {"id": 50, "seek": 13050, "start": 143.54, "end": 145.82, "text": "\u6c7a\u3081\u3064\u3051\u306a\u3044\u3053\u3068", "tokens": [51018, 33540, 11429, 9335, 7625, 9311, 13235, 51138], "temperature": 0.0, "avg_logprob": -0.2524867057800293, "compression_ratio": 1.2053571428571428, "no_speech_prob": 2.4177170682149196e-11, "words": [{"word": "\u6c7a", "start": 143.54, "end": 143.96, "probability": 0.6016696095466614}, {"word": "\u3081", "start": 143.96, "end": 144.3, "probability": 0.9998268485069275}, {"word": "\u3064", "start": 144.3, "end": 144.56, "probability": 0.9730210304260254}, {"word": "\u3051", "start": 144.56, "end": 144.86, "probability": 0.9998714923858643}, {"word": "\u306a\u3044", "start": 144.86, "end": 145.32, "probability": 0.9999239444732666}, {"word": "\u3053\u3068", "start": 145.32, "end": 145.82, "probability": 0.9998801946640015}]}, {"id": 51, "seek": 13050, "start": 145.82, "end": 149.04, "text": "\u4fe1\u3058\u3066\u5f85\u3064\u3053\u3068", "tokens": [51138, 17665, 9257, 2996, 18390, 9335, 13235, 51322], "temperature": 0.0, "avg_logprob": -0.2524867057800293, "compression_ratio": 1.2053571428571428, "no_speech_prob": 2.4177170682149196e-11, "words": [{"word": "\u4fe1", "start": 145.82, "end": 146.82, "probability": 0.987174391746521}, {"word": "\u3058", "start": 146.82, "end": 147.42, "probability": 0.9999516010284424}, {"word": "\u3066", "start": 147.42, "end": 147.78, "probability": 0.9997883439064026}, {"word": "\u5f85", "start": 147.78, "end": 148.16, "probability": 0.9975581169128418}, {"word": "\u3064", "start": 148.16, "end": 148.52, "probability": 0.9998244643211365}, {"word": "\u3053\u3068", "start": 148.52, "end": 149.04, "probability": 0.9996263980865479}]}, {"id": 52, "seek": 14904, "start": 153.95999999999998, "end": 155.44, "text": "\u8e0f\u307f\u8fbc\u307e\u305a\u306b", "tokens": [50365, 41166, 237, 11362, 9830, 120, 34690, 4108, 50692], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u8e0f", "start": 153.95999999999998, "end": 154.64, "probability": 0.9751041829586029}, {"word": "\u307f", "start": 154.64, "end": 154.76, "probability": 0.9998286962509155}, {"word": "\u8fbc", "start": 154.76, "end": 154.94, "probability": 0.9998762309551239}, {"word": "\u307e\u305a", "start": 154.94, "end": 155.24, "probability": 0.9987533092498779}, {"word": "\u306b", "start": 155.24, "end": 155.44, "probability": 0.9997194409370422}]}, {"id": 53, "seek": 14904, "start": 155.44, "end": 157.06, "text": "\u5bc4\u308a\u6dfb\u3046\u3084\u308a\u65b9", "tokens": [50692, 4510, 226, 5095, 14176, 119, 2646, 7355, 5095, 9249, 50767], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u5bc4", "start": 155.44, "end": 155.72, "probability": 0.9951013624668121}, {"word": "\u308a", "start": 155.72, "end": 155.84, "probability": 0.9999419450759888}, {"word": "\u6dfb", "start": 155.84, "end": 156.06, "probability": 0.9987930357456207}, {"word": "\u3046", "start": 156.06, "end": 156.28, "probability": 0.9995629191398621}, {"word": "\u3084", "start": 156.28, "end": 156.46, "probability": 0.9988406300544739}, {"word": "\u308a", "start": 156.46, "end": 156.7, "probability": 0.9999290704727173}, {"word": "\u65b9", "start": 156.7, "end": 157.06, "probability": 0.9970237612724304}]}, {"id": 54, "seek": 14904, "start": 157.06, "end": 159.76, "text": "\u5883\u754c\u7dda\u3092\u8d8a\u3048\u305a\u306b", "tokens": [50767, 47885, 21185, 31699, 5998, 25761, 6474, 18216, 4108, 50915], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u5883", "start": 157.06, "end": 157.76, "probability": 0.9509621262550354}, {"word": "\u754c", "start": 157.76, "end": 158.12, "probability": 0.9986496567726135}, {"word": "\u7dda", "start": 158.12, "end": 158.46, "probability": 0.9998695850372314}, {"word": "\u3092", "start": 158.46, "end": 158.74, "probability": 0.9998199343681335}, {"word": "\u8d8a", "start": 158.74, "end": 158.96, "probability": 0.9671412706375122}, {"word": "\u3048", "start": 158.96, "end": 159.26, "probability": 0.9998489618301392}, {"word": "\u305a", "start": 159.26, "end": 159.46, "probability": 0.9999783039093018}, {"word": "\u306b", "start": 159.46, "end": 159.76, "probability": 0.9999282360076904}]}, {"id": 55, "seek": 14904, "start": 159.76, "end": 162.22, "text": "\u89e6\u308c\u306a\u3044\u3053\u3068\u3067", "tokens": [50915, 6758, 99, 48535, 13235, 2474, 51027], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u89e6", "start": 159.76, "end": 160.52, "probability": 0.9887091815471649}, {"word": "\u308c\u306a\u3044", "start": 160.52, "end": 161.04, "probability": 0.9992470741271973}, {"word": "\u3053\u3068", "start": 161.04, "end": 161.62, "probability": 0.9965296387672424}, {"word": "\u3067", "start": 161.62, "end": 162.22, "probability": 0.9999339580535889}]}, {"id": 56, "seek": 14904, "start": 162.22, "end": 164.14, "text": "\u8fd1\u304f\u306b\u3044\u308b", "tokens": [51027, 17463, 6134, 4108, 22979, 51138], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u8fd1", "start": 162.22, "end": 162.84, "probability": 0.9953033924102783}, {"word": "\u304f", "start": 162.84, "end": 163.34, "probability": 0.9997521042823792}, {"word": "\u306b", "start": 163.34, "end": 163.62, "probability": 0.9999856948852539}, {"word": "\u3044\u308b", "start": 163.62, "end": 164.14, "probability": 0.9895057082176208}]}, {"id": 57, "seek": 14904, "start": 164.14, "end": 166.68, "text": "\u5149\u3089\u306a\u3044\u307e\u307e\u3067", "tokens": [51138, 20690, 5154, 9311, 2889, 28176, 51246], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u5149", "start": 164.14, "end": 164.84, "probability": 0.9780465960502625}, {"word": "\u3089", "start": 164.84, "end": 165.24, "probability": 0.998103141784668}, {"word": "\u306a\u3044", "start": 165.24, "end": 165.82, "probability": 0.999473512172699}, {"word": "\u307e", "start": 165.82, "end": 166.18, "probability": 0.9997877478599548}, {"word": "\u307e\u3067", "start": 166.18, "end": 166.68, "probability": 0.9967821836471558}]}, {"id": 58, "seek": 14904, "start": 166.68, "end": 169.04, "text": "\u751f\u6d3b\u306e\u4e00\u90e8\u307f\u305f\u3044\u306b", "tokens": [51246, 49958, 2972, 2257, 13470, 41258, 4108, 51365], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u751f\u6d3b", "start": 166.68, "end": 167.36, "probability": 0.9965621829032898}, {"word": "\u306e", "start": 167.36, "end": 167.74, "probability": 0.999953031539917}, {"word": "\u4e00", "start": 167.74, "end": 168.0, "probability": 0.9999420642852783}, {"word": "\u90e8", "start": 168.0, "end": 168.28, "probability": 0.9976823329925537}, {"word": "\u307f\u305f\u3044", "start": 168.28, "end": 168.74, "probability": 0.9998094439506531}, {"word": "\u306b", "start": 168.74, "end": 169.08, "probability": 0.9998964071273804}]}, {"id": 59, "seek": 14904, "start": 169.6, "end": 171.18, "text": "\u5f53\u305f\u308a\u524d\u3068\u3057\u3066", "tokens": [51393, 16233, 3368, 5095, 8945, 3193, 8822, 51474], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u5f53", "start": 169.6, "end": 169.84, "probability": 0.9987881779670715}, {"word": "\u305f", "start": 169.84, "end": 170.0, "probability": 0.9997547268867493}, {"word": "\u308a", "start": 170.0, "end": 170.14, "probability": 0.9999268054962158}, {"word": "\u524d", "start": 170.14, "end": 170.48, "probability": 0.9999567270278931}, {"word": "\u3068", "start": 170.48, "end": 170.86, "probability": 0.9985811710357666}, {"word": "\u3057\u3066", "start": 170.86, "end": 171.18, "probability": 0.9999849796295166}]}, {"id": 60, "seek": 14904, "start": 171.18, "end": 172.82, "text": "\u7d9a\u3044\u3066\u3044\u304f", "tokens": [51474, 44985, 18549, 49394, 51559], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u7d9a", "start": 171.18, "end": 171.62, "probability": 0.9998582601547241}, {"word": "\u3044\u3066", "start": 171.62, "end": 172.14, "probability": 0.9999232292175293}, {"word": "\u3044\u304f", "start": 172.14, "end": 172.82, "probability": 0.9962981343269348}]}, {"id": 61, "seek": 14904, "start": 173.88, "end": 175.46, "text": "\u305d\u308c\u304c\u512a\u3057\u3055", "tokens": [51559, 13873, 5142, 12827, 103, 2849, 6722, 51688], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u305d\u308c", "start": 173.88, "end": 174.56, "probability": 0.9983238577842712}, {"word": "\u304c", "start": 174.56, "end": 174.74, "probability": 0.999935507774353}, {"word": "\u512a", "start": 174.74, "end": 175.04, "probability": 0.9951504468917847}, {"word": "\u3057", "start": 175.04, "end": 175.28, "probability": 0.7239839434623718}, {"word": "\u3055", "start": 175.28, "end": 175.46, "probability": 0.9993579983711243}]}, {"id": 62, "seek": 14904, "start": 175.46, "end": 177.34, "text": "\u7279\u5225\u3058\u3083\u306a\u3044\u9854\u3067", "tokens": [51688, 38446, 40323, 10178, 242, 2474, 51786], "temperature": 0.0, "avg_logprob": -0.20439115437594327, "compression_ratio": 1.331360946745562, "no_speech_prob": 2.0709439371713323e-11, "words": [{"word": "\u7279\u5225", "start": 175.46, "end": 175.94, "probability": 0.7651454210281372}, {"word": "\u3058\u3083\u306a\u3044", "start": 175.94, "end": 176.48, "probability": 0.9997561573982239}, {"word": "\u9854", "start": 176.48, "end": 177.02, "probability": 0.9988630414009094}, {"word": "\u3067", "start": 177.02, "end": 177.34, "probability": 0.997825026512146}]}, {"id": 63, "seek": 17734, "start": 177.34, "end": 179.86, "text": "\u50d5\u306e\u65e5\u5e38\u306e\u89d2\u3092", "tokens": [50365, 28546, 2972, 6890, 11279, 2972, 29389, 5998, 50492], "temperature": 0.0, "avg_logprob": -0.24184191054192142, "compression_ratio": 1.1951219512195121, "no_speech_prob": 2.482242189572048e-11, "words": [{"word": "\u50d5", "start": 177.34, "end": 177.86, "probability": 0.994391143321991}, {"word": "\u306e", "start": 177.86, "end": 178.22, "probability": 0.9996070265769958}, {"word": "\u65e5", "start": 178.22, "end": 178.42, "probability": 0.9989770650863647}, {"word": "\u5e38", "start": 178.42, "end": 178.74, "probability": 0.9983774423599243}, {"word": "\u306e", "start": 178.74, "end": 179.02, "probability": 0.9965014457702637}, {"word": "\u89d2", "start": 179.02, "end": 179.36, "probability": 0.4930900037288666}, {"word": "\u3092", "start": 179.36, "end": 179.86, "probability": 0.9978945851325989}]}, {"id": 64, "seek": 17734, "start": 179.86, "end": 182.22, "text": "\u9759\u304b\u306b\u4e38\u3081\u308b", "tokens": [50492, 5363, 247, 3703, 4108, 940, 116, 11429, 4895, 50612], "temperature": 0.0, "avg_logprob": -0.24184191054192142, "compression_ratio": 1.1951219512195121, "no_speech_prob": 2.482242189572048e-11, "words": [{"word": "\u9759", "start": 179.86, "end": 180.42, "probability": 0.9563006162643433}, {"word": "\u304b", "start": 180.42, "end": 180.76, "probability": 0.9997175335884094}, {"word": "\u306b", "start": 180.76, "end": 181.2, "probability": 0.9998857975006104}, {"word": "\u4e38", "start": 181.2, "end": 181.66, "probability": 0.9988425970077515}, {"word": "\u3081", "start": 181.66, "end": 181.96, "probability": 0.9986934065818787}, {"word": "\u308b", "start": 181.96, "end": 182.22, "probability": 0.9998424053192139}]}, {"id": 65, "seek": 17734, "start": 182.22, "end": 184.2, "text": "\u5f8c\u304b\u3089\u80f8\u306b\u97ff\u304f", "tokens": [50612, 5661, 11046, 19095, 116, 4108, 13665, 123, 6134, 50710], "temperature": 0.0, "avg_logprob": -0.24184191054192142, "compression_ratio": 1.1951219512195121, "no_speech_prob": 2.482242189572048e-11, "words": [{"word": "\u5f8c", "start": 182.22, "end": 182.82, "probability": 0.9170709252357483}, {"word": "\u304b\u3089", "start": 182.82, "end": 183.16, "probability": 0.9989836812019348}, {"word": "\u80f8", "start": 183.16, "end": 183.48, "probability": 0.9998522698879242}, {"word": "\u306b", "start": 183.48, "end": 183.66, "probability": 0.9999579191207886}, {"word": "\u97ff", "start": 183.66, "end": 183.96, "probability": 0.9998227655887604}, {"word": "\u304f", "start": 183.96, "end": 184.2, "probability": 0.9999439716339111}]}, {"id": 66, "seek": 17734, "start": 184.2, "end": 185.46, "text": "\u305d\u308c\u304c\u512a\u3057\u3055", "tokens": [50710, 13873, 5142, 12827, 103, 2849, 6722, 50774], "temperature": 0.0, "avg_logprob": -0.24184191054192142, "compression_ratio": 1.1951219512195121, "no_speech_prob": 2.482242189572048e-11, "words": [{"word": "\u305d\u308c", "start": 184.2, "end": 184.56, "probability": 0.9278021454811096}, {"word": "\u304c", "start": 184.56, "end": 184.74, "probability": 0.9999241828918457}, {"word": "\u512a", "start": 184.74, "end": 185.02, "probability": 0.9951873421669006}, {"word": "\u3057", "start": 185.02, "end": 185.32, "probability": 0.5942649245262146}, {"word": "\u3055", "start": 185.32, "end": 185.46, "probability": 0.9997126460075378}]}, {"id": 67, "seek": 17734, "start": 185.46, "end": 187.4, "text": "\u6b8b\u3089\u306a\u3044\u306f\u305a\u306a\u306e\u306b", "tokens": [50774, 15976, 233, 5154, 9311, 3065, 18216, 3203, 2972, 4108, 50872], "temperature": 0.0, "avg_logprob": -0.24184191054192142, "compression_ratio": 1.1951219512195121, "no_speech_prob": 2.482242189572048e-11, "words": [{"word": "\u6b8b", "start": 185.46, "end": 185.88, "probability": 0.996198982000351}, {"word": "\u3089", "start": 185.88, "end": 186.02, "probability": 0.9999432563781738}, {"word": "\u306a\u3044", "start": 186.02, "end": 186.3, "probability": 0.999943733215332}, {"word": "\u306f", "start": 186.3, "end": 186.48, "probability": 0.9975067973136902}, {"word": "\u305a", "start": 186.48, "end": 186.64, "probability": 0.9999310970306396}, {"word": "\u306a", "start": 186.64, "end": 186.82, "probability": 0.9998865127563477}, {"word": "\u306e", "start": 186.82, "end": 187.02, "probability": 0.9999386072158813}, {"word": "\u306b", "start": 187.02, "end": 187.4, "probability": 0.9999599456787109}]}, {"id": 68, "seek": 17734, "start": 187.4, "end": 189.22, "text": "\u632f\u308a\u8fd4\u308b\u305f\u3073", "tokens": [50872, 8501, 107, 5095, 3316, 242, 4895, 3368, 38761, 50965], "temperature": 0.0, "avg_logprob": -0.24184191054192142, "compression_ratio": 1.1951219512195121, "no_speech_prob": 2.482242189572048e-11, "words": [{"word": "\u632f", "start": 187.4, "end": 187.84, "probability": 0.9912388324737549}, {"word": "\u308a", "start": 187.84, "end": 187.98, "probability": 0.9997683167457581}, {"word": "\u8fd4", "start": 187.98, "end": 188.48, "probability": 0.9998767673969269}, {"word": "\u308b", "start": 188.48, "end": 188.74, "probability": 0.9998239874839783}, {"word": "\u305f", "start": 188.74, "end": 188.98, "probability": 0.6368359327316284}, {"word": "\u3073", "start": 188.98, "end": 189.22, "probability": 0.9999674558639526}]}, {"id": 69, "seek": 17734, "start": 189.22, "end": 193.12, "text": "\u78ba\u304b\u306b\u305d\u3053\u306b\u3042\u308b", "tokens": [50965, 24293, 3703, 4108, 5040, 3503, 4108, 24719, 51165], "temperature": 0.0, "avg_logprob": -0.24184191054192142, "compression_ratio": 1.1951219512195121, "no_speech_prob": 2.482242189572048e-11, "words": [{"word": "\u78ba", "start": 189.22, "end": 190.04, "probability": 0.9968301653862}, {"word": "\u304b", "start": 190.04, "end": 190.5, "probability": 0.9999526739120483}, {"word": "\u306b", "start": 190.5, "end": 190.96, "probability": 0.9999674558639526}, {"word": "\u305d", "start": 190.96, "end": 191.48, "probability": 0.9979504942893982}, {"word": "\u3053", "start": 191.48, "end": 191.78, "probability": 0.999909520149231}, {"word": "\u306b", "start": 191.78, "end": 192.18, "probability": 0.9999688863754272}, {"word": "\u3042\u308b", "start": 192.18, "end": 193.12, "probability": 0.999840259552002}]}, {"id": 70, "seek": 19312, "start": 221.2, "end": 222.6, "text": "\u3067\u3082", "tokens": [50365, 17783, 51284], "temperature": 1.0, "avg_logprob": -2.823649597167969, "compression_ratio": 0.42857142857142855, "no_speech_prob": 4.871838488185176e-10, "words": [{"word": "\u3067\u3082", "start": 221.2, "end": 222.6, "probability": 0.00022061313211452216}]}, {"id": 71, "seek": 22260, "start": 222.58, "end": 222.58, "text": "", "tokens": [], "temperature": 0.0, "avg_logprob": -0.18344435095787048, "compression_ratio": 0.8571428571428571, "no_speech_prob": 1.6767101596038003e-10, "words": []}], "language": "ja"}
+{
+  "text": "\u4eba\u6df7\u307f\u3092\u907f\u3051\u308b\u307f\u305f\u3044\u306b\u5c11\u3057\u3060\u3051\u6b69\u5e45\u3092\u843d\u3068\u3059\u6d3e\u624b\u306a\u8a00\u8449\u306f\u9078\u3070\u306a\u3044\u3067\u3082\u76ee\u7dda\u306f\u3061\u3083\u3093\u3068\u5408\u3063\u3066\u308b\u5197\u8ac7\u306b\u9003\u3052\u305f\u6c88\u9ed9\u306e\u5f8c\u8ab0\u306b\u3082\u6c17\u3065\u304b\u308c\u306a\u3044\u3068\u3053\u308d\u3067\u6b69\u3044\u305f\u307e\u307e\u305d\u3063\u3068\u57cb\u3081\u308b\u3088\u3046\u306a\u305d\u3093\u306a\u4ed5\u8349\u304c\u6b8b\u3063\u3066\u308b\u5927\u4e08\u592b\u3068\u306f\u805e\u304b\u306a\u3044\u3067\u7b54\u3048\u304c\u51fa\u308b\u307e\u3067\u5f85\u3066\u308b\u4eba\u6b63\u3057\u3055\u3088\u308a\u3082\u5f31\u304f\u3092\u9078\u3076\u7656\u304c\u3042\u308b\u307f\u305f\u3044\u3060\u50b7\u3064\u3051\u306a\u3044\u305f\u3081\u3058\u3083\u306a\u304f\u9003\u3052\u306a\u3044\u305f\u3081\u306e\u30c1\u30fc\u30e0\u541b\u305d\u306e\u610f\u5473\u3092\u5f8c\u304b\u3089\u77e5\u308b\u3053\u3068\u306b\u306a\u308b\u5f37\u304f\u898b\u305b\u305f\u3044\u308f\u3051\u3058\u3083\u306a\u3044\u5f31\u3055\u3092\u96a0\u3059\u3067\u3082\u306a\u3044\u305f\u3060\u7121\u7406\u3092\u3057\u306a\u3044\u8ddd\u96e2\u3067\u96a3\u306b\u7acb\u3063\u3066\u3044\u308b\u6c17\u3065\u3051\u3070\u3082\u3046\u52a9\u3051\u3089\u308c\u3066\u308b\u5f62\u3092\u6301\u305f\u306a\u3044\u307e\u307e\u3067\u62b1\u304d\u3057\u3081\u308b\u3088\u308a\u3082\u5148\u306b\u547c\u5438\u3092\u5408\u308f\u305b\u3066\u304f\u308b\u540d\u524d\u3092\u3064\u3051\u306a\u3044\u307e\u307e\u3067\u4f55\u3082\u6c42\u3081\u305a\u306b\u5b88\u3089\u308c\u3066\u3044\u305f\u3053\u3068\u306b\u5f8c\u3067\u6c17\u3065\u304f\u96e8\u304c\u964d\u308a\u305d\u3046\u306a\u7a7a\u3092\u898b\u4e0a\u3052\u3066\u4f55\u3082\u8a00\u308f\u306a\u3044\u5098\u3092\u5dee\u3057\u51fa\u3059\u4ee3\u308f\u308a\u306b\u4e00\u6b69\u5f71\u3092\u5bc4\u305b\u308b\u671f\u5f85\u3057\u306a\u3044\u632f\u308a\u304c\u4e0a\u624b\u3067\u5931\u671b\u3082\u3057\u306a\u3044\u9854\u3067\u305d\u308c\u3067\u3082\u3061\u3083\u3093\u3068\u4eba\u3092\u4fe1\u3058\u3066\u3044\u308b\u5f37\u304f\u898b\u305b\u308b\u5fc5\u8981\u3082\u306a\u304f\u5f31\u3055\u3092\u96a0\u3059\u3053\u3068\u3082\u306a\u304f\u305f\u3060\u81ea\u5206\u306e\u901f\u5ea6\u3067\u540c\u3058\u65b9\u3092\u5411\u3044\u3066\u308b\u8a00\u8449\u3088\u308a\u5148\u306b\u652f\u3048\u3066\u304f\u308b\u97f3\u3092\u7acb\u3066\u306a\u3044\u307e\u307e\u3067\u89e6\u308c\u305f\u3053\u3068\u3055\u3048\u5fd8\u308c\u308b\u307b\u3069\u81ea\u7136\u306b\u5bc4\u308a\u6dfb\u3046\u7b54\u3048\u3092\u6025\u304c\u306a\u3044\u307e\u307e\u3067\u9078\u3076\u81ea\u7531\u3054\u3068\u5dee\u3057\u51fa\u3055\u308c\u3066\u3044\u305f\u3053\u3068\u3092\u4eca\u306b\u306a\u3063\u3066\u77e5\u308b\u512a\u3057\u3044\u3063\u3066\u8a00\u8449\u3058\u3083\u8db3\u308a\u306a\u3044\u7406\u7531\u304c\u4eca\u306a\u3089\u5c11\u3057\u308f\u304b\u308b\u596a\u308f\u306a\u3044\u3053\u3068\u6c7a\u3081\u3064\u3051\u306a\u3044\u3053\u3068\u4fe1\u3058\u3066\u5f85\u3064\u3053\u3068\u8e0f\u307f\u8fbc\u307e\u305a\u306b\u5bc4\u308a\u6dfb\u3046\u3084\u308a\u65b9\u5883\u754c\u7dda\u3092\u8d8a\u3048\u305a\u306b\u89e6\u308c\u306a\u3044\u3053\u3068\u3067\u8fd1\u304f\u306b\u3044\u308b\u5149\u3089\u306a\u3044\u307e\u307e\u3067\u751f\u6d3b\u306e\u4e00\u90e8\u307f\u305f\u3044\u306b\u5f53\u305f\u308a\u524d\u3068\u3057\u3066\u7d9a\u3044\u3066\u3044\u304f\u305d\u308c\u304c\u512a\u3057\u3055\u7279\u5225\u3058\u3083\u306a\u3044\u9854\u3067\u50d5\u306e\u65e5\u5e38\u306e\u89d2\u3092\u9759\u304b\u306b\u4e38\u3081\u308b\u5f8c\u304b\u3089\u80f8\u306b\u97ff\u304f\u305d\u308c\u304c\u512a\u3057\u3055\u6b8b\u3089\u306a\u3044\u306f\u305a\u306a\u306e\u306b\u632f\u308a\u8fd4\u308b\u305f\u3073\u78ba\u304b\u306b\u305d\u3053\u306b\u3042\u308b\u3067\u3082",
+  "segments": [
+    {
+      "id": 0,
+      "seek": 0,
+      "start": 10.64,
+      "end": 13.26,
+      "text": "\u4eba\u6df7\u307f\u3092\u907f\u3051\u308b\u307f\u305f\u3044\u306b",
+      "tokens": [
+        50365, 4035, 48640, 11362, 5998, 3330, 123, 39278, 41258, 4108, 51035
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1335312245966314,
+      "compression_ratio": 1.3278688524590163,
+      "no_speech_prob": 7.310693717066385e-12,
+      "words": [
+        {
+          "word": "\u4eba",
+          "start": 10.64,
+          "end": 11.14,
+          "probability": 0.9699311852455139
+        },
+        {
+          "word": "\u6df7",
+          "start": 11.14,
+          "end": 11.34,
+          "probability": 0.7907119989395142
+        },
+        {
+          "word": "\u307f",
+          "start": 11.34,
+          "end": 11.48,
+          "probability": 0.9907504916191101
+        },
+        {
+          "word": "\u3092",
+          "start": 11.48,
+          "end": 11.64,
+          "probability": 0.9935473799705505
+        },
+        {
+          "word": "\u907f",
+          "start": 11.64,
+          "end": 11.9,
+          "probability": 0.9724639654159546
+        },
+        {
+          "word": "\u3051\u308b",
+          "start": 11.9,
+          "end": 12.32,
+          "probability": 0.9998249411582947
+        },
+        {
+          "word": "\u307f\u305f\u3044",
+          "start": 12.32,
+          "end": 12.84,
+          "probability": 0.9951914548873901
+        },
+        {
+          "word": "\u306b",
+          "start": 12.84,
+          "end": 13.26,
+          "probability": 0.9987552165985107
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "seek": 0,
+      "start": 13.26,
+      "end": 15.76,
+      "text": "\u5c11\u3057\u3060\u3051\u6b69\u5e45\u3092\u843d\u3068\u3059",
+      "tokens": [
+        51035, 15686, 2849, 36215, 4287, 102, 3509, 227, 5998, 30848, 3193,
+        2659, 51155
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1335312245966314,
+      "compression_ratio": 1.3278688524590163,
+      "no_speech_prob": 7.310693717066385e-12,
+      "words": [
+        {
+          "word": "\u5c11",
+          "start": 13.26,
+          "end": 13.58,
+          "probability": 0.6487824320793152
+        },
+        {
+          "word": "\u3057",
+          "start": 13.58,
+          "end": 13.84,
+          "probability": 0.999910831451416
+        },
+        {
+          "word": "\u3060\u3051",
+          "start": 13.84,
+          "end": 14.1,
+          "probability": 0.9993690848350525
+        },
+        {
+          "word": "\u6b69",
+          "start": 14.1,
+          "end": 14.3,
+          "probability": 0.9937864542007446
+        },
+        {
+          "word": "\u5e45",
+          "start": 14.3,
+          "end": 14.56,
+          "probability": 0.9992524683475494
+        },
+        {
+          "word": "\u3092",
+          "start": 14.56,
+          "end": 14.98,
+          "probability": 0.9999438524246216
+        },
+        {
+          "word": "\u843d",
+          "start": 14.98,
+          "end": 15.24,
+          "probability": 0.9994354844093323
+        },
+        {
+          "word": "\u3068",
+          "start": 15.24,
+          "end": 15.42,
+          "probability": 0.9989411234855652
+        },
+        {
+          "word": "\u3059",
+          "start": 15.42,
+          "end": 15.76,
+          "probability": 0.9999682903289795
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "seek": 0,
+      "start": 15.76,
+      "end": 18.14,
+      "text": "\u6d3e\u624b\u306a\u8a00\u8449\u306f\u9078\u3070\u306a\u3044",
+      "tokens": [
+        51155, 12136, 122, 11389, 3203, 12009, 46290, 3065, 21625, 13349, 9311,
+        51274
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1335312245966314,
+      "compression_ratio": 1.3278688524590163,
+      "no_speech_prob": 7.310693717066385e-12,
+      "words": [
+        {
+          "word": "\u6d3e",
+          "start": 15.76,
+          "end": 16.02,
+          "probability": 0.994696170091629
+        },
+        {
+          "word": "\u624b",
+          "start": 16.02,
+          "end": 16.16,
+          "probability": 0.99845290184021
+        },
+        {
+          "word": "\u306a",
+          "start": 16.16,
+          "end": 16.36,
+          "probability": 0.9999719858169556
+        },
+        {
+          "word": "\u8a00",
+          "start": 16.36,
+          "end": 16.56,
+          "probability": 0.9998804330825806
+        },
+        {
+          "word": "\u8449",
+          "start": 16.56,
+          "end": 16.8,
+          "probability": 0.9998551607131958
+        },
+        {
+          "word": "\u306f",
+          "start": 16.8,
+          "end": 17.02,
+          "probability": 0.9996799230575562
+        },
+        {
+          "word": "\u9078",
+          "start": 17.02,
+          "end": 17.28,
+          "probability": 0.9999473094940186
+        },
+        {
+          "word": "\u3070",
+          "start": 17.28,
+          "end": 17.64,
+          "probability": 0.9993568062782288
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 17.64,
+          "end": 18.14,
+          "probability": 0.9997345805168152
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "seek": 0,
+      "start": 18.14,
+      "end": 20.42,
+      "text": "\u3067\u3082\u76ee\u7dda\u306f\u3061\u3083\u3093\u3068\u5408\u3063\u3066\u308b",
+      "tokens": [
+        51274, 17783, 11386, 31699, 3065, 35771, 3193, 14245, 45350, 51387
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1335312245966314,
+      "compression_ratio": 1.3278688524590163,
+      "no_speech_prob": 7.310693717066385e-12,
+      "words": [
+        {
+          "word": "\u3067\u3082",
+          "start": 18.14,
+          "end": 18.52,
+          "probability": 0.9657766222953796
+        },
+        {
+          "word": "\u76ee",
+          "start": 18.52,
+          "end": 18.86,
+          "probability": 0.968923032283783
+        },
+        {
+          "word": "\u7dda",
+          "start": 18.86,
+          "end": 19.06,
+          "probability": 0.9997993111610413
+        },
+        {
+          "word": "\u306f",
+          "start": 19.06,
+          "end": 19.3,
+          "probability": 0.9999550580978394
+        },
+        {
+          "word": "\u3061\u3083\u3093",
+          "start": 19.3,
+          "end": 19.56,
+          "probability": 0.9998555183410645
+        },
+        {
+          "word": "\u3068",
+          "start": 19.56,
+          "end": 19.8,
+          "probability": 0.9998453855514526
+        },
+        {
+          "word": "\u5408",
+          "start": 19.8,
+          "end": 19.98,
+          "probability": 0.9687612056732178
+        },
+        {
+          "word": "\u3063\u3066\u308b",
+          "start": 19.98,
+          "end": 20.42,
+          "probability": 0.9943364262580872
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "seek": 0,
+      "start": 20.42,
+      "end": 23.1,
+      "text": "\u5197\u8ac7\u306b\u9003\u3052\u305f\u6c88\u9ed9\u306e\u5f8c",
+      "tokens": [
+        51387, 5676, 245, 48022, 4108, 2215, 225, 26012, 3368, 3308, 230, 6173,
+        247, 2972, 5661, 51524
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1335312245966314,
+      "compression_ratio": 1.3278688524590163,
+      "no_speech_prob": 7.310693717066385e-12,
+      "words": [
+        {
+          "word": "\u5197",
+          "start": 20.42,
+          "end": 20.96,
+          "probability": 0.9955272376537323
+        },
+        {
+          "word": "\u8ac7",
+          "start": 20.96,
+          "end": 21.24,
+          "probability": 0.9995436072349548
+        },
+        {
+          "word": "\u306b",
+          "start": 21.24,
+          "end": 21.5,
+          "probability": 0.9999440908432007
+        },
+        {
+          "word": "\u9003",
+          "start": 21.5,
+          "end": 21.68,
+          "probability": 0.9998064637184143
+        },
+        {
+          "word": "\u3052",
+          "start": 21.68,
+          "end": 21.8,
+          "probability": 0.9999066591262817
+        },
+        {
+          "word": "\u305f",
+          "start": 21.8,
+          "end": 21.96,
+          "probability": 0.9917635917663574
+        },
+        {
+          "word": "\u6c88",
+          "start": 21.96,
+          "end": 22.2,
+          "probability": 0.9322241842746735
+        },
+        {
+          "word": "\u9ed9",
+          "start": 22.2,
+          "end": 22.48,
+          "probability": 0.9496493935585022
+        },
+        {
+          "word": "\u306e",
+          "start": 22.48,
+          "end": 22.72,
+          "probability": 0.9963439106941223
+        },
+        {
+          "word": "\u5f8c",
+          "start": 22.72,
+          "end": 23.1,
+          "probability": 0.6026389598846436
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "seek": 0,
+      "start": 23.1,
+      "end": 25.78,
+      "text": "\u8ab0\u306b\u3082\u6c17\u3065\u304b\u308c\u306a\u3044\u3068\u3053\u308d\u3067",
+      "tokens": [
+        51524, 20757, 4108, 4801, 25870, 487, 98, 3703, 48535, 46001, 2474,
+        51658
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1335312245966314,
+      "compression_ratio": 1.3278688524590163,
+      "no_speech_prob": 7.310693717066385e-12,
+      "words": [
+        {
+          "word": "\u8ab0",
+          "start": 23.1,
+          "end": 23.58,
+          "probability": 0.9978727102279663
+        },
+        {
+          "word": "\u306b",
+          "start": 23.58,
+          "end": 23.82,
+          "probability": 0.9999525547027588
+        },
+        {
+          "word": "\u3082",
+          "start": 23.82,
+          "end": 23.98,
+          "probability": 0.9999210834503174
+        },
+        {
+          "word": "\u6c17",
+          "start": 23.98,
+          "end": 24.16,
+          "probability": 0.9997022747993469
+        },
+        {
+          "word": "\u3065",
+          "start": 24.16,
+          "end": 24.3,
+          "probability": 0.8622739017009735
+        },
+        {
+          "word": "\u304b",
+          "start": 24.3,
+          "end": 24.5,
+          "probability": 0.9997487664222717
+        },
+        {
+          "word": "\u308c\u306a\u3044",
+          "start": 24.5,
+          "end": 24.8,
+          "probability": 0.9997280240058899
+        },
+        {
+          "word": "\u3068\u3053\u308d",
+          "start": 24.8,
+          "end": 25.32,
+          "probability": 0.9909821152687073
+        },
+        {
+          "word": "\u3067",
+          "start": 25.32,
+          "end": 25.78,
+          "probability": 0.9999517202377319
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "seek": 0,
+      "start": 25.78,
+      "end": 28.12,
+      "text": "\u6b69\u3044\u305f\u307e\u307e\u305d\u3063\u3068\u57cb\u3081\u308b\u3088\u3046\u306a",
+      "tokens": [
+        51658, 4287, 102, 17679, 2889, 2889, 5040, 13137, 16262, 233, 11429,
+        4895, 17010, 3203, 51775
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1335312245966314,
+      "compression_ratio": 1.3278688524590163,
+      "no_speech_prob": 7.310693717066385e-12,
+      "words": [
+        {
+          "word": "\u6b69",
+          "start": 25.78,
+          "end": 26.12,
+          "probability": 0.7330726683139801
+        },
+        {
+          "word": "\u3044\u305f",
+          "start": 26.12,
+          "end": 26.34,
+          "probability": 0.8900891542434692
+        },
+        {
+          "word": "\u307e",
+          "start": 26.34,
+          "end": 26.46,
+          "probability": 0.5334389209747314
+        },
+        {
+          "word": "\u307e",
+          "start": 26.46,
+          "end": 26.58,
+          "probability": 0.6279078722000122
+        },
+        {
+          "word": "\u305d",
+          "start": 26.58,
+          "end": 26.8,
+          "probability": 0.7117111682891846
+        },
+        {
+          "word": "\u3063\u3068",
+          "start": 26.8,
+          "end": 27.08,
+          "probability": 0.9991942048072815
+        },
+        {
+          "word": "\u57cb",
+          "start": 27.08,
+          "end": 27.3,
+          "probability": 0.9980497360229492
+        },
+        {
+          "word": "\u3081",
+          "start": 27.3,
+          "end": 27.44,
+          "probability": 0.9999512434005737
+        },
+        {
+          "word": "\u308b",
+          "start": 27.44,
+          "end": 27.58,
+          "probability": 0.9999194145202637
+        },
+        {
+          "word": "\u3088\u3046",
+          "start": 27.58,
+          "end": 27.8,
+          "probability": 0.9906901121139526
+        },
+        {
+          "word": "\u306a",
+          "start": 27.8,
+          "end": 28.12,
+          "probability": 0.9997096657752991
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "seek": 2812,
+      "start": 28.12,
+      "end": 30.54,
+      "text": "\u305d\u3093\u306a\u4ed5\u8349\u304c\u6b8b\u3063\u3066\u308b",
+      "tokens": [
+        50365, 46346, 1550, 243, 31409, 231, 5142, 15976, 233, 45350, 50488
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u305d\u3093\u306a",
+          "start": 28.12,
+          "end": 28.82,
+          "probability": 0.9961394667625427
+        },
+        {
+          "word": "\u4ed5",
+          "start": 28.82,
+          "end": 29.26,
+          "probability": 0.9874396026134491
+        },
+        {
+          "word": "\u8349",
+          "start": 29.26,
+          "end": 29.58,
+          "probability": 0.9991794526576996
+        },
+        {
+          "word": "\u304c",
+          "start": 29.58,
+          "end": 29.78,
+          "probability": 0.9999188184738159
+        },
+        {
+          "word": "\u6b8b",
+          "start": 29.78,
+          "end": 30.14,
+          "probability": 0.9999462962150574
+        },
+        {
+          "word": "\u3063\u3066\u308b",
+          "start": 30.14,
+          "end": 30.54,
+          "probability": 0.9962378740310669
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "seek": 2812,
+      "start": 30.54,
+      "end": 33.22,
+      "text": "\u5927\u4e08\u592b\u3068\u306f\u805e\u304b\u306a\u3044\u3067",
+      "tokens": [50488, 44537, 3193, 3065, 25468, 3703, 9311, 2474, 50623],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u5927\u4e08\u592b",
+          "start": 30.54,
+          "end": 31.52,
+          "probability": 0.9481772184371948
+        },
+        {
+          "word": "\u3068",
+          "start": 31.52,
+          "end": 32.08,
+          "probability": 0.9936578869819641
+        },
+        {
+          "word": "\u306f",
+          "start": 32.08,
+          "end": 32.34,
+          "probability": 0.9998272061347961
+        },
+        {
+          "word": "\u805e",
+          "start": 32.34,
+          "end": 32.56,
+          "probability": 0.99793541431427
+        },
+        {
+          "word": "\u304b",
+          "start": 32.56,
+          "end": 32.74,
+          "probability": 0.9999412298202515
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 32.74,
+          "end": 33.02,
+          "probability": 0.9999828338623047
+        },
+        {
+          "word": "\u3067",
+          "start": 33.02,
+          "end": 33.22,
+          "probability": 0.9998111128807068
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "seek": 2812,
+      "start": 33.22,
+      "end": 35.42,
+      "text": "\u7b54\u3048\u304c\u51fa\u308b\u307e\u3067\u5f85\u3066\u308b\u4eba",
+      "tokens": [
+        50623, 28223, 6474, 5142, 7781, 4895, 28176, 18390, 2996, 4895, 4035,
+        50732
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u7b54",
+          "start": 33.22,
+          "end": 33.6,
+          "probability": 0.8895542025566101
+        },
+        {
+          "word": "\u3048",
+          "start": 33.6,
+          "end": 33.82,
+          "probability": 0.9999141693115234
+        },
+        {
+          "word": "\u304c",
+          "start": 33.82,
+          "end": 33.98,
+          "probability": 0.9999041557312012
+        },
+        {
+          "word": "\u51fa",
+          "start": 33.98,
+          "end": 34.14,
+          "probability": 0.9999055862426758
+        },
+        {
+          "word": "\u308b",
+          "start": 34.14,
+          "end": 34.3,
+          "probability": 0.9999481439590454
+        },
+        {
+          "word": "\u307e\u3067",
+          "start": 34.3,
+          "end": 34.58,
+          "probability": 0.6544159650802612
+        },
+        {
+          "word": "\u5f85",
+          "start": 34.58,
+          "end": 34.76,
+          "probability": 0.6958413124084473
+        },
+        {
+          "word": "\u3066",
+          "start": 34.76,
+          "end": 34.92,
+          "probability": 0.9972948431968689
+        },
+        {
+          "word": "\u308b",
+          "start": 34.92,
+          "end": 35.08,
+          "probability": 0.9994851350784302
+        },
+        {
+          "word": "\u4eba",
+          "start": 35.08,
+          "end": 35.42,
+          "probability": 0.9971699118614197
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "seek": 2812,
+      "start": 35.42,
+      "end": 40.54,
+      "text": "\u6b63\u3057\u3055\u3088\u308a\u3082\u5f31\u304f\u3092\u9078\u3076\u7656\u304c\u3042\u308b\u307f\u305f\u3044\u3060",
+      "tokens": [
+        50732, 15789, 2849, 6722, 5591, 5095, 4801, 5702, 109, 6134, 5998,
+        21625, 23441, 6651, 244, 5142, 24719, 41258, 5362, 50995
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u6b63",
+          "start": 35.42,
+          "end": 36.12,
+          "probability": 0.9826377034187317
+        },
+        {
+          "word": "\u3057",
+          "start": 36.12,
+          "end": 36.34,
+          "probability": 0.9966592788696289
+        },
+        {
+          "word": "\u3055",
+          "start": 36.34,
+          "end": 36.5,
+          "probability": 0.9998660087585449
+        },
+        {
+          "word": "\u3088",
+          "start": 36.5,
+          "end": 36.66,
+          "probability": 0.9999394416809082
+        },
+        {
+          "word": "\u308a",
+          "start": 36.66,
+          "end": 36.8,
+          "probability": 0.9999898672103882
+        },
+        {
+          "word": "\u3082",
+          "start": 36.8,
+          "end": 37.02,
+          "probability": 0.9998722076416016
+        },
+        {
+          "word": "\u5f31",
+          "start": 37.02,
+          "end": 37.32,
+          "probability": 0.9817418456077576
+        },
+        {
+          "word": "\u304f",
+          "start": 37.32,
+          "end": 37.64,
+          "probability": 0.9357618689537048
+        },
+        {
+          "word": "\u3092",
+          "start": 37.64,
+          "end": 37.9,
+          "probability": 0.943050742149353
+        },
+        {
+          "word": "\u9078",
+          "start": 37.9,
+          "end": 38.16,
+          "probability": 0.9988037347793579
+        },
+        {
+          "word": "\u3076",
+          "start": 38.16,
+          "end": 38.5,
+          "probability": 0.9993614554405212
+        },
+        {
+          "word": "\u7656",
+          "start": 38.5,
+          "end": 38.9,
+          "probability": 0.9935400187969208
+        },
+        {
+          "word": "\u304c",
+          "start": 38.9,
+          "end": 39.16,
+          "probability": 0.9998871088027954
+        },
+        {
+          "word": "\u3042\u308b",
+          "start": 39.16,
+          "end": 39.5,
+          "probability": 0.9998788833618164
+        },
+        {
+          "word": "\u307f\u305f\u3044",
+          "start": 39.5,
+          "end": 39.98,
+          "probability": 0.9998819828033447
+        },
+        {
+          "word": "\u3060",
+          "start": 39.98,
+          "end": 40.54,
+          "probability": 0.9998767375946045
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "seek": 2812,
+      "start": 40.54,
+      "end": 42.98,
+      "text": "\u50b7\u3064\u3051\u306a\u3044\u305f\u3081\u3058\u3083\u306a\u304f",
+      "tokens": [50995, 41323, 9335, 7625, 9311, 49983, 15339, 40252, 51110],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u50b7",
+          "start": 40.54,
+          "end": 41.1,
+          "probability": 0.9997881054878235
+        },
+        {
+          "word": "\u3064",
+          "start": 41.1,
+          "end": 41.32,
+          "probability": 0.9868934154510498
+        },
+        {
+          "word": "\u3051",
+          "start": 41.32,
+          "end": 41.5,
+          "probability": 0.9999281167984009
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 41.5,
+          "end": 41.88,
+          "probability": 0.999578058719635
+        },
+        {
+          "word": "\u305f\u3081",
+          "start": 41.88,
+          "end": 42.22,
+          "probability": 0.976791262626648
+        },
+        {
+          "word": "\u3058\u3083",
+          "start": 42.22,
+          "end": 42.56,
+          "probability": 0.9997430443763733
+        },
+        {
+          "word": "\u306a\u304f",
+          "start": 42.56,
+          "end": 42.98,
+          "probability": 0.9998785257339478
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "seek": 2812,
+      "start": 42.98,
+      "end": 45.32,
+      "text": "\u9003\u3052\u306a\u3044\u305f\u3081\u306e\u30c1\u30fc\u30e0\u541b",
+      "tokens": [
+        51110, 2215, 225, 26012, 9311, 49983, 2972, 17794, 44265, 24168, 51228
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u9003",
+          "start": 42.98,
+          "end": 43.44,
+          "probability": 0.9872096478939056
+        },
+        {
+          "word": "\u3052",
+          "start": 43.44,
+          "end": 43.54,
+          "probability": 0.9999327659606934
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 43.54,
+          "end": 43.78,
+          "probability": 0.9998499155044556
+        },
+        {
+          "word": "\u305f\u3081",
+          "start": 43.78,
+          "end": 44.12,
+          "probability": 0.9996179342269897
+        },
+        {
+          "word": "\u306e",
+          "start": 44.12,
+          "end": 44.62,
+          "probability": 0.9999126195907593
+        },
+        {
+          "word": "\u30c1",
+          "start": 44.62,
+          "end": 44.8,
+          "probability": 0.8059760332107544
+        },
+        {
+          "word": "\u30fc\u30e0",
+          "start": 44.8,
+          "end": 45.06,
+          "probability": 0.9687859416007996
+        },
+        {
+          "word": "\u541b",
+          "start": 45.06,
+          "end": 45.32,
+          "probability": 0.6897132992744446
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "seek": 2812,
+      "start": 45.32,
+      "end": 49.34,
+      "text": "\u305d\u306e\u610f\u5473\u3092\u5f8c\u304b\u3089\u77e5\u308b\u3053\u3068\u306b\u306a\u308b",
+      "tokens": [
+        51228, 20564, 9042, 17268, 5998, 5661, 11046, 6498, 4895, 13235, 22615,
+        4895, 51434
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u305d\u306e",
+          "start": 45.32,
+          "end": 45.96,
+          "probability": 0.9979926347732544
+        },
+        {
+          "word": "\u610f",
+          "start": 45.96,
+          "end": 46.22,
+          "probability": 0.9999376535415649
+        },
+        {
+          "word": "\u5473",
+          "start": 46.22,
+          "end": 46.32,
+          "probability": 0.9999607801437378
+        },
+        {
+          "word": "\u3092",
+          "start": 46.32,
+          "end": 46.62,
+          "probability": 0.9999147653579712
+        },
+        {
+          "word": "\u5f8c",
+          "start": 46.62,
+          "end": 47.2,
+          "probability": 0.9985198378562927
+        },
+        {
+          "word": "\u304b\u3089",
+          "start": 47.2,
+          "end": 47.6,
+          "probability": 0.9999749660491943
+        },
+        {
+          "word": "\u77e5",
+          "start": 47.6,
+          "end": 47.86,
+          "probability": 0.9999011754989624
+        },
+        {
+          "word": "\u308b",
+          "start": 47.86,
+          "end": 48.04,
+          "probability": 0.999962329864502
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 48.04,
+          "end": 48.28,
+          "probability": 0.9987362027168274
+        },
+        {
+          "word": "\u306b\u306a",
+          "start": 48.28,
+          "end": 48.92,
+          "probability": 0.999853253364563
+        },
+        {
+          "word": "\u308b",
+          "start": 48.92,
+          "end": 49.34,
+          "probability": 0.9999825954437256
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "seek": 2812,
+      "start": 50.699999999999996,
+      "end": 53.36,
+      "text": "\u5f37\u304f\u898b\u305b\u305f\u3044\u308f\u3051\u3058\u3083\u306a\u3044",
+      "tokens": [
+        51434, 22752, 6134, 10470, 13702, 20699, 9206, 7625, 40323, 51632
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u5f37",
+          "start": 50.699999999999996,
+          "end": 51.26,
+          "probability": 0.9991550445556641
+        },
+        {
+          "word": "\u304f",
+          "start": 51.26,
+          "end": 51.48,
+          "probability": 0.9999905824661255
+        },
+        {
+          "word": "\u898b",
+          "start": 51.48,
+          "end": 51.64,
+          "probability": 0.9995809197425842
+        },
+        {
+          "word": "\u305b",
+          "start": 51.64,
+          "end": 51.84,
+          "probability": 0.9996813535690308
+        },
+        {
+          "word": "\u305f\u3044",
+          "start": 51.84,
+          "end": 52.5,
+          "probability": 0.9996036887168884
+        },
+        {
+          "word": "\u308f",
+          "start": 52.5,
+          "end": 52.72,
+          "probability": 0.8979707360267639
+        },
+        {
+          "word": "\u3051",
+          "start": 52.72,
+          "end": 52.94,
+          "probability": 0.9999951124191284
+        },
+        {
+          "word": "\u3058\u3083\u306a\u3044",
+          "start": 52.94,
+          "end": 53.36,
+          "probability": 0.9997697472572327
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "seek": 2812,
+      "start": 53.36,
+      "end": 55.92,
+      "text": "\u5f31\u3055\u3092\u96a0\u3059\u3067\u3082\u306a\u3044",
+      "tokens": [
+        51632, 5702, 109, 6722, 5998, 10673, 254, 2659, 17783, 9311, 51757
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.11733936380456995,
+      "compression_ratio": 1.4727272727272727,
+      "no_speech_prob": 6.47439090187274e-12,
+      "words": [
+        {
+          "word": "\u5f31",
+          "start": 53.36,
+          "end": 53.78,
+          "probability": 0.9867573082447052
+        },
+        {
+          "word": "\u3055",
+          "start": 53.78,
+          "end": 53.98,
+          "probability": 0.9999487400054932
+        },
+        {
+          "word": "\u3092",
+          "start": 53.98,
+          "end": 54.18,
+          "probability": 0.9999433755874634
+        },
+        {
+          "word": "\u96a0",
+          "start": 54.18,
+          "end": 54.54,
+          "probability": 0.9995699822902679
+        },
+        {
+          "word": "\u3059",
+          "start": 54.54,
+          "end": 55.06,
+          "probability": 0.9935684204101562
+        },
+        {
+          "word": "\u3067\u3082",
+          "start": 55.06,
+          "end": 55.42,
+          "probability": 0.9977546334266663
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 55.42,
+          "end": 55.92,
+          "probability": 0.9995827078819275
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "seek": 5592,
+      "start": 55.92,
+      "end": 58.18,
+      "text": "\u305f\u3060\u7121\u7406\u3092\u3057\u306a\u3044\u8ddd\u96e2\u3067",
+      "tokens": [
+        50365, 44519, 16976, 13876, 5998, 2849, 9311, 6563, 251, 32662, 2474,
+        50488
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1668867724282401,
+      "compression_ratio": 0.75,
+      "no_speech_prob": 1.582125229437903e-11,
+      "words": [
+        {
+          "word": "\u305f\u3060",
+          "start": 55.92,
+          "end": 56.3,
+          "probability": 0.9876076579093933
+        },
+        {
+          "word": "\u7121",
+          "start": 56.3,
+          "end": 56.52,
+          "probability": 0.9972968697547913
+        },
+        {
+          "word": "\u7406",
+          "start": 56.52,
+          "end": 56.64,
+          "probability": 0.9997666478157043
+        },
+        {
+          "word": "\u3092",
+          "start": 56.64,
+          "end": 56.8,
+          "probability": 0.9989728927612305
+        },
+        {
+          "word": "\u3057",
+          "start": 56.8,
+          "end": 57.08,
+          "probability": 0.9996019005775452
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 57.08,
+          "end": 57.44,
+          "probability": 0.9999395608901978
+        },
+        {
+          "word": "\u8ddd",
+          "start": 57.44,
+          "end": 57.78,
+          "probability": 0.9974023103713989
+        },
+        {
+          "word": "\u96e2",
+          "start": 57.78,
+          "end": 57.9,
+          "probability": 0.999891996383667
+        },
+        {
+          "word": "\u3067",
+          "start": 57.9,
+          "end": 58.18,
+          "probability": 0.9997846484184265
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "seek": 5818,
+      "start": 58.18,
+      "end": 60.48,
+      "text": "\u96a3\u306b\u7acb\u3063\u3066\u3044\u308b",
+      "tokens": [50365, 10673, 96, 4108, 24409, 6102, 22979, 50488],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u96a3",
+          "start": 58.18,
+          "end": 58.72,
+          "probability": 0.9980821013450623
+        },
+        {
+          "word": "\u306b",
+          "start": 58.72,
+          "end": 59.02,
+          "probability": 0.9996426105499268
+        },
+        {
+          "word": "\u7acb",
+          "start": 59.02,
+          "end": 59.34,
+          "probability": 0.9902786612510681
+        },
+        {
+          "word": "\u3063\u3066",
+          "start": 59.34,
+          "end": 59.94,
+          "probability": 0.9994373917579651
+        },
+        {
+          "word": "\u3044\u308b",
+          "start": 59.94,
+          "end": 60.48,
+          "probability": 0.999874472618103
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "seek": 5818,
+      "start": 60.48,
+      "end": 63.5,
+      "text": "\u6c17\u3065\u3051\u3070\u3082\u3046\u52a9\u3051\u3089\u308c\u3066\u308b",
+      "tokens": [
+        50488, 25870, 487, 98, 7625, 13349, 16324, 37618, 7625, 5154, 26638,
+        4895, 50635
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u6c17",
+          "start": 60.48,
+          "end": 61.04,
+          "probability": 0.9410565495491028
+        },
+        {
+          "word": "\u3065",
+          "start": 61.04,
+          "end": 61.16,
+          "probability": 0.7479570209980011
+        },
+        {
+          "word": "\u3051",
+          "start": 61.16,
+          "end": 61.34,
+          "probability": 0.9998738765716553
+        },
+        {
+          "word": "\u3070",
+          "start": 61.34,
+          "end": 61.5,
+          "probability": 0.9999428987503052
+        },
+        {
+          "word": "\u3082\u3046",
+          "start": 61.5,
+          "end": 61.74,
+          "probability": 0.9932390451431274
+        },
+        {
+          "word": "\u52a9",
+          "start": 61.74,
+          "end": 62.22,
+          "probability": 0.9609048366546631
+        },
+        {
+          "word": "\u3051",
+          "start": 62.22,
+          "end": 62.5,
+          "probability": 0.9998325109481812
+        },
+        {
+          "word": "\u3089",
+          "start": 62.5,
+          "end": 62.66,
+          "probability": 0.9999748468399048
+        },
+        {
+          "word": "\u308c\u3066",
+          "start": 62.66,
+          "end": 63.18,
+          "probability": 0.9998855590820312
+        },
+        {
+          "word": "\u308b",
+          "start": 63.18,
+          "end": 63.5,
+          "probability": 0.9925132393836975
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "seek": 5818,
+      "start": 63.5,
+      "end": 65.9,
+      "text": "\u5f62\u3092\u6301\u305f\u306a\u3044\u307e\u307e\u3067",
+      "tokens": [50635, 30900, 5998, 17694, 3368, 9311, 2889, 28176, 50753],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u5f62",
+          "start": 63.5,
+          "end": 64.12,
+          "probability": 0.8726099729537964
+        },
+        {
+          "word": "\u3092",
+          "start": 64.12,
+          "end": 64.66,
+          "probability": 0.9998167157173157
+        },
+        {
+          "word": "\u6301",
+          "start": 64.66,
+          "end": 64.76,
+          "probability": 0.9928613305091858
+        },
+        {
+          "word": "\u305f",
+          "start": 64.76,
+          "end": 64.94,
+          "probability": 0.9998329877853394
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 64.94,
+          "end": 65.22,
+          "probability": 0.9999336004257202
+        },
+        {
+          "word": "\u307e",
+          "start": 65.22,
+          "end": 65.44,
+          "probability": 0.9999209642410278
+        },
+        {
+          "word": "\u307e\u3067",
+          "start": 65.44,
+          "end": 65.9,
+          "probability": 0.9875868558883667
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "seek": 5818,
+      "start": 65.9,
+      "end": 68.52,
+      "text": "\u62b1\u304d\u3057\u3081\u308b\u3088\u308a\u3082\u5148\u306b",
+      "tokens": [
+        50753, 38382, 7016, 2849, 11429, 4895, 5591, 5095, 4801, 10108, 4108,
+        50886
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u62b1",
+          "start": 65.9,
+          "end": 66.5,
+          "probability": 0.9949588179588318
+        },
+        {
+          "word": "\u304d",
+          "start": 66.5,
+          "end": 66.68,
+          "probability": 0.9999500513076782
+        },
+        {
+          "word": "\u3057",
+          "start": 66.68,
+          "end": 66.9,
+          "probability": 0.9722097516059875
+        },
+        {
+          "word": "\u3081",
+          "start": 66.9,
+          "end": 67.1,
+          "probability": 0.9999701976776123
+        },
+        {
+          "word": "\u308b",
+          "start": 67.1,
+          "end": 67.26,
+          "probability": 0.9999692440032959
+        },
+        {
+          "word": "\u3088",
+          "start": 67.26,
+          "end": 67.46,
+          "probability": 0.9997515082359314
+        },
+        {
+          "word": "\u308a",
+          "start": 67.46,
+          "end": 67.58,
+          "probability": 0.9999818801879883
+        },
+        {
+          "word": "\u3082",
+          "start": 67.58,
+          "end": 67.72,
+          "probability": 0.9995993971824646
+        },
+        {
+          "word": "\u5148",
+          "start": 67.72,
+          "end": 68.1,
+          "probability": 0.9997460246086121
+        },
+        {
+          "word": "\u306b",
+          "start": 68.1,
+          "end": 68.52,
+          "probability": 0.9999865293502808
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "seek": 5818,
+      "start": 68.52,
+      "end": 71.08,
+      "text": "\u547c\u5438\u3092\u5408\u308f\u305b\u3066\u304f\u308b",
+      "tokens": [
+        50886, 38718, 46431, 5998, 14245, 9206, 47745, 6134, 4895, 50988
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u547c",
+          "start": 68.52,
+          "end": 69.02,
+          "probability": 0.9850644469261169
+        },
+        {
+          "word": "\u5438",
+          "start": 69.02,
+          "end": 69.24,
+          "probability": 0.9992965459823608
+        },
+        {
+          "word": "\u3092",
+          "start": 69.24,
+          "end": 69.68,
+          "probability": 0.9999514818191528
+        },
+        {
+          "word": "\u5408",
+          "start": 69.68,
+          "end": 70.02,
+          "probability": 0.9996953010559082
+        },
+        {
+          "word": "\u308f",
+          "start": 70.02,
+          "end": 70.14,
+          "probability": 0.9999185800552368
+        },
+        {
+          "word": "\u305b\u3066",
+          "start": 70.14,
+          "end": 70.38,
+          "probability": 0.9999301433563232
+        },
+        {
+          "word": "\u304f",
+          "start": 70.38,
+          "end": 70.72,
+          "probability": 0.9941577911376953
+        },
+        {
+          "word": "\u308b",
+          "start": 70.72,
+          "end": 71.08,
+          "probability": 0.9835493564605713
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "seek": 5818,
+      "start": 71.08,
+      "end": 73.38,
+      "text": "\u540d\u524d\u3092\u3064\u3051\u306a\u3044\u307e\u307e\u3067",
+      "tokens": [
+        51015, 15940, 8945, 5998, 9335, 7625, 9311, 2889, 28176, 51125
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u540d",
+          "start": 71.08,
+          "end": 71.52,
+          "probability": 0.9992161989212036
+        },
+        {
+          "word": "\u524d",
+          "start": 71.52,
+          "end": 71.84,
+          "probability": 0.9999619722366333
+        },
+        {
+          "word": "\u3092",
+          "start": 71.84,
+          "end": 72.2,
+          "probability": 0.9999592304229736
+        },
+        {
+          "word": "\u3064",
+          "start": 72.2,
+          "end": 72.28,
+          "probability": 0.8135812878608704
+        },
+        {
+          "word": "\u3051",
+          "start": 72.28,
+          "end": 72.44,
+          "probability": 0.999920129776001
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 72.44,
+          "end": 72.72,
+          "probability": 0.999806821346283
+        },
+        {
+          "word": "\u307e",
+          "start": 72.72,
+          "end": 72.94,
+          "probability": 0.9999709129333496
+        },
+        {
+          "word": "\u307e\u3067",
+          "start": 72.94,
+          "end": 73.38,
+          "probability": 0.999716579914093
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "seek": 5818,
+      "start": 73.38,
+      "end": 75.76,
+      "text": "\u4f55\u3082\u6c42\u3081\u305a\u306b",
+      "tokens": [51125, 11906, 4801, 32718, 11429, 18216, 4108, 51250],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u4f55",
+          "start": 73.38,
+          "end": 74.08,
+          "probability": 0.9984567165374756
+        },
+        {
+          "word": "\u3082",
+          "start": 74.08,
+          "end": 74.5,
+          "probability": 0.9987208247184753
+        },
+        {
+          "word": "\u6c42",
+          "start": 74.5,
+          "end": 74.86,
+          "probability": 0.9997815489768982
+        },
+        {
+          "word": "\u3081",
+          "start": 74.86,
+          "end": 75.16,
+          "probability": 0.9999825954437256
+        },
+        {
+          "word": "\u305a",
+          "start": 75.16,
+          "end": 75.36,
+          "probability": 0.9999784231185913
+        },
+        {
+          "word": "\u306b",
+          "start": 75.36,
+          "end": 75.76,
+          "probability": 0.9999549388885498
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "seek": 5818,
+      "start": 75.76,
+      "end": 78.62,
+      "text": "\u5b88\u3089\u308c\u3066\u3044\u305f\u3053\u3068\u306b",
+      "tokens": [51250, 48480, 5154, 26638, 17679, 13235, 4108, 51398],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u5b88",
+          "start": 75.76,
+          "end": 76.28,
+          "probability": 0.9989932179450989
+        },
+        {
+          "word": "\u3089",
+          "start": 76.28,
+          "end": 76.72,
+          "probability": 0.9998842477798462
+        },
+        {
+          "word": "\u308c\u3066",
+          "start": 76.72,
+          "end": 77.28,
+          "probability": 0.9999632835388184
+        },
+        {
+          "word": "\u3044\u305f",
+          "start": 77.28,
+          "end": 77.88,
+          "probability": 0.9876453280448914
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 77.88,
+          "end": 78.28,
+          "probability": 0.9959180951118469
+        },
+        {
+          "word": "\u306b",
+          "start": 78.28,
+          "end": 78.62,
+          "probability": 0.9998389482498169
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "seek": 5818,
+      "start": 78.62,
+      "end": 80.8,
+      "text": "\u5f8c\u3067\u6c17\u3065\u304f",
+      "tokens": [51398, 5661, 2474, 25870, 487, 98, 6134, 51502],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u5f8c",
+          "start": 78.62,
+          "end": 79.08,
+          "probability": 0.9847813844680786
+        },
+        {
+          "word": "\u3067",
+          "start": 79.08,
+          "end": 79.58,
+          "probability": 0.999735414981842
+        },
+        {
+          "word": "\u6c17",
+          "start": 79.58,
+          "end": 79.86,
+          "probability": 0.9956657290458679
+        },
+        {
+          "word": "\u3065",
+          "start": 79.86,
+          "end": 80.22,
+          "probability": 0.9335312247276306
+        },
+        {
+          "word": "\u304f",
+          "start": 80.22,
+          "end": 80.8,
+          "probability": 0.999881386756897
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "seek": 5818,
+      "start": 81.52,
+      "end": 84.16,
+      "text": "\u96e8\u304c\u964d\u308a\u305d\u3046\u306a\u7a7a\u3092",
+      "tokens": [
+        51502, 35339, 5142, 47421, 5095, 9955, 3203, 23322, 5998, 51667
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u96e8",
+          "start": 81.52,
+          "end": 82.16,
+          "probability": 0.9984371066093445
+        },
+        {
+          "word": "\u304c",
+          "start": 82.16,
+          "end": 82.46,
+          "probability": 0.9999178647994995
+        },
+        {
+          "word": "\u964d",
+          "start": 82.46,
+          "end": 82.74,
+          "probability": 0.9999420642852783
+        },
+        {
+          "word": "\u308a",
+          "start": 82.74,
+          "end": 82.92,
+          "probability": 0.9999071359634399
+        },
+        {
+          "word": "\u305d\u3046",
+          "start": 82.92,
+          "end": 83.26,
+          "probability": 0.9971027970314026
+        },
+        {
+          "word": "\u306a",
+          "start": 83.26,
+          "end": 83.48,
+          "probability": 0.9999433755874634
+        },
+        {
+          "word": "\u7a7a",
+          "start": 83.48,
+          "end": 83.8,
+          "probability": 0.998982846736908
+        },
+        {
+          "word": "\u3092",
+          "start": 83.8,
+          "end": 84.16,
+          "probability": 0.9999624490737915
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "seek": 5818,
+      "start": 84.16,
+      "end": 86.38,
+      "text": "\u898b\u4e0a\u3052\u3066\u4f55\u3082\u8a00\u308f\u306a\u3044",
+      "tokens": [
+        51667, 10470, 5708, 26012, 2996, 11906, 4801, 12009, 9206, 9311, 51779
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.1842342866670101,
+      "compression_ratio": 1.4845360824742269,
+      "no_speech_prob": 2.0100834191572048e-11,
+      "words": [
+        {
+          "word": "\u898b",
+          "start": 84.16,
+          "end": 84.48,
+          "probability": 0.9932465553283691
+        },
+        {
+          "word": "\u4e0a",
+          "start": 84.48,
+          "end": 84.64,
+          "probability": 0.9997639060020447
+        },
+        {
+          "word": "\u3052",
+          "start": 84.64,
+          "end": 84.76,
+          "probability": 0.999971866607666
+        },
+        {
+          "word": "\u3066",
+          "start": 84.76,
+          "end": 84.92,
+          "probability": 0.9998807907104492
+        },
+        {
+          "word": "\u4f55",
+          "start": 84.92,
+          "end": 85.14,
+          "probability": 0.9994643330574036
+        },
+        {
+          "word": "\u3082",
+          "start": 85.14,
+          "end": 85.4,
+          "probability": 0.9998664855957031
+        },
+        {
+          "word": "\u8a00",
+          "start": 85.4,
+          "end": 85.58,
+          "probability": 0.9995179176330566
+        },
+        {
+          "word": "\u308f",
+          "start": 85.58,
+          "end": 85.76,
+          "probability": 0.9998847246170044
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 85.76,
+          "end": 86.38,
+          "probability": 0.9997286200523376
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "seek": 8638,
+      "start": 86.38,
+      "end": 88.74,
+      "text": "\u5098\u3092\u5dee\u3057\u51fa\u3059\u4ee3\u308f\u308a\u306b",
+      "tokens": [
+        50365, 161, 3404, 5998, 21679, 2849, 7781, 2659, 19105, 9206, 5095,
+        4108, 50488
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u5098",
+          "start": 86.38,
+          "end": 87.24,
+          "probability": 0.9894079566001892
+        },
+        {
+          "word": "\u3092",
+          "start": 87.24,
+          "end": 87.48,
+          "probability": 0.9979023933410645
+        },
+        {
+          "word": "\u5dee",
+          "start": 87.48,
+          "end": 87.58,
+          "probability": 0.9942873120307922
+        },
+        {
+          "word": "\u3057",
+          "start": 87.58,
+          "end": 87.72,
+          "probability": 0.9999256134033203
+        },
+        {
+          "word": "\u51fa",
+          "start": 87.72,
+          "end": 87.9,
+          "probability": 0.9994176626205444
+        },
+        {
+          "word": "\u3059",
+          "start": 87.9,
+          "end": 88.1,
+          "probability": 0.9998173117637634
+        },
+        {
+          "word": "\u4ee3",
+          "start": 88.1,
+          "end": 88.26,
+          "probability": 0.9913151860237122
+        },
+        {
+          "word": "\u308f",
+          "start": 88.26,
+          "end": 88.36,
+          "probability": 0.9982088804244995
+        },
+        {
+          "word": "\u308a",
+          "start": 88.36,
+          "end": 88.52,
+          "probability": 0.9999954700469971
+        },
+        {
+          "word": "\u306b",
+          "start": 88.52,
+          "end": 88.74,
+          "probability": 0.9986284971237183
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "seek": 8638,
+      "start": 88.74,
+      "end": 90.52,
+      "text": "\u4e00\u6b69\u5f71\u3092\u5bc4\u305b\u308b",
+      "tokens": [
+        50488, 2257, 4287, 102, 16820, 5998, 4510, 226, 13702, 4895, 50577
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u4e00",
+          "start": 88.74,
+          "end": 89.08,
+          "probability": 0.7584278583526611
+        },
+        {
+          "word": "\u6b69",
+          "start": 89.08,
+          "end": 89.28,
+          "probability": 0.9991852045059204
+        },
+        {
+          "word": "\u5f71",
+          "start": 89.28,
+          "end": 89.5,
+          "probability": 0.8774625658988953
+        },
+        {
+          "word": "\u3092",
+          "start": 89.5,
+          "end": 89.92,
+          "probability": 0.9989591836929321
+        },
+        {
+          "word": "\u5bc4",
+          "start": 89.92,
+          "end": 90.08,
+          "probability": 0.9910034537315369
+        },
+        {
+          "word": "\u305b",
+          "start": 90.08,
+          "end": 90.24,
+          "probability": 0.9999035596847534
+        },
+        {
+          "word": "\u308b",
+          "start": 90.24,
+          "end": 90.52,
+          "probability": 0.999862551689148
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "seek": 8638,
+      "start": 90.52,
+      "end": 93.44,
+      "text": "\u671f\u5f85\u3057\u306a\u3044\u632f\u308a\u304c\u4e0a\u624b\u3067",
+      "tokens": [
+        50577, 16786, 18390, 2849, 9311, 8501, 107, 5095, 5142, 5708, 11389,
+        2474, 50722
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u671f",
+          "start": 90.52,
+          "end": 91.06,
+          "probability": 0.9401401281356812
+        },
+        {
+          "word": "\u5f85",
+          "start": 91.06,
+          "end": 91.24,
+          "probability": 0.999354898929596
+        },
+        {
+          "word": "\u3057",
+          "start": 91.24,
+          "end": 91.48,
+          "probability": 0.9993997812271118
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 91.48,
+          "end": 91.86,
+          "probability": 0.9996651411056519
+        },
+        {
+          "word": "\u632f",
+          "start": 91.86,
+          "end": 92.2,
+          "probability": 0.8722900152206421
+        },
+        {
+          "word": "\u308a",
+          "start": 92.2,
+          "end": 92.26,
+          "probability": 0.9996795654296875
+        },
+        {
+          "word": "\u304c",
+          "start": 92.26,
+          "end": 92.48,
+          "probability": 0.9989780187606812
+        },
+        {
+          "word": "\u4e0a",
+          "start": 92.48,
+          "end": 92.66,
+          "probability": 0.9927687644958496
+        },
+        {
+          "word": "\u624b",
+          "start": 92.66,
+          "end": 92.92,
+          "probability": 0.9883697032928467
+        },
+        {
+          "word": "\u3067",
+          "start": 92.92,
+          "end": 93.44,
+          "probability": 0.9992890357971191
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "seek": 8638,
+      "start": 93.44,
+      "end": 95.74,
+      "text": "\u5931\u671b\u3082\u3057\u306a\u3044\u9854\u3067",
+      "tokens": [50722, 28564, 22694, 49412, 9311, 10178, 242, 2474, 50838],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u5931",
+          "start": 93.44,
+          "end": 93.84,
+          "probability": 0.8462562561035156
+        },
+        {
+          "word": "\u671b",
+          "start": 93.84,
+          "end": 94.22,
+          "probability": 0.9996800422668457
+        },
+        {
+          "word": "\u3082\u3057",
+          "start": 94.22,
+          "end": 94.56,
+          "probability": 0.997812032699585
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 94.56,
+          "end": 94.94,
+          "probability": 0.9999467134475708
+        },
+        {
+          "word": "\u9854",
+          "start": 94.94,
+          "end": 95.5,
+          "probability": 0.9982469379901886
+        },
+        {
+          "word": "\u3067",
+          "start": 95.5,
+          "end": 95.74,
+          "probability": 0.9998300075531006
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "seek": 8638,
+      "start": 95.74,
+      "end": 97.18,
+      "text": "\u305d\u308c\u3067\u3082\u3061\u3083\u3093\u3068",
+      "tokens": [50838, 13873, 17783, 35771, 3193, 50888],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u305d\u308c",
+          "start": 95.74,
+          "end": 96.14,
+          "probability": 0.9749453067779541
+        },
+        {
+          "word": "\u3067\u3082",
+          "start": 96.14,
+          "end": 96.44,
+          "probability": 0.999934196472168
+        },
+        {
+          "word": "\u3061\u3083\u3093",
+          "start": 96.44,
+          "end": 96.68,
+          "probability": 0.9985747337341309
+        },
+        {
+          "word": "\u3068",
+          "start": 96.68,
+          "end": 97.18,
+          "probability": 0.999884843826294
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "seek": 8638,
+      "start": 97.18,
+      "end": 99.32,
+      "text": "\u4eba\u3092\u4fe1\u3058\u3066\u3044\u308b",
+      "tokens": [50888, 4035, 5998, 17665, 9257, 2996, 22979, 50988],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u4eba",
+          "start": 97.18,
+          "end": 97.98,
+          "probability": 0.9724030494689941
+        },
+        {
+          "word": "\u3092",
+          "start": 97.98,
+          "end": 98.24,
+          "probability": 0.9995681643486023
+        },
+        {
+          "word": "\u4fe1",
+          "start": 98.24,
+          "end": 98.38,
+          "probability": 0.9998782873153687
+        },
+        {
+          "word": "\u3058",
+          "start": 98.38,
+          "end": 98.64,
+          "probability": 0.999957799911499
+        },
+        {
+          "word": "\u3066",
+          "start": 98.64,
+          "end": 98.88,
+          "probability": 0.999870777130127
+        },
+        {
+          "word": "\u3044\u308b",
+          "start": 98.88,
+          "end": 99.32,
+          "probability": 0.9986463189125061
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "seek": 8638,
+      "start": 100.75999999999999,
+      "end": 103.14,
+      "text": "\u5f37\u304f\u898b\u305b\u308b\u5fc5\u8981\u3082\u306a\u304f",
+      "tokens": [
+        50988, 22752, 6134, 10470, 13702, 4895, 28531, 4275, 4801, 40252, 51188
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u5f37",
+          "start": 100.75999999999999,
+          "end": 101.24,
+          "probability": 0.9988382458686829
+        },
+        {
+          "word": "\u304f",
+          "start": 101.24,
+          "end": 101.46,
+          "probability": 0.999984622001648
+        },
+        {
+          "word": "\u898b",
+          "start": 101.46,
+          "end": 101.64,
+          "probability": 0.9910100698471069
+        },
+        {
+          "word": "\u305b",
+          "start": 101.64,
+          "end": 101.8,
+          "probability": 0.999893069267273
+        },
+        {
+          "word": "\u308b",
+          "start": 101.8,
+          "end": 101.96,
+          "probability": 0.9999688863754272
+        },
+        {
+          "word": "\u5fc5",
+          "start": 101.96,
+          "end": 102.22,
+          "probability": 0.9999171495437622
+        },
+        {
+          "word": "\u8981",
+          "start": 102.22,
+          "end": 102.5,
+          "probability": 0.9999295473098755
+        },
+        {
+          "word": "\u3082",
+          "start": 102.5,
+          "end": 102.72,
+          "probability": 0.9999401569366455
+        },
+        {
+          "word": "\u306a\u304f",
+          "start": 102.72,
+          "end": 103.14,
+          "probability": 0.9972680807113647
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "seek": 8638,
+      "start": 103.14,
+      "end": 105.48,
+      "text": "\u5f31\u3055\u3092\u96a0\u3059\u3053\u3068\u3082\u306a\u304f",
+      "tokens": [
+        51188, 5702, 109, 6722, 5998, 10673, 254, 2659, 13235, 4801, 40252,
+        51288
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u5f31",
+          "start": 103.14,
+          "end": 103.6,
+          "probability": 0.8993779718875885
+        },
+        {
+          "word": "\u3055",
+          "start": 103.6,
+          "end": 103.82,
+          "probability": 0.9999376535415649
+        },
+        {
+          "word": "\u3092",
+          "start": 103.82,
+          "end": 104.04,
+          "probability": 0.9999212026596069
+        },
+        {
+          "word": "\u96a0",
+          "start": 104.04,
+          "end": 104.22,
+          "probability": 0.9996569156646729
+        },
+        {
+          "word": "\u3059",
+          "start": 104.22,
+          "end": 104.46,
+          "probability": 0.9999269247055054
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 104.46,
+          "end": 104.7,
+          "probability": 0.991523027420044
+        },
+        {
+          "word": "\u3082",
+          "start": 104.7,
+          "end": 105.06,
+          "probability": 0.999961256980896
+        },
+        {
+          "word": "\u306a\u304f",
+          "start": 105.06,
+          "end": 105.48,
+          "probability": 0.9996483325958252
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "seek": 8638,
+      "start": 105.48,
+      "end": 107.4,
+      "text": "\u305f\u3060\u81ea\u5206\u306e\u901f\u5ea6\u3067",
+      "tokens": [51288, 44519, 9722, 6627, 2972, 31217, 13127, 2474, 51388],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u305f\u3060",
+          "start": 105.48,
+          "end": 105.98,
+          "probability": 0.9988487958908081
+        },
+        {
+          "word": "\u81ea",
+          "start": 105.98,
+          "end": 106.22,
+          "probability": 0.999685525894165
+        },
+        {
+          "word": "\u5206",
+          "start": 106.22,
+          "end": 106.44,
+          "probability": 0.9999809265136719
+        },
+        {
+          "word": "\u306e",
+          "start": 106.44,
+          "end": 106.64,
+          "probability": 0.9999315738677979
+        },
+        {
+          "word": "\u901f",
+          "start": 106.64,
+          "end": 106.92,
+          "probability": 0.9055284261703491
+        },
+        {
+          "word": "\u5ea6",
+          "start": 106.92,
+          "end": 107.1,
+          "probability": 0.991499125957489
+        },
+        {
+          "word": "\u3067",
+          "start": 107.1,
+          "end": 107.4,
+          "probability": 0.9999600648880005
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "seek": 8638,
+      "start": 107.4,
+      "end": 109.32,
+      "text": "\u540c\u3058\u65b9\u3092\u5411\u3044\u3066\u308b",
+      "tokens": [51388, 13089, 9257, 9249, 5998, 24282, 18549, 4895, 51488],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u540c",
+          "start": 107.4,
+          "end": 107.64,
+          "probability": 0.998091995716095
+        },
+        {
+          "word": "\u3058",
+          "start": 107.64,
+          "end": 107.9,
+          "probability": 0.9997227787971497
+        },
+        {
+          "word": "\u65b9",
+          "start": 107.9,
+          "end": 108.16,
+          "probability": 0.6080268025398254
+        },
+        {
+          "word": "\u3092",
+          "start": 108.16,
+          "end": 108.42,
+          "probability": 0.8232842087745667
+        },
+        {
+          "word": "\u5411",
+          "start": 108.42,
+          "end": 108.54,
+          "probability": 0.9969398975372314
+        },
+        {
+          "word": "\u3044\u3066",
+          "start": 108.54,
+          "end": 108.92,
+          "probability": 0.9997918009757996
+        },
+        {
+          "word": "\u308b",
+          "start": 108.92,
+          "end": 109.32,
+          "probability": 0.9665625691413879
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "seek": 8638,
+      "start": 110.46,
+      "end": 113.56,
+      "text": "\u8a00\u8449\u3088\u308a\u5148\u306b\u652f\u3048\u3066\u304f\u308b",
+      "tokens": [
+        51488, 12009, 46290, 5591, 5095, 10108, 4108, 24400, 31045, 6134, 4895,
+        51688
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.21812057495117188,
+      "compression_ratio": 1.348623853211009,
+      "no_speech_prob": 1.862768619909083e-11,
+      "words": [
+        {
+          "word": "\u8a00",
+          "start": 110.46,
+          "end": 110.94,
+          "probability": 0.9994921684265137
+        },
+        {
+          "word": "\u8449",
+          "start": 110.94,
+          "end": 111.16,
+          "probability": 0.9999374151229858
+        },
+        {
+          "word": "\u3088",
+          "start": 111.16,
+          "end": 111.36,
+          "probability": 0.9995167255401611
+        },
+        {
+          "word": "\u308a",
+          "start": 111.36,
+          "end": 111.46,
+          "probability": 0.999997615814209
+        },
+        {
+          "word": "\u5148",
+          "start": 111.46,
+          "end": 111.68,
+          "probability": 0.9997333884239197
+        },
+        {
+          "word": "\u306b",
+          "start": 111.68,
+          "end": 112.0,
+          "probability": 0.9999852180480957
+        },
+        {
+          "word": "\u652f",
+          "start": 112.0,
+          "end": 112.16,
+          "probability": 0.9986128807067871
+        },
+        {
+          "word": "\u3048\u3066",
+          "start": 112.16,
+          "end": 112.84,
+          "probability": 0.999313235282898
+        },
+        {
+          "word": "\u304f",
+          "start": 112.84,
+          "end": 113.18,
+          "probability": 0.9993059635162354
+        },
+        {
+          "word": "\u308b",
+          "start": 113.18,
+          "end": 113.56,
+          "probability": 0.9997397065162659
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "seek": 11356,
+      "start": 113.56,
+      "end": 115.9,
+      "text": "\u97f3\u3092\u7acb\u3066\u306a\u3044\u307e\u307e\u3067",
+      "tokens": [50365, 18034, 5998, 24409, 2996, 9311, 2889, 28176, 50488],
+      "temperature": 0.0,
+      "avg_logprob": -0.16920706051499096,
+      "compression_ratio": 1.3098591549295775,
+      "no_speech_prob": 2.3153793118901866e-11,
+      "words": [
+        {
+          "word": "\u97f3",
+          "start": 113.56,
+          "end": 114.18,
+          "probability": 0.9364212155342102
+        },
+        {
+          "word": "\u3092",
+          "start": 114.18,
+          "end": 114.52,
+          "probability": 0.9814148545265198
+        },
+        {
+          "word": "\u7acb",
+          "start": 114.52,
+          "end": 114.62,
+          "probability": 0.9027630686759949
+        },
+        {
+          "word": "\u3066",
+          "start": 114.62,
+          "end": 114.76,
+          "probability": 0.999900221824646
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 114.76,
+          "end": 115.08,
+          "probability": 0.999035120010376
+        },
+        {
+          "word": "\u307e",
+          "start": 115.08,
+          "end": 115.44,
+          "probability": 0.9988951086997986
+        },
+        {
+          "word": "\u307e\u3067",
+          "start": 115.44,
+          "end": 115.9,
+          "probability": 0.9511159658432007
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "seek": 11356,
+      "start": 115.9,
+      "end": 118.5,
+      "text": "\u89e6\u308c\u305f\u3053\u3068\u3055\u3048\u5fd8\u308c\u308b\u307b\u3069",
+      "tokens": [
+        50488, 6758, 99, 35478, 13235, 6722, 6474, 26677, 35367, 29050, 50615
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16920706051499096,
+      "compression_ratio": 1.3098591549295775,
+      "no_speech_prob": 2.3153793118901866e-11,
+      "words": [
+        {
+          "word": "\u89e6",
+          "start": 115.9,
+          "end": 116.58,
+          "probability": 0.9547228217124939
+        },
+        {
+          "word": "\u308c\u305f",
+          "start": 116.58,
+          "end": 116.9,
+          "probability": 0.9987181425094604
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 116.9,
+          "end": 117.16,
+          "probability": 0.9644179940223694
+        },
+        {
+          "word": "\u3055",
+          "start": 117.16,
+          "end": 117.42,
+          "probability": 0.9995638728141785
+        },
+        {
+          "word": "\u3048",
+          "start": 117.42,
+          "end": 117.6,
+          "probability": 0.9996461868286133
+        },
+        {
+          "word": "\u5fd8",
+          "start": 117.6,
+          "end": 117.86,
+          "probability": 0.9982598423957825
+        },
+        {
+          "word": "\u308c\u308b",
+          "start": 117.86,
+          "end": 118.2,
+          "probability": 0.9995656609535217
+        },
+        {
+          "word": "\u307b\u3069",
+          "start": 118.2,
+          "end": 118.5,
+          "probability": 0.9954480528831482
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "seek": 11356,
+      "start": 118.5,
+      "end": 120.54,
+      "text": "\u81ea\u7136\u306b\u5bc4\u308a\u6dfb\u3046",
+      "tokens": [
+        50615, 9722, 5823, 4108, 4510, 226, 5095, 14176, 119, 2646, 50717
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16920706051499096,
+      "compression_ratio": 1.3098591549295775,
+      "no_speech_prob": 2.3153793118901866e-11,
+      "words": [
+        {
+          "word": "\u81ea",
+          "start": 118.5,
+          "end": 118.96,
+          "probability": 0.9550341367721558
+        },
+        {
+          "word": "\u7136",
+          "start": 118.96,
+          "end": 119.32,
+          "probability": 0.9990993738174438
+        },
+        {
+          "word": "\u306b",
+          "start": 119.32,
+          "end": 119.64,
+          "probability": 0.9999111890792847
+        },
+        {
+          "word": "\u5bc4",
+          "start": 119.64,
+          "end": 119.82,
+          "probability": 0.9998021423816681
+        },
+        {
+          "word": "\u308a",
+          "start": 119.82,
+          "end": 119.94,
+          "probability": 0.9998319149017334
+        },
+        {
+          "word": "\u6dfb",
+          "start": 119.94,
+          "end": 120.24,
+          "probability": 0.9982242584228516
+        },
+        {
+          "word": "\u3046",
+          "start": 120.24,
+          "end": 120.54,
+          "probability": 0.9992833733558655
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "seek": 11356,
+      "start": 120.54,
+      "end": 123.44,
+      "text": "\u7b54\u3048\u3092\u6025\u304c\u306a\u3044\u307e\u307e\u3067",
+      "tokens": [
+        50717, 28223, 6474, 5998, 36379, 5142, 9311, 2889, 28176, 50863
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16920706051499096,
+      "compression_ratio": 1.3098591549295775,
+      "no_speech_prob": 2.3153793118901866e-11,
+      "words": [
+        {
+          "word": "\u7b54",
+          "start": 120.54,
+          "end": 120.98,
+          "probability": 0.9773406982421875
+        },
+        {
+          "word": "\u3048",
+          "start": 120.98,
+          "end": 121.22,
+          "probability": 0.9996718168258667
+        },
+        {
+          "word": "\u3092",
+          "start": 121.22,
+          "end": 121.42,
+          "probability": 0.9809320569038391
+        },
+        {
+          "word": "\u6025",
+          "start": 121.42,
+          "end": 121.6,
+          "probability": 0.9992357492446899
+        },
+        {
+          "word": "\u304c",
+          "start": 121.6,
+          "end": 122.08,
+          "probability": 0.9968807697296143
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 122.08,
+          "end": 122.58,
+          "probability": 0.9991214871406555
+        },
+        {
+          "word": "\u307e",
+          "start": 122.58,
+          "end": 122.92,
+          "probability": 0.9997575879096985
+        },
+        {
+          "word": "\u307e\u3067",
+          "start": 122.92,
+          "end": 123.44,
+          "probability": 0.9997193217277527
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "seek": 11356,
+      "start": 123.44,
+      "end": 125.42,
+      "text": "\u9078\u3076\u81ea\u7531\u3054\u3068",
+      "tokens": [50863, 21625, 23441, 45233, 9991, 3193, 50963],
+      "temperature": 0.0,
+      "avg_logprob": -0.16920706051499096,
+      "compression_ratio": 1.3098591549295775,
+      "no_speech_prob": 2.3153793118901866e-11,
+      "words": [
+        {
+          "word": "\u9078",
+          "start": 123.44,
+          "end": 124.14,
+          "probability": 0.9957051873207092
+        },
+        {
+          "word": "\u3076",
+          "start": 124.14,
+          "end": 124.44,
+          "probability": 0.9995848536491394
+        },
+        {
+          "word": "\u81ea\u7531",
+          "start": 124.44,
+          "end": 124.8,
+          "probability": 0.9603140354156494
+        },
+        {
+          "word": "\u3054",
+          "start": 124.8,
+          "end": 125.16,
+          "probability": 0.8027042746543884
+        },
+        {
+          "word": "\u3068",
+          "start": 125.16,
+          "end": 125.42,
+          "probability": 0.998598039150238
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "seek": 11356,
+      "start": 125.42,
+      "end": 128.58,
+      "text": "\u5dee\u3057\u51fa\u3055\u308c\u3066\u3044\u305f\u3053\u3068\u3092",
+      "tokens": [
+        50963, 21679, 2849, 7781, 6722, 26638, 17679, 13235, 5998, 51088
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.16920706051499096,
+      "compression_ratio": 1.3098591549295775,
+      "no_speech_prob": 2.3153793118901866e-11,
+      "words": [
+        {
+          "word": "\u5dee",
+          "start": 125.42,
+          "end": 125.86,
+          "probability": 0.9559652805328369
+        },
+        {
+          "word": "\u3057",
+          "start": 125.86,
+          "end": 126.02,
+          "probability": 0.9995335340499878
+        },
+        {
+          "word": "\u51fa",
+          "start": 126.02,
+          "end": 126.14,
+          "probability": 0.9975070357322693
+        },
+        {
+          "word": "\u3055",
+          "start": 126.14,
+          "end": 126.42,
+          "probability": 0.9999581575393677
+        },
+        {
+          "word": "\u308c\u3066",
+          "start": 126.42,
+          "end": 126.96,
+          "probability": 0.9992656111717224
+        },
+        {
+          "word": "\u3044\u305f",
+          "start": 126.96,
+          "end": 127.58,
+          "probability": 0.9985380172729492
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 127.58,
+          "end": 128.12,
+          "probability": 0.9911425113677979
+        },
+        {
+          "word": "\u3092",
+          "start": 128.12,
+          "end": 128.58,
+          "probability": 0.999527096748352
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "seek": 11356,
+      "start": 128.58,
+      "end": 130.5,
+      "text": "\u4eca\u306b\u306a\u3063\u3066\u77e5\u308b",
+      "tokens": [51088, 6480, 22615, 6102, 6498, 4895, 51188],
+      "temperature": 0.0,
+      "avg_logprob": -0.16920706051499096,
+      "compression_ratio": 1.3098591549295775,
+      "no_speech_prob": 2.3153793118901866e-11,
+      "words": [
+        {
+          "word": "\u4eca",
+          "start": 128.58,
+          "end": 128.96,
+          "probability": 0.9589486122131348
+        },
+        {
+          "word": "\u306b\u306a",
+          "start": 128.96,
+          "end": 129.26,
+          "probability": 0.9975441098213196
+        },
+        {
+          "word": "\u3063\u3066",
+          "start": 129.26,
+          "end": 129.72,
+          "probability": 0.9998751878738403
+        },
+        {
+          "word": "\u77e5",
+          "start": 129.72,
+          "end": 130.04,
+          "probability": 0.9980744123458862
+        },
+        {
+          "word": "\u308b",
+          "start": 130.04,
+          "end": 130.5,
+          "probability": 0.9997698664665222
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "seek": 13050,
+      "start": 130.5,
+      "end": 133.78,
+      "text": "\u512a\u3057\u3044\u3063\u3066\u8a00\u8449\u3058\u3083",
+      "tokens": [50365, 12827, 103, 17121, 6102, 12009, 46290, 15339, 50535],
+      "temperature": 0.0,
+      "avg_logprob": -0.2524867057800293,
+      "compression_ratio": 1.2053571428571428,
+      "no_speech_prob": 2.4177170682149196e-11,
+      "words": [
+        {
+          "word": "\u512a",
+          "start": 130.5,
+          "end": 132.08,
+          "probability": 0.9640615880489349
+        },
+        {
+          "word": "\u3057\u3044",
+          "start": 132.08,
+          "end": 132.38,
+          "probability": 0.9979642629623413
+        },
+        {
+          "word": "\u3063\u3066",
+          "start": 132.38,
+          "end": 132.72,
+          "probability": 0.9994458556175232
+        },
+        {
+          "word": "\u8a00",
+          "start": 132.72,
+          "end": 132.96,
+          "probability": 0.999502420425415
+        },
+        {
+          "word": "\u8449",
+          "start": 132.96,
+          "end": 133.26,
+          "probability": 0.9998509883880615
+        },
+        {
+          "word": "\u3058\u3083",
+          "start": 133.26,
+          "end": 133.78,
+          "probability": 0.9980620741844177
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "seek": 13050,
+      "start": 133.78,
+      "end": 136.0,
+      "text": "\u8db3\u308a\u306a\u3044\u7406\u7531\u304c",
+      "tokens": [50535, 37236, 5095, 9311, 13876, 23786, 5142, 50652],
+      "temperature": 0.0,
+      "avg_logprob": -0.2524867057800293,
+      "compression_ratio": 1.2053571428571428,
+      "no_speech_prob": 2.4177170682149196e-11,
+      "words": [
+        {
+          "word": "\u8db3",
+          "start": 133.78,
+          "end": 134.48,
+          "probability": 0.9218706488609314
+        },
+        {
+          "word": "\u308a",
+          "start": 134.48,
+          "end": 134.62,
+          "probability": 0.9998817443847656
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 134.62,
+          "end": 134.9,
+          "probability": 0.9999605417251587
+        },
+        {
+          "word": "\u7406",
+          "start": 134.9,
+          "end": 135.3,
+          "probability": 0.9993724226951599
+        },
+        {
+          "word": "\u7531",
+          "start": 135.3,
+          "end": 135.54,
+          "probability": 0.999923586845398
+        },
+        {
+          "word": "\u304c",
+          "start": 135.54,
+          "end": 136.0,
+          "probability": 0.999708354473114
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "seek": 13050,
+      "start": 136.0,
+      "end": 141.52,
+      "text": "\u4eca\u306a\u3089\u5c11\u3057\u308f\u304b\u308b",
+      "tokens": [50652, 6480, 42540, 15686, 2849, 44054, 4895, 50922],
+      "temperature": 0.0,
+      "avg_logprob": -0.2524867057800293,
+      "compression_ratio": 1.2053571428571428,
+      "no_speech_prob": 2.4177170682149196e-11,
+      "words": [
+        {
+          "word": "\u4eca",
+          "start": 136.0,
+          "end": 137.36,
+          "probability": 0.9000434279441833
+        },
+        {
+          "word": "\u306a\u3089",
+          "start": 137.36,
+          "end": 138.24,
+          "probability": 0.9998413324356079
+        },
+        {
+          "word": "\u5c11",
+          "start": 138.24,
+          "end": 139.34,
+          "probability": 0.9992886781692505
+        },
+        {
+          "word": "\u3057",
+          "start": 139.34,
+          "end": 139.94,
+          "probability": 0.9999018907546997
+        },
+        {
+          "word": "\u308f\u304b",
+          "start": 139.94,
+          "end": 140.7,
+          "probability": 0.74126797914505
+        },
+        {
+          "word": "\u308b",
+          "start": 140.7,
+          "end": 141.52,
+          "probability": 0.9999473094940186
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "seek": 13050,
+      "start": 141.52,
+      "end": 143.54,
+      "text": "\u596a\u308f\u306a\u3044\u3053\u3068",
+      "tokens": [50922, 1881, 103, 9206, 9311, 13235, 51018],
+      "temperature": 0.0,
+      "avg_logprob": -0.2524867057800293,
+      "compression_ratio": 1.2053571428571428,
+      "no_speech_prob": 2.4177170682149196e-11,
+      "words": [
+        {
+          "word": "\u596a",
+          "start": 141.52,
+          "end": 142.32,
+          "probability": 0.9981737434864044
+        },
+        {
+          "word": "\u308f",
+          "start": 142.32,
+          "end": 142.58,
+          "probability": 0.9998077750205994
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 142.58,
+          "end": 143.12,
+          "probability": 0.9995793700218201
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 143.12,
+          "end": 143.54,
+          "probability": 0.9929043650627136
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "seek": 13050,
+      "start": 143.54,
+      "end": 145.82,
+      "text": "\u6c7a\u3081\u3064\u3051\u306a\u3044\u3053\u3068",
+      "tokens": [51018, 33540, 11429, 9335, 7625, 9311, 13235, 51138],
+      "temperature": 0.0,
+      "avg_logprob": -0.2524867057800293,
+      "compression_ratio": 1.2053571428571428,
+      "no_speech_prob": 2.4177170682149196e-11,
+      "words": [
+        {
+          "word": "\u6c7a",
+          "start": 143.54,
+          "end": 143.96,
+          "probability": 0.6016696095466614
+        },
+        {
+          "word": "\u3081",
+          "start": 143.96,
+          "end": 144.3,
+          "probability": 0.9998268485069275
+        },
+        {
+          "word": "\u3064",
+          "start": 144.3,
+          "end": 144.56,
+          "probability": 0.9730210304260254
+        },
+        {
+          "word": "\u3051",
+          "start": 144.56,
+          "end": 144.86,
+          "probability": 0.9998714923858643
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 144.86,
+          "end": 145.32,
+          "probability": 0.9999239444732666
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 145.32,
+          "end": 145.82,
+          "probability": 0.9998801946640015
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "seek": 13050,
+      "start": 145.82,
+      "end": 149.04,
+      "text": "\u4fe1\u3058\u3066\u5f85\u3064\u3053\u3068",
+      "tokens": [51138, 17665, 9257, 2996, 18390, 9335, 13235, 51322],
+      "temperature": 0.0,
+      "avg_logprob": -0.2524867057800293,
+      "compression_ratio": 1.2053571428571428,
+      "no_speech_prob": 2.4177170682149196e-11,
+      "words": [
+        {
+          "word": "\u4fe1",
+          "start": 145.82,
+          "end": 146.82,
+          "probability": 0.987174391746521
+        },
+        {
+          "word": "\u3058",
+          "start": 146.82,
+          "end": 147.42,
+          "probability": 0.9999516010284424
+        },
+        {
+          "word": "\u3066",
+          "start": 147.42,
+          "end": 147.78,
+          "probability": 0.9997883439064026
+        },
+        {
+          "word": "\u5f85",
+          "start": 147.78,
+          "end": 148.16,
+          "probability": 0.9975581169128418
+        },
+        {
+          "word": "\u3064",
+          "start": 148.16,
+          "end": 148.52,
+          "probability": 0.9998244643211365
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 148.52,
+          "end": 149.04,
+          "probability": 0.9996263980865479
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "seek": 14904,
+      "start": 153.95999999999998,
+      "end": 155.44,
+      "text": "\u8e0f\u307f\u8fbc\u307e\u305a\u306b",
+      "tokens": [50365, 41166, 237, 11362, 9830, 120, 34690, 4108, 50692],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u8e0f",
+          "start": 153.95999999999998,
+          "end": 154.64,
+          "probability": 0.9751041829586029
+        },
+        {
+          "word": "\u307f",
+          "start": 154.64,
+          "end": 154.76,
+          "probability": 0.9998286962509155
+        },
+        {
+          "word": "\u8fbc",
+          "start": 154.76,
+          "end": 154.94,
+          "probability": 0.9998762309551239
+        },
+        {
+          "word": "\u307e\u305a",
+          "start": 154.94,
+          "end": 155.24,
+          "probability": 0.9987533092498779
+        },
+        {
+          "word": "\u306b",
+          "start": 155.24,
+          "end": 155.44,
+          "probability": 0.9997194409370422
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "seek": 14904,
+      "start": 155.44,
+      "end": 157.06,
+      "text": "\u5bc4\u308a\u6dfb\u3046\u3084\u308a\u65b9",
+      "tokens": [
+        50692, 4510, 226, 5095, 14176, 119, 2646, 7355, 5095, 9249, 50767
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u5bc4",
+          "start": 155.44,
+          "end": 155.72,
+          "probability": 0.9951013624668121
+        },
+        {
+          "word": "\u308a",
+          "start": 155.72,
+          "end": 155.84,
+          "probability": 0.9999419450759888
+        },
+        {
+          "word": "\u6dfb",
+          "start": 155.84,
+          "end": 156.06,
+          "probability": 0.9987930357456207
+        },
+        {
+          "word": "\u3046",
+          "start": 156.06,
+          "end": 156.28,
+          "probability": 0.9995629191398621
+        },
+        {
+          "word": "\u3084",
+          "start": 156.28,
+          "end": 156.46,
+          "probability": 0.9988406300544739
+        },
+        {
+          "word": "\u308a",
+          "start": 156.46,
+          "end": 156.7,
+          "probability": 0.9999290704727173
+        },
+        {
+          "word": "\u65b9",
+          "start": 156.7,
+          "end": 157.06,
+          "probability": 0.9970237612724304
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "seek": 14904,
+      "start": 157.06,
+      "end": 159.76,
+      "text": "\u5883\u754c\u7dda\u3092\u8d8a\u3048\u305a\u306b",
+      "tokens": [
+        50767, 47885, 21185, 31699, 5998, 25761, 6474, 18216, 4108, 50915
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u5883",
+          "start": 157.06,
+          "end": 157.76,
+          "probability": 0.9509621262550354
+        },
+        {
+          "word": "\u754c",
+          "start": 157.76,
+          "end": 158.12,
+          "probability": 0.9986496567726135
+        },
+        {
+          "word": "\u7dda",
+          "start": 158.12,
+          "end": 158.46,
+          "probability": 0.9998695850372314
+        },
+        {
+          "word": "\u3092",
+          "start": 158.46,
+          "end": 158.74,
+          "probability": 0.9998199343681335
+        },
+        {
+          "word": "\u8d8a",
+          "start": 158.74,
+          "end": 158.96,
+          "probability": 0.9671412706375122
+        },
+        {
+          "word": "\u3048",
+          "start": 158.96,
+          "end": 159.26,
+          "probability": 0.9998489618301392
+        },
+        {
+          "word": "\u305a",
+          "start": 159.26,
+          "end": 159.46,
+          "probability": 0.9999783039093018
+        },
+        {
+          "word": "\u306b",
+          "start": 159.46,
+          "end": 159.76,
+          "probability": 0.9999282360076904
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "seek": 14904,
+      "start": 159.76,
+      "end": 162.22,
+      "text": "\u89e6\u308c\u306a\u3044\u3053\u3068\u3067",
+      "tokens": [50915, 6758, 99, 48535, 13235, 2474, 51027],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u89e6",
+          "start": 159.76,
+          "end": 160.52,
+          "probability": 0.9887091815471649
+        },
+        {
+          "word": "\u308c\u306a\u3044",
+          "start": 160.52,
+          "end": 161.04,
+          "probability": 0.9992470741271973
+        },
+        {
+          "word": "\u3053\u3068",
+          "start": 161.04,
+          "end": 161.62,
+          "probability": 0.9965296387672424
+        },
+        {
+          "word": "\u3067",
+          "start": 161.62,
+          "end": 162.22,
+          "probability": 0.9999339580535889
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "seek": 14904,
+      "start": 162.22,
+      "end": 164.14,
+      "text": "\u8fd1\u304f\u306b\u3044\u308b",
+      "tokens": [51027, 17463, 6134, 4108, 22979, 51138],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u8fd1",
+          "start": 162.22,
+          "end": 162.84,
+          "probability": 0.9953033924102783
+        },
+        {
+          "word": "\u304f",
+          "start": 162.84,
+          "end": 163.34,
+          "probability": 0.9997521042823792
+        },
+        {
+          "word": "\u306b",
+          "start": 163.34,
+          "end": 163.62,
+          "probability": 0.9999856948852539
+        },
+        {
+          "word": "\u3044\u308b",
+          "start": 163.62,
+          "end": 164.14,
+          "probability": 0.9895057082176208
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "seek": 14904,
+      "start": 164.14,
+      "end": 166.68,
+      "text": "\u5149\u3089\u306a\u3044\u307e\u307e\u3067",
+      "tokens": [51138, 20690, 5154, 9311, 2889, 28176, 51246],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u5149",
+          "start": 164.14,
+          "end": 164.84,
+          "probability": 0.9780465960502625
+        },
+        {
+          "word": "\u3089",
+          "start": 164.84,
+          "end": 165.24,
+          "probability": 0.998103141784668
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 165.24,
+          "end": 165.82,
+          "probability": 0.999473512172699
+        },
+        {
+          "word": "\u307e",
+          "start": 165.82,
+          "end": 166.18,
+          "probability": 0.9997877478599548
+        },
+        {
+          "word": "\u307e\u3067",
+          "start": 166.18,
+          "end": 166.68,
+          "probability": 0.9967821836471558
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "seek": 14904,
+      "start": 166.68,
+      "end": 169.04,
+      "text": "\u751f\u6d3b\u306e\u4e00\u90e8\u307f\u305f\u3044\u306b",
+      "tokens": [51246, 49958, 2972, 2257, 13470, 41258, 4108, 51365],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u751f\u6d3b",
+          "start": 166.68,
+          "end": 167.36,
+          "probability": 0.9965621829032898
+        },
+        {
+          "word": "\u306e",
+          "start": 167.36,
+          "end": 167.74,
+          "probability": 0.999953031539917
+        },
+        {
+          "word": "\u4e00",
+          "start": 167.74,
+          "end": 168.0,
+          "probability": 0.9999420642852783
+        },
+        {
+          "word": "\u90e8",
+          "start": 168.0,
+          "end": 168.28,
+          "probability": 0.9976823329925537
+        },
+        {
+          "word": "\u307f\u305f\u3044",
+          "start": 168.28,
+          "end": 168.74,
+          "probability": 0.9998094439506531
+        },
+        {
+          "word": "\u306b",
+          "start": 168.74,
+          "end": 169.08,
+          "probability": 0.9998964071273804
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "seek": 14904,
+      "start": 169.6,
+      "end": 171.18,
+      "text": "\u5f53\u305f\u308a\u524d\u3068\u3057\u3066",
+      "tokens": [51393, 16233, 3368, 5095, 8945, 3193, 8822, 51474],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u5f53",
+          "start": 169.6,
+          "end": 169.84,
+          "probability": 0.9987881779670715
+        },
+        {
+          "word": "\u305f",
+          "start": 169.84,
+          "end": 170.0,
+          "probability": 0.9997547268867493
+        },
+        {
+          "word": "\u308a",
+          "start": 170.0,
+          "end": 170.14,
+          "probability": 0.9999268054962158
+        },
+        {
+          "word": "\u524d",
+          "start": 170.14,
+          "end": 170.48,
+          "probability": 0.9999567270278931
+        },
+        {
+          "word": "\u3068",
+          "start": 170.48,
+          "end": 170.86,
+          "probability": 0.9985811710357666
+        },
+        {
+          "word": "\u3057\u3066",
+          "start": 170.86,
+          "end": 171.18,
+          "probability": 0.9999849796295166
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "seek": 14904,
+      "start": 171.18,
+      "end": 172.82,
+      "text": "\u7d9a\u3044\u3066\u3044\u304f",
+      "tokens": [51474, 44985, 18549, 49394, 51559],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u7d9a",
+          "start": 171.18,
+          "end": 171.62,
+          "probability": 0.9998582601547241
+        },
+        {
+          "word": "\u3044\u3066",
+          "start": 171.62,
+          "end": 172.14,
+          "probability": 0.9999232292175293
+        },
+        {
+          "word": "\u3044\u304f",
+          "start": 172.14,
+          "end": 172.82,
+          "probability": 0.9962981343269348
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "seek": 14904,
+      "start": 173.88,
+      "end": 175.46,
+      "text": "\u305d\u308c\u304c\u512a\u3057\u3055",
+      "tokens": [51559, 13873, 5142, 12827, 103, 2849, 6722, 51688],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u305d\u308c",
+          "start": 173.88,
+          "end": 174.56,
+          "probability": 0.9983238577842712
+        },
+        {
+          "word": "\u304c",
+          "start": 174.56,
+          "end": 174.74,
+          "probability": 0.999935507774353
+        },
+        {
+          "word": "\u512a",
+          "start": 174.74,
+          "end": 175.04,
+          "probability": 0.9951504468917847
+        },
+        {
+          "word": "\u3057",
+          "start": 175.04,
+          "end": 175.28,
+          "probability": 0.7239839434623718
+        },
+        {
+          "word": "\u3055",
+          "start": 175.28,
+          "end": 175.46,
+          "probability": 0.9993579983711243
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "seek": 14904,
+      "start": 175.46,
+      "end": 177.34,
+      "text": "\u7279\u5225\u3058\u3083\u306a\u3044\u9854\u3067",
+      "tokens": [51688, 38446, 40323, 10178, 242, 2474, 51786],
+      "temperature": 0.0,
+      "avg_logprob": -0.20439115437594327,
+      "compression_ratio": 1.331360946745562,
+      "no_speech_prob": 2.0709439371713323e-11,
+      "words": [
+        {
+          "word": "\u7279\u5225",
+          "start": 175.46,
+          "end": 175.94,
+          "probability": 0.7651454210281372
+        },
+        {
+          "word": "\u3058\u3083\u306a\u3044",
+          "start": 175.94,
+          "end": 176.48,
+          "probability": 0.9997561573982239
+        },
+        {
+          "word": "\u9854",
+          "start": 176.48,
+          "end": 177.02,
+          "probability": 0.9988630414009094
+        },
+        {
+          "word": "\u3067",
+          "start": 177.02,
+          "end": 177.34,
+          "probability": 0.997825026512146
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "seek": 17734,
+      "start": 177.34,
+      "end": 179.86,
+      "text": "\u50d5\u306e\u65e5\u5e38\u306e\u89d2\u3092",
+      "tokens": [50365, 28546, 2972, 6890, 11279, 2972, 29389, 5998, 50492],
+      "temperature": 0.0,
+      "avg_logprob": -0.24184191054192142,
+      "compression_ratio": 1.1951219512195121,
+      "no_speech_prob": 2.482242189572048e-11,
+      "words": [
+        {
+          "word": "\u50d5",
+          "start": 177.34,
+          "end": 177.86,
+          "probability": 0.994391143321991
+        },
+        {
+          "word": "\u306e",
+          "start": 177.86,
+          "end": 178.22,
+          "probability": 0.9996070265769958
+        },
+        {
+          "word": "\u65e5",
+          "start": 178.22,
+          "end": 178.42,
+          "probability": 0.9989770650863647
+        },
+        {
+          "word": "\u5e38",
+          "start": 178.42,
+          "end": 178.74,
+          "probability": 0.9983774423599243
+        },
+        {
+          "word": "\u306e",
+          "start": 178.74,
+          "end": 179.02,
+          "probability": 0.9965014457702637
+        },
+        {
+          "word": "\u89d2",
+          "start": 179.02,
+          "end": 179.36,
+          "probability": 0.4930900037288666
+        },
+        {
+          "word": "\u3092",
+          "start": 179.36,
+          "end": 179.86,
+          "probability": 0.9978945851325989
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "seek": 17734,
+      "start": 179.86,
+      "end": 182.22,
+      "text": "\u9759\u304b\u306b\u4e38\u3081\u308b",
+      "tokens": [50492, 5363, 247, 3703, 4108, 940, 116, 11429, 4895, 50612],
+      "temperature": 0.0,
+      "avg_logprob": -0.24184191054192142,
+      "compression_ratio": 1.1951219512195121,
+      "no_speech_prob": 2.482242189572048e-11,
+      "words": [
+        {
+          "word": "\u9759",
+          "start": 179.86,
+          "end": 180.42,
+          "probability": 0.9563006162643433
+        },
+        {
+          "word": "\u304b",
+          "start": 180.42,
+          "end": 180.76,
+          "probability": 0.9997175335884094
+        },
+        {
+          "word": "\u306b",
+          "start": 180.76,
+          "end": 181.2,
+          "probability": 0.9998857975006104
+        },
+        {
+          "word": "\u4e38",
+          "start": 181.2,
+          "end": 181.66,
+          "probability": 0.9988425970077515
+        },
+        {
+          "word": "\u3081",
+          "start": 181.66,
+          "end": 181.96,
+          "probability": 0.9986934065818787
+        },
+        {
+          "word": "\u308b",
+          "start": 181.96,
+          "end": 182.22,
+          "probability": 0.9998424053192139
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "seek": 17734,
+      "start": 182.22,
+      "end": 184.2,
+      "text": "\u5f8c\u304b\u3089\u80f8\u306b\u97ff\u304f",
+      "tokens": [50612, 5661, 11046, 19095, 116, 4108, 13665, 123, 6134, 50710],
+      "temperature": 0.0,
+      "avg_logprob": -0.24184191054192142,
+      "compression_ratio": 1.1951219512195121,
+      "no_speech_prob": 2.482242189572048e-11,
+      "words": [
+        {
+          "word": "\u5f8c",
+          "start": 182.22,
+          "end": 182.82,
+          "probability": 0.9170709252357483
+        },
+        {
+          "word": "\u304b\u3089",
+          "start": 182.82,
+          "end": 183.16,
+          "probability": 0.9989836812019348
+        },
+        {
+          "word": "\u80f8",
+          "start": 183.16,
+          "end": 183.48,
+          "probability": 0.9998522698879242
+        },
+        {
+          "word": "\u306b",
+          "start": 183.48,
+          "end": 183.66,
+          "probability": 0.9999579191207886
+        },
+        {
+          "word": "\u97ff",
+          "start": 183.66,
+          "end": 183.96,
+          "probability": 0.9998227655887604
+        },
+        {
+          "word": "\u304f",
+          "start": 183.96,
+          "end": 184.2,
+          "probability": 0.9999439716339111
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "seek": 17734,
+      "start": 184.2,
+      "end": 185.46,
+      "text": "\u305d\u308c\u304c\u512a\u3057\u3055",
+      "tokens": [50710, 13873, 5142, 12827, 103, 2849, 6722, 50774],
+      "temperature": 0.0,
+      "avg_logprob": -0.24184191054192142,
+      "compression_ratio": 1.1951219512195121,
+      "no_speech_prob": 2.482242189572048e-11,
+      "words": [
+        {
+          "word": "\u305d\u308c",
+          "start": 184.2,
+          "end": 184.56,
+          "probability": 0.9278021454811096
+        },
+        {
+          "word": "\u304c",
+          "start": 184.56,
+          "end": 184.74,
+          "probability": 0.9999241828918457
+        },
+        {
+          "word": "\u512a",
+          "start": 184.74,
+          "end": 185.02,
+          "probability": 0.9951873421669006
+        },
+        {
+          "word": "\u3057",
+          "start": 185.02,
+          "end": 185.32,
+          "probability": 0.5942649245262146
+        },
+        {
+          "word": "\u3055",
+          "start": 185.32,
+          "end": 185.46,
+          "probability": 0.9997126460075378
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "seek": 17734,
+      "start": 185.46,
+      "end": 187.4,
+      "text": "\u6b8b\u3089\u306a\u3044\u306f\u305a\u306a\u306e\u306b",
+      "tokens": [
+        50774, 15976, 233, 5154, 9311, 3065, 18216, 3203, 2972, 4108, 50872
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.24184191054192142,
+      "compression_ratio": 1.1951219512195121,
+      "no_speech_prob": 2.482242189572048e-11,
+      "words": [
+        {
+          "word": "\u6b8b",
+          "start": 185.46,
+          "end": 185.88,
+          "probability": 0.996198982000351
+        },
+        {
+          "word": "\u3089",
+          "start": 185.88,
+          "end": 186.02,
+          "probability": 0.9999432563781738
+        },
+        {
+          "word": "\u306a\u3044",
+          "start": 186.02,
+          "end": 186.3,
+          "probability": 0.999943733215332
+        },
+        {
+          "word": "\u306f",
+          "start": 186.3,
+          "end": 186.48,
+          "probability": 0.9975067973136902
+        },
+        {
+          "word": "\u305a",
+          "start": 186.48,
+          "end": 186.64,
+          "probability": 0.9999310970306396
+        },
+        {
+          "word": "\u306a",
+          "start": 186.64,
+          "end": 186.82,
+          "probability": 0.9998865127563477
+        },
+        {
+          "word": "\u306e",
+          "start": 186.82,
+          "end": 187.02,
+          "probability": 0.9999386072158813
+        },
+        {
+          "word": "\u306b",
+          "start": 187.02,
+          "end": 187.4,
+          "probability": 0.9999599456787109
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "seek": 17734,
+      "start": 187.4,
+      "end": 189.22,
+      "text": "\u632f\u308a\u8fd4\u308b\u305f\u3073",
+      "tokens": [50872, 8501, 107, 5095, 3316, 242, 4895, 3368, 38761, 50965],
+      "temperature": 0.0,
+      "avg_logprob": -0.24184191054192142,
+      "compression_ratio": 1.1951219512195121,
+      "no_speech_prob": 2.482242189572048e-11,
+      "words": [
+        {
+          "word": "\u632f",
+          "start": 187.4,
+          "end": 187.84,
+          "probability": 0.9912388324737549
+        },
+        {
+          "word": "\u308a",
+          "start": 187.84,
+          "end": 187.98,
+          "probability": 0.9997683167457581
+        },
+        {
+          "word": "\u8fd4",
+          "start": 187.98,
+          "end": 188.48,
+          "probability": 0.9998767673969269
+        },
+        {
+          "word": "\u308b",
+          "start": 188.48,
+          "end": 188.74,
+          "probability": 0.9998239874839783
+        },
+        {
+          "word": "\u305f",
+          "start": 188.74,
+          "end": 188.98,
+          "probability": 0.6368359327316284
+        },
+        {
+          "word": "\u3073",
+          "start": 188.98,
+          "end": 189.22,
+          "probability": 0.9999674558639526
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "seek": 17734,
+      "start": 189.22,
+      "end": 193.12,
+      "text": "\u78ba\u304b\u306b\u305d\u3053\u306b\u3042\u308b",
+      "tokens": [50965, 24293, 3703, 4108, 5040, 3503, 4108, 24719, 51165],
+      "temperature": 0.0,
+      "avg_logprob": -0.24184191054192142,
+      "compression_ratio": 1.1951219512195121,
+      "no_speech_prob": 2.482242189572048e-11,
+      "words": [
+        {
+          "word": "\u78ba",
+          "start": 189.22,
+          "end": 190.04,
+          "probability": 0.9968301653862
+        },
+        {
+          "word": "\u304b",
+          "start": 190.04,
+          "end": 190.5,
+          "probability": 0.9999526739120483
+        },
+        {
+          "word": "\u306b",
+          "start": 190.5,
+          "end": 190.96,
+          "probability": 0.9999674558639526
+        },
+        {
+          "word": "\u305d",
+          "start": 190.96,
+          "end": 191.48,
+          "probability": 0.9979504942893982
+        },
+        {
+          "word": "\u3053",
+          "start": 191.48,
+          "end": 191.78,
+          "probability": 0.999909520149231
+        },
+        {
+          "word": "\u306b",
+          "start": 191.78,
+          "end": 192.18,
+          "probability": 0.9999688863754272
+        },
+        {
+          "word": "\u3042\u308b",
+          "start": 192.18,
+          "end": 193.12,
+          "probability": 0.999840259552002
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "seek": 19312,
+      "start": 221.2,
+      "end": 222.6,
+      "text": "\u3067\u3082",
+      "tokens": [50365, 17783, 51284],
+      "temperature": 1.0,
+      "avg_logprob": -2.823649597167969,
+      "compression_ratio": 0.42857142857142855,
+      "no_speech_prob": 4.871838488185176e-10,
+      "words": [
+        {
+          "word": "\u3067\u3082",
+          "start": 221.2,
+          "end": 222.6,
+          "probability": 0.00022061313211452216
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "seek": 22260,
+      "start": 222.58,
+      "end": 222.58,
+      "text": "",
+      "tokens": [],
+      "temperature": 0.0,
+      "avg_logprob": -0.18344435095787048,
+      "compression_ratio": 0.8571428571428571,
+      "no_speech_prob": 1.6767101596038003e-10,
+      "words": []
+    }
+  ],
+  "language": "ja"
+}

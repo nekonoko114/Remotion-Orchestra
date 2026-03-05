@@ -1,5 +1,4 @@
-import { Composition } from "remotion";
-
+import { Composition } from 'remotion';
 
 import {
   ENDING_SEC,
@@ -10,7 +9,7 @@ import {
   RankingVideo,
   TOP_RANK_SEC,
   TRANSITION_FRAMES,
-} from "./compositions/VideoFactory/RankingVideo";
+} from './compositions/VideoFactory/RankingVideo';
 import {
   RankingTime,
   OPENING_SEC as OPENING_SEC_TIME,
@@ -19,17 +18,17 @@ import {
   ENDING_SEC as ENDING_SEC_TIME,
   TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
   GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
-} from "./compositions/VideoFactory/RankingTime";
-import { BattleCrystal } from "./compositions/VideoFactory/BattleCrystal";
-import { BattleWater } from "./compositions/VideoFactory/BattleWater";
-import { BattleKawaii } from "./compositions/VideoFactory/BattleKawaii";
-import { NarandaMamadeMV } from "./compositions/NarandaMamade";
-import { SoregayasashisaMV } from "./compositions/Soregayasashisa";
-import narandaMamadeMusicAnalysis from "./compositions/NarandaMamade/music_analysis.json";
-import { NovaShowMV } from "./components/NovaShowMV";
-import { KimitonaraComposition } from "./compositions/Kimitonara";
-import "./index.css";
-import React from "react";
+} from './compositions/VideoFactory/RankingTime';
+import { BattleCrystal } from './compositions/VideoFactory/BattleCrystal';
+import { BattleWater } from './compositions/VideoFactory/BattleWater';
+import { BattleKawaii } from './compositions/VideoFactory/BattleKawaii';
+import { NarandaMamadeMV } from './compositions/NarandaMamade';
+import { SoregayasashisaMV } from './compositions/Soregayasashisa';
+import narandaMamadeMusicAnalysis from './compositions/NarandaMamade/music_analysis.json';
+import { NovaShowMV } from './components/NovaShowMV';
+import { KimitonaraComposition } from './compositions/Kimitonara';
+import './index.css';
+import React from 'react';
 
 const JOL_RANKING_FPS = 30;
 

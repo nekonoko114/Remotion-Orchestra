@@ -1,5 +1,11 @@
 import React from 'react';
-import { AbsoluteFill, Audio, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
+import {
+  AbsoluteFill,
+  Audio,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from 'remotion';
 import { useAudioData, visualizeAudio } from '@remotion/media-utils';
 import { Lyrics } from './Lyrics';
 import { ChorusLyrics } from './ChorusLyrics';
@@ -17,72 +23,89 @@ import subtitles from './subtitles.json';
 
 // 映画風の黒帯 (シネマスコープ)
 const CinemaScope: React.FC = () => {
-    return (
-        <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 1000 }}>
-            <div style={{ position: 'absolute', top: 0, width: '100%', height: '10%', background: 'black' }} />
-            <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '10%', background: 'black' }} />
-        </AbsoluteFill>
-    );
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 1000 }}>
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          width: '100%',
+          height: '10%',
+          background: 'black',
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          height: '10%',
+          background: 'black',
+        }}
+      />
+    </AbsoluteFill>
+  );
 };
 
 export const KimitonaraComposition: React.FC = () => {
-    const frame = useCurrentFrame();
-    const { fps } = useVideoConfig();
-    const time = frame / fps;
-    const music = staticFile('assets/audio/music/君となら.mp3');
-    const audioData = useAudioData(music);
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const time = frame / fps;
+  const music = staticFile('assets/audio/music/君となら.mp3');
+  const audioData = useAudioData(music);
 
-    // If no audio data, beat is 0
-    if (!audioData) {
-        return null; // Or return loading state
-    }
+  // If no audio data, beat is 0
+  if (!audioData) {
+    return null; // Or return loading state
+  }
 
-    // Audio Analysis for Reactivity
-    const visualization = visualizeAudio({
-        fps,
-        frame,
-        audioData,
-        numberOfSamples: 16, // Low for performance, enough for bass/treble
-    });
-    
-    // Simple bass detection (low frequencies)
-    const bass = visualization.slice(0, 4).reduce((a, b) => a + b, 0) / 4; 
+  // Audio Analysis for Reactivity
+  const visualization = visualizeAudio({
+    fps,
+    frame,
+    audioData,
+    numberOfSamples: 16, // Low for performance, enough for bass/treble
+  });
 
-    const currentSection = TIMELINE.find(section => time >= section.start && time < section.end);
-    const showSpeedLines = currentSection?.showSpeedLines ?? false;
-    const showSpeedSlash = currentSection?.showSpeedSlash ?? false;
+  // Simple bass detection (low frequencies)
+  const bass = visualization.slice(0, 4).reduce((a, b) => a + b, 0) / 4;
 
-    return (
-        <AbsoluteFill>
-            {/* Dynamic Background Manager */}
-            <BackgroundScenes beat={bass} />
-            
-            {/* 歌詞アニメーション (背景レイヤー) */}
-            <Lyrics subtitles={subtitles} layer="background" />
+  const currentSection = TIMELINE.find(
+    (section) => time >= section.start && time < section.end,
+  );
+  const showSpeedLines = currentSection?.showSpeedLines ?? false;
+  const showSpeedSlash = currentSection?.showSpeedSlash ?? false;
 
-            {/* Ado-Style Speed Lines (Global FX controlled by Timeline) */}
-            {showSpeedLines && <SpeedLines />}
+  return (
+    <AbsoluteFill>
+      {/* Dynamic Background Manager */}
+      <BackgroundScenes beat={bass} />
 
-            {/* Back Chorus Lyrics (Parallax: Slower, Behind Character) */}
-            <ChorusLyrics subtitles={subtitles} layer="back" />
-            
-            {/* Character (Nova) - now using nova-chracter.png */}
-            <CharacterScenes />
+      {/* 歌詞アニメーション (背景レイヤー) */}
+      <Lyrics subtitles={subtitles} layer="background" />
 
-            {/* Ado-style Speed Slash (Purple Strip) - Between Character and Front Lyrics */}
-            {showSpeedSlash && <SpeedSlash />}
-            
-            {/* 歌詞アニメーション (前景レイヤー: ここは汎用歌詞) */}
-            <Lyrics subtitles={subtitles} layer="foreground" />
+      {/* Ado-Style Speed Lines (Global FX controlled by Timeline) */}
+      {showSpeedLines && <SpeedLines />}
 
-            {/* Front Chorus Lyrics (Parallax: Faster, In Front of Character) */}
-            <ChorusLyrics subtitles={subtitles} layer="front" />
+      {/* Back Chorus Lyrics (Parallax: Slower, Behind Character) */}
+      <ChorusLyrics subtitles={subtitles} layer="back" />
 
-            <Audio src={music} />
+      {/* Character (Nova) - now using nova-chracter.png */}
+      <CharacterScenes />
 
-            {/* 映画風の黒帯 */}
-            <CinemaScope />
-            
-        </AbsoluteFill>
-    );
+      {/* Ado-style Speed Slash (Purple Strip) - Between Character and Front Lyrics */}
+      {showSpeedSlash && <SpeedSlash />}
+
+      {/* 歌詞アニメーション (前景レイヤー: ここは汎用歌詞) */}
+      <Lyrics subtitles={subtitles} layer="foreground" />
+
+      {/* Front Chorus Lyrics (Parallax: Faster, In Front of Character) */}
+      <ChorusLyrics subtitles={subtitles} layer="front" />
+
+      <Audio src={music} />
+
+      {/* 映画風の黒帯 */}
+      <CinemaScope />
+    </AbsoluteFill>
+  );
 };

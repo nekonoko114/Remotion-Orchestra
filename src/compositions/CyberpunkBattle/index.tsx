@@ -1,1 +1,1 @@
-export { BattleScene as CyberpunkBattle } from "./BattleScene";
+export { BattleScene as CyberpunkBattle } from './BattleScene';

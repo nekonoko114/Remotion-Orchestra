@@ -1,17 +1,17 @@
-import { Center, Text3D } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import type React from "react";
-import { useMemo, useRef } from "react";
-import { interpolate, random, staticFile, useCurrentFrame } from "remotion";
-import * as THREE from "three";
+import { Center, Text3D } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import type React from 'react';
+import { useMemo, useRef } from 'react';
+import { interpolate, random, staticFile, useCurrentFrame } from 'remotion';
+import * as THREE from 'three';
 
 const EmberShaderMaterial = {
-	uniforms: {
-		uTime: { value: 0 },
-		uProgress: { value: 1.0 },
-		uColor: { value: new THREE.Color("#ffaa00") },
-	},
-	vertexShader: `
+  uniforms: {
+    uTime: { value: 0 },
+    uProgress: { value: 1.0 },
+    uColor: { value: new THREE.Color('#ffaa00') },
+  },
+  vertexShader: `
         uniform float uTime;
         uniform float uProgress;
         varying float vOpacity;
@@ -30,7 +30,7 @@ const EmberShaderMaterial = {
             gl_Position = projectionMatrix * mvPosition;
         }
     `,
-	fragmentShader: `
+  fragmentShader: `
         uniform vec3 uColor;
         varying float vOpacity;
         void main() {
@@ -40,9 +40,9 @@ const EmberShaderMaterial = {
             gl_FragColor = vec4(uColor, vOpacity * strength);
         }
     `,
-	transparent: true,
-	blending: THREE.AdditiveBlending,
-	depthWrite: false,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
 };
 
 // Shared Noise Functions (Same as RealisticFireText for consistency)
@@ -97,16 +97,16 @@ const NoiseChunk = `
 `;
 
 const AdvancedFireShader = {
-	uniforms: {
-		uTime: { value: 0 },
-		uProgress: { value: 1.0 },
-		uColorCore: { value: new THREE.Color("#ffffff") },
-		uColorHeat: { value: new THREE.Color("#ffaa00") },
-		uColorFlame: { value: new THREE.Color("#ff0000") },
-		uTargetColor: { value: new THREE.Color("#ff5500") },
-		uDistortionStrength: { value: 1.0 }, // New uniform
-	},
-	vertexShader: `
+  uniforms: {
+    uTime: { value: 0 },
+    uProgress: { value: 1.0 },
+    uColorCore: { value: new THREE.Color('#ffffff') },
+    uColorHeat: { value: new THREE.Color('#ffaa00') },
+    uColorFlame: { value: new THREE.Color('#ff0000') },
+    uTargetColor: { value: new THREE.Color('#ff5500') },
+    uDistortionStrength: { value: 1.0 }, // New uniform
+  },
+  vertexShader: `
         varying vec3 vPosition;
         varying float vNoise;
         uniform float uTime;
@@ -132,7 +132,7 @@ const AdvancedFireShader = {
             gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
         }
     `,
-	fragmentShader: `
+  fragmentShader: `
         varying vec3 vPosition;
         varying float vNoise;
         uniform float uTime;
@@ -164,113 +164,113 @@ const AdvancedFireShader = {
 };
 
 interface BurningTextProps {
-	text: string;
-	size?: number;
-	height?: number;
-	color?: string;
-	durationInFrames?: number;
-	startFrame?: number;
-	fontUrl?: string;
-	distortionStrength?: number; // New prop
+  text: string;
+  size?: number;
+  height?: number;
+  color?: string;
+  durationInFrames?: number;
+  startFrame?: number;
+  fontUrl?: string;
+  distortionStrength?: number; // New prop
 }
 
 export const BurningText: React.FC<BurningTextProps> = ({
-	text,
-	size = 1,
-	height = 0.2,
-	color = "#ffaa00",
-	durationInFrames = 90,
-	startFrame = 0,
-	fontUrl = "fonts/helvetiker_regular.typeface.json",
-	distortionStrength = 1.0,
+  text,
+  size = 1,
+  height = 0.2,
+  color = '#ffaa00',
+  durationInFrames = 90,
+  startFrame = 0,
+  fontUrl = 'fonts/helvetiker_regular.typeface.json',
+  distortionStrength = 1.0,
 }) => {
-	const frame = useCurrentFrame();
-	const fireMaterialRef = useRef<THREE.ShaderMaterial>(null);
-	const emberMaterialRef = useRef<THREE.ShaderMaterial>(null);
+  const frame = useCurrentFrame();
+  const fireMaterialRef = useRef<THREE.ShaderMaterial>(null);
+  const emberMaterialRef = useRef<THREE.ShaderMaterial>(null);
 
-	// Fade intensity from 1.0 (burning) to 0.0 (solid)
-	const intensity = interpolate(
-		frame - startFrame,
-		[0, durationInFrames],
-		[1, 0],
-		{ extrapolateRight: "clamp", extrapolateLeft: "clamp" },
-	);
+  // Fade intensity from 1.0 (burning) to 0.0 (solid)
+  const intensity = interpolate(
+    frame - startFrame,
+    [0, durationInFrames],
+    [1, 0],
+    { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' },
+  );
 
-	const [particlePositions] = useMemo(() => {
-		const count = 2000;
-		const positions = new Float32Array(count * 3);
-		const seed = text + size + height;
-		for (let i = 0; i < count; i++) {
-			positions[i * 3] =
-				(random(`${seed}-x-${i}`) - 0.5) * (text.length * size * 0.8);
-			positions[i * 3 + 1] = (random(`${seed}-y-${i}`) - 0.5) * size;
-			positions[i * 3 + 2] = (random(`${seed}-z-${i}`) - 0.5) * height;
-		}
-		return [positions];
-	}, [text, size, height]);
+  const [particlePositions] = useMemo(() => {
+    const count = 2000;
+    const positions = new Float32Array(count * 3);
+    const seed = text + size + height;
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] =
+        (random(`${seed}-x-${i}`) - 0.5) * (text.length * size * 0.8);
+      positions[i * 3 + 1] = (random(`${seed}-y-${i}`) - 0.5) * size;
+      positions[i * 3 + 2] = (random(`${seed}-z-${i}`) - 0.5) * height;
+    }
+    return [positions];
+  }, [text, size, height]);
 
-	useFrame(({ clock }) => {
-		const t = clock.getElapsedTime();
-		if (fireMaterialRef.current) {
-			fireMaterialRef.current.uniforms.uTime.value = t;
-			fireMaterialRef.current.uniforms.uProgress.value = intensity;
-			fireMaterialRef.current.uniforms.uDistortionStrength.value =
-				distortionStrength;
-		}
-		if (emberMaterialRef.current) {
-			emberMaterialRef.current.uniforms.uTime.value = t;
-			emberMaterialRef.current.uniforms.uProgress.value = intensity;
-		}
-	});
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    if (fireMaterialRef.current) {
+      fireMaterialRef.current.uniforms.uTime.value = t;
+      fireMaterialRef.current.uniforms.uProgress.value = intensity;
+      fireMaterialRef.current.uniforms.uDistortionStrength.value =
+        distortionStrength;
+    }
+    if (emberMaterialRef.current) {
+      emberMaterialRef.current.uniforms.uTime.value = t;
+      emberMaterialRef.current.uniforms.uProgress.value = intensity;
+    }
+  });
 
-	const fireShader = useMemo(() => {
-		const mat = new THREE.ShaderMaterial(AdvancedFireShader);
-		mat.uniforms.uTargetColor.value = new THREE.Color(color);
-		return mat;
-	}, [color]);
-	const emberShader = useMemo(
-		() => new THREE.ShaderMaterial(EmberShaderMaterial),
-		[],
-	);
+  const fireShader = useMemo(() => {
+    const mat = new THREE.ShaderMaterial(AdvancedFireShader);
+    mat.uniforms.uTargetColor.value = new THREE.Color(color);
+    return mat;
+  }, [color]);
+  const emberShader = useMemo(
+    () => new THREE.ShaderMaterial(EmberShaderMaterial),
+    [],
+  );
 
-	return (
-		<group>
-			<Center>
-				<Text3D
-					font={staticFile(fontUrl)}
-					size={size}
-					height={height}
-					curveSegments={12}
-					bevelEnabled
-					bevelThickness={0.02}
-					bevelSize={0.02}
-				>
-					{text}
-					<primitive
-						object={fireShader}
-						ref={fireMaterialRef}
-						attach="material"
-					/>
-				</Text3D>
-			</Center>
+  return (
+    <group>
+      <Center>
+        <Text3D
+          font={staticFile(fontUrl)}
+          size={size}
+          height={height}
+          curveSegments={12}
+          bevelEnabled
+          bevelThickness={0.02}
+          bevelSize={0.02}
+        >
+          {text}
+          <primitive
+            object={fireShader}
+            ref={fireMaterialRef}
+            attach="material"
+          />
+        </Text3D>
+      </Center>
 
-			{intensity > 0.01 && (
-				<points>
-					<bufferGeometry>
-						<bufferAttribute
-							attach="attributes-position"
-							count={particlePositions.length / 3}
-							array={particlePositions}
-							itemSize={3}
-						/>
-					</bufferGeometry>
-					<primitive
-						object={emberShader}
-						ref={emberMaterialRef}
-						attach="material"
-					/>
-				</points>
-			)}
-		</group>
-	);
+      {intensity > 0.01 && (
+        <points>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              count={particlePositions.length / 3}
+              array={particlePositions}
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <primitive
+            object={emberShader}
+            ref={emberMaterialRef}
+            attach="material"
+          />
+        </points>
+      )}
+    </group>
+  );
 };

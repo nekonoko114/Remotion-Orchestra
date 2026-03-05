@@ -1,31 +1,31 @@
-import { Center, Text3D } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import type React from "react";
-import { useMemo, useRef } from "react";
-import { random, staticFile } from "remotion";
-import * as THREE from "three";
+import { Center, Text3D } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import type React from 'react';
+import { useMemo, useRef } from 'react';
+import { random, staticFile } from 'remotion';
+import * as THREE from 'three';
 
 // --- 1. Procedural Fire Texture Generator ---
 function generateFireTexture(core: string, body: string, edge: string) {
-	if (typeof document === "undefined") return null;
-	const canvas = document.createElement("canvas");
-	canvas.width = 64;
-	canvas.height = 64;
-	const ctx = canvas.getContext("2d");
-	if (!ctx) return null;
+  if (typeof document === 'undefined') return null;
+  const canvas = document.createElement('canvas');
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
 
-	// Draw a fuzzy, flame-like blob
-	const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-	gradient.addColorStop(0, core);
-	gradient.addColorStop(0.2, body);
-	gradient.addColorStop(0.5, edge);
-	gradient.addColorStop(1, "rgba(0, 0, 0, 0)"); // Transparent
+  // Draw a fuzzy, flame-like blob
+  const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gradient.addColorStop(0, core);
+  gradient.addColorStop(0.2, body);
+  gradient.addColorStop(0.5, edge);
+  gradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // Transparent
 
-	ctx.fillStyle = gradient;
-	ctx.fillRect(0, 0, 64, 64);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, 64, 64);
 
-	const texture = new THREE.CanvasTexture(canvas);
-	return texture;
+  const texture = new THREE.CanvasTexture(canvas);
+  return texture;
 }
 
 // --- 2. Charcoal "Fuel" Shader (The Text Mesh) ---
@@ -81,13 +81,13 @@ const NoiseChunk = `
 `;
 
 const CharcoalShader = {
-	uniforms: {
-		uTime: { value: 0 },
-		uColorCarbon: { value: new THREE.Color("#000000") },
-		uColorEmissive: { value: new THREE.Color("#ff3300") },
-		uDistortionStrength: { value: 1.0 }, // New uniform
-	},
-	vertexShader: `
+  uniforms: {
+    uTime: { value: 0 },
+    uColorCarbon: { value: new THREE.Color('#000000') },
+    uColorEmissive: { value: new THREE.Color('#ff3300') },
+    uDistortionStrength: { value: 1.0 }, // New uniform
+  },
+  vertexShader: `
         varying vec3 vPosition;
         uniform float uTime;
         uniform float uDistortionStrength;
@@ -107,7 +107,7 @@ const CharcoalShader = {
             gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
         }
     `,
-	fragmentShader: `
+  fragmentShader: `
         varying vec3 vPosition;
         uniform float uTime;
         uniform vec3 uColorCarbon;
@@ -131,11 +131,11 @@ const CharcoalShader = {
 
 // --- 3. Flame Particle Shader ---
 const FlameSpriteShader = {
-	uniforms: {
-		uTime: { value: 0 },
-		uTexture: { value: null },
-	},
-	vertexShader: `
+  uniforms: {
+    uTime: { value: 0 },
+    uTexture: { value: null },
+  },
+  vertexShader: `
         uniform float uTime;
         varying float vLife;
         varying float vRotation;
@@ -167,7 +167,7 @@ const FlameSpriteShader = {
             gl_Position = projectionMatrix * mvPosition;
         }
     `,
-	fragmentShader: `
+  fragmentShader: `
         uniform sampler2D uTexture;
         varying float vLife;
         varying float vRotation;
@@ -196,116 +196,116 @@ const FlameSpriteShader = {
             gl_FragColor = vec4(color, tex.a * (1.0 - vLife));
         }
     `,
-	transparent: true,
-	blending: THREE.AdditiveBlending,
-	depthWrite: false,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
 };
 
 interface RealisticFireTextProps {
-	text: string;
-	size?: number;
-	height?: number;
-	fontUrl?: string;
-	distortionStrength?: number;
-	// Color Config
-	fireColorCore?: string;
-	fireColorBody?: string;
-	fireColorEdge?: string;
-	magmaColor?: string;
-	carbonColor?: string;
+  text: string;
+  size?: number;
+  height?: number;
+  fontUrl?: string;
+  distortionStrength?: number;
+  // Color Config
+  fireColorCore?: string;
+  fireColorBody?: string;
+  fireColorEdge?: string;
+  magmaColor?: string;
+  carbonColor?: string;
 }
 
 export const RealisticFireText: React.FC<RealisticFireTextProps> = ({
-	text,
-	size = 1,
-	height = 0.3,
-	fontUrl = "fonts/helvetiker_regular.typeface.json",
-	distortionStrength = 1.0,
-	fireColorCore = "rgba(255, 200, 100, 1)",
-	fireColorBody = "rgba(255, 100, 0, 0.8)",
-	fireColorEdge = "rgba(100, 0, 0, 0.2)",
-	magmaColor = "#ff3300",
-	carbonColor = "#000000",
+  text,
+  size = 1,
+  height = 0.3,
+  fontUrl = 'fonts/helvetiker_regular.typeface.json',
+  distortionStrength = 1.0,
+  fireColorCore = 'rgba(255, 200, 100, 1)',
+  fireColorBody = 'rgba(255, 100, 0, 0.8)',
+  fireColorEdge = 'rgba(100, 0, 0, 0.2)',
+  magmaColor = '#ff3300',
+  carbonColor = '#000000',
 }) => {
-	const charcoalRef = useRef<THREE.ShaderMaterial>(null);
-	const flameRef = useRef<THREE.ShaderMaterial>(null);
+  const charcoalRef = useRef<THREE.ShaderMaterial>(null);
+  const flameRef = useRef<THREE.ShaderMaterial>(null);
 
-	// 1. Create the Fire Texture with custom colors
-	const fireTexture = useMemo(() => {
-		return generateFireTexture(fireColorCore, fireColorBody, fireColorEdge);
-	}, [fireColorCore, fireColorBody, fireColorEdge]);
+  // 1. Create the Fire Texture with custom colors
+  const fireTexture = useMemo(() => {
+    return generateFireTexture(fireColorCore, fireColorBody, fireColorEdge);
+  }, [fireColorCore, fireColorBody, fireColorEdge]);
 
-	// 2. Generate particle origins...
-	const count = 1500;
-	const [particleOrigins] = useMemo(() => {
-		const origins = new Float32Array(count * 3);
-		const seed = text + size;
-		for (let i = 0; i < count; i++) {
-			origins[i * 3] =
-				(random(`${seed}-x-${i}`) - 0.5) * (text.length * size * 0.7);
-			origins[i * 3 + 1] = (random(`${seed}-y-${i}`) - 0.5) * size;
-			origins[i * 3 + 2] = (random(`${seed}-z-${i}`) - 0.5) * height;
-		}
-		return [origins];
-	}, [text, size, height]);
+  // 2. Generate particle origins...
+  const count = 1500;
+  const [particleOrigins] = useMemo(() => {
+    const origins = new Float32Array(count * 3);
+    const seed = text + size;
+    for (let i = 0; i < count; i++) {
+      origins[i * 3] =
+        (random(`${seed}-x-${i}`) - 0.5) * (text.length * size * 0.7);
+      origins[i * 3 + 1] = (random(`${seed}-y-${i}`) - 0.5) * size;
+      origins[i * 3 + 2] = (random(`${seed}-z-${i}`) - 0.5) * height;
+    }
+    return [origins];
+  }, [text, size, height]);
 
-	useFrame(({ clock }) => {
-		const t = clock.getElapsedTime();
-		if (charcoalRef.current) {
-			charcoalRef.current.uniforms.uTime.value = t;
-			charcoalRef.current.uniforms.uDistortionStrength.value =
-				distortionStrength;
-			// Update dynamic colors
-			charcoalRef.current.uniforms.uColorEmissive.value.set(magmaColor);
-			charcoalRef.current.uniforms.uColorCarbon.value.set(carbonColor);
-		}
-		if (flameRef.current) flameRef.current.uniforms.uTime.value = t;
-	});
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    if (charcoalRef.current) {
+      charcoalRef.current.uniforms.uTime.value = t;
+      charcoalRef.current.uniforms.uDistortionStrength.value =
+        distortionStrength;
+      // Update dynamic colors
+      charcoalRef.current.uniforms.uColorEmissive.value.set(magmaColor);
+      charcoalRef.current.uniforms.uColorCarbon.value.set(carbonColor);
+    }
+    if (flameRef.current) flameRef.current.uniforms.uTime.value = t;
+  });
 
-	const charcoalShader = useMemo(
-		() => new THREE.ShaderMaterial(CharcoalShader),
-		[],
-	);
-	const flameShader = useMemo(() => {
-		const mat = new THREE.ShaderMaterial(FlameSpriteShader);
-		if (fireTexture) mat.uniforms.uTexture.value = fireTexture;
-		return mat;
-	}, [fireTexture]);
+  const charcoalShader = useMemo(
+    () => new THREE.ShaderMaterial(CharcoalShader),
+    [],
+  );
+  const flameShader = useMemo(() => {
+    const mat = new THREE.ShaderMaterial(FlameSpriteShader);
+    if (fireTexture) mat.uniforms.uTexture.value = fireTexture;
+    return mat;
+  }, [fireTexture]);
 
-	return (
-		<group>
-			{/* The Charcoal Text */}
-			<Center>
-				<Text3D
-					font={staticFile(fontUrl)}
-					size={size}
-					height={height}
-					curveSegments={12}
-					bevelEnabled
-					bevelThickness={0.02}
-					bevelSize={0.02}
-				>
-					{text}
-					<primitive
-						object={charcoalShader}
-						ref={charcoalRef}
-						attach="material"
-					/>
-				</Text3D>
-			</Center>
+  return (
+    <group>
+      {/* The Charcoal Text */}
+      <Center>
+        <Text3D
+          font={staticFile(fontUrl)}
+          size={size}
+          height={height}
+          curveSegments={12}
+          bevelEnabled
+          bevelThickness={0.02}
+          bevelSize={0.02}
+        >
+          {text}
+          <primitive
+            object={charcoalShader}
+            ref={charcoalRef}
+            attach="material"
+          />
+        </Text3D>
+      </Center>
 
-			{/* The Flames */}
-			<points>
-				<bufferGeometry>
-					<bufferAttribute
-						attach="attributes-position"
-						count={count}
-						array={particleOrigins}
-						itemSize={3}
-					/>
-				</bufferGeometry>
-				<primitive object={flameShader} ref={flameRef} attach="material" />
-			</points>
-		</group>
-	);
+      {/* The Flames */}
+      <points>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={count}
+            array={particleOrigins}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <primitive object={flameShader} ref={flameRef} attach="material" />
+      </points>
+    </group>
+  );
 };
