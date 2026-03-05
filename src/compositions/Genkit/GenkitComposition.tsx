@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { AbsoluteFill, useCurrentFrame, Img, staticFile, Series, Audio } from 'remotion';
 import gsap from 'gsap';
+import { z } from 'zod';
 import timelineData from '../../../generated_timeline.json';
 
 // 字幕データの型定義
@@ -10,35 +11,140 @@ interface Subtitle {
   end: number;
 }
 
+export const genkitCompositionSchema = z.object({
+  title: z.string(),
+  concept: z.string(),
+});
+
+/**
+ * 1. StaggerFade: 文字が1つずつふわっと出現
+ */
+const StaggerFade: React.FC<{ text: string }> = ({ text }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const chars = text.split('');
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const elements = containerRef.current.querySelectorAll('.char');
+      gsap.fromTo(
+        elements,
+        { opacity: 0, y: 20, filter: 'blur(10px)' },
+        { 
+          opacity: 1, 
+          y: 0, 
+          filter: 'blur(0px)', 
+          duration: 0.8, 
+          stagger: 0.05, 
+          ease: 'power3.out' 
+        }
+      );
+    }
+  }, [text]);
+
+  return (
+    <div ref={containerRef} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+      {chars.map((char, i) => (
+        <span key={i} className="char" style={{ display: 'inline-block', whiteSpace: 'pre' }}>
+          {char}
+        </span>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * 2. GlitchEffect: 激しい揺れと色の変化
+ */
+const GlitchEffect: React.FC<{ text: string }> = ({ text }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const frame = useCurrentFrame();
+
+  useEffect(() => {
+    if (containerRef.current) {
+      gsap.fromTo(
+        containerRef.current,
+        { skewX: 20, scale: 1.2, opacity: 0 },
+        { skewX: 0, scale: 1, opacity: 1, duration: 0.2, ease: 'rough' }
+      );
+    }
+  }, [text]);
+
+  // フレームに基づいた微細な揺れ
+  const offsetX = Math.sin(frame * 2.1) * 2;
+  const offsetY = Math.cos(frame * 1.8) * 2;
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        transform: `translate(${offsetX}px, ${offsetY}px)`,
+        color: frame % 4 < 2 ? '#ff00ff' : '#00ffff',
+        textShadow: '2px 2px #ff0000, -2px -2px #0000ff',
+      }}
+    >
+      {text}
+    </div>
+  );
+};
+
+/**
+ * 3. FloatAndRotate: 3D的な浮遊感
+ */
+const FloatAndRotate: React.FC<{ text: string }> = ({ text }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const frame = useCurrentFrame();
+
+  useEffect(() => {
+    if (containerRef.current) {
+      gsap.fromTo(
+        containerRef.current,
+        { rotationY: 90, z: -500, opacity: 0 },
+        { rotationY: 0, z: 0, opacity: 1, duration: 1.5, ease: 'expo.out' }
+      );
+    }
+  }, [text]);
+
+  const floatY = Math.sin(frame / 15) * 10;
+  const rotateZ = Math.cos(frame / 25) * 2;
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        transform: `translateY(${floatY}px) rotateZ(${rotateZ}deg)`,
+        perspective: '1000px',
+      }}
+    >
+      {text}
+    </div>
+  );
+};
+
 const GenkitScene: React.FC<{
   imageSrc: string;
   duration: number;
   subtitles: Subtitle[];
   sceneStartFrame: number;
-}> = ({ imageSrc, duration, subtitles, sceneStartFrame }) => {
+  sceneIndex: number;
+}> = ({ imageSrc, duration, subtitles, sceneStartFrame, sceneIndex }) => {
   const frame = useCurrentFrame();
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // 現在のフレームに該当する字幕を探す
+  
   const currentSubtitle = subtitles.find(s => {
-    const sStart = Math.floor(s.start * 30); // 30fps換算
+    const sStart = Math.floor(s.start * 30);
     const sEnd = Math.floor(s.end * 30);
     const globalFrame = frame + sceneStartFrame;
     return globalFrame >= sStart && globalFrame < sEnd;
   });
 
-  useEffect(() => {
-    if (containerRef.current && currentSubtitle) {
-      // 字幕が切り替わったタイミングでアニメーション
-      gsap.fromTo(
-        containerRef.current,
-        { y: 20, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.5)' }
-      );
-    }
-  }, [currentSubtitle?.text]);
+  const scale = 1 + (frame / duration) * 0.1;
 
-  const scale = 1 + (frame / duration) * 0.1; // Gentle zoom in
+  // シーンや字幕の内容に合わせてアニメーションを切り替える
+  const AnimationComponent = useMemo(() => {
+    const type = sceneIndex % 3;
+    if (type === 0) return StaggerFade;
+    if (type === 1) return GlitchEffect;
+    return FloatAndRotate;
+  }, [sceneIndex]);
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'black', overflow: 'hidden' }}>
@@ -57,41 +163,37 @@ const GenkitScene: React.FC<{
           flexDirection: 'column',
           justifyContent: 'flex-end',
           alignItems: 'center',
-          paddingBottom: 150,
-          background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 40%)',
+          paddingBottom: 200,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%)',
         }}
       >
         <div
-          ref={containerRef}
           style={{
-            fontSize: 80,
+            fontSize: 90,
             fontWeight: 'bold',
             color: 'white',
-            textShadow: '0 0 20px rgba(0,0,0,0.8)',
+            textShadow: '0 0 30px rgba(0,0,0,1)',
             fontFamily: 'sans-serif',
             textAlign: 'center',
-            padding: '0 50px',
-            minHeight: '1.2em',
+            padding: '0 60px',
           }}
         >
-          {currentSubtitle?.text || ''}
+          {currentSubtitle && <AnimationComponent text={currentSubtitle.text} />}
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
   );
 };
 
-export const GenkitComposition: React.FC = () => {
+export const GenkitComposition: React.FC<z.infer<typeof genkitCompositionSchema>> = ({ title, concept }) => {
   const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
 
   useEffect(() => {
-    // subtitles.json を動的にインポート（存在しない場合は空配列）
     import('./subtitles.json')
       .then((data) => setSubtitles(data.default))
       .catch(() => console.warn('subtitles.json not found'));
   }, []);
 
-  // 各シーンの開始フレームを計算
   let currentStart = 0;
 
   return (
@@ -110,6 +212,7 @@ export const GenkitComposition: React.FC = () => {
                 duration={scene.duration_frames}
                 subtitles={subtitles}
                 sceneStartFrame={startFrame}
+                sceneIndex={index}
               />
             </Series.Sequence>
           );

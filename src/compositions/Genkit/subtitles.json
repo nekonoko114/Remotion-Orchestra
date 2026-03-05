@@ -1,7 +1,22 @@
 [
   {
-    "text": "水",
-    "start": 0,
-    "end": 0.68
+    "text": "SYSTEM INITIALIZING...",
+    "start": 0.5,
+    "end": 2.5
+  },
+  {
+    "text": "NEON VOID DETECTED",
+    "start": 3.2,
+    "end": 5.2
+  },
+  {
+    "text": "WARNING: SYSTEM BREACH",
+    "start": 6.5,
+    "end": 8.5
+  },
+  {
+    "text": "DATA OVERDRIVE ACTIVE",
+    "start": 9.5,
+    "end": 12.0
   }
 ]

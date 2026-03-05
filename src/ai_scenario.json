@@ -1,65 +1,65 @@
 {
-  "title": "CYBER WARS: NEON OVERDRIVE",
-  "concept": "A high-octane narrative depicting a digital duel between hackers' avatars in a futuristic metropolis, where data streams manifest as physical weapons.",
+  "title": "Cyber-Neon Conflict",
+  "concept": "A high-octane digital duel occurring within the shimmering circuits and neon-lit skyscrapers of a futuristic metropolis, where data streams manifest as physical weapons.",
   "timeline": [
     {
       "id": 1,
-      "label": "The Entry",
+      "label": "Opening",
       "effect": "dim_and_focus",
-      "text_primary": "SYSTEM BOOT",
-      "text_secondary": "ACCESS GRANTED",
+      "text_primary": "NEON VOID",
+      "text_secondary": "THE CITY NEVER SLEEPS",
       "color_theme": "neon_blue",
       "duration_frames": 90,
       "start_frame": 0,
-      "transition": "GlitchTransition",
+      "transition": "CyberPuncture",
       "end_frame": 90
     },
     {
       "id": 2,
-      "label": "Initiate Combat",
-      "effect": "camera_shake_with_particles",
-      "text_primary": "ENGAGE",
-      "text_secondary": "FIREWALL BYPASS",
+      "label": "Encounter",
+      "effect": "zoom_and_glitch",
+      "text_primary": "TARGET DETECTED",
+      "text_secondary": "SYSTEM BREACH INITIATED",
       "color_theme": "vibrant_magenta",
-      "duration_frames": 120,
+      "duration_frames": 90,
       "start_frame": 90,
       "transition": "NeuralGlitchOverload",
-      "end_frame": 210
+      "end_frame": 180
     },
     {
       "id": 3,
-      "label": "The Final Strike",
-      "effect": "zoom_and_glitch",
-      "text_primary": "OVERLOAD",
-      "text_secondary": "CRITICAL ERROR",
-      "color_theme": "fire_and_ice",
-      "duration_frames": 150,
-      "start_frame": 210,
-      "transition": "FlashTransition",
-      "end_frame": 360
+      "label": "Climax",
+      "effect": "camera_shake_with_particles",
+      "text_primary": "DATA OVERDRIVE",
+      "text_secondary": "PROTOCOL OVERRIDE",
+      "color_theme": "electric_gold",
+      "duration_frames": 120,
+      "start_frame": 180,
+      "transition": "PrismShatterBlast",
+      "end_frame": 300
     },
     {
       "id": 4,
-      "label": "Aftermath",
+      "label": "Ending",
       "effect": "awakening_flash",
-      "text_primary": "DISCONNECT",
-      "text_secondary": "VICTORY SECURED",
-      "color_theme": "electric_gold",
-      "duration_frames": 120,
-      "start_frame": 360,
-      "end_frame": 480
+      "text_primary": "SYSTEM REBOOT",
+      "text_secondary": "MISSION ACCOMPLISHED",
+      "color_theme": "monochrome_highlight",
+      "duration_frames": 90,
+      "start_frame": 300,
+      "end_frame": 390
     }
   ],
   "asset_prompts": {
     "images": [
-      "A futuristic cyber city at night with towering skyscrapers, neon blue and magenta lighting, rain slicked streets, cinematic lighting, 8k resolution.",
-      "A high-tech digital warrior made of glowing data streams, wielding a light blade, standing on a rooftop, cybernetic aesthetic.",
-      "An intense explosion of digital pixels and binary code in a dark alleyway, glowing particles flying everywhere, high contrast.",
-      "Close up of a hacker's eye reflecting a scrolling matrix of green and blue code, futuristic visor, hyper-detailed.",
-      "A panoramic view of a neon city skyline with a massive holographic billboard displaying 'SYSTEM CRITICAL', dark clouds, futuristic atmosphere."
+      "Cinematic wide shot of a cyberpunk city at night with blue and pink neon lights, rain-slicked streets, and towering skyscrapers with digital billboards.",
+      "High-tech cyber warrior with glowing armor interfaces standing on a rooftop, holographic screens floating in the air, intense gaze, cinematic lighting.",
+      "Two hackers engaged in a digital duel, streams of binary code and light particles clashing in a virtual reality space, neon explosions.",
+      "Close-up of a futuristic computer core emitting electric gold sparks and data fragments, high-speed camera movement, macro detail.",
+      "A desolate neon alleyway after a battle, flickering signs, smoke rising from a discarded neural link device, monochrome highlights with blue accents."
     ],
-    "description": "Cyberpunk aesthetic with heavy emphasis on high-contrast neon lighting, digital artifacts, and sharp geometric shapes.",
-    "music": "High-energy synthwave with aggressive basslines and fast-paced electronic beats.",
-    "sfx": "Electronic glitch noises, digital sword clashing, futuristic system alerts, and deep bass drops."
+    "description": "Hyper-realistic cyberpunk aesthetic with high contrast, sharp textures, and dynamic lighting inspired by 80s futuristic noir.",
+    "music": "Aggressive synthwave track with heavy bass, fast-paced electronic beats, and glitchy digital soundscapes.",
+    "sfx": "Digital glitch sounds, neon hum, electrical sparks, data processing blips, and high-impact cinematic booms."
   }
 }
