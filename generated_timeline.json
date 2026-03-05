@@ -1,85 +1,79 @@
 {
-  "title": "雨の日に出会った不思議な少女",
-  "concept": "雨の日に不思議な少女と出会い、自己発見の旅を通じて内面的な成長を遂げる物語。",
+  "title": "Silicon Sprout",
+  "concept": "A cinematic journey of a lonely robot in a post-apocalyptic metallic world finding the last bit of organic life, sparking a transformation from cold logic to emotional purpose.",
   "timeline": [
     {
       "id": 1,
-      "label": "Intro: Reflective Rain",
+      "label": "Desolation",
       "effect": "dim_and_focus",
-      "text_primary": "雨の音が静かに街を包む",
-      "text_secondary": "灰色の空、反射する水たまり",
+      "text_primary": "DEAD WORLD",
+      "text_secondary": "ONLY METAL REMAINS",
       "color_theme": "monochrome_highlight",
       "duration_frames": 150,
       "start_frame": 0,
+      "transition": "DataVoidInferno",
       "end_frame": 150
     },
     {
       "id": 2,
-      "label": "Development: Mysterious Encounter",
-      "effect": "camera_shake_with_particles",
-      "text_primary": "傘の無い不思議な少女がそこに立っていた",
-      "text_secondary": "彼女の周りだけ雨が降らない",
-      "color_theme": "vibrant_magenta",
+      "label": "Discovery",
+      "effect": "awakening_flash",
+      "text_primary": "GREEN LIGHT",
+      "text_secondary": "IMPOSSIBLE VITALITY",
+      "color_theme": "electric_gold",
       "duration_frames": 150,
       "start_frame": 150,
+      "transition": "PrismShatterBlast",
       "end_frame": 300
     },
     {
       "id": 3,
-      "label": "Development: Inner Conflict",
+      "label": "Connection",
       "effect": "zoom_and_glitch",
-      "text_primary": "彼女の存在に引き込まれるが、心に不安が渦巻く",
-      "text_secondary": "自分を疑い、揺れ動く感情",
-      "color_theme": "electric_gold",
+      "text_primary": "NEW MISSION",
+      "text_secondary": "PROTECT THE FUTURE",
+      "color_theme": "neon_blue",
       "duration_frames": 150,
       "start_frame": 300,
+      "transition": "QuantumPhaseDisruption",
       "end_frame": 450
     },
     {
       "id": 4,
-      "label": "Climax: Dreamlike Connection",
-      "effect": "awakening_flash",
-      "text_primary": "彼女と目が合った瞬間、世界が広がる",
-      "text_secondary": "心の奥に響く声が聞こえる",
-      "color_theme": "fire_and_ice",
+      "label": "Hope",
+      "effect": "camera_shake_with_particles",
+      "text_primary": "LIFE BLOOMS",
+      "text_secondary": "BEYOND CIRCUITRY",
+      "color_theme": "vibrant_magenta",
       "duration_frames": 150,
       "start_frame": 450,
       "end_frame": 600
-    },
-    {
-      "id": 5,
-      "label": "Conclusion: Epilogue of Enlightenment",
-      "effect": "split_vertical_slide",
-      "text_primary": "少女は微笑み、ゆっくりと消えた",
-      "text_secondary": "新たな視点で雨の街を歩き出す",
-      "color_theme": "neon_blue",
-      "duration_frames": 150,
-      "start_frame": 600,
-      "end_frame": 750
     }
   ],
   "asset_prompts": {
-    "music": "Compose an evocative and ethereal piece consisting of gentle piano melodies and ambient rain sounds, subtly changing in tone to reflect inner turmoil and resolution.",
-    "sfx": "Sound effects of gentle rain, soft footsteps, and a faint whispering voice on the wind.",
-    "video": "An urban scene soaked in rain, highlighting reflections on puddles. The mysterious girl stands, radiating an ethereal glow, and the environment around her shows subtle visual shifts from mundane to ethereal, representing the protagonist's perspective changes.",
-    "voice": "彼女の瞳に映る世界の広がり。その変化を心に深く刻み、新しい日常が始まる。"
+    "images": [
+      "Cinematic wide shot of a rusted humanoid robot walking through a vast desert of scrap metal and giant gears, moody atmospheric lighting, 8k resolution, hyper-detailed textures.",
+      "Macro photography of a tiny vibrant green sprout pushing through a crack in a rusted steel plate, soft bokeh background of a mechanical wasteland, dramatic sunlight hitting the leaves.",
+      "Close-up of a robot's weathered hand with glowing blue sensors gently hovering over a fragile plant, intricate mechanical details, cinematic lighting, dust particles in the air.",
+      "A robot's circular optical eye reflecting a single green leaf, high contrast, cyberpunk aesthetic, detailed metal textures and lens flare.",
+      "Ethereal landscape where nature starts to reclaim a futuristic ruined city, vines climbing over rusted robots, golden hour lighting, epic scale, masterpiece."
+    ],
+    "description": "A high-contrast cinematic style blending cold, industrial metallic textures with the vibrant, soft, and organic details of nature. The visual progression moves from dark monochrome to bright, neon-infused colors.",
+    "music": "Orchestral synth-wave, starting with a melancholic solo piano and transitioning into an epic, hopeful climax with pulsing bass and soaring violins.",
+    "sfx": "Metallic footsteps, mechanical whirrs and clicks, digital glitch interference, followed by the soft sound of wind and organic rustling of leaves."
   },
   "generated_assets": {
-    "id": "gen_1769640274206",
-    "prompt": "雨の日に出会った不思議な少女",
-    "music": "assets/audio/music/gen_music_1769639521224.mp3",
-    "sfx": "assets/audio/sfx/gen_sfx_1769640274206.mp3",
-    "voice": "assets/audio/voice/gen_voice_1769640274206.mp3",
-    "video": "assets/video/gen_luma_1769640274206.mp4",
-    "generatedAt": "2026-01-28T22:46:38.632Z",
-    "lastUpdated": "2026-01-29T00:14:55.862Z",
-    "source": "Local Scan",
-    "scene_images": {
-      "1": "assets/images/generated/scene_1.jpg",
-      "2": "assets/images/generated/scene_2.jpg",
-      "3": "assets/images/generated/scene_3.jpg",
-      "4": "assets/images/generated/scene_4.jpg",
-      "5": "assets/images/generated/scene_5.jpg"
-    }
+    "id": "gen_1772692277181",
+    "music": null,
+    "images": [
+      "assets/images/gen_image_1772692277181_0.png",
+      "assets/images/gen_image_1772692277181_1.png",
+      "assets/images/gen_image_1772692277181_2.png",
+      "assets/images/gen_image_1772692277181_3.png",
+      "assets/images/gen_image_1772692277181_4.png"
+    ],
+    "subtitles": "src/compositions/Soregayasashisa/subtitles.json",
+    "voice": null,
+    "generatedAt": "2026-03-05T06:31:31.572Z"
   }
 }

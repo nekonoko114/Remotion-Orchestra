@@ -12,7 +12,7 @@ if (!GEMINI_API_KEY) {
   process.exit(1);
 }
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' }); // ⚠️ Use ONLY gemini-3 or newer. gemini-1.5 is deprecated for this project.
+const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite-preview' }); // ⚠️ Use ONLY gemini-3 or newer. gemini-1.5 is deprecated for this project.
 
 // --- Constants ---
 

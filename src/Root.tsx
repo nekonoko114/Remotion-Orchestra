@@ -27,6 +27,7 @@ import { SoregayasashisaMV } from './compositions/Soregayasashisa';
 import narandaMamadeMusicAnalysis from './compositions/NarandaMamade/music_analysis.json';
 import { NovaShowMV } from './components/NovaShowMV';
 import { KimitonaraComposition } from './compositions/Kimitonara';
+import { GenkitComposition } from './compositions/Genkit';
 import './index.css';
 import React from 'react';
 
@@ -135,6 +136,14 @@ export const RemotionRoot: React.FC = () => {
         id="Kimitonara"
         component={KimitonaraComposition}
         durationInFrames={30 * 222} // 3分42秒
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="Sakura"
+        component={GenkitComposition}
+        durationInFrames={600}
         fps={30}
         width={1920}
         height={1080}

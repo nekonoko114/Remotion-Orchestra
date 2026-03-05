@@ -1,60 +1,65 @@
 {
-  "title": "春の訪れ、再会の鼓動",
-  "concept": "凍てつく冬の静寂が溶け、色彩が溢れ出す瞬間に訪れる奇跡の再会。モノクロームの世界が鮮やかな春へと変貌するドラマチックな構成。",
+  "title": "Silicon Sprout",
+  "concept": "A cinematic journey of a lonely robot in a post-apocalyptic metallic world finding the last bit of organic life, sparking a transformation from cold logic to emotional purpose.",
   "timeline": [
     {
       "id": 1,
-      "label": "winter_silence",
+      "label": "Desolation",
       "effect": "dim_and_focus",
-      "transition": "CrossDissolve",
-      "text_primary": "止まっていた時間",
-      "text_secondary": "凍てつく風の中で",
+      "text_primary": "DEAD WORLD",
+      "text_secondary": "ONLY METAL REMAINS",
       "color_theme": "monochrome_highlight",
       "duration_frames": 150,
       "start_frame": 0,
+      "transition": "DataVoidInferno",
       "end_frame": 150
     },
     {
       "id": 2,
-      "label": "first_thaw",
+      "label": "Discovery",
       "effect": "awakening_flash",
-      "transition": "CircularReveal",
-      "text_primary": "鼓動の予感",
-      "text_secondary": "雪解けの雫が光る",
+      "text_primary": "GREEN LIGHT",
+      "text_secondary": "IMPOSSIBLE VITALITY",
       "color_theme": "electric_gold",
       "duration_frames": 150,
       "start_frame": 150,
+      "transition": "PrismShatterBlast",
       "end_frame": 300
     },
     {
       "id": 3,
-      "label": "the_reunion",
-      "effect": "camera_shake_with_particles",
-      "transition": "ZoomBlurTransition",
-      "text_primary": "ようやく、巡り合う",
-      "text_secondary": "舞い散る花びらとともに",
-      "color_theme": "vibrant_magenta",
+      "label": "Connection",
+      "effect": "zoom_and_glitch",
+      "text_primary": "NEW MISSION",
+      "text_secondary": "PROTECT THE FUTURE",
+      "color_theme": "neon_blue",
       "duration_frames": 150,
       "start_frame": 300,
+      "transition": "QuantumPhaseDisruption",
       "end_frame": 450
     },
     {
       "id": 4,
-      "label": "eternal_spring",
-      "effect": "split_vertical_slide",
-      "transition": "FlashTransition",
-      "text_primary": "新しい季節の始まり",
-      "text_secondary": "二人の物語が、再び動き出す",
-      "color_theme": "fire_and_ice",
+      "label": "Hope",
+      "effect": "camera_shake_with_particles",
+      "text_primary": "LIFE BLOOMS",
+      "text_secondary": "BEYOND CIRCUITRY",
+      "color_theme": "vibrant_magenta",
       "duration_frames": 150,
       "start_frame": 450,
       "end_frame": 600
     }
   ],
   "asset_prompts": {
-    "music": "Starts with a melancholic solo piano, gradually layering with warm violin strings and light orchestral percussion to create an uplifting and emotional spring theme.",
-    "sfx": "Cold winter wind fading out, soft ice cracking sounds, birds chirping, gentle rustling of cherry blossom petals, and a heartbeat sound at the moment of reunion.",
-    "video": "Cinematic 4K visuals shifting from macro shots of frost on glass to blooming cherry blossoms in slow motion, soft sunlight bokeh, and two silhouettes reaching out to each other.",
-    "voice": "凍てつく時は終わり、世界は光を取り戻した。ずっと待っていた、この瞬間を。春の風が、私たちを再び引き合わせた。"
+    "images": [
+      "Cinematic wide shot of a rusted humanoid robot walking through a vast desert of scrap metal and giant gears, moody atmospheric lighting, 8k resolution, hyper-detailed textures.",
+      "Macro photography of a tiny vibrant green sprout pushing through a crack in a rusted steel plate, soft bokeh background of a mechanical wasteland, dramatic sunlight hitting the leaves.",
+      "Close-up of a robot's weathered hand with glowing blue sensors gently hovering over a fragile plant, intricate mechanical details, cinematic lighting, dust particles in the air.",
+      "A robot's circular optical eye reflecting a single green leaf, high contrast, cyberpunk aesthetic, detailed metal textures and lens flare.",
+      "Ethereal landscape where nature starts to reclaim a futuristic ruined city, vines climbing over rusted robots, golden hour lighting, epic scale, masterpiece."
+    ],
+    "description": "A high-contrast cinematic style blending cold, industrial metallic textures with the vibrant, soft, and organic details of nature. The visual progression moves from dark monochrome to bright, neon-infused colors.",
+    "music": "Orchestral synth-wave, starting with a melancholic solo piano and transitioning into an epic, hopeful climax with pulsing bass and soaring violins.",
+    "sfx": "Metallic footsteps, mechanical whirrs and clicks, digital glitch interference, followed by the soft sound of wind and organic rustling of leaves."
   }
 }

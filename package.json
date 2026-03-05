@@ -6,6 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@genkit-ai/googleai": "^1.28.0",
     "@google/generative-ai": "^0.24.1",
     "@react-three/drei": "^9.121.5",
     "@react-three/fiber": "^8.17.10",
@@ -29,6 +30,7 @@
     "budoux": "^0.7.0",
     "dotenv": "^17.2.3",
     "elevenlabs": "^1.59.0",
+    "genkit": "^1.29.0",
     "gl-react": "^5.2.0",
     "gl-react-dom": "^5.2.1",
     "gsap": "^3.14.2",
@@ -43,7 +45,7 @@
     "tailwindcss": "^4.1.18",
     "text-to-svg": "^3.1.5",
     "three": "^0.182.0",
-    "zod": "3.22.3"
+    "zod": "3.24.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -63,9 +65,13 @@
     "transcribe": "npx tsx transcribe-local.ts"
   },
   "pnpm": {
-    "trustedDependencies": ["@biomejs/biome", "esbuild"],
+    "trustedDependencies": [
+      "@biomejs/biome",
+      "esbuild"
+    ],
     "overrides": {
-      "zod": "3.22.3"
+      "zod": "^3.24.2",
+      "zod-to-json-schema": "3.24.3"
     }
   }
 }
