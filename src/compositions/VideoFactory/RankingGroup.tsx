@@ -17,13 +17,23 @@ type Props = {
 
 const getAvatarPosition = (rank: number) => {
 	// Diamond Ranking specific adjustments
-	if (rank === 10) return "center 20%"; // だぁ～み
+	if (rank === 10) return "center 20%"; // だぁ～み (より上に)
 	if (rank === 8) return "center 25%";  // やらかしタロー
 	if (rank === 7) return "center 20%";  // yukiんこ
-	if (rank === 6) return "center 15%";  // ユージン
-	if (rank === 5) return "center 10%";  // 一条美月 (アイコンとの重なりを避ける)
+	if (rank === 6) return "center 50%";   // ユージン (より上に)
+	if (rank === 5) return "center 50%";   // 一条美月 (アイコンとの重なりを避ける)
 	if (rank === 4) return "center 15%";  // 限界突破まみ
 	return "center";
+};
+
+const getBackgroundPosition = (rank: number) => {
+	if (rank === 5) return "0% 50%"; // 背景画像の左端を合わせることで、被写体を右へ押し出す
+	return getAvatarPosition(rank);
+};
+
+const getBackgroundTransform = (rank: number) => {
+	if (rank === 5) return "scale(1.2) translateX(10%)"; // さらに右へ押し出す
+	return "none";
 };
 
 export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
@@ -40,11 +50,12 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 	const scale = interpolate(entrance, [0, 1], [0.95, 1]);
 
 	const is3Group = livers.length === 3;
-	const gap = is3Group ? 80 : 60;
-	const rankFontSize = is3Group ? 90 : 70; // Adjusted for stacking
-	const rankWidth = is3Group ? 200 : 160; // Widened for icon + rank stack
-	const iconSize = is3Group ? 200 : 150; // Slightly smaller to fit stack
-	const nameFontSize = 50; // Reduced to 50 for optimal balance as per user's preference
+	const is2Group = livers.length === 2;
+	const gap = is2Group ? 120 : (is3Group ? 80 : 60);
+	const rankFontSize = is2Group ? 120 : (is3Group ? 90 : 70); 
+	const rankWidth = is2Group ? 250 : (is3Group ? 200 : 160); 
+	const iconSize = is2Group ? 300 : (is3Group ? 200 : 150); 
+	const nameFontSize = is2Group ? 80 : 50; 
 
 	return (
 		<AbsoluteFill>
@@ -120,16 +131,17 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 								key={liver.rank}
 								style={{
 									display: "flex",
-									alignItems: "center",
-									gap: 40, // More gap between elements
-									borderRadius: 100,
-									border: "4px solid #8B0000", // Dark Red border
-									boxShadow: "0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.8)", // 赤の光と黒のシャドウ
-									backgroundColor: "rgba(0,0,0,0.4)", // 背景を黒透過に
+									alignItems: "end",
+									gap: is2Group ? 60 : 40, 
+									borderRadius: 40, // More rounded for larger icons
+									border: "4px solid #8B0000", 
+									boxShadow: "0 0 20px 10px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.8)", 
+									backgroundColor: "rgba(0,0,0,0.4)", 
 									transform: `translateY(${interpolate(liverEntrance, [0, 1], [-1000, 0])}px)`,
 									opacity: interpolate(liverEntrance, [0, 0.4], [0, 1]),
-									position: "relative", // Needed for absolute background
-									overflow: "hidden", // Clip the blur
+									position: "relative", 
+									overflow: "hidden", 
+									padding: is2Group ? "60px 40px" : (is3Group ? "40px 30px" : "20px 30px"),
 								}}
 							>
 								{/* Blurred Background */}
@@ -141,7 +153,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 												width: "100%", 
 												height: "100%", 
 												objectFit: "cover", 
-												objectPosition: getAvatarPosition(liver.rank),
+												objectPosition: getBackgroundPosition(liver.rank),
+												transform: getBackgroundTransform(liver.rank),
 											}}
 										/>
 									) : (
@@ -151,7 +164,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 												width: "100%", 
 												height: "100%", 
 												objectFit: "cover",
-												objectPosition: getAvatarPosition(liver.rank),
+												objectPosition: getBackgroundPosition(liver.rank),
+												transform: getBackgroundTransform(liver.rank),
 											}}
 										/>
 									)}

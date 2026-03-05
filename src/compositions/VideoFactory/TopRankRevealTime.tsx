@@ -73,10 +73,12 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 		const count = rank === 1 ? 5 : 3;
 		return [...new Array(count)].map((_, i) => {
 			const seed = `magic-${rank}-${i}`;
-			const size = 600 + random(seed + "size") * 400; // 少し大きく
+			const size = 1200 + random(seed + "size") * 800; // さらに大きく (Previously 600 + 400)
 			// 配置範囲を分散させる
 			const angle = (i / count) * Math.PI * 2 + random(seed + "ang") * 0.5;
-			const radius = 300 + random(seed + "rad") * 200;
+			const baseRadius = rank === 1 ? 500 : 450;
+			const radiusVariance = rank === 1 ? 400 : 350;
+			const radius = baseRadius + random(seed + "rad") * radiusVariance;
 			const x = Math.cos(angle) * radius;
 			const y = Math.sin(angle) * radius;
 			

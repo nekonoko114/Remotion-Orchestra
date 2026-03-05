@@ -5,7 +5,6 @@ import { JsonDrivenVideo } from "./compositions/VFXLibrary/JsonDrivenVideo";
 import { ThreeDTextScene } from "./compositions/VFXLibrary/ThreeDTextScene";
 import { VFXShowreel } from "./compositions/VFXLibrary/VFXShowreel";
 
-
 import { MyVideo } from "./compositions/VideoFactory/MyVideo";
 import {
   ENDING_SEC,
@@ -48,67 +47,30 @@ import React from "react";
 const JOL_RANKING_FPS = 30;
 
 // Calculate Vertical Duration
+// Updated to 3 groups (10-8, 7-6, 5-4)
 const JOL_RANKING_DURATION_VERTICAL =
-  (OPENING_SEC + GROUP_SEC * 2 + GRID_BRIDGE_SEC + TOP_RANK_SEC * 3 + ENDING_SEC) *
+  (OPENING_SEC +
+    GROUP_SEC * 3 +
+    GRID_BRIDGE_SEC +
+    TOP_RANK_SEC * 3 +
+    ENDING_SEC) *
     JOL_RANKING_FPS -
-  (6 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
+  (7 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
 
 // Calculate Time Duration (Correctly using its own 7s opening)
+// Updated to 3 groups (10-8, 7-6, 5-4)
 const JOL_RANKING_DURATION_TIME =
   (OPENING_SEC_TIME +
-    GROUP_SEC_TIME * 2 +
+    GROUP_SEC_TIME * 3 +
     GRID_BRIDGE_SEC_TIME +
     TOP_RANK_SEC_TIME * 3 +
     ENDING_SEC_TIME) *
     JOL_RANKING_FPS -
-  7 * TRANSITION_FRAMES_TIME;
+  8 * TRANSITION_FRAMES_TIME;
 
 export const RemotionRoot: React.FC = () => {
-
-
   return (
     <>
-      <Composition
-        id="CatsAdventure"
-        component={CatsAdventure}
-        durationInFrames={600}
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-
-      <Composition
-        id="VFXShowreel"
-        component={VFXShowreel}
-        durationInFrames={390}
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
-        id="EffectsCatalog"
-        component={EffectsCatalog}
-        durationInFrames={1600}
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
-        id="ThreeDTextScene"
-        component={ThreeDTextScene}
-        durationInFrames={300}
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
-        id="GeminiScenarioVideo"
-        component={JsonDrivenVideo}
-        durationInFrames={600}
-        fps={30}
-        width={1080}
-        height={1920}
-      />
       {/* Imported from video-factory-v1 */}
       <Composition
         id="JOL-Ranking-Vertical"
@@ -125,14 +87,6 @@ export const RemotionRoot: React.FC = () => {
         fps={JOL_RANKING_FPS}
         width={2160}
         height={3840}
-      />
-      <Composition
-        id="JOL-Video"
-        component={MyVideo}
-        durationInFrames={150} // 5秒 (30fps * 5)
-        fps={60}
-        width={1920}
-        height={1080}
       />
       <Composition
         id="JOL-Battle"
@@ -166,14 +120,7 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
       />
-      <Composition
-        id="AssetCatalog"
-        component={AssetCatalog}
-        durationInFrames={1500}
-        fps={60}
-        width={1080}
-        height={1920}
-      />
+
       <Composition
         id="NarandaMamadeMV"
         component={NarandaMamadeMV}
@@ -191,42 +138,6 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
       />
       <Composition
-        id="GSAP-Showcase"
-        component={GsapExample}
-        schema={GsapExampleSchema}
-        durationInFrames={150}
-        fps={30}
-        width={1920}
-        height={1080}
-        defaultProps={{
-          text: "NOVA x GSAP x GEMINI"
-        }}
-      />
-      <Composition
-        id="MORPH-Showcase"
-        component={MorphExample}
-        durationInFrames={120} // 4秒
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
-        id="TEXT-MORPH-Showcase"
-        component={TextMorphExample}
-        durationInFrames={180} // 6秒
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
-        id="KALEIDA-MORPH-Showcase"
-        component={KaleidaMorph}
-        durationInFrames={180} // 6秒
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
         id="NOVA-SHOW-MV"
         component={NovaShowMV}
         durationInFrames={15 * 8} // 歌詞8セット分
@@ -235,33 +146,9 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
       />
       <Composition
-        id="ADO-LYRIC-Showcase"
-        component={AdoStyleLyric}
-        durationInFrames={30 * 4} // 歌詞4種類分
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
-        id="NOVA-LYRIC-MASTER"
-        component={NovaLyricMaster}
-        durationInFrames={45 * 4} // 4つの歌詞セクション
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
         id="Kimitonara"
         component={KimitonaraComposition}
         durationInFrames={30 * 222} // 3分42秒
-        fps={30}
-        width={1920}
-        height={1080}
-      />
-      <Composition
-        id="SkillsShowcase"
-        component={SkillsShowcase}
-        durationInFrames={2695} // 1795 + 900 (MV)
         fps={30}
         width={1920}
         height={1080}

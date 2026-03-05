@@ -12,7 +12,7 @@ import { Confetti } from "../../components/effects/Confetti";
 import { ParticleBurst } from "../../components/effects/ParticleBurst";
 import { Explosion } from "../../components/effects/Explosion";
 import { LightningBolt } from "../../components/effects/LightningBolt";
-import { LensFlare as GlobalLensFlare } from "../../components/effects/LensFlare";
+
 import { SmokeEffect } from "../../components/effects/SmokeEffect";
 import { ImpactEffect } from "./ImpactEffect";
 // Podium3D removed as per user request (wanted space background, not pedestal)
@@ -192,12 +192,11 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 						{rank === 1 && (
 							<div style={{
 								position: "absolute",
-								top: -150,
+								top: -230,
 								left: "50%",
-								transform: "translateX(-50%)",
+								transform: "translateX(-50%) rotate(-5deg)",
 								fontSize: 180,
 								textShadow: `0 0 30px ${primary}, 0 0 60px ${primary}, 0 10px 20px rgba(0,0,0,0.8)`,
-								animation: "pulse-crown 2s infinite alternate", // もしCSSがあれば適用させる（無ければ静止）
 								zIndex: 10,
 							}}>
 								👑
@@ -219,17 +218,27 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 						zIndex: 5,
 						marginTop: 10,
 						transform: `scale(${imageScale}) rotate(${imageRotate}deg) translateY(${imageY}px)`,
-						opacity: imageOpacity
+						opacity: imageOpacity,
 					}}>
 						{liver.saved_to ? (
 							<Img
 								src={staticFile(liver.saved_to)}
-								style={{ width: "100%", height: "100%", objectFit: "cover" }}
+								style={{ 
+									width: "100%", 
+									height: "100%", 
+									objectFit: "cover",
+									transform: rank === 1 ? "rotate(-90deg)" : "none"
+								}}
 							/>
 						) : (
 							<Img
 								src={liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url)}
-								style={{ width: "100%", height: "100%", objectFit: "cover" }}
+								style={{ 
+									width: "100%", 
+									height: "100%", 
+									objectFit: "cover",
+									transform: rank === 1 ? "rotate(-90deg)" : "none"
+								}}
 							/>
 						)}
 					</div>
@@ -251,14 +260,6 @@ export const TopRankReveal: React.FC<Props> = ({ rank, liver, title }) => {
 
 			<CinematicBorder color={primary} glowColor={glow} />
 			
-			<AbsoluteFill style={{ pointerEvents: "none", zIndex: 200, mixBlendMode: "screen" }}>
-				<GlobalLensFlare 
-					color={primary} 
-					intensity={1.5}
-					scale={1.5}
-					opacity={1}
-				/>
-			</AbsoluteFill>
 
 			<AdjustmentLayer rank={rank} />
 

@@ -90,9 +90,9 @@ export const GridBridgeTime: React.FC = () => {
 	const getGatherOffset = (colIndex: number, rank: number) => {
 		if (rank > 3) return { x: 0, y: 0 };
 		
-        // Grid animation total duration is about 8 seconds (240 frames)
-        // Gathering starts around beat 12 (135 frames) and ends at beat 18 (202 frames)
-		const gatherProgress = interpolate(frame, [beatFrames * 12, beatFrames * 18], [0, 1], {
+        // Grid animation total duration is about 5.5 seconds (166 frames)
+        // Gathering starts around beat 8 (90 frames) and ends at beat 12 (135 frames)
+		const gatherProgress = interpolate(frame, [beatFrames * 8, beatFrames * 12], [0, 1], {
 			easing: Easing.out(Easing.back(2)),
 			extrapolateLeft: "clamp",
 			extrapolateRight: "clamp",
@@ -152,7 +152,7 @@ export const GridBridgeTime: React.FC = () => {
 								const isTop3 = item.rank <= 3;
 								
 								// Dim non-top-3 images after gathering
-								const opacity = isTop3 ? 1 : interpolate(frame, [beatFrames * 16, beatFrames * 20], [1, 0.75], { 
+								const opacity = isTop3 ? 1 : interpolate(frame, [beatFrames * 10, beatFrames * 14], [1, 0.75], { 
 									extrapolateLeft: "clamp",
 									extrapolateRight: "clamp" 
 								});

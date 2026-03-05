@@ -72,11 +72,11 @@ export const RankingVideo = () => {
 					timing={timing}
 				/>
 
-				{/* 2. Group: 10位〜7位 */}
+				{/* 2. Group: 10位〜8位 */}
 				<TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
 					<RankingGroup
-						title={"TOP\n10~7"}
-						livers={RANKING_DATA.filter((d) => d.rank >= 7 && d.rank <= 10)}
+						title={"TOP\n10~8"}
+						livers={RANKING_DATA.filter((d) => d.rank >= 8 && d.rank <= 10)}
 					/>
 				</TransitionSeries.Sequence>
 
@@ -86,11 +86,25 @@ export const RankingVideo = () => {
 					timing={timing}
 				/>
 
-				{/* 3. Group: 6位〜4位 */}
+				{/* 3. Group: 7位〜6位 */}
 				<TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
 					<RankingGroup
-						title={"TOP\n6~4"}
-						livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 6)}
+						title={"TOP\n7~6"}
+						livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 7)}
+					/>
+				</TransitionSeries.Sequence>
+
+				{/* Transition 3: Group 2 -> Group 3 */}
+				<TransitionSeries.Transition
+					presentation={transition}
+					timing={timing}
+				/>
+
+				{/* 4. Group: 5位〜4位 */}
+				<TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
+					<RankingGroup
+						title={"TOP\n5~4"}
+						livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 5)}
 					/>
 				</TransitionSeries.Sequence>
 

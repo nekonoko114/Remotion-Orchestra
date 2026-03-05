@@ -15,10 +15,10 @@ const BPM = 160;
 
 const getAvatarPosition = (rank: number) => {
 	// Stream Time Ranking specific adjustments
-	if (rank === 9) return "center 15%"; // 限界突破まみ
-	if (rank === 8) return "center 20%"; // yukiんこ
-	if (rank === 7) return "center 20%"; // 小悪魔
-	if (rank === 5) return "center 15%"; // ジンヤ (顔を縦に調整)
+	if (rank === 9) return "center 10%"; // 限界突破まみ (より上に)
+	if (rank === 8) return "center 10%"; // yukiんこ (より上に)
+	if (rank === 7) return "center 10%"; // 小悪魔 (より上に)
+	if (rank === 5) return "center 20%"; // ジンヤ (顔を縦に調整)
 	return "center";
 };
 
@@ -108,10 +108,11 @@ export const RankingGroupTime: React.FC<Props> = ({
 					const liverOpacity = interpolate(liverSpr, [0, 0.3], [0, 1], { extrapolateRight: "clamp" });
 					const liverScale = interpolate(liverSpr, [0, 1], [1.8, 1]);
 
+					const is2Group = livers.length === 2;
 					// Highlight Sizing
-					const iconSize = (isHighlight ? 450 : 150) * scale; // iconSize reduced for stack
-					const fontSize = (isHighlight ? 100 : 50) * scale; // Reduced to 50 for optimal balance
-					const rankWidth = 180 * scale;
+					const iconSize = (isHighlight ? 450 : (is2Group ? 250 : 200)) * scale; 
+					const fontSize = (isHighlight ? 100 : (is2Group ? 80 : 60)) * scale; 
+					const rankWidth = (is2Group ? 250 : 220) * scale;
 
 					// ゆらゆら揺れるアニメーション (Y軸回転)
 					const wobble = Math.sin((frame + index * 10) / 15) * 15; 
@@ -125,7 +126,11 @@ export const RankingGroupTime: React.FC<Props> = ({
 								alignItems: "center",
 								backgroundColor: "rgba(0, 0, 0, 0.6)",
 								width: "100%",
-								padding: isHighlight ? `${60 * scale}px ${40 * scale}px` : `${20 * scale}px ${30 * scale}px`,
+								padding: isHighlight 
+									? `${80 * scale}px ${40 * scale}px` 
+									: (is2Group 
+										? `${100 * scale}px ${30 * scale}px` 
+										: `${40 * scale}px ${30 * scale}px`),
 								borderRadius: 20 * scale,
 								// Entrance (Dropdown) + Wobble Animation
 								transform: `translateY(${liverY}px) scale(${liverScale}) ${liver.rank <= 3 ? "" : `rotateY(${Math.sin(frame / 60) * 5}deg)`}`,
@@ -153,6 +158,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 										height: "100%", 
 										objectFit: "cover",
 										objectPosition: getAvatarPosition(liver.rank),
+										transform: liver.rank === 5 ? "rotate(-90deg)" : "none",
 									}}
 								/>
 							</AbsoluteFill>
@@ -164,7 +170,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 									style={{
 										display: "flex",
 										flexDirection: "row",
-										alignItems: "center",
+										alignItems: "end",
 										width: "100%",
 										justifyContent: isHighlight ? "center" : "flex-start",
 										position: "relative",
@@ -208,7 +214,6 @@ export const RankingGroupTime: React.FC<Props> = ({
 													boxShadow: `0 0 ${20 * scale}px rgba(0,0,0,0.5)`,
 													flexShrink: 0,
 													backgroundColor: "#ccc",
-													
 												}}
 											>
 												<Img
@@ -223,6 +228,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 														objectFit: "cover",
 														objectPosition: getAvatarPosition(liver.rank),
 														border: `${4 * scale}px solid white`,
+														transform: liver.rank === 5 ? "rotate(-90deg)" : "none",
 													}}
 												/>
 											</div>
@@ -275,6 +281,7 @@ export const RankingGroupTime: React.FC<Props> = ({
 														height: "100%",
 														objectFit: "cover",
 														objectPosition: getAvatarPosition(liver.rank),
+														transform: liver.rank === 5 ? "rotate(-90deg)" : "none",
 													}}
 												/>
 											</div>
