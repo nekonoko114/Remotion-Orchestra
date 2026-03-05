@@ -55,25 +55,23 @@ export const orchestratorFlow = ai.defineFlow(
     // 3. アセット生成 (Whisper, Nanobanana等)
     console.log('\n🎬 [Genkit Director] Asset generation & Processing...');
     
-    // Whisperによる文字起こし (既存の transcribe-local.ts を活用)
-    // 注意: 動画があることが前提ですが、ここでは音声解析のみ行う想定で調整
-    console.log('🗣️ [Whisper] Starting local transcription...');
-    await runStepTool('Whisper', 'npm run transcribe');
-    const subtitlePath = 'src/compositions/Soregayasashisa/subtitles.json';
+    // 音楽ファイルのパス (デフォルトまたは特定のものを指定可能にする)
+    const musicPath = path.join(process.cwd(), 'public/assets/audio/sfx/gen_sfx_1772691683527.mp3'); 
+    const outputDir = path.join(process.cwd(), 'src/compositions/Genkit'); // Genkitコンポジション用に出力
+
+    // Whisperによる文字起こし
+    console.log('🗣️ [Whisper] Starting local transcription for music...');
+    await runStepTool('Whisper', `npx tsx transcribe-local.ts "${musicPath}" "${outputDir}"`);
+    const subtitlePath = 'src/compositions/Genkit/subtitles.json';
 
     // Nanobanana画像生成の準備
-    // Agent側で実際のツール実行を促すためのプレースホルダ
     const generatedImages = scenario.asset_prompts.images.map((_, i) => {
       return `assets/images/gen_image_${timestamp}_${i}.png`;
     });
 
-    // Background Removal (rembg) - 必要に応じて各画像に対して実行
-    // ここでは将来的に組み込み可能な構成にしておく
-    // await runStepTool('rembg', `rembg i inputs outputs`);
-
     const generatedAssets = {
       id: `gen_${timestamp}`,
-      music: null, // 将来的にBGM生成を追加可能
+      music: 'assets/audio/sfx/gen_sfx_1772691683527.mp3', 
       images: generatedImages,
       subtitles: subtitlePath,
       voice: null,

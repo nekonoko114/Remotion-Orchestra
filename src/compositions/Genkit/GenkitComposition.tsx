@@ -1,33 +1,42 @@
-import React, { useEffect, useRef } from 'react';
-import { AbsoluteFill, useCurrentFrame, Img, staticFile, Series } from 'remotion';
+import React, { useEffect, useRef, useState } from 'react';
+import { AbsoluteFill, useCurrentFrame, Img, staticFile, Series, Audio } from 'remotion';
 import gsap from 'gsap';
 import timelineData from '../../../generated_timeline.json';
 
+// 字幕データの型定義
+interface Subtitle {
+  text: string;
+  start: number;
+  end: number;
+}
+
 const GenkitScene: React.FC<{
   imageSrc: string;
-  textPrimary: string;
-  textSecondary: string;
   duration: number;
-}> = ({ imageSrc, textPrimary, textSecondary, duration }) => {
+  subtitles: Subtitle[];
+  sceneStartFrame: number;
+}> = ({ imageSrc, duration, subtitles, sceneStartFrame }) => {
   const frame = useCurrentFrame();
-  const textRef = useRef<HTMLDivElement>(null);
-  const secondaryRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // 現在のフレームに該当する字幕を探す
+  const currentSubtitle = subtitles.find(s => {
+    const sStart = Math.floor(s.start * 30); // 30fps換算
+    const sEnd = Math.floor(s.end * 30);
+    const globalFrame = frame + sceneStartFrame;
+    return globalFrame >= sStart && globalFrame < sEnd;
+  });
 
   useEffect(() => {
-    if (textRef.current && secondaryRef.current) {
-      // Simple kinetic typography with GSAP
+    if (containerRef.current && currentSubtitle) {
+      // 字幕が切り替わったタイミングでアニメーション
       gsap.fromTo(
-        textRef.current,
-        { x: -100, opacity: 0, scale: 0.5 },
-        { x: 0, opacity: 1, scale: 1, duration: 1, ease: 'back.out(1.7)' }
-      );
-      gsap.fromTo(
-        secondaryRef.current,
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, delay: 0.5, ease: 'power2.out' }
+        containerRef.current,
+        { y: 20, opacity: 0, scale: 0.9 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.5)' }
       );
     }
-  }, []);
+  }, [currentSubtitle?.text]);
 
   const scale = 1 + (frame / duration) * 0.1; // Gentle zoom in
 
@@ -46,36 +55,26 @@ const GenkitScene: React.FC<{
         style={{
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-end',
           alignItems: 'center',
-          background: 'radial-gradient(circle, transparent 0%, rgba(0,0,0,0.4) 100%)',
+          paddingBottom: 150,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 40%)',
         }}
       >
         <div
-          ref={textRef}
+          ref={containerRef}
           style={{
-            fontSize: 120,
+            fontSize: 80,
             fontWeight: 'bold',
             color: 'white',
             textShadow: '0 0 20px rgba(0,0,0,0.8)',
             fontFamily: 'sans-serif',
-            letterSpacing: '0.1em',
+            textAlign: 'center',
+            padding: '0 50px',
+            minHeight: '1.2em',
           }}
         >
-          {textPrimary}
-        </div>
-        <div
-          ref={secondaryRef}
-          style={{
-            fontSize: 48,
-            color: '#00ffcc',
-            textShadow: '0 0 10px rgba(0,0,0,0.8)',
-            fontFamily: 'sans-serif',
-            marginTop: 20,
-            letterSpacing: '0.05em',
-          }}
-        >
-          {textSecondary}
+          {currentSubtitle?.text || ''}
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
@@ -83,18 +82,39 @@ const GenkitScene: React.FC<{
 };
 
 export const GenkitComposition: React.FC = () => {
+  const [subtitles, setSubtitles] = useState<Subtitle[]>([]);
+
+  useEffect(() => {
+    // subtitles.json を動的にインポート（存在しない場合は空配列）
+    import('./subtitles.json')
+      .then((data) => setSubtitles(data.default))
+      .catch(() => console.warn('subtitles.json not found'));
+  }, []);
+
+  // 各シーンの開始フレームを計算
+  let currentStart = 0;
+
   return (
-    <Series>
-      {timelineData.timeline.map((scene, index) => (
-        <Series.Sequence key={scene.id} durationInFrames={scene.duration_frames}>
-          <GenkitScene
-            imageSrc={timelineData.generated_assets.images[index]}
-            textPrimary={scene.text_primary}
-            textSecondary={scene.text_secondary}
-            duration={scene.duration_frames}
-          />
-        </Series.Sequence>
-      ))}
-    </Series>
+    <AbsoluteFill>
+      {timelineData.generated_assets.music && (
+        <Audio src={staticFile(timelineData.generated_assets.music)} />
+      )}
+      <Series>
+        {timelineData.timeline.map((scene, index) => {
+          const startFrame = currentStart;
+          currentStart += scene.duration_frames;
+          return (
+            <Series.Sequence key={scene.id} durationInFrames={scene.duration_frames}>
+              <GenkitScene
+                imageSrc={timelineData.generated_assets.images[index]}
+                duration={scene.duration_frames}
+                subtitles={subtitles}
+                sceneStartFrame={startFrame}
+              />
+            </Series.Sequence>
+          );
+        })}
+      </Series>
+    </AbsoluteFill>
   );
 };

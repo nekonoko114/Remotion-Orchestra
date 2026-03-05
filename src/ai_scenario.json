@@ -1,65 +1,65 @@
 {
-  "title": "Silicon Sprout",
-  "concept": "A cinematic journey of a lonely robot in a post-apocalyptic metallic world finding the last bit of organic life, sparking a transformation from cold logic to emotional purpose.",
+  "title": "CYBER WARS: NEON OVERDRIVE",
+  "concept": "A high-octane narrative depicting a digital duel between hackers' avatars in a futuristic metropolis, where data streams manifest as physical weapons.",
   "timeline": [
     {
       "id": 1,
-      "label": "Desolation",
+      "label": "The Entry",
       "effect": "dim_and_focus",
-      "text_primary": "DEAD WORLD",
-      "text_secondary": "ONLY METAL REMAINS",
-      "color_theme": "monochrome_highlight",
-      "duration_frames": 150,
+      "text_primary": "SYSTEM BOOT",
+      "text_secondary": "ACCESS GRANTED",
+      "color_theme": "neon_blue",
+      "duration_frames": 90,
       "start_frame": 0,
-      "transition": "DataVoidInferno",
-      "end_frame": 150
+      "transition": "GlitchTransition",
+      "end_frame": 90
     },
     {
       "id": 2,
-      "label": "Discovery",
-      "effect": "awakening_flash",
-      "text_primary": "GREEN LIGHT",
-      "text_secondary": "IMPOSSIBLE VITALITY",
-      "color_theme": "electric_gold",
-      "duration_frames": 150,
-      "start_frame": 150,
-      "transition": "PrismShatterBlast",
-      "end_frame": 300
+      "label": "Initiate Combat",
+      "effect": "camera_shake_with_particles",
+      "text_primary": "ENGAGE",
+      "text_secondary": "FIREWALL BYPASS",
+      "color_theme": "vibrant_magenta",
+      "duration_frames": 120,
+      "start_frame": 90,
+      "transition": "NeuralGlitchOverload",
+      "end_frame": 210
     },
     {
       "id": 3,
-      "label": "Connection",
+      "label": "The Final Strike",
       "effect": "zoom_and_glitch",
-      "text_primary": "NEW MISSION",
-      "text_secondary": "PROTECT THE FUTURE",
-      "color_theme": "neon_blue",
+      "text_primary": "OVERLOAD",
+      "text_secondary": "CRITICAL ERROR",
+      "color_theme": "fire_and_ice",
       "duration_frames": 150,
-      "start_frame": 300,
-      "transition": "QuantumPhaseDisruption",
-      "end_frame": 450
+      "start_frame": 210,
+      "transition": "FlashTransition",
+      "end_frame": 360
     },
     {
       "id": 4,
-      "label": "Hope",
-      "effect": "camera_shake_with_particles",
-      "text_primary": "LIFE BLOOMS",
-      "text_secondary": "BEYOND CIRCUITRY",
-      "color_theme": "vibrant_magenta",
-      "duration_frames": 150,
-      "start_frame": 450,
-      "end_frame": 600
+      "label": "Aftermath",
+      "effect": "awakening_flash",
+      "text_primary": "DISCONNECT",
+      "text_secondary": "VICTORY SECURED",
+      "color_theme": "electric_gold",
+      "duration_frames": 120,
+      "start_frame": 360,
+      "end_frame": 480
     }
   ],
   "asset_prompts": {
     "images": [
-      "Cinematic wide shot of a rusted humanoid robot walking through a vast desert of scrap metal and giant gears, moody atmospheric lighting, 8k resolution, hyper-detailed textures.",
-      "Macro photography of a tiny vibrant green sprout pushing through a crack in a rusted steel plate, soft bokeh background of a mechanical wasteland, dramatic sunlight hitting the leaves.",
-      "Close-up of a robot's weathered hand with glowing blue sensors gently hovering over a fragile plant, intricate mechanical details, cinematic lighting, dust particles in the air.",
-      "A robot's circular optical eye reflecting a single green leaf, high contrast, cyberpunk aesthetic, detailed metal textures and lens flare.",
-      "Ethereal landscape where nature starts to reclaim a futuristic ruined city, vines climbing over rusted robots, golden hour lighting, epic scale, masterpiece."
+      "A futuristic cyber city at night with towering skyscrapers, neon blue and magenta lighting, rain slicked streets, cinematic lighting, 8k resolution.",
+      "A high-tech digital warrior made of glowing data streams, wielding a light blade, standing on a rooftop, cybernetic aesthetic.",
+      "An intense explosion of digital pixels and binary code in a dark alleyway, glowing particles flying everywhere, high contrast.",
+      "Close up of a hacker's eye reflecting a scrolling matrix of green and blue code, futuristic visor, hyper-detailed.",
+      "A panoramic view of a neon city skyline with a massive holographic billboard displaying 'SYSTEM CRITICAL', dark clouds, futuristic atmosphere."
     ],
-    "description": "A high-contrast cinematic style blending cold, industrial metallic textures with the vibrant, soft, and organic details of nature. The visual progression moves from dark monochrome to bright, neon-infused colors.",
-    "music": "Orchestral synth-wave, starting with a melancholic solo piano and transitioning into an epic, hopeful climax with pulsing bass and soaring violins.",
-    "sfx": "Metallic footsteps, mechanical whirrs and clicks, digital glitch interference, followed by the soft sound of wind and organic rustling of leaves."
+    "description": "Cyberpunk aesthetic with heavy emphasis on high-contrast neon lighting, digital artifacts, and sharp geometric shapes.",
+    "music": "High-energy synthwave with aggressive basslines and fast-paced electronic beats.",
+    "sfx": "Electronic glitch noises, digital sword clashing, futuristic system alerts, and deep bass drops."
   }
 }
