@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Futuristic Gaming Highlight Overlay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f20d80",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#221019",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(34, 16, 25, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(242, 13, 128, 0.3);
+        }
+        .scanline {
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(242, 13, 128, 0.05) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+        .hud-corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: #f20d80;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-display text-slate-100 flex items-center justify-center min-h-screen p-4">
+<!-- Mobile Device Frame (9:16 Aspect Ratio Simulation) -->
+<div class="relative w-[405px] h-[720px] bg-background-dark rounded-[3rem] border-[8px] border-slate-800 overflow-hidden shadow-2xl shadow-primary/20">
+<!-- Gaming Background Image -->
+<div class="absolute inset-0 z-0 bg-cover bg-center" data-alt="High intensity futuristic first person shooter gameplay scene" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB76_oaS1CFSyPJGO_XYyQ8TcZa2BKjojPn9dWj1f_mFJQgzH7TnJYctXHjg8FQxcoL-p05IVfQyGh-rpIhbkLkC_1yUPiHOHZ3_OMvjscGclXJqudl2wP52eGRFb_oX4FzL8ZxlkiOWfr-WjaDZ5tMuSiU_ECptKvdYjJnkUDmNhUdUHogcqPcO1-pSQO_QDUKl2f577ZxIkeUMFWCXcMevMdUuTyr8s7xhPJyQP0jXn3bSkBQY4mmgzK2K_SwCAMyZq5dn0EPVUo')">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-background-dark/40"></div>
+<div class="absolute inset-0 scanline opacity-30"></div>
+</div>
+<!-- Safe Area Top (TikTok Interface Space) -->
+<div class="absolute top-0 left-0 w-full h-[15%] pointer-events-none flex flex-col justify-end p-6">
+<div class="flex items-center gap-2 opacity-60">
+<span class="material-symbols-outlined text-primary text-sm">sensors</span>
+<span class="text-[10px] font-bold tracking-widest uppercase text-primary">Live Signal Detected</span>
+</div>
+</div>
+<!-- HUD Corners Overlay -->
+<div class="absolute inset-8 pointer-events-none border border-primary/10">
+<div class="hud-corner top-0 left-0 border-t-2 border-l-2"></div>
+<div class="hud-corner top-0 right-0 border-t-2 border-r-2"></div>
+<div class="hud-corner bottom-0 left-0 border-b-2 border-l-2"></div>
+<div class="hud-corner bottom-0 right-0 border-b-2 border-r-2"></div>
+</div>
+<!-- Main Content Area -->
+<div class="absolute inset-0 flex flex-col justify-center px-6 pointer-events-none">
+<!-- Ranking Card (Glassmorphism) -->
+<div class="glass p-5 rounded-xl self-end mt-20 pointer-events-auto border-l-4 border-l-primary shadow-lg max-w-[240px]">
+<div class="flex items-center gap-3 mb-4">
+<div class="relative">
+<div class="size-12 rounded-full border-2 border-primary bg-cover bg-center" data-alt="CyberGhost player profile avatar icon" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDwl4QKQWw3XXuO16LB_8774q4t03vnx12xa4p4wWZefUoxP0jwac5hC4C5xfiGbB5oHTcizU1FJvfhCiMeBSXGjvM0RSABof3q28NxfqdkCVUYR8wlVXvmUwVf6OAJjn1jxhEs3N0QuGx2H8IbiVBVgp6sQuXmQCuKLpjQdBj9FE-Tzk8xcEkUZUZGJUemYI8bAXkzlxrSxuQX5RDnETwyMYoNI26x5AoT8KpCBalwFurrkoG1eklxNSPWS0D3_LtIJsKaZWWoZuQ')"></div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-[8px] font-black px-1 rounded text-white uppercase">Pro</div>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-primary/80 font-bold uppercase tracking-tighter">Top Player</span>
+<h2 class="text-lg font-bold leading-none text-white">CyberGhost</h2>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-4 bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary text-xl">military_tech</span>
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-400 uppercase leading-none">Rank Status</span>
+<span class="text-sm font-bold text-slate-100">Platinum Elite</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="bg-background-dark/40 p-2 rounded border border-white/5">
+<p class="text-[10px] text-slate-400 uppercase">Kills</p>
+<div class="flex items-baseline gap-1">
+<span class="text-xl font-bold text-white">24</span>
+<span class="text-[10px] text-emerald-400 font-bold">+15%</span>
+</div>
+</div>
+<div class="bg-background-dark/40 p-2 rounded border border-white/5">
+<p class="text-[10px] text-slate-400 uppercase">Damage</p>
+<div class="flex items-baseline gap-1">
+<span class="text-xl font-bold text-white">4.5k</span>
+<span class="text-[10px] text-emerald-400 font-bold">+20%</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 bg-primary hover:bg-primary/90 text-white py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">person</span>
+                    VIEW PROFILE
+                </button>
+</div>
+<!-- Kill Feed Notification -->
+<div class="mt-4 flex flex-col gap-2">
+<div class="glass px-4 py-2 rounded-lg border-l-4 border-l-emerald-500 w-fit flex items-center gap-3 opacity-90 animate-pulse">
+<span class="material-symbols-outlined text-emerald-500">skull</span>
+<span class="text-xs font-bold"><span class="text-primary">CyberGhost</span> eliminated <span class="text-slate-400">Wraith_99</span></span>
+</div>
+</div>
+</div>
+<!-- Interactions Sidebar (Right) -->
+<div class="absolute right-4 bottom-[15%] flex flex-col gap-6 z-10 pointer-events-auto">
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="size-12 rounded-full glass flex items-center justify-center group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-2xl text-white">favorite</span>
+</div>
+<span class="text-xs font-bold text-white">12.4k</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="size-12 rounded-full glass flex items-center justify-center group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-2xl text-white">chat_bubble</span>
+</div>
+<span class="text-xs font-bold text-white">850</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="size-12 rounded-full glass flex items-center justify-center group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-2xl text-white">share</span>
+</div>
+<span class="text-xs font-bold text-white">2.1k</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer">
+<div class="size-12 rounded-full glass flex items-center justify-center group-hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-2xl text-white">bookmark</span>
+</div>
+<span class="text-xs font-bold text-white">3.2k</span>
+</div>
+</div>
+<!-- Safe Area Bottom (TikTok Caption/Interface Space) -->
+<div class="absolute bottom-0 left-0 w-full h-[20%] pointer-events-none flex flex-col justify-start p-6">
+<div class="w-full bg-white/20 h-1 rounded-full overflow-hidden mb-2">
+<div class="bg-primary h-full w-2/3 shadow-[0_0_8px_#f20d80]"></div>
+</div>
+<div class="flex justify-between items-center opacity-60">
+<span class="text-[10px] font-bold text-white">00:37</span>
+<span class="text-[10px] font-bold text-white">02:23</span>
+</div>
+<div class="mt-4 flex gap-4">
+<div class="size-10 rounded-lg glass border border-primary/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">play_arrow</span>
+</div>
+<div class="flex-1 glass rounded-lg border border-white/10 p-2 flex items-center justify-center">
+<span class="text-[10px] font-bold tracking-widest text-primary/60 uppercase">Rewatch Best Moment</span>
+</div>
+</div>
+</div>
+<!-- Glossy Reflection Overlay -->
+<div class="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-transparent"></div>
+</div>
+</body></html>

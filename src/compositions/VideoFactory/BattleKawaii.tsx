@@ -23,8 +23,16 @@ if (typeof window !== 'undefined') {
 import { loadFont as loadZenMaru } from '@remotion/google-fonts/ZenMaruGothic';
 import { loadFont as loadHachiMaru } from '@remotion/google-fonts/HachiMaruPop';
 
-const { fontFamily } = loadZenMaru();
-const { fontFamily: kawaiiFont } = loadHachiMaru();
+// @ts-ignore — このサブセット分割フォントはオプション型が合わないため ignore
+const { fontFamily } = loadZenMaru('normal', {
+  weights: ['400', '700'],
+  ignoreTooManyRequestsWarning: true,
+});
+// @ts-ignore
+const { fontFamily: kawaiiFont } = loadHachiMaru('normal', {
+  weights: ['400'],
+  ignoreTooManyRequestsWarning: true,
+});
 
 const ShimmerOverlay: React.FC = () => {
   const frame = useCurrentFrame();
