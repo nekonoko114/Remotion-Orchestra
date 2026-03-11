@@ -22,6 +22,7 @@ import {
 import { BattleCrystal } from './compositions/VideoFactory/BattleCrystal';
 import { BattleWater } from './compositions/VideoFactory/BattleWater';
 import { BattleKawaii } from './compositions/VideoFactory/BattleKawaii';
+import { PastelDreamShowcase, pastelDreamSchema } from './compositions/VideoFactory/PastelDreamShowcase';
 import { NarandaMamadeMV } from './compositions/NarandaMamade';
 import { SoregayasashisaMV } from './compositions/Soregayasashisa';
 import narandaMamadeMusicAnalysis from './compositions/NarandaMamade/music_analysis.json';
@@ -29,6 +30,8 @@ import { NovaShowMV } from './components/NovaShowMV';
 import { KimitonaraComposition } from './compositions/Kimitonara';
 import { GenkitComposition, genkitCompositionSchema } from './compositions/Genkit';
 import { StitchOverlay } from './compositions/Stitch';
+import { RookieRanking } from './compositions/VideoFactory/RookieRanking';
+import { JolBattleSpiritRed } from './compositions/VideoFactory/JolBattleSpiritRed';
 import './index.css';
 import React from 'react';
 
@@ -108,6 +111,38 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
       />
+      <Composition
+        id="JOL-PastelDream"
+        component={PastelDreamShowcase}
+        durationInFrames={840} // 31秒から3秒減らして28秒 (840フレーム)
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={pastelDreamSchema}
+        defaultProps={{
+          player1: {
+            name: '🌸さくら🌸',
+            image: 'assets/images-01/l5332541.jpeg',
+            color: '#FFB6C1',
+          },
+          player2: {
+            name: '🌸さくら🌸',
+            image: 'assets/images-01/l5332541-01.png',
+            color: '#FFB6C1',
+          },
+          player3: {
+            name: '🌸さくら🌸',
+            image: 'assets/images-01/l5332541-02.png',
+            color: '#FFB6C1',
+          },
+          tatan: {
+            name: 'たー𝕥𝕒𝕟🏡☀️',
+            image: 'assets/images-01/ta-tan.png',
+            color: '#87CEEB',
+          },
+          musicStartSec: 36.4,
+        }}
+      />
 
       <Composition
         id="NarandaMamadeMV"
@@ -158,6 +193,22 @@ export const RemotionRoot: React.FC = () => {
         id="Stitch-Gaming-Overlay"
         component={StitchOverlay}
         durationInFrames={300} // 10 seconds
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="JOL-Rookie-Ranking"
+        component={RookieRanking}
+        durationInFrames={1260} // 42 seconds total
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="JOL-BATTLE-SPIRIT-RED"
+        component={JolBattleSpiritRed}
+        durationInFrames={1065} // 35.5 seconds * 30fps
         fps={30}
         width={1080}
         height={1920}

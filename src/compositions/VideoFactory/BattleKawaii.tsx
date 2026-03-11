@@ -26,11 +26,13 @@ import { loadFont as loadHachiMaru } from '@remotion/google-fonts/HachiMaruPop';
 // @ts-ignore — このサブセット分割フォントはオプション型が合わないため ignore
 const { fontFamily } = loadZenMaru('normal', {
   weights: ['400', '700'],
+  subsets: ['latin'],
   ignoreTooManyRequestsWarning: true,
 });
 // @ts-ignore
 const { fontFamily: kawaiiFont } = loadHachiMaru('normal', {
   weights: ['400'],
+  subsets: ['latin'],
   ignoreTooManyRequestsWarning: true,
 });
 

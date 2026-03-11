@@ -6,6 +6,7 @@ import { loadFont } from '@remotion/google-fonts/SpaceGrotesk';
 export const { fontFamily } = loadFont('normal', {
 	weights: ['300', '400', '700'],
 	subsets: ['latin'],
+	ignoreTooManyRequestsWarning: true,
 });
 
 export const HUDCorners: React.FC = () => {
