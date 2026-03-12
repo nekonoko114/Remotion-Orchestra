@@ -39,7 +39,7 @@ import { StitchOverlay } from './compositions/Stitch';
 import { RookieRanking } from './compositions/VideoFactory/RookieRanking';
 import { JolBattleSpiritRed } from './compositions/VideoFactory/JolBattleSpiritRed';
 import { JolBattleSpiritBlue } from './compositions/VideoFactory/JolBattleSpiritBlue';
-import { JolBattleSpiritOrange } from './compositions/VideoFactory/JolBattleSpiritOrange';
+import { JolBattleSpiritOrange, JOL_ORANGE_DURATION } from './compositions/VideoFactory/JolBattleSpiritOrange';
 import './index.css';
 import React from 'react';
 
@@ -231,7 +231,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-BATTLE-SPIRIT-ORENGE"
         component={JolBattleSpiritOrange}
-        durationInFrames={1050}
+        durationInFrames={JOL_ORANGE_DURATION}
         fps={30}
         width={1080}
         height={1920}

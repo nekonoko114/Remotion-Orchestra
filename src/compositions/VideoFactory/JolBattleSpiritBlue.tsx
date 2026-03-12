@@ -324,6 +324,81 @@ const SvgDefs: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
+const LightLeak: React.FC<{ frame: number; color?: string }> = ({ frame, color = '#0066ff' }) => {
+  const opacity = interpolate(
+    Math.sin(frame * 0.05),
+    [-1, 1],
+    [0.1, 0.4]
+  );
+  const move = Math.sin(frame * 0.02) * 100;
+
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 90, overflow: 'hidden' }}>
+      {/* Top Left */}
+      <div style={{
+        position: 'absolute',
+        top: -200 + move,
+        left: -200 - move,
+        width: 1000,
+        height: 1000,
+        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+        filter: 'blur(120px)',
+        opacity,
+        mixBlendMode: 'screen',
+      }} />
+      {/* Bottom Right */}
+      <div style={{
+        position: 'absolute',
+        bottom: -300 - move,
+        right: -300 + move,
+        width: 1200,
+        height: 1200,
+        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+        filter: 'blur(150px)',
+        opacity: opacity * 0.8,
+        mixBlendMode: 'screen',
+      }} />
+    </AbsoluteFill>
+  );
+};
+
+const RotatingFocusLines: React.FC<{ frame: number; color?: string; count?: number }> = ({ 
+  frame, 
+  color = 'rgba(0, 100, 255, 0.3)', 
+  count = 40 
+}) => {
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', justifyContent: 'center', alignItems: 'center', pointerEvents: 'none' }}>
+      <div style={{
+        width: 3000,
+        height: 3000,
+        transform: `rotate(${frame * 2}deg)`,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        {new Array(count).fill(0).map((_, i) => {
+          const angle = (i / count) * 360;
+          return (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                width: 2000,
+                height: 4,
+                background: `linear-gradient(to right, ${color}, transparent)`,
+                transform: `rotate(${angle}deg) translateX(500px)`,
+                transformOrigin: 'left center',
+                opacity: 0.5 + Math.sin(frame * 0.2 + i) * 0.5,
+              }}
+            />
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 // ========================
 // Kinetic Typography Component
 // ========================
@@ -784,8 +859,9 @@ const SceneVs = (): any => {
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
       {flashOpacity > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flashOpacity, zIndex: 10 }} />}
+      <RotatingFocusLines frame={frame} color="rgba(0, 50, 255, 0.4)" />
 
-      <AbsoluteFill style={{ transform: `scale(${1 + shakeDecay * 0.1}) translate(${shakeX}px, ${shakeY}px)`, filter: 'url(#heat-haze)' }}>
+      <AbsoluteFill style={{ transform: `scale(${1 + shakeDecay * 0.1}) translate(${shakeX}px, ${shakeY}px)` }}>
         <KaleidoscopeBackground 
           imageSrc={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} 
           frame={frame} 
@@ -898,7 +974,7 @@ const SceneRules = (): any => {
               frame={frame}
               fps={fps}
               startFrame={20}
-              fontSize={180}
+              fontSize={160}
               color="#FFF"
               glowColor="#0044ff"
               style={{ fontWeight: 900 }}
@@ -915,7 +991,7 @@ const SceneRules = (): any => {
               frame={frame}
               fps={fps}
               startFrame={50}
-              fontSize={180}
+              fontSize={160}
               color="#FFF"
               glowColor="#00ccff"
               style={{ fontWeight: 900 }}
@@ -943,7 +1019,7 @@ const SceneEnding = (): any => {
       
       {frame < 10 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: 1 - frame / 10, zIndex: 10 }} />}
       
-      <AbsoluteFill style={{ opacity: fadeOut, filter: 'url(#heat-haze)' }}>
+      <AbsoluteFill style={{ opacity: fadeOut }}>
         {blueInferno ? (
           <Canvas style={{ flex: 1 }}>
             <Fill>
@@ -1046,6 +1122,7 @@ export const JolBattleSpiritBlue: React.FC = () => {
   return (
     <AbsoluteFill>
       <Audio src={staticFile('assets/audio/music/冷蔵庫のメモ.mp3')} volume={0.6} loop />
+      <LightLeak frame={useCurrentFrame()} />
 
       <Sequence from={s1} durationInFrames={OP_DUR}><SceneOpening /></Sequence>
       <Sequence from={s2} durationInFrames={DATE_DUR}><SceneDate /></Sequence>

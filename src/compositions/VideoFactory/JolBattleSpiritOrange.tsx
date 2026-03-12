@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   AbsoluteFill,
-  Sequence,
   useCurrentFrame,
   useVideoConfig,
   interpolate,
@@ -10,7 +9,10 @@ import {
   Img,
   Audio,
   staticFile,
+  Composition,
 } from 'remotion';
+import { TransitionSeries, linearTiming, TransitionPresentationComponentProps } from '@remotion/transitions';
+import { CameraMotionBlur } from '@remotion/motion-blur';
 
 // @ts-ignore
 import { loadFont } from '@remotion/google-fonts/NotoSansJP';
@@ -19,6 +21,49 @@ const { fontFamily } = loadFont('normal', {
   ignoreTooManyRequestsWarning: true,
 });
 
+
+const SunsetBackground: React.FC<{
+  frame: number;
+  opacity?: number;
+}> = ({ frame, opacity = 1 }) => {
+  const progress = frame / (35 * 30); 
+  const scale = interpolate(progress, [0, 1], [1, 3.5]);
+  const translateY = interpolate(progress, [0, 1], [0, -200]);
+
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', opacity }}>
+      <div style={{
+        width: '100%',
+        height: '100%',
+        transform: `scale(${scale}) translateY(${translateY}px)`,
+        transformOrigin: '50% 50%',
+      }}>
+        <Img 
+          src={staticFile('assets/anime_sunset_background.png')} 
+          style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.9) contrast(1.1)' }} 
+        />
+      </div>
+      <AbsoluteFill style={{
+        background: 'radial-gradient(circle, rgba(255,100,0,0.2) 0%, rgba(30,0,0,0.4) 100%)',
+        mixBlendMode: 'overlay',
+      }} />
+    </AbsoluteFill>
+  );
+};
+
+const GlobalFrame: React.FC = () => {
+  const frame = useCurrentFrame();
+  const pulse = Math.sin(frame / 10) * 0.2 + 0.8;
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
+      <div style={{ 
+        position: 'absolute', inset: 0,
+        border: '12px solid rgba(255, 140, 0, 0.8)', 
+        boxShadow: `inset 0 0 80px rgba(255, 100, 0, ${0.4 * pulse}), 0 0 80px rgba(255, 100, 0, ${0.4 * pulse})`,
+      }} />
+    </AbsoluteFill>
+  );
+};
 
 const KaleidoscopeBackground: React.FC<{
   imageSrc: string;
@@ -74,19 +119,6 @@ const KaleidoscopeBackground: React.FC<{
   );
 };
 
-// 炎のカラーバリエーション — 全シーンでカラフルにサイクル
-const useFireColors = (frame: number, globalFrame?: number) => {
-  // 夕日の妖精テーマ: オレンジ、ゴールド、少しのピンク/パープル
-  const phase = Math.floor(frame / 60) % 3;
-  const palettes = [
-    { c1: [4.0, 1.0, 0.0], c2: [5.0, 2.5, 0.0] },  // ゴールデンオレンジ
-    { c1: [4.0, 0.5, 0.8], c2: [5.0, 1.5, 2.0] },  // サンセットピンク
-    { c1: [3.0, 2.0, 0.0], c2: [4.0, 4.0, 1.0] },  // ウォームゴールド
-  ];
-
-  return palettes[phase];
-};
-
 // CSS particle (shared helper)
 const Particle: React.FC<{ seed: number; frame: number; color: string }> = ({ seed, frame, color }) => {
   const life = 35 + random(seed + 5) * 30; // Faster life
@@ -109,6 +141,81 @@ const Particle: React.FC<{ seed: number; frame: number; color: string }> = ({ se
       transform: `scale(${s}) rotate(${Math.sin(frame / 8 + seed) * 15}deg)`,
       mixBlendMode: 'screen',
     }} />
+  );
+};
+
+const LightLeak: React.FC<{ frame: number; color?: string }> = ({ frame, color = '#ff8800' }) => {
+  const opacity = interpolate(
+    Math.sin(frame * 0.05),
+    [-1, 1],
+    [0.1, 0.4]
+  );
+  const move = Math.sin(frame * 0.02) * 100;
+
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 90, overflow: 'hidden' }}>
+      {/* Top Left */}
+      <div style={{
+        position: 'absolute',
+        top: -200 + move,
+        left: -200 - move,
+        width: 1000,
+        height: 1000,
+        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+        filter: 'blur(120px)',
+        opacity,
+        mixBlendMode: 'screen',
+      }} />
+      {/* Bottom Right */}
+      <div style={{
+        position: 'absolute',
+        bottom: -300 - move,
+        right: -300 + move,
+        width: 1200,
+        height: 1200,
+        background: `radial-gradient(circle, ${color} 0%, transparent 70%)`,
+        filter: 'blur(150px)',
+        opacity: opacity * 0.8,
+        mixBlendMode: 'screen',
+      }} />
+    </AbsoluteFill>
+  );
+};
+
+const RotatingFocusLines: React.FC<{ frame: number; color?: string; count?: number }> = ({ 
+  frame, 
+  color = 'rgba(255, 140, 0, 0.3)', 
+  count = 40 
+}) => {
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', justifyContent: 'center', alignItems: 'center', pointerEvents: 'none' }}>
+      <div style={{
+        width: 3000,
+        height: 3000,
+        transform: `rotate(${frame * 2}deg)`,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        {new Array(count).fill(0).map((_, i) => {
+          const angle = (i / count) * 360;
+          return (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                width: 2000,
+                height: 4,
+                background: `linear-gradient(to right, ${color}, transparent)`,
+                transform: `rotate(${angle}deg) translateX(500px)`,
+                transformOrigin: 'left center',
+                opacity: 0.5 + Math.sin(frame * 0.2 + i) * 0.5,
+              }}
+            />
+          );
+        })}
+      </div>
+    </AbsoluteFill>
   );
 };
 
@@ -222,27 +329,18 @@ const SceneOpening = (): any => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // 180frames for 6 seconds. phase every 60 frames.
-  const text = "夕日の妖精が<br/>見守るバトル";
+  // 90フレーム目（3秒）でテキストを切り替え
+  const text = frame < 90 ? "ガチバトル<br/>決定‼️" : "みんな<br/>私についてきな！";
 
-  const localFrame = frame % 60;
+  // テキスト切り替え時にアニメーションもリセットされるように調整
+  const localFrame = frame < 90 ? (frame % 60) : ((frame - 90) % 60);
   const entry = spring({ frame: localFrame, fps, config: { stiffness: 400, damping: 15 } });
   const pulse = Math.pow(Math.max(0, 1 - localFrame / 45), 4) * 1.5 + 0.3;
 
-  // 画面外框の赤いグローフレーム
-  const framePulse = Math.sin(frame / 10) * 0.2 + 0.8;
-
   const content = (
     <AbsoluteFill style={{ backgroundColor: '#050000' }}>
-      {/* 画面外框の赤いグローフレーム */}
-      <div style={{ 
-        position: 'absolute', inset: 0,
-        border: '15px solid rgba(255, 120, 0, 0.7)', 
-        boxShadow: `inset 0 0 100px rgba(255, 150, 0, ${0.5 * framePulse}), 0 0 100px rgba(255, 100, 0, ${0.5 * framePulse})`,
-        zIndex: 5,
-        pointerEvents: 'none'
-      }} />
-
+      <SunsetBackground frame={frame} />
+      
       {/* スキャンライン（CRTエフェクト） */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 4, pointerEvents: 'none',
@@ -337,10 +435,11 @@ const SceneDate = (): any => {
 
   const content = (
     <AbsoluteFill style={{ backgroundColor: '#050000', overflow: 'hidden' }}>
-      <SvgDefs frame={frame} />
-      {new Array(30).fill(0).map((_, i) => (
+      <SunsetBackground frame={frame + 180} opacity={0.8} />
+      {new Array(20).fill(0).map((_, i) => (
         <Particle key={i} seed={i * 8} frame={frame} color={i % 2 === 0 ? '#cc0000' : '#ff4400'} />
       ))}
+      <SvgDefs frame={frame} />
       {flash > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flash }} />}
 
       <AbsoluteFill style={{ transform: `translate(${shakeX}px, ${shakeY}px)`, justifyContent: 'center', alignItems: 'center', gap: 60 }}>
@@ -397,68 +496,73 @@ const SceneDate = (): any => {
 };
 
 // ========================
-// Scene 3 & 4: J.O.Lライバー Grid Collage (10-16s)
+// Scene 3 & 4: J.O.Lライバー Doubling Grid (10-16s)
 // ========================
-const SceneLiverGrid: React.FC<{ name: string; image: string }> = ({ name, image }) => {
+const SceneDoublingGrid: React.FC<{ name: string; image: string }> = ({ name, image }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const staticImage = staticFile(image);
   
-  // 1秒ごとに変わる数
-  const second = Math.floor(frame / 30);
-  const number = Math.floor(random(second + name) * 10000);
+  // 指定されたシーケンス: 16,9,4,2,1
+  const sequence = [ 16,9,4,2,1];
+  const fpb = 30 / (174 / 30); // Frames Per Beat
+  const beatInterval = 6; // 3拍ごとに切り替え
+  const exponent = Math.floor(frame / (fpb * beatInterval));
+  const count = sequence[Math.min(exponent, sequence.length - 1)];
+
+  // グリッドのカラム数を計算 (ルートを切り上げ)
+  const cols = Math.ceil(Math.sqrt(count));
+  const rows = Math.ceil(count / cols);
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#100800', overflow: 'hidden' }}>
+      <SunsetBackground frame={frame + 300} opacity={0.4} />
       <KaleidoscopeBackground imageSrc={staticImage} frame={frame} opacity={0.3} />
       
-      {/* 4分割グリッド */}
+      {/* 動的グリッド */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gridTemplateRows: '1fr 1fr',
-        gap: '20px',
-        padding: '40px',
+        gridTemplateColumns: `repeat(${cols}, 1fr)`,
+        gridTemplateRows: `repeat(${rows}, 1fr)`,
+        gap: `${Math.max(2, 5 - exponent * 2)}px`,
+        padding: '10px 0', // 左右のパディングをなくして端まで広げる
         width: '100%',
         height: '100%',
         boxSizing: 'border-box'
       }}>
-        {[0, 1, 2, 3].map((i) => {
-          const s = spring({ frame: frame - i * 5, fps, config: { stiffness: 200 } });
+        {new Array(count).fill(0).map((_, i) => {
+          // パパパパっとした非常に速い出現
+          const s = spring({ 
+            frame: frame % 30, 
+            fps, 
+            config: { stiffness: 1000, damping: 50, mass: 0.5 } 
+          });
+
           return (
             <div key={i} style={{
               position: 'relative',
-              borderRadius: '20px',
+              width: '100%',
+              // aspectRatio を削除し、Gridセルのサイズに合わせる
+              borderRadius: '50%', 
               overflow: 'hidden',
-              border: '8px solid orange',
-              transform: `scale(${s}) rotate(${(random(i + name) - 0.5) * 10}deg)`,
-              boxShadow: '0 0 30px rgba(255,165,0,0.5)'
+              border: `${Math.max(1, 4 - exponent * 0.5)}px solid orange`,
+              transform: `scale(${s}) rotate(${(random(i + name + exponent) - 0.5) * 5}deg)`,
+              boxShadow: `0 0 ${Math.max(5, 20 - exponent * 3)}px rgba(255,165,0,0.5)`,
+              margin: 'auto',
             }}>
               <Img src={staticImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: `linear-gradient(${random(i + name) * 360}deg, rgba(255,100,0,0.2), transparent)`,
+                background: `linear-gradient(${random(i + name + exponent) * 360}deg, rgba(255,100,0,0.2), transparent)`,
               }} />
             </div>
           );
         })}
       </div>
 
-      {/* 中央の動く数字 */}
+      {/* 名前ラベル */}
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', pointerEvents: 'none' }}>
-        <div style={{
-          fontSize: 300,
-          fontWeight: 900,
-          color: '#fff',
-          fontStyle: 'italic',
-          textShadow: '0 0 50px orange, 0 0 100px red',
-          transform: `scale(${1 + Math.sin(frame / 5) * 0.1}) rotate(${(random(second + name) - 0.5) * 10}deg)`,
-          WebkitTextStroke: '10px #300',
-        }}>
-          {number}
-        </div>
-        {/* 名前ラベル */}
         <div style={{
           position: 'absolute',
           bottom: 100,
@@ -498,6 +602,10 @@ const SceneOpponent = (): any => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#050000', overflow: 'hidden' }}>
+      <SunsetBackground frame={frame + 480} opacity={0.6} />
+      {new Array(30).fill(0).map((_, i) => (
+        <Particle key={i} seed={i * 12 + 500} frame={frame} color={i % 2 === 0 ? '#ff8800' : '#ffcc00'} />
+      ))}
       <KaleidoscopeBackground 
         imageSrc={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} 
         frame={frame} 
@@ -553,12 +661,17 @@ const SceneVs = (): any => {
 
   const content = (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+      <SunsetBackground frame={frame + 570} opacity={0.5} />
+      {new Array(30).fill(0).map((_, i) => (
+        <Particle key={i} seed={i * 17 + 600} frame={frame} color={i % 2 === 0 ? '#ffae00' : '#ffea00'} />
+      ))}
+      <RotatingFocusLines frame={frame} color="rgba(255, 100, 0, 0.4)" />
       <SvgDefs frame={frame} />
       {flashOpacity > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flashOpacity, zIndex: 10 }} />}
 
-      <AbsoluteFill style={{ transform: `scale(${1 + shakeDecay * 0.1}) translate(${shakeX}px, ${shakeY}px)`, filter: 'url(#heat-haze)' }}>
+      <AbsoluteFill style={{ transform: `scale(${1 + shakeDecay * 0.1}) translate(${shakeX}px, ${shakeY}px)` }}>
         <KaleidoscopeBackground 
-          imageSrc={staticFile('assets/images-01/mrm0115-01.jpg')} 
+          imageSrc={staticFile('assets/images-01/mrm0115-01.png')} 
           frame={frame} 
           opacity={0.3} 
         />
@@ -576,7 +689,7 @@ const SceneVs = (): any => {
                 width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
                 border: '15px solid #FFE4B5', margin: '0 auto 15px', boxShadow: '0 0 100px orange' 
               }}>
-                <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <Img src={staticFile('assets/images-01/mrm0115-01.png')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <KineticText
                 text="限界突破まみ🎽"
@@ -651,14 +764,14 @@ const SceneRules = (): any => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#100500', overflow: 'hidden' }}>
+      <SunsetBackground frame={frame + 690} opacity={0.7} />
+      {new Array(20).fill(0).map((_, i) => (
+        <Particle key={i} seed={i * 19 + 800} frame={frame} color={i % 2 === 0 ? '#ff8800' : '#ffcc00'} />
+      ))}
       <SvgDefs frame={frame} />
       
       {/* 画面切り替え時のフラッシュ */}
       {rulesImpact > 0.8 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'orange', opacity: rulesImpact * 0.4, zIndex: 10 }} />}
-
-      {new Array(30).fill(0).map((_, i) => (
-        <Particle key={i} seed={i * 19 + 800} frame={frame} color={i % 2 === 0 ? '#ff8800' : '#ffcc00'} />
-      ))}
 
       <AbsoluteFill style={{ transform: `translate(${shakeX}px, ${shakeY}px)`, justifyContent: 'center', alignItems: 'center', gap: 80 }}>
         <div style={{
@@ -671,7 +784,7 @@ const SceneRules = (): any => {
               frame={frame}
               fps={fps}
               startFrame={20}
-              fontSize={180}
+              fontSize={160}
               color="#FFF"
               glowColor="#ff8800"
               style={{ fontWeight: 900 }}
@@ -688,7 +801,7 @@ const SceneRules = (): any => {
               frame={frame}
               fps={fps}
               startFrame={50}
-              fontSize={180}
+              fontSize={160}
               color="#FFF"
               glowColor="#ffcc00"
               style={{ fontWeight: 900 }}
@@ -715,8 +828,9 @@ const SceneEnding = (): any => {
       {/* 画面切り替え時のフラッシュ */}
       {frame < 10 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: 1 - frame / 10, zIndex: 10 }} />}
       
-      <AbsoluteFill style={{ opacity: fadeOut, filter: 'url(#heat-haze)' }}>
-        {new Array(60).fill(0).map((_, i) => (
+      <AbsoluteFill style={{ opacity: fadeOut }}>
+        <SunsetBackground frame={frame + 780} />
+        {new Array(30).fill(0).map((_, i) => (
           <Particle key={i} seed={i * 31} frame={frame} color={i % 2 === 0 ? '#ff4400' : '#ff0000'} />
         ))}
 
@@ -728,18 +842,16 @@ const SceneEnding = (): any => {
             background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.7) 70%, transparent 100%)',
           }} />
           <KineticText
-            text="夕日の妖精たちの⁠
-祝福と共に
-最高のバトルを！！"
+            text="この戦いは<br/>負けられない"
             frame={frame}
             fps={fps}
             startFrame={30}
-            fontSize={110}
+            fontSize={150}
             color="#FFFFFF"
             glowColor="#FFCC00"
             style={{ 
               lineHeight: 1.5, 
-              letterSpacing: 5,
+              letterSpacing: 20,
               position: 'relative',
               zIndex: 2,
             }}
@@ -752,21 +864,6 @@ const SceneEnding = (): any => {
   return content as any;
 };
 
-const SceneLogoText = (): any => {
-  const frame = useCurrentFrame();
-  return (
-    <AbsoluteFill style={{ backgroundColor: '#000', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{
-         fontSize: 160, fontWeight: 900, color: '#fff', textAlign: 'center',
-         textShadow: '0 0 40px orange, 0 0 80px red',
-         transform: `scale(${interpolate(frame, [0, 20], [0, 1], { extrapolateRight: 'clamp' })})`,
-      }}>
-        JOL BATTLE SPIRIT<br/>
-        <span style={{ color: 'orange' }}>ORANGE</span>
-      </div>
-    </AbsoluteFill>
-  );
-};
 const SceneLogo = (): any => {
   const frame = useCurrentFrame();
   const opacity = interpolate(frame, [0, 30], [0, 1], { extrapolateRight: 'clamp' });
@@ -787,49 +884,188 @@ const SceneLogo = (): any => {
   );
 };
 
+// ========================
+// Main Composition Timing
+// ========================
+const FPB = 30 / (174 / 60); // 1拍あたりのフレーム数 (約10.34)
+const OP_DUR = Math.round(FPB * 14);    
+const DATE_DUR = Math.round(FPB * 12);    
+const INTRO_LIVER_DUR = Math.round(FPB * 15); 
+const OPPONENT_DUR = Math.round(FPB * 12); 
+const VS_DUR = Math.round(FPB * 12);      
+const RULE_DUR = 120;                     // 文字が読めるように90フレーム確保
+const ENDING_DUR = 120;       // 合計120フレームになるよう残りをエンディングに
+const LOGO_DUR = 100; 
+
+// 最終的な尺を動的に計算 (TransitionSeriesの合計尺)
+// 各Sequenceの合計 + 各Transitionの合計 (20 * 7)
+const TRANS_DUR = 20 * 7;
+export const JOL_ORANGE_DURATION = OP_DUR + DATE_DUR + INTRO_LIVER_DUR + OPPONENT_DUR + VS_DUR + RULE_DUR + ENDING_DUR + LOGO_DUR - TRANS_DUR;
+
+// ========================
+// Custom Transition: Blurred Slide + Flash
+// ========================
+
+type BlurredSlideProps = {
+  direction?: 'from-left' | 'from-right' | 'from-top' | 'from-bottom';
+};
+
+const BlurredSlide: React.FC<TransitionPresentationComponentProps<BlurredSlideProps>> = ({
+  children,
+  presentationProgress,
+  presentationDirection,
+  passedProps,
+}) => {
+  const direction = passedProps.direction ?? 'from-left';
+  
+  // Transition logic
+  const translateX = presentationDirection === 'entering' 
+    ? (direction === 'from-left' ? (1 - presentationProgress) * -100 : direction === 'from-right' ? (1 - presentationProgress) * 100 : 0)
+    : 0;
+  const translateY = presentationDirection === 'entering'
+    ? (direction === 'from-top' ? (1 - presentationProgress) * -100 : direction === 'from-bottom' ? (1 - presentationProgress) * 100 : 0)
+    : 0;
+
+  // Flash: peaks at 0.5
+  const flash = interpolate(presentationProgress, [0, 0.45, 0.5, 0.55, 1], [0, 0, 1, 0, 0]);
+
+  return (
+    <div style={{ position: 'absolute', inset: 0 }}>
+      {presentationDirection === 'entering' ? (
+        <CameraMotionBlur samples={4} shutterAngle={160}>
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            transform: `translate(${translateX}%, ${translateY}%)`,
+          }}>
+            {children}
+          </div>
+        </CameraMotionBlur>
+      ) : (
+        <div style={{ position: 'absolute', inset: 0 }}>
+          {children}
+        </div>
+      )}
+      
+      {/* High-speed Flash Overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundColor: '#fff',
+        opacity: flash,
+        pointerEvents: 'none',
+        zIndex: 100,
+      }} />
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        backgroundColor: 'orange',
+        opacity: flash * 0.4,
+        pointerEvents: 'none',
+        zIndex: 101,
+      }} />
+    </div>
+  );
+};
+
+const blurredSlide = (props: BlurredSlideProps = {}) => {
+  return {
+    component: BlurredSlide,
+    props,
+  };
+};
 
 // ========================
 // Main Composition
 // ========================
 export const JolBattleSpiritOrange = (): any => {
-  const { fps } = useVideoConfig();
-  
-  // Timing Adjustments: OP_DUR extended to 6s, DATE_DUR extended to 4s
-  // Timing Adjustments: OP_DUR extended to 6s, DATE_DUR extended to 4s
-  const OP_DUR = 6 * fps;      
-  const DATE_DUR = 4 * fps;    
-  const INTRO_LIVER_DUR = 6 * fps; 
-  const OPPONENT_DUR = 3 * fps; 
-  const VS_DUR = 4 * fps;      
-  const RULE_DUR = 3 * fps;    
-  const ENDING_DUR = 5 * fps;  
-  const LOGO_DUR = 3 * fps;
-
-  const s1 = 0;
-  const s2 = s1 + OP_DUR;
-  const s3 = s2 + DATE_DUR;
-  const s5 = s3 + INTRO_LIVER_DUR; 
-  const s6 = s5 + OPPONENT_DUR;
-  const s7 = s6 + VS_DUR;
-  const s8 = s7 + RULE_DUR;
-  const s9 = s8 + ENDING_DUR;
-
-  // Total duration will be calculated via AbsoluteFill but visually controlled by Sequence
-
   return (
     <AbsoluteFill>
-      <Audio src={staticFile('assets/audio/music/冷蔵庫のメモ.mp3')} volume={0.6} loop />
+      <GlobalFrame />
+      <LightLeak frame={useCurrentFrame()} />
+      <Audio src={staticFile('assets/audio/music/冷蔵庫のメモ.mp3')} volume={0.6} startFrom={3720} loop />
 
-      <Sequence from={s1} durationInFrames={OP_DUR}><SceneOpening /></Sequence>
-      <Sequence from={s2} durationInFrames={DATE_DUR}><SceneDate /></Sequence>
-      <Sequence from={s3} durationInFrames={INTRO_LIVER_DUR}>
-        <SceneLiverGrid name="限界突破まみ🎽" image="assets/images-01/mrm0115-01.jpg" />
-      </Sequence>
-      <Sequence from={s5} durationInFrames={OPPONENT_DUR}><SceneOpponent /></Sequence>
-      <Sequence from={s6} durationInFrames={VS_DUR}><SceneVs /></Sequence>
-      <Sequence from={s7} durationInFrames={RULE_DUR}><SceneRules /></Sequence>
-      <Sequence from={s8} durationInFrames={ENDING_DUR}><SceneEnding /></Sequence>
-      <Sequence from={s9} durationInFrames={LOGO_DUR}><SceneLogo /></Sequence>
+      <TransitionSeries>
+        <TransitionSeries.Sequence durationInFrames={OP_DUR}>
+          <SceneOpening />
+        </TransitionSeries.Sequence>
+        
+        <TransitionSeries.Transition
+          presentation={blurredSlide({ direction: 'from-left' }) as any}
+          timing={linearTiming({ durationInFrames: 20 })}
+        />
+        
+        <TransitionSeries.Sequence durationInFrames={DATE_DUR}>
+          <SceneDate />
+        </TransitionSeries.Sequence>
+
+        <TransitionSeries.Transition
+          presentation={blurredSlide({ direction: 'from-bottom' }) as any}
+          timing={linearTiming({ durationInFrames: 20 })}
+        />
+
+        <TransitionSeries.Sequence durationInFrames={INTRO_LIVER_DUR}>
+          <SceneDoublingGrid name="限界突破まみ🎽" image="assets/images-01/mrm0115-01.png" />
+        </TransitionSeries.Sequence>
+
+        <TransitionSeries.Transition
+          presentation={blurredSlide({ direction: 'from-right' }) as any}
+          timing={linearTiming({ durationInFrames: 20 })}
+        />
+
+        <TransitionSeries.Sequence durationInFrames={OPPONENT_DUR}>
+          <SceneOpponent />
+        </TransitionSeries.Sequence>
+
+        <TransitionSeries.Transition
+          presentation={blurredSlide({ direction: 'from-top' }) as any}
+          timing={linearTiming({ durationInFrames: 20 })}
+        />
+
+        <TransitionSeries.Sequence durationInFrames={VS_DUR}>
+          <SceneVs />
+        </TransitionSeries.Sequence>
+
+        <TransitionSeries.Transition
+          presentation={blurredSlide({ direction: 'from-left' }) as any}
+          timing={linearTiming({ durationInFrames: 20 })}
+        />
+
+        <TransitionSeries.Sequence durationInFrames={RULE_DUR}>
+          <SceneRules />
+        </TransitionSeries.Sequence>
+
+        <TransitionSeries.Transition
+          presentation={blurredSlide({ direction: 'from-right' }) as any}
+          timing={linearTiming({ durationInFrames: 20 })}
+        />
+
+        <TransitionSeries.Sequence durationInFrames={ENDING_DUR}>
+          <SceneEnding />
+        </TransitionSeries.Sequence>
+
+        <TransitionSeries.Transition
+          presentation={blurredSlide({ direction: 'from-left' }) as any}
+          timing={linearTiming({ durationInFrames: 20 })}
+        />
+
+        <TransitionSeries.Sequence durationInFrames={LOGO_DUR}>
+          <SceneLogo />
+        </TransitionSeries.Sequence>
+      </TransitionSeries>
     </AbsoluteFill>
+  );
+};
+
+export const JolBattleSpiritOrangeComposition: React.FC = () => {
+  return (
+    <Composition
+      id="JOL-BATTLE-SPIRIT-ORENGE"
+      component={JolBattleSpiritOrange}
+      durationInFrames={JOL_ORANGE_DURATION}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
   );
 };
