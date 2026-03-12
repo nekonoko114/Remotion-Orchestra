@@ -8,7 +8,7 @@ const redTheme: BattleSpiritTheme = {
   particleColor1: '#cc0000',
   particleColor2: '#ff4400',
   music: {
-    src: 'public/assets/audio/music/冷蔵庫のメモ.mp3',
+    src: 'assets/audio/music/Breathing-Lighter.mp3',
     startFrom: (126 * 30),
     volume: 0.6,
   },
