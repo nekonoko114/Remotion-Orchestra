@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AbsoluteFill,
   Sequence,
@@ -7,10 +7,19 @@ import {
   interpolate,
   spring,
   random,
+  delayRender,
+  continueRender,
   Img,
   Audio,
   staticFile,
 } from 'remotion';
+import {
+  Canvas,
+  Fill,
+  Shader,
+  Skia,
+  vec,
+} from '@shopify/react-native-skia';
 
 // @ts-ignore
 import { loadFont } from '@remotion/google-fonts/NotoSansJP';
@@ -19,7 +28,187 @@ const { fontFamily } = loadFont('normal', {
   ignoreTooManyRequestsWarning: true,
 });
 
+// ========================
+// Shader code strings
+// ========================
+const BLUE_FLAME_SKSL = `
+uniform float time;
+uniform vec2 resolution;
+uniform float pulse;
 
+float random(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+float noise(vec2 p) {
+  vec2 i = floor(p); vec2 f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(random(i), random(i + vec2(1,0)), f.x),
+             mix(random(i + vec2(0,1)), random(i + vec2(1,1)), f.x), f.y);
+}
+float fbm(vec2 p) {
+  float v = 0.0; float a = 0.5;
+  mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
+  for (int i = 0; i < 5; ++i) { v += a * noise(p); p = rot * p * 2.0 + 100.0; a *= 0.5; }
+  return v;
+}
+// 炎のスケールを大きくし、縦に伸ばして「火柱」にする
+vec4 main(vec2 fc) {
+  vec2 uv = (fc / resolution.xy) * 2.0 - 1.0;
+  uv.x *= resolution.x / resolution.y;
+  uv.y *= 0.15; // 0.25 -> 0.1 (極限まで拡大)
+  uv.x *= 0.3;  // 0.5 -> 0.3 (極限まで拡大)
+  float n = fbm(uv * 2.0 - vec2(0.0, time * 0.7)); // 2.5 -> 2.0 (パターン密度を下げて大きく)
+  float d = length(uv * vec2(1.5, 0.5)); 
+  float g = smoothstep(1.5, 0.0, d) * pulse;
+  float f = smoothstep(0.3, 0.7, n * g) * 1.8;
+  vec3 col = vec3(0.0, 0.1, 1.0) * f
+           + vec3(0.2, 0.4, 1.0) * pow(g, 3.0)
+           + vec3(0.9, 0.95, 1.0) * pow(g, 10.0);
+  return vec4(col, 1.0);
+}
+`;
+
+const BLUE_INFERNO_SKSL = `
+uniform float time;
+uniform vec2 resolution;
+uniform float intensity;
+uniform vec3 color1;
+uniform vec3 color2;
+
+float random(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+float noise(vec2 p) {
+  vec2 i = floor(p); vec2 f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(random(i), random(i + vec2(1,0)), f.x),
+             mix(random(i + vec2(0,1)), random(i + vec2(1,1)), f.x), f.y);
+}
+float fbm(vec2 p) {
+  float v = 0.0; float a = 0.5;
+  mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
+  for (int i = 0; i < 6; ++i) { v += a * noise(p); p = rot * p * 2.0 + 100.0; a *= 0.5; }
+  return v;
+}
+vec4 main(vec2 fc) {
+  vec2 p = (fc / resolution.xy) * 2.0 - 1.0;
+  p.x *= resolution.x / resolution.y;
+  
+  float angle = atan(p.y, p.x);
+  float radius = length(p);
+  
+  // 渦巻き構造: 角度に半径を依存させて回転させる (Vortex)
+  float swirl = radius * 1.0 + time * 0.5;
+  vec2 uv = vec2((angle + swirl) / 6.2831, 1.0 / (radius + 0.02) - time * 1.5);
+  
+  vec2 q = uv;
+  q.x *= 3.0; // 横方向の繰り返し
+  q.y *= 0.8; // 奥行き方向のスケール
+  
+  float f = fbm(q);
+  float tear = smoothstep(0.2, 0.8, f);
+  
+  // 中心（奥）に向かって吸い込まれる演出のため、中心付近の不透明度を調整
+  float brightness = smoothstep(0.05, 0.6, radius) * intensity;
+  
+  vec3 col = mix(color1 * 0.05, color1, tear);
+  col = mix(col, color2, pow(tear, 3.0));
+  
+  // 奥の方は収束するようにフェード
+  col *= brightness;
+  
+  return vec4(col, 1.0);
+}
+`;
+
+const KALEIDOSCOPE_SKSL = `
+uniform float time;
+uniform vec2 resolution;
+uniform shader image;
+
+vec2 kaleidoscope(vec2 uv, float n) {
+  float angle = atan(uv.y, uv.x);
+  float radius = length(uv);
+  angle = abs(mod(angle, 6.2831 / n) - 3.1415 / n);
+  return vec2(cos(angle), sin(angle)) * radius;
+}
+
+vec4 main(vec2 fc) {
+  vec2 uv = (fc.xy / resolution.xy);
+  vec2 p = uv * 2.0 - 1.0;
+  p.x *= resolution.x / resolution.y;
+  
+  // 回転とゆっくりとした拡大縮小
+  float t = time * 0.2;
+  float s = 0.5 + sin(t * 0.5) * 0.2; 
+  mat2 rot = mat2(cos(t), sin(t), -sin(t), cos(t));
+  p = rot * p * s;
+  
+  // 万華鏡効果 (12面)
+  p = kaleidoscope(p, 12.0);
+  
+  // サンプリング座標を [0, 1] に戻す
+  vec2 samplePos = (p + 1.0) / 2.0;
+  
+  // 画面端で不自然にならないよう mod でリピート
+  samplePos = mod(samplePos, 1.0);
+  
+  vec4 col = image.eval(samplePos * resolution.xy);
+  
+  // 中心のグローを足して青基調の高級感を出す
+  float glow = exp(-length(p) * 2.5);
+  col.rgb += vec3(0.5, 0.8, 1.0) * glow * 0.4;
+  
+  return col;
+}
+`
+
+// ========================
+// Hook: wait for Skia to be ready
+// ========================
+function useShaders() {
+  const [handle] = useState(() => delayRender('Loading Skia shaders'));
+  const [shaders, setShaders] = useState<{
+    blueFlame: ReturnType<typeof Skia.RuntimeEffect.Make> | null;
+    blueInferno: ReturnType<typeof Skia.RuntimeEffect.Make> | null;
+    kaleidoscope: ReturnType<typeof Skia.RuntimeEffect.Make> | null;
+  }>({ blueFlame: null, blueInferno: null, kaleidoscope: null });
+
+  useEffect(() => {
+    let attempt = 0;
+    let cancelled = false;
+    const tryCompile = () => {
+      if (cancelled) return;
+      attempt++;
+      try {
+        const skiaReady =
+          typeof Skia !== 'undefined' &&
+          Skia.RuntimeEffect != null &&
+          typeof Skia.RuntimeEffect.Make === 'function';
+        
+        if (skiaReady) {
+          const blueFlame = Skia.RuntimeEffect.Make(BLUE_FLAME_SKSL);
+          const blueInferno = Skia.RuntimeEffect.Make(BLUE_INFERNO_SKSL);
+          const kaleidoscope = Skia.RuntimeEffect.Make(KALEIDOSCOPE_SKSL);
+          if (blueFlame && blueInferno && kaleidoscope) {
+            setShaders({ blueFlame, blueInferno, kaleidoscope });
+            continueRender(handle);
+            return;
+          }
+        }
+      } catch (_) {
+        // Skia still initializing — silently retry
+      }
+      if (attempt < 100) setTimeout(tryCompile, 100);
+      else continueRender(handle);
+    };
+    // Wait for Skia to be likely ready before first attempt
+    setTimeout(tryCompile, 200);
+    return () => { cancelled = true; };
+  }, [handle]);
+
+  return shaders;
+}
+
+// ========================
+// Component: Kaleidoscope Background
+// ========================
 const KaleidoscopeBackground: React.FC<{
   imageSrc: string;
   frame: number;
@@ -36,7 +225,7 @@ const KaleidoscopeBackground: React.FC<{
     <AbsoluteFill style={{ overflow: 'hidden', opacity }}>
       <div style={{
         position: 'absolute',
-        inset: '-100%', // 余裕を持って広げる
+        inset: '-100%', 
         transform: `rotate(${rotation}deg) scale(${scale})`,
         display: 'flex',
         justifyContent: 'center',
@@ -50,23 +239,21 @@ const KaleidoscopeBackground: React.FC<{
               width: '200%',
               height: '200%',
               backgroundImage: `url(${imageSrc})`,
-              backgroundSize: '30%', // パターンの細かさ
+              backgroundSize: '30%', 
               backgroundPosition: 'center',
               backgroundRepeat: 'repeat',
-              // 扇形にクリップ (中心から30度の範囲)
               clipPath: `polygon(50% 50%, ${50 + 50 * Math.cos((i * angle * Math.PI) / 180)}% ${50 + 50 * Math.sin((i * angle * Math.PI) / 180)}%, ${50 + 50 * Math.cos(((i + 1) * angle * Math.PI) / 180)}% ${50 + 50 * Math.sin(((i + 1) * angle * Math.PI) / 180)}%)`,
-              // 1つおきに反転させて万華鏡らしくする
               transform: i % 2 === 1 ? 'scaleX(-1)' : 'none',
               filter: 'brightness(0.8) contrast(1.2)',
             }}
           />
         ))}
-        {/* 中央のグロー */}
+        {/* 中央のブルーグロー */}
         <div style={{
           position: 'absolute',
           width: 800,
           height: 800,
-          background: 'radial-gradient(circle, rgba(255,100,0,0.4) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(0,150,255,0.4) 0%, transparent 70%)',
           filter: 'blur(50px)',
         }} />
       </div>
@@ -74,26 +261,17 @@ const KaleidoscopeBackground: React.FC<{
   );
 };
 
-// 炎のカラーバリエーション — 全シーンでカラフルにサイクル
-const useFireColors = (frame: number, globalFrame?: number) => {
-  const gf = globalFrame ?? frame;
-
-  // frame 180以降は青炎 / コバルト
-  if (gf >= 180) {
-    const blueFlicker = 0.8 + Math.sin(frame * 0.3) * 0.2;
-    return {
-      c1: [0.0, 0.2 * blueFlicker, 4.0],
-      c2: [0.3 * blueFlicker, 0.8, 5.0],
-    };
-  }
-
-  // 前半は2秒ごとに色が循環（騎士規模の㇆0fr幅で切り替わる）
+// 炎のカラーバリエーション — 全シーンでブルー系にサイクル
+const useFireColors = (frame: number, _globalFrame?: number) => {
+  // 基本的に全て青・シアン系にする
+  
+  // 前半は2秒ごとに青の階調が循環
   const phase = Math.floor(frame / 60) % 4;
   const palettes = [
-    { c1: [4.0, 0.2, 0.0], c2: [4.0, 1.2, 0.0] },  // 赤・オレンジ
-    { c1: [1.5, 0.0, 3.0], c2: [3.5, 0.5, 3.5] },  // パープル・ピンク
-    { c1: [4.0, 2.5, 0.0], c2: [5.0, 5.0, 2.0] },  // 金・ホワイト
-    { c1: [0.0, 3.0, 1.0], c2: [0.5, 5.0, 3.0] },  // エメラルドグリーン
+    { c1: [0.0, 0.1, 4.0], c2: [0.2, 0.5, 5.0] },  // 深い青・シアン
+    { c1: [0.0, 0.3, 3.5], c2: [0.5, 0.8, 4.5] },  // スカイブルー
+    { c1: [0.5, 0.0, 4.0], c2: [0.8, 0.3, 5.0] },  // ヴァイオレット・ブルー
+    { c1: [0.0, 4.0, 2.0], c2: [0.5, 5.0, 4.0] },  // ターコイズ
   ];
 
   return palettes[phase];
@@ -127,7 +305,7 @@ const Particle: React.FC<{ seed: number; frame: number; color: string }> = ({ se
 // SVG filter defs
 const SvgDefs: React.FC<{ frame: number }> = ({ frame }) => {
   const freq = 0.01 + Math.sin(frame / 20) * 0.005; 
-  const scale = 8 + Math.sin(frame / 10) * 4; // 20+10 -> 8+4 (さらに弱める)
+  const scale = 8 + Math.sin(frame / 10) * 4; // 20+10 -> 8+4
   return (
     <svg width="0" height="0" style={{ position: 'absolute' }}>
       <defs>
@@ -139,7 +317,7 @@ const SvgDefs: React.FC<{ frame: number }> = ({ frame }) => {
           <feGaussianBlur stdDeviation="14" result="b" />
           <feComposite in="SourceGraphic" in2="b" operator="over" />
         </filter>
-        <filter id="glitch-red"><feColorMatrix type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" /></filter>
+        <filter id="glitch-blue"><feColorMatrix type="matrix" values="0 0 0 0 0 0 0.5 0 0 0 0 0 1 0 0 0 0 0 1 0" /></filter>
         <filter id="glitch-cyan"><feColorMatrix type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" /></filter>
       </defs>
     </svg>
@@ -224,7 +402,6 @@ const KineticText: React.FC<{
   );
 };
 
-// Alias for backwards compatibility
 const TypingSaberText = KineticText;
 
 // ========================
@@ -233,6 +410,8 @@ const TypingSaberText = KineticText;
 const SceneOpening = (): any => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { blueInferno } = useShaders();
+  const fireColors = useFireColors(frame);
 
   // 180frames for 6 seconds. phase every 60 frames.
   const phase = Math.floor(frame / 60);
@@ -242,16 +421,16 @@ const SceneOpening = (): any => {
   const entry = spring({ frame: localFrame, fps, config: { stiffness: 400, damping: 15 } });
   const pulse = Math.pow(Math.max(0, 1 - localFrame / 45), 4) * 1.5 + 0.3;
 
-  // 画面外框の赤いグローフレーム
+  // 画面外框の青いグローフレーム
   const framePulse = Math.sin(frame / 10) * 0.2 + 0.8;
 
   const content = (
-    <AbsoluteFill style={{ backgroundColor: '#050000' }}>
-      {/* 画面外框の赤いグローフレーム */}
+    <AbsoluteFill style={{ backgroundColor: '#000005' }}>
+      {/* 画面外框の青いグローフレーム */}
       <div style={{ 
         position: 'absolute', inset: 0,
-        border: '15px solid rgba(255, 50, 0, 0.7)', 
-        boxShadow: `inset 0 0 100px rgba(255, 80, 0, ${0.5 * framePulse}), 0 0 100px rgba(255, 60, 0, ${0.5 * framePulse})`,
+        border: '15px solid rgba(0, 100, 255, 0.7)', 
+        boxShadow: `inset 0 0 100px rgba(0, 120, 255, ${0.5 * framePulse}), 0 0 100px rgba(0, 80, 255, ${0.5 * framePulse})`,
         zIndex: 5,
         pointerEvents: 'none'
       }} />
@@ -263,10 +442,21 @@ const SceneOpening = (): any => {
         opacity: 0.6,
       }} />
 
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: `radial-gradient(ellipse at 50% 50%, rgba(120,10,0,${0.7 * pulse}) 0%, transparent 70%)`,
-      }} />
+      {blueInferno ? (
+        <Canvas style={{ flex: 1, opacity: 0.8 + 0.2 * pulse }}>
+          <Fill>
+            <Shader
+              source={blueInferno}
+              uniforms={{ time: frame / 5, resolution: vec(1080, 1920), intensity: 2.5, color1: fireColors.c1, color2: fireColors.c2 }}
+            />
+          </Fill>
+        </Canvas>
+      ) : (
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: `radial-gradient(ellipse at 50% 50%, rgba(0,10,120,${0.7 * pulse}) 0%, transparent 70%)`,
+        }} />
+      )}
 
       {/* フェーズ切り替え時のショックウェーブリング */}
       {localFrame < 20 && (
@@ -275,8 +465,8 @@ const SceneOpening = (): any => {
             width: interpolate(localFrame, [0, 20], [0, 1600]),
             height: interpolate(localFrame, [0, 20], [0, 1600]),
             borderRadius: '50%',
-            border: `${Math.max(0, 15 - localFrame * 0.7)}px solid rgba(255,100,0,${Math.max(0, 1 - localFrame / 20)})`,
-            boxShadow: `0 0 60px rgba(255,60,0,${Math.max(0, 0.8 - localFrame / 20)})`,
+            border: `${Math.max(0, 15 - localFrame * 0.7)}px solid rgba(0,150,255,${Math.max(0, 1 - localFrame / 20)})`,
+            boxShadow: `0 0 60px rgba(0,100,255,${Math.max(0, 0.8 - localFrame / 20)})`,
             pointerEvents: 'none',
           }} />
         </AbsoluteFill>
@@ -293,7 +483,7 @@ const SceneOpening = (): any => {
                 position: 'absolute',
                 width: len,
                 height: Math.max(0, 4 - localFrame * 0.4),
-                background: `rgba(255,120,30,${Math.max(0, 1 - localFrame / 8)})`,
+                background: `rgba(30,150,255,${Math.max(0, 1 - localFrame / 8)})`,
                 transformOrigin: '0% 50%',
                 transform: `rotate(${angle}deg)`,
                 filter: 'blur(1px)',
@@ -307,9 +497,9 @@ const SceneOpening = (): any => {
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
         <div style={{
           width: 250 + 150 * pulse, height: 600 + 400 * pulse,
-          background: `radial-gradient(ellipse at 50% 60%, white 0%, #ffaa44 35%, #ff2200 65%, transparent 80%)`,
+          background: `radial-gradient(ellipse at 50% 60%, white 0%, #44ccff 35%, #0044ff 65%, transparent 80%)`,
           filter: `blur(${20 + 20 * pulse}px)`, borderRadius: '40% 40% 60% 60%',
-          boxShadow: `0 0 ${300 * pulse}px ${100 * pulse}px rgba(255,50,0,1)`, 
+          boxShadow: `0 0 ${300 * pulse}px ${100 * pulse}px rgba(0,100,255,1)`, 
           transform: `scale(${pulse * entry})`,
         }} />
       </AbsoluteFill>
@@ -319,9 +509,9 @@ const SceneOpening = (): any => {
           text={text}
           frame={localFrame}
           fps={fps}
-          fontSize={phase === 2 ? 210 : 120}
-          color="#fff5f0"
-          glowColor="rgba(255,80,0,1)"
+          fontSize={phase === 2 ? 210 : 170}
+          color="#f0f5ff"
+          glowColor="rgba(0,150,255,1)"
           style={{ 
             lineHeight: 1.2, 
             letterSpacing: 10,
@@ -330,9 +520,9 @@ const SceneOpening = (): any => {
               textOrientation: 'mixed',
               height: '80vh',
               display: 'flex',
-              flexDirection: 'column', // In vertical-rl, 'column' is horizontal (block axis)
-              justifyContent: 'center', // Centers the columns horizontally
-              alignItems: 'center',     // Centers text within columns vertically
+              flexDirection: 'column', 
+              justifyContent: 'center', 
+              alignItems: 'center',     
               gap: '60px',
             } : {}),
           }}
@@ -359,10 +549,10 @@ const SceneDate = (): any => {
   const shakeY = (random(frame + 11) - 0.5) * 40 * Math.max(0, 1 - Math.abs(frame - 25) / 10);
 
   const content = (
-    <AbsoluteFill style={{ backgroundColor: '#050000', overflow: 'hidden' }}>
+    <AbsoluteFill style={{ backgroundColor: '#000005', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
       {new Array(30).fill(0).map((_, i) => (
-        <Particle key={i} seed={i * 8} frame={frame} color={i % 2 === 0 ? '#cc0000' : '#ff4400'} />
+        <Particle key={i} seed={i * 8} frame={frame} color={i % 2 === 0 ? '#0033cc' : '#00aaff'} />
       ))}
       {flash > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flash }} />}
 
@@ -380,7 +570,7 @@ const SceneDate = (): any => {
             startFrame={10}
             fontSize={210}
             color="#FFF"
-            glowColor="#FF3300"
+            glowColor="#0066FF"
             style={{ marginBottom: 20 }}
           />
           <TypingSaberText
@@ -390,7 +580,7 @@ const SceneDate = (): any => {
             startFrame={30}
             fontSize={140}
             color="#FFF"
-            glowColor="#FFD700"
+            glowColor="#00CCFF"
             style={{ letterSpacing: 10 }}
           />
         </div>
@@ -408,7 +598,7 @@ const SceneDate = (): any => {
             startFrame={45}
             fontSize={240}
             color="#FFF"
-            glowColor="#FF3300"
+            glowColor="#0066FF"
             style={{ fontWeight: 900 }}
           />
         </div>
@@ -433,25 +623,25 @@ const SceneLiver = (): any => {
   const nameGlitchOffset = Math.max(0, 1 - (frame - 30) / 20) * (random(frame) - 0.5) * 40;
 
   const content = (
-    <AbsoluteFill style={{ backgroundColor: '#080000', overflow: 'hidden' }}>
+    <AbsoluteFill style={{ backgroundColor: '#000008', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
-
-      <KaleidoscopeBackground
-        imageSrc={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')}
-        frame={frame}
-        opacity={0.4}
+      
+      <KaleidoscopeBackground 
+        imageSrc={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} 
+        frame={frame} 
+        opacity={0.4} 
       />
 
       {/* 激しく落下するアイコン */}
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
         <div style={{
-          width: 700, height: 700, borderRadius: '50%', backgroundColor: '#0a0000', 
-          border: '24px solid #ff4400',
-          boxShadow: `0 0 350px rgba(255,50,0,1), inset 0 0 150px rgba(255,50,0,0.5)`, 
+          width: 700, height: 700, borderRadius: '50%', backgroundColor: '#00000a', 
+          border: '24px solid #0088ff',
+          boxShadow: `0 0 350px rgba(0,100,255,1), inset 0 0 150px rgba(0,100,255,0.5)`, 
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           transform: `scale(${scale}) translateY(${yPos + bounceIntensity}px)`,
           opacity: slam > 0.05 ? 1 : 0, 
-          filter: `drop-shadow(0 0 100px #ff0000)`,
+          filter: `drop-shadow(0 0 100px #0044ff)`,
           overflow: 'hidden',
         }}>
           <Img src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -463,11 +653,11 @@ const SceneLiver = (): any => {
           fps={fps}
           startFrame={35}
           fontSize={120}
-          color="#FFD700"
-          glowColor="#FF6600"
+          color="#00FFFF"
+          glowColor="#0066FF"
           style={{ 
             marginTop: 100, 
-            WebkitTextStroke: '4px #500', 
+            WebkitTextStroke: '4px #002255', 
             letterSpacing: 5,
             transform: `scale(${spring({ frame: frame - 25, fps, config: { stiffness: 400 } })}) translateX(${nameGlitchOffset}px)`,
           }}
@@ -492,17 +682,16 @@ const SceneOpponentAnnounce = (): any => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
-      {/* Glitch filter - Focus on Red for brand color and to avoid grayish overlap */}
       <SvgDefs frame={frame} />
       
-      {/* Deep Red Glow Background */}
+      {/* Deep Blue Glow Background */}
       <AbsoluteFill style={{
-        background: 'radial-gradient(circle at 50% 50%, #440000 0%, #000 70%)',
+        background: 'radial-gradient(circle at 50% 50%, #000044 0%, #000 70%)',
         opacity: interpolate(frame, [0, 10], [0, 1]),
       }} />
 
-      <AbsoluteFill style={{ filter: 'url(#glitch-red)', opacity: 0.6, transform: `translateX(${(frame % 2) * 20}px)` }}>
-        <div style={{ flex: 1, border: '40px solid #660000' }} />
+      <AbsoluteFill style={{ filter: 'url(#glitch-blue)', opacity: 0.6, transform: `translateX(${(frame % 2) * 20}px)` }}>
+        <div style={{ flex: 1, border: '40px solid #000066' }} />
       </AbsoluteFill>
 
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -512,7 +701,7 @@ const SceneOpponentAnnounce = (): any => {
           fps={fps}
           fontSize={120}
           color="#FFF"
-          glowColor="#FF0000"
+          glowColor="#0066FF"
           style={{ 
             letterSpacing: 20,
             transform: `scale(${interpolate(scale, [0, 1], [4.0, 1])}) rotate(${interpolate(scale, [0, 1], [360, 0])}deg) skewX(-15deg)`,
@@ -538,7 +727,7 @@ const SceneOpponent = (): any => {
   const shakeY = (random(frame + 11) - 0.5) * 60 * impact;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#050000', overflow: 'hidden' }}>
+    <AbsoluteFill style={{ backgroundColor: '#000005', overflow: 'hidden' }}>
       <KaleidoscopeBackground 
         imageSrc={staticFile('assets/images-01/mrm0115-01.jpg')} 
         frame={frame} 
@@ -551,15 +740,14 @@ const SceneOpponent = (): any => {
         <div style={{
           display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
           transform: `scale(${interpolate(drop, [0, 0.4, 1], [5, 0.9, 1])}) translateY(${interpolate(drop, [0, 1], [-1000, 0])}px)`,
-          filter: `brightness(${1 + impact * 5}) drop-shadow(0 0 ${impact * 100}px red)`,
+          filter: `brightness(${1 + impact * 5}) drop-shadow(0 0 ${impact * 100}px #0066ff)`,
           opacity: drop > 0.05 ? 1 : 0,
         }}>
           <div style={{ 
              width: 800, height: 800, borderRadius: '50%', overflow: 'hidden', 
-             border: '10px solid white', marginBottom: 20, boxShadow: '0 0 50px red' 
+             border: '10px solid white', marginBottom: 20, boxShadow: '0 0 50px #0066ff' 
           }}>
             <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
- Sarah: Correct path for opponent.
           </div>
           <KineticText
             text="限界突破まみ🎽"
@@ -568,7 +756,7 @@ const SceneOpponent = (): any => {
             startFrame={15}
             fontSize={140}
             color="white"
-            glowColor="#ff0000"
+            glowColor="#0066FF"
             style={{ 
               letterSpacing: 4,
               whiteSpace: 'nowrap'
@@ -586,11 +774,10 @@ const SceneOpponent = (): any => {
 const SceneVs = (): any => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-
   const pop = spring({ frame, fps, config: { stiffness: 600, damping: 15 } }); 
   const shakeDecay = Math.max(0, 1 - frame / 40); 
-  const shakeX = (random(frame) - 0.5) * 60 * shakeDecay; // 180 -> 60
-  const shakeY = (random(frame + 9) - 0.5) * 60 * shakeDecay; // 180 -> 60
+  const shakeX = (random(frame) - 0.5) * 60 * shakeDecay; 
+  const shakeY = (random(frame + 9) - 0.5) * 60 * shakeDecay; 
   const flashOpacity = Math.max(0, 1 - frame / 4); 
 
   const content = (
@@ -608,15 +795,15 @@ const SceneVs = (): any => {
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ 
             display: 'flex', 
-            flexDirection: 'column', // 縦並びに変更
+            flexDirection: 'column', 
             alignItems: 'center', 
             transform: `scale(${pop})`,
             gap: 20 
           }}>
-            <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px orange)' }}>
+            <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px #00aaff)' }}>
               <div style={{ 
                 width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
-                border: '15px solid #FFE4B5', margin: '0 auto 15px', boxShadow: '0 0 100px orange' 
+                border: '15px solid #E0FFFF', margin: '0 auto 15px', boxShadow: '0 0 100px #00aaff' 
               }}>
                 <Img src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
@@ -626,8 +813,8 @@ const SceneVs = (): any => {
                 fps={fps}
                 startFrame={10}
                 fontSize={90}
-                color="#FFE4B5"
-                glowColor="orange"
+                color="#E0FFFF"
+                glowColor="#00aaff"
                 style={{ letterSpacing: 4 }}
               />
             </div>
@@ -635,24 +822,24 @@ const SceneVs = (): any => {
             {/* VS Glitch Text - Center */}
             <div style={{ position: 'relative', height: 120, zIndex: 10 }}>
                <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-                 <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: 'red', fontStyle: 'italic', transform: `translate(-20px, 10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
+                 <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: '#0044ff', fontStyle: 'italic', transform: `translate(-20px, 10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
                  <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: 'cyan', fontStyle: 'italic', transform: `translate(20px, -10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
                  <div style={{ 
                    position: 'relative',
                    fontSize: 260, fontWeight: 900, color: 'white', fontStyle: 'italic', 
                    transform: `rotate(${Math.sin(frame / 3) * 15}deg)`, 
                    WebkitTextStroke: '8px black',
-                   textShadow: '0 0 100px rgba(255,255,255,0.8)'
+                   textShadow: '0 0 100px rgba(0,255,255,0.8)'
                  }}>
                    VS
                  </div>
                </div>
             </div>
             
-            <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px red)' }}>
+            <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px #0066ff)' }}>
               <div style={{ 
                 width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
-                border: '15px solid white', margin: '15px auto 10px', boxShadow: '0 0 100px red' 
+                border: '15px solid white', margin: '15px auto 10px', boxShadow: '0 0 100px #0066ff' 
               }}>
                 <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
@@ -663,7 +850,7 @@ const SceneVs = (): any => {
                 startFrame={20}
                 fontSize={90}
                 color="#FFF"
-                glowColor="red"
+                glowColor="#0066ff"
                 style={{ letterSpacing: 4 }}
               />
             </div>
@@ -686,27 +873,25 @@ const SceneRules = (): any => {
   const r1 = spring({ frame: frame - 10, fps, config: { stiffness: 600, damping: 10 } });
   const r2 = spring({ frame: frame - 40, fps, config: { stiffness: 600, damping: 10 } });
   
-  // 525-645フレーム（ルールシーン）の揺れを大幅軽減 (100 -> 30)
   const rulesImpact = Math.max(0, 1 - Math.max(0, frame - 10) / 6) + Math.max(0, 1 - Math.max(0, frame - 40) / 6);
   const shakeX = (random(frame) - 0.5) * 30 * Math.min(1, rulesImpact);
   const shakeY = (random(frame + 77) - 0.5) * 30 * Math.min(1, rulesImpact);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#040000', overflow: 'hidden' }}>
+    <AbsoluteFill style={{ backgroundColor: '#000004', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
       
-      {/* 画面切り替え時のフラッシュ */}
       {rulesImpact > 0.8 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: rulesImpact * 0.8, zIndex: 10 }} />}
 
       {new Array(30).fill(0).map((_, i) => (
-        <Particle key={i} seed={i * 19 + 800} frame={frame} color={i % 2 === 0 ? '#ff1100' : '#ff5500'} />
+        <Particle key={i} seed={i * 19 + 800} frame={frame} color={i % 2 === 0 ? '#0044ff' : '#00ccff'} />
       ))}
 
       <AbsoluteFill style={{ transform: `translate(${shakeX}px, ${shakeY}px)`, justifyContent: 'center', alignItems: 'center', gap: 80 }}>
         <div style={{
           transform: `scale(${interpolate(r1, [0, 0.5, 1], [8, 0.9, 1])}) rotate(${-(interpolate(r1, [0, 1], [20, 5]))}deg)`,
           opacity: r1 > 0.05 ? 1 : 0,
-          filter: `drop-shadow(0 0 100px #ff3300)`,
+          filter: `drop-shadow(0 0 100px #0066ff)`,
         }}>
             <TypingSaberText
               text="やり直し無し<br/>一本勝負"
@@ -715,7 +900,7 @@ const SceneRules = (): any => {
               startFrame={20}
               fontSize={180}
               color="#FFF"
-              glowColor="#ff2200"
+              glowColor="#0044ff"
               style={{ fontWeight: 900 }}
             />
         </div>
@@ -723,7 +908,7 @@ const SceneRules = (): any => {
         <div style={{
           transform: `scale(${interpolate(r2, [0, 0.5, 1], [8, 0.9, 1])}) rotate(${interpolate(r2, [0, 1], [-20, 5])}deg)`,
           opacity: r2 > 0.05 ? 1 : 0,
-          filter: `drop-shadow(0 0 100px #ffaa00)`,
+          filter: `drop-shadow(0 0 100px #00ffff)`,
         }}>
             <TypingSaberText
               text="フルアイテム"
@@ -732,7 +917,7 @@ const SceneRules = (): any => {
               startFrame={50}
               fontSize={180}
               color="#FFF"
-              glowColor="#ff8800"
+              glowColor="#00ccff"
               style={{ fontWeight: 900 }}
             />
         </div>
@@ -747,39 +932,53 @@ const SceneRules = (): any => {
 const SceneEnding = (): any => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const { blueInferno } = useShaders();
+  const fireColors = useFireColors(frame, 200);
 
-  const fadeOut = interpolate(frame, [240, 300], [1, 0], { extrapolateRight: 'clamp' }); // Fade to black at end
+  const fadeOut = interpolate(frame, [240, 300], [1, 0], { extrapolateRight: 'clamp' }); 
 
   const content = (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
       
-      {/* 画面切り替え時のフラッシュ */}
       {frame < 10 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: 1 - frame / 10, zIndex: 10 }} />}
       
       <AbsoluteFill style={{ opacity: fadeOut, filter: 'url(#heat-haze)' }}>
-        {new Array(60).fill(0).map((_, i) => (
-          <Particle key={i} seed={i * 31} frame={frame} color={i % 2 === 0 ? '#ff4400' : '#ff0000'} />
-        ))}
+        {blueInferno ? (
+          <Canvas style={{ flex: 1 }}>
+            <Fill>
+              <Shader 
+                source={blueInferno} 
+                uniforms={{ 
+                  time: frame / 5, 
+                  resolution: vec(1080, 1920), 
+                  intensity: 3.0,
+                  color1: fireColors.c1,
+                  color2: fireColors.c2
+                }} 
+              />
+            </Fill>
+          </Canvas>
+        ) : (
+          new Array(60).fill(0).map((_, i) => (
+            <Particle key={i} seed={i * 31} frame={frame} color={i % 2 === 0 ? '#0066ff' : '#00ccff'} />
+          ))
+        )}
 
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 60px' }}>
-          {/* 読みやすさのための為暗色バック */}
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.7) 70%, transparent 100%)',
+            background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,10,0.6) 30%, rgba(0,0,20,0.7) 70%, transparent 100%)',
           }} />
           <KineticText
-            text="配信再開の⁠
-３月
-有終の美を
-飾りたいです！！"
+            text="配信再開の&#10;３月&#10;有終の美を&#10;飾りたいです！！"
             frame={frame}
             fps={fps}
             startFrame={30}
             fontSize={110}
             color="#FFFFFF"
-            glowColor="#FF4400"
+            glowColor="#0066FF"
             style={{ 
               lineHeight: 1.5, 
               letterSpacing: 5,
@@ -811,24 +1010,22 @@ const SceneLogo = (): any => {
           width: 800,
           opacity,
           transform: `scale(${scale})`,
-          filter: 'drop-shadow(0 0 80px rgba(255,255,255,0.6))',
+          filter: 'drop-shadow(0 0 80px rgba(0,150,255,0.6))',
         }}
       />
     </AbsoluteFill>
   );
 };
 
-
 // ========================
 // Main Composition
 // ========================
-export const JolBattleSpiritRed: React.FC = () => {
+export const JolBattleSpiritBlue: React.FC = () => {
   const { fps } = useVideoConfig();
   
-  // Timing Adjustments: OP_DUR extended to 6s, DATE_DUR extended to 4s
   const OP_DUR = 6 * fps;      
   const DATE_DUR = 4 * fps;    
-  const INTRO_LIVER_DUR = 6 * fps; // 9 -> 6
+  const INTRO_LIVER_DUR = 6 * fps;
   const MSG_DUR = 1.5 * fps;   
   const OPPONENT_DUR = 3 * fps; 
   const VS_DUR = 4 * fps;      
@@ -845,8 +1042,6 @@ export const JolBattleSpiritRed: React.FC = () => {
   const s7 = s6 + VS_DUR;
   const s8 = s7 + RULE_DUR;
   const s9 = s8 + ENDING_DUR;
-
-  // Total duration will be calculated via AbsoluteFill but visually controlled by Sequence
 
   return (
     <AbsoluteFill>
