@@ -111,7 +111,7 @@ const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   const { fps } = useVideoConfig();
   const flash = Math.max(0, 1 - frame / 8); 
   const drop1 = spring({ frame: frame - 5, fps, config: { stiffness: 400, damping: 10, mass: 2 } });
-  const drop2 = spring({ frame: frame - 25, fps, config: { stiffness: 400, damping: 10, mass: 2 } });
+  const drop2 = spring({ frame: frame - 20, fps, config: { stiffness: 400, damping: 10, mass: 2 } });
   const shakeX = (random(frame) - 0.5) * 40 * Math.max(0, 1 - Math.abs(frame - 5) / 10);
   const shakeY = (random(frame + 11) - 0.5) * 40 * Math.max(0, 1 - Math.abs(frame - 25) / 10);
 
@@ -382,7 +382,7 @@ const SceneEndingList: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
         {new Array(60).fill(0).map((_, i) => <Particle key={i} seed={i * 31} frame={frame} color={i % 2 === 0 ? theme.particleColor1 : theme.particleColor2} />)}
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 60px' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.7) 70%, transparent 100%)' }} />
-          <KineticText text={theme.endingText} frame={frame} fps={fps} startFrame={30} fontSize={140} color="#FFFFFF" glowColor={theme.themeColor} style={{ lineHeight: 1.5, letterSpacing: 5, position: 'relative', zIndex: 2 }} />
+          <KineticText text={theme.endingText} frame={frame} fps={fps} startFrame={30} fontSize={120} color="#FFFFFF" glowColor={theme.themeColor} style={{ lineHeight: 1.5, letterSpacing: 5, position: 'relative', zIndex: 2 }} />
         </AbsoluteFill>
       </AbsoluteFill>
     </AbsoluteFill>

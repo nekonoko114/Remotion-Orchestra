@@ -2,7 +2,7 @@ import React from 'react';
 import { BattleSpiritTemplate } from './components/BattleShared/BattleSpiritTemplate';
 import { BattleSpiritTheme } from './components/BattleShared/types';
 
-const blueTheme: BattleSpiritTheme = {
+export const blueTheme: BattleSpiritTheme = {
   themeColor: '#0066ff',
   glowColor: 'rgba(0, 100, 255, 0.8)',
   particleColor1: '#0000cc',
@@ -32,6 +32,6 @@ const blueTheme: BattleSpiritTheme = {
   },
 };
 
-export const JolBattleSpiritBlue: React.FC = () => {
-  return <BattleSpiritTemplate theme={blueTheme} />;
+export const JolBattleSpiritBlue: React.FC<BattleSpiritTheme> = (props) => {
+  return <BattleSpiritTemplate theme={props} />;
 };

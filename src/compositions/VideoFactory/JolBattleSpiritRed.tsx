@@ -2,15 +2,15 @@ import React from 'react';
 import { BattleSpiritTemplate } from './components/BattleShared/BattleSpiritTemplate';
 import { BattleSpiritTheme } from './components/BattleShared/types';
 
-const redTheme: BattleSpiritTheme = {
+export const redTheme: BattleSpiritTheme = {
   themeColor: '#ff2200',
   glowColor: 'rgba(255, 60, 0, 0.8)',
   particleColor1: '#cc0000',
   particleColor2: '#ff4400',
   music: {
     src: 'assets/audio/music/Breathing-Lighter.mp3',
-    startFrom: (126 * 30),
     volume: 0.6,
+    startFrom: 1440,
   },
   opponent: {
     name: '限界突破まみ🎽',
@@ -24,7 +24,7 @@ const redTheme: BattleSpiritTheme = {
     borderColor: '#FFF',
     glowColor: '#FF6600',
   },
-  endingText: 'この戦いは<br/>絶対に負けられない。',
+  endingText: '配信再開の<br/>３月<br/>有終の美を<br/>飾りたいです！！',
   features: {
     useGlitch: true,
     useMirror: true,
@@ -32,6 +32,6 @@ const redTheme: BattleSpiritTheme = {
   },
 };
 
-export const JolBattleSpiritRed: React.FC = () => {
-  return <BattleSpiritTemplate theme={redTheme} />;
+export const JolBattleSpiritRed: React.FC<BattleSpiritTheme> = (props) => {
+  return <BattleSpiritTemplate theme={props} />;
 };

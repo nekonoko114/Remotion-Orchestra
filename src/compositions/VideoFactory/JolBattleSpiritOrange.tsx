@@ -4,7 +4,7 @@ import { BattleSpiritTheme } from './components/BattleShared/types';
 
 export const JOL_ORANGE_DURATION = 1065;
 
-const orangeTheme: BattleSpiritTheme = {
+export const orangeTheme: BattleSpiritTheme = {
   themeColor: 'orange',
   glowColor: 'rgba(255, 140, 0, 0.8)',
   particleColor1: '#cc5500',
@@ -35,6 +35,6 @@ const orangeTheme: BattleSpiritTheme = {
   lightLeakColor: '#ff8800',
 };
 
-export const JolBattleSpiritOrange: React.FC = () => {
-  return <BattleSpiritTemplate theme={orangeTheme} />;
+export const JolBattleSpiritOrange: React.FC<BattleSpiritTheme> = (props) => {
+  return <BattleSpiritTemplate theme={props} />;
 };

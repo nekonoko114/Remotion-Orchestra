@@ -1,30 +1,34 @@
-export interface BattleSpiritTheme {
-  themeColor: string;
-  glowColor: string;
-  particleColor1: string;
-  particleColor2: string;
-  music: {
-    src: string;
-    startFrom?: number;
-    volume?: number;
-  };
-  opponent: {
-    name: string;
-    image: string;
-    borderColor: string;
-    glowColor: string;
-  };
-  liver: {
-    name: string;
-    image: string;
-    borderColor: string;
-    glowColor: string;
-  };
-  endingText: string;
-  features: {
-    useGlitch: boolean;
-    useMirror: boolean;
-    useDoublingGrid: boolean;
-  };
-  lightLeakColor?: string;
-}
+import { z } from 'zod';
+
+export const BattleSpiritThemeSchema = z.object({
+  themeColor: z.string(),
+  glowColor: z.string(),
+  particleColor1: z.string(),
+  particleColor2: z.string(),
+  music: z.object({
+    src: z.string(),
+    startFrom: z.number().optional(),
+    volume: z.number().optional(),
+  }),
+  opponent: z.object({
+    name: z.string(),
+    image: z.string(),
+    borderColor: z.string(),
+    glowColor: z.string(),
+  }),
+  liver: z.object({
+    name: z.string(),
+    image: z.string(),
+    borderColor: z.string(),
+    glowColor: z.string(),
+  }),
+  endingText: z.string(),
+  features: z.object({
+    useGlitch: z.boolean(),
+    useMirror: z.boolean(),
+    useDoublingGrid: z.boolean(),
+  }),
+  lightLeakColor: z.string().optional(),
+});
+
+export type BattleSpiritTheme = z.infer<typeof BattleSpiritThemeSchema>;
