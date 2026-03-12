@@ -1,7 +1,8 @@
 import React from 'react';
-import { staticFile } from 'remotion';
 import { BattleSpiritTemplate } from './components/BattleShared/BattleSpiritTemplate';
 import { BattleSpiritTheme } from './components/BattleShared/types';
+
+export const JOL_ORANGE_DURATION = 1065;
 
 const orangeTheme: BattleSpiritTheme = {
   themeColor: 'orange',

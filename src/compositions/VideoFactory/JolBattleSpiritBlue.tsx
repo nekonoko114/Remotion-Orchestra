@@ -1,5 +1,4 @@
 import React from 'react';
-import { staticFile } from 'remotion';
 import { BattleSpiritTemplate } from './components/BattleShared/BattleSpiritTemplate';
 import { BattleSpiritTheme } from './components/BattleShared/types';
 

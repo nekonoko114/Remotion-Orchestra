@@ -1,5 +1,4 @@
 import React from 'react';
-import { staticFile } from 'remotion';
 import { BattleSpiritTemplate } from './components/BattleShared/BattleSpiritTemplate';
 import { BattleSpiritTheme } from './components/BattleShared/types';
 
@@ -9,7 +8,7 @@ const redTheme: BattleSpiritTheme = {
   particleColor1: '#cc0000',
   particleColor2: '#ff4400',
   music: {
-    src: 'assets/p-01.mp3',
+    src: 'public/assets/audio/music/冷蔵庫のメモ.mp3',
     startFrom: (126 * 30),
     volume: 0.6,
   },
