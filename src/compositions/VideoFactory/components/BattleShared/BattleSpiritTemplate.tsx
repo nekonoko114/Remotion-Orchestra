@@ -172,7 +172,7 @@ const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   );
 };
 
-const SceneLiver: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
+const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number }> = ({ theme, duration }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -229,7 +229,7 @@ const SceneLiver: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
             imageSrc={staticFile(theme.liver.image)} 
             color={theme.themeColor} 
             zoomProgress={spring({
-              frame: frame - (180 - 10),
+              frame: frame - (duration - 10),
               fps,
               config: { stiffness: 200, damping: 20 }
             })}
@@ -312,6 +312,9 @@ const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   const shakeY = (random(frame + 9) - 0.5) * 60 * shakeDecay; 
   const flashOpacity = Math.max(0, 1 - frame / 4); 
 
+  const topPlayer = theme.reverseVsOrder ? theme.liver : theme.opponent;
+  const bottomPlayer = theme.reverseVsOrder ? theme.opponent : theme.liver;
+
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
@@ -321,9 +324,9 @@ const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
         <KaleidoscopeBackground imageSrc={staticFile(theme.opponent.image)} frame={frame} opacity={0.3} glowColor={theme.glowColor} />
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `scale(${pop})`, gap: 20 }}>
-            <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${theme.opponent.glowColor})` }}>
-              <GlitchedIcon src={staticFile(theme.opponent.image)} frame={frame} size={600} borderColor={theme.opponent.borderColor} glowColor={theme.opponent.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
-              <KineticText text={theme.opponent.name} frame={frame} fps={fps} startFrame={10} fontSize={90} color={theme.opponent.borderColor} glowColor={theme.opponent.glowColor} style={{ letterSpacing: 4 }} />
+            <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})` }}>
+              <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={600} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
+              <KineticText text={topPlayer.name} frame={frame} fps={fps} startFrame={10} fontSize={90} color={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ letterSpacing: 4 }} />
             </div>
             <div style={{ position: 'relative', height: 120, zIndex: 10 }}>
                <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
@@ -332,9 +335,9 @@ const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
                  <div style={{ position: 'relative', fontSize: 260, fontWeight: 900, color: 'white', fontStyle: 'italic', transform: `rotate(${Math.sin(frame / 3) * 15}deg)`, WebkitTextStroke: '8px black', textShadow: `0 0 100px ${theme.glowColor}` }}>VS</div>
                </div>
             </div>
-            <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${theme.liver.glowColor})` }}>
-              <GlitchedIcon src={staticFile(theme.liver.image)} frame={frame} size={600} borderColor={theme.liver.borderColor} glowColor={theme.liver.glowColor} style={{ margin: '15px auto 10px' }} enabled={theme.features.useGlitch} />
-              <KineticText text={theme.liver.name} frame={frame} fps={fps} startFrame={20} fontSize={90} color={theme.liver.borderColor} glowColor={theme.liver.glowColor} style={{ letterSpacing: 4 }} />
+            <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})` }}>
+              <GlitchedIcon src={staticFile(bottomPlayer.image)} frame={frame} size={600} borderColor={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ margin: '15px auto 10px' }} enabled={theme.features.useGlitch} />
+              <KineticText text={bottomPlayer.name} frame={frame} fps={fps} startFrame={20} fontSize={90} color={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ letterSpacing: 4 }} />
             </div>
           </div>
         </AbsoluteFill>
@@ -369,10 +372,10 @@ const SceneRules: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   );
 };
 
-const SceneEndingList: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
+const SceneEndingList: React.FC<{ theme: BattleSpiritTheme; duration: number }> = ({ theme, duration }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const fadeOut = interpolate(frame, [240, 300], [1, 0], { extrapolateRight: 'clamp' });
+  const fadeOut = interpolate(frame, [duration - 60, duration], [1, 0], { extrapolateRight: 'clamp' });
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
@@ -410,7 +413,7 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ t
 
   const OP_DUR = 6 * fps;
   const DATE_DUR = 4 * fps;
-  const INTRO_LIVER_DUR = 6 * fps;
+  const INTRO_LIVER_DUR = theme.liverIntroDuration ?? 6 * fps;
   const MSG_DUR = 1.5 * fps;
   const OPPONENT_DUR = 3 * fps;
   const VS_DUR = 4 * fps;
@@ -436,12 +439,12 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ t
 
       <Sequence from={s1} durationInFrames={OP_DUR}><SceneOpening theme={theme} /></Sequence>
       <Sequence from={s2} durationInFrames={DATE_DUR}><SceneDate theme={theme} /></Sequence>
-      <Sequence from={s3} durationInFrames={INTRO_LIVER_DUR}><SceneLiver theme={theme} /></Sequence>
+      <Sequence from={s3} durationInFrames={INTRO_LIVER_DUR}><SceneLiver theme={theme} duration={INTRO_LIVER_DUR} /></Sequence>
       <Sequence from={s4} durationInFrames={MSG_DUR}><SceneOpponentAnnounce theme={theme} /></Sequence>
       <Sequence from={s5} durationInFrames={OPPONENT_DUR}><SceneOpponent theme={theme} /></Sequence>
       <Sequence from={s6} durationInFrames={VS_DUR}><SceneVs theme={theme} /></Sequence>
       <Sequence from={s7} durationInFrames={RULE_DUR}><SceneRules theme={theme} /></Sequence>
-      <Sequence from={s8} durationInFrames={ENDING_DUR}><SceneEndingList theme={theme} /></Sequence>
+      <Sequence from={s8} durationInFrames={ENDING_DUR}><SceneEndingList theme={theme} duration={ENDING_DUR} /></Sequence>
       <Sequence from={s9} durationInFrames={LOGO_DUR}><SceneLogo /></Sequence>
     </AbsoluteFill>
   );

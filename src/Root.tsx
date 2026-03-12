@@ -39,7 +39,10 @@ import { StitchOverlay } from './compositions/Stitch';
 import { RookieRanking } from './compositions/VideoFactory/RookieRanking';
 import { JolBattleSpiritRed } from './compositions/VideoFactory/JolBattleSpiritRed';
 import { JolBattleSpiritBlue } from './compositions/VideoFactory/JolBattleSpiritBlue';
-import { JolBattleSpiritOrange, JOL_ORANGE_DURATION } from './compositions/VideoFactory/JolBattleSpiritOrange';
+import {
+  JolBattleSpiritOrange,
+  JOL_ORANGE_DURATION,
+} from './compositions/VideoFactory/JolBattleSpiritOrange';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import './index.css';
 import React from 'react';
@@ -216,7 +219,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-BATTLE-SPIRIT-RED"
         component={JolBattleSpiritRed}
-        durationInFrames={1065} // 35.5 seconds * 30fps
+        durationInFrames={1005} // 1065 - 60 (SceneLiver shortened)
         fps={30}
         width={1080}
         height={1920}
@@ -232,16 +235,16 @@ export const RemotionRoot: React.FC = () => {
             startFrom: 1440,
           },
           opponent: {
+            name: '🔆≒ユージン≒🔆',
+            image: 'assets/images-01/t.o.p_u_jin_.jpeg',
+            borderColor: '#ff0000',
+            glowColor: '#FF6600',
+          },
+          liver: {
             name: '限界突破まみ🎽',
             image: 'assets/images-01/mrm0115-01.png',
             borderColor: '#fff',
             glowColor: 'red',
-          },
-          liver: {
-            name: '🔆≒ユージン≒🔆',
-            image: 'assets/images-01/t.o.p_u_jin_.jpeg',
-            borderColor: '#FFF',
-            glowColor: '#FF6600',
           },
           endingText: '配信再開の<br/>３月<br/>有終の美を<br/>飾りたいです！！',
           features: {
@@ -249,6 +252,8 @@ export const RemotionRoot: React.FC = () => {
             useMirror: true,
             useDoublingGrid: false,
           },
+          liverIntroDuration: 120,
+          reverseVsOrder: true,
         }}
       />
       <Composition
@@ -266,7 +271,7 @@ export const RemotionRoot: React.FC = () => {
           particleColor2: '#0088ff',
           music: {
             src: 'assets/p-02.mp3',
-            startFrom: (126 * 30),
+            startFrom: 126 * 30,
             volume: 0.6,
           },
           opponent: {
@@ -302,11 +307,7 @@ export const RemotionRoot: React.FC = () => {
           glowColor: 'rgba(255, 140, 0, 0.8)',
           particleColor1: '#cc5500',
           particleColor2: '#ffbb00',
-          music: {
-            src: 'assets/p-01.mp3',
-            startFrom: (126 * 30),
-            volume: 0.6,
-          },
+          music: { src: 'assets/p-01.mp3', startFrom: 4717, volume: 0.6 },
           opponent: {
             name: '🔆≒ユージン≒🔆',
             image: 'assets/images-01/t.o.p_u_jin_.jpeg',
@@ -326,6 +327,7 @@ export const RemotionRoot: React.FC = () => {
             useDoublingGrid: true,
           },
           lightLeakColor: '#ff8800',
+          reverseVsOrder: true,
         }}
       />
     </>

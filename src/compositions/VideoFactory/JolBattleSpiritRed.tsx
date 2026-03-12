@@ -13,16 +13,16 @@ export const redTheme: BattleSpiritTheme = {
     startFrom: 1440,
   },
   opponent: {
-    name: '限界突破まみ🎽',
-    image: 'assets/images-01/mrm0115-01.png',
-    borderColor: '#fff',
-    glowColor: 'red',
-  },
-  liver: {
     name: '🔆≒ユージン≒🔆',
     image: 'assets/images-01/t.o.p_u_jin_.jpeg',
     borderColor: '#FFF',
     glowColor: '#FF6600',
+  },
+  liver: {
+    name: '限界突破まみ🎽',
+    image: 'assets/images-01/mrm0115-01.png',
+    borderColor: '#fff',
+    glowColor: 'red',
   },
   endingText: '配信再開の<br/>３月<br/>有終の美を<br/>飾りたいです！！',
   features: {

@@ -29,6 +29,8 @@ export const BattleSpiritThemeSchema = z.object({
     useDoublingGrid: z.boolean(),
   }),
   lightLeakColor: z.string().optional(),
+  liverIntroDuration: z.number().optional(),
+  reverseVsOrder: z.boolean().optional(),
 });
 
 export type BattleSpiritTheme = z.infer<typeof BattleSpiritThemeSchema>;

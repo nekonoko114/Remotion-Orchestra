@@ -15,16 +15,16 @@ export const orangeTheme: BattleSpiritTheme = {
     volume: 0.6,
   },
   opponent: {
-    name: '🔆≒ユージン≒🔆',
-    image: 'assets/images-01/t.o.p_u_jin_.jpeg',
-    borderColor: '#fff',
-    glowColor: '#ff4400',
-  },
-  liver: {
     name: '限界突破まみ🎽',
     image: 'assets/images-01/mrm0115-01.png',
     borderColor: '#FFE4B5',
     glowColor: 'orange',
+  },
+  liver: {
+    name: '🔆≒ユージン≒🔆',
+    image: 'assets/images-01/t.o.p_u_jin_.jpeg',
+    borderColor: '#fff',
+    glowColor: '#ff4400',
   },
   endingText: 'この戦いは<br/>絶対に負けられない。',
   features: {
