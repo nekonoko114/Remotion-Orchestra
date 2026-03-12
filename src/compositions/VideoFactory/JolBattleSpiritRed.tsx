@@ -228,30 +228,28 @@ function useShaders() {
   return shaders;
 }
 
-// 炎のカラーバリエーションをReact側で制御 (グローバルフレーム対応版)
+// 炎のカラーバリエーション — 全シーンでカラフルにサイクル
 const useFireColors = (frame: number, globalFrame?: number) => {
   const gf = globalFrame ?? frame;
-  
-  // frame 180（シーン内フレーム）以降は青灮に切り替わる
+
+  // frame 180以降は青炎 / コバルト
   if (gf >= 180) {
-    // 青・コバルトブルーの車肎
     const blueFlicker = 0.8 + Math.sin(frame * 0.3) * 0.2;
     return {
-      c1: [0.0, 0.2 * blueFlicker, 4.0],  // Deep blue
-      c2: [0.3 * blueFlicker, 0.8, 5.0],  // Bright cyan-blue
+      c1: [0.0, 0.2 * blueFlicker, 4.0],
+      c2: [0.3 * blueFlicker, 0.8, 5.0],
     };
   }
 
-  const cycleSpeed = 0.02;
-  const phase = Math.floor(frame * cycleSpeed) % 3;
-  
-  // Skiaのvec3は [r, g, b] の配列形式
+  // 前半は2秒ごとに色が循環（騎士規模の㇆0fr幅で切り替わる）
+  const phase = Math.floor(frame / 60) % 4;
   const palettes = [
-    { c1: [4.0, 0.2, 0.0], c2: [4.0, 1.2, 0.0] },  // Red/Orange
-    { c1: [1.5, 0.0, 3.0], c2: [3.5, 0.5, 3.5] },  // Purple/Pink
-    { c1: [4.0, 2.5, 0.0], c2: [5.0, 5.0, 2.0] },  // Gold/White
+    { c1: [4.0, 0.2, 0.0], c2: [4.0, 1.2, 0.0] },  // 赤・オレンジ
+    { c1: [1.5, 0.0, 3.0], c2: [3.5, 0.5, 3.5] },  // パープル・ピンク
+    { c1: [4.0, 2.5, 0.0], c2: [5.0, 5.0, 2.0] },  // 金・ホワイト
+    { c1: [0.0, 3.0, 1.0], c2: [0.5, 5.0, 3.0] },  // エメラルドグリーン
   ];
-  
+
   return palettes[phase];
 };
 
@@ -388,7 +386,8 @@ const TypingSaberText = KineticText;
 const SceneOpening = (): any => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const { blue: blueShader } = useShaders();
+  const { red: redShader } = useShaders();
+  const fireColors = useFireColors(frame);
 
   // 180frames for 6 seconds. phase every 60 frames.
   const phase = Math.floor(frame / 60);
@@ -398,43 +397,85 @@ const SceneOpening = (): any => {
   const entry = spring({ frame: localFrame, fps, config: { stiffness: 400, damping: 15 } });
   const pulse = Math.pow(Math.max(0, 1 - localFrame / 45), 4) * 1.5 + 0.3;
 
-  // 青いフレーム（枠）の演出
+  // 画面外框の赤いグローフレーム
   const framePulse = Math.sin(frame / 10) * 0.2 + 0.8;
 
   const content = (
-    <AbsoluteFill style={{ backgroundColor: '#000008' }}>
-      {/* 画面外枠の青いグローフレーム */}
+    <AbsoluteFill style={{ backgroundColor: '#050000' }}>
+      {/* 画面外框の赤いグローフレーム */}
       <div style={{ 
         position: 'absolute', inset: 0,
-        border: '15px solid rgba(0, 100, 255, 0.6)', 
-        boxShadow: `inset 0 0 100px rgba(0, 150, 255, ${0.5 * framePulse}), 0 0 100px rgba(0, 150, 255, ${0.5 * framePulse})`,
+        border: '15px solid rgba(255, 50, 0, 0.7)', 
+        boxShadow: `inset 0 0 100px rgba(255, 80, 0, ${0.5 * framePulse}), 0 0 100px rgba(255, 60, 0, ${0.5 * framePulse})`,
         zIndex: 5,
         pointerEvents: 'none'
       }} />
 
-      {blueShader ? (
+      {/* スキャンライン（CRTエフェクト） */}
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 4, pointerEvents: 'none',
+        backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.25) 3px, rgba(0,0,0,0.25) 4px)',
+        opacity: 0.6,
+      }} />
+
+      {redShader ? (
         <Canvas style={{ flex: 1, opacity: 0.8 + 0.2 * pulse }}>
           <Fill>
             <Shader
-              source={blueShader}
-              uniforms={{ time: frame / 60, resolution: vec(1080, 1920), pulse }}
+              source={redShader}
+              uniforms={{ time: frame / 5, resolution: vec(1080, 1920), intensity: 2.5, color1: fireColors.c1, color2: fireColors.c2 }}
             />
           </Fill>
         </Canvas>
       ) : (
         <div style={{
           position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse at 50% 50%, rgba(10,10,120,${0.7 * pulse}) 0%, transparent 70%)`,
+          background: `radial-gradient(ellipse at 50% 50%, rgba(120,10,0,${0.7 * pulse}) 0%, transparent 70%)`,
         }} />
+      )}
+
+      {/* フェーズ切り替え時のショックウェーブリング */}
+      {localFrame < 20 && (
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', pointerEvents: 'none', zIndex: 6 }}>
+          <div style={{
+            width: interpolate(localFrame, [0, 20], [0, 1600]),
+            height: interpolate(localFrame, [0, 20], [0, 1600]),
+            borderRadius: '50%',
+            border: `${Math.max(0, 15 - localFrame * 0.7)}px solid rgba(255,100,0,${Math.max(0, 1 - localFrame / 20)})`,
+            boxShadow: `0 0 60px rgba(255,60,0,${Math.max(0, 0.8 - localFrame / 20)})`,
+            pointerEvents: 'none',
+          }} />
+        </AbsoluteFill>
+      )}
+
+      {/* 放射状バースト（フェーズ切り替え瞬間） */}
+      {localFrame < 8 && (
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', zIndex: 3, pointerEvents: 'none' }}>
+          {[...Array(12)].map((_, i) => {
+            const angle = (i / 12) * 360;
+            const len = interpolate(localFrame, [0, 8], [0, 500]);
+            return (
+              <div key={i} style={{
+                position: 'absolute',
+                width: len,
+                height: Math.max(0, 4 - localFrame * 0.4),
+                background: `rgba(255,120,30,${Math.max(0, 1 - localFrame / 8)})`,
+                transformOrigin: '0% 50%',
+                transform: `rotate(${angle}deg)`,
+                filter: 'blur(1px)',
+              }} />
+            );
+          })}
+        </AbsoluteFill>
       )}
 
       {/* Core glow */}
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
         <div style={{
-          width: 250 + 150 * pulse, height: 600 + 400 * pulse, // 縦長に
-          background: `radial-gradient(ellipse at 50% 60%, white 0%, #88aaff 35%, #2244ff 65%, transparent 80%)`,
+          width: 250 + 150 * pulse, height: 600 + 400 * pulse,
+          background: `radial-gradient(ellipse at 50% 60%, white 0%, #ffaa44 35%, #ff2200 65%, transparent 80%)`,
           filter: `blur(${20 + 20 * pulse}px)`, borderRadius: '40% 40% 60% 60%',
-          boxShadow: `0 0 ${300 * pulse}px ${100 * pulse}px rgba(50,100,255,1)`, 
+          boxShadow: `0 0 ${300 * pulse}px ${100 * pulse}px rgba(255,50,0,1)`, 
           transform: `scale(${pulse * entry})`,
         }} />
       </AbsoluteFill>
@@ -445,8 +486,8 @@ const SceneOpening = (): any => {
           frame={localFrame}
           fps={fps}
           fontSize={phase === 2 ? 210 : 170}
-          color="#e6f0ff"
-          glowColor="rgba(50,150,255,1)"
+          color="#fff5f0"
+          glowColor="rgba(255,80,0,1)"
           style={{ 
             lineHeight: 1.2, 
             letterSpacing: 10,
@@ -634,26 +675,30 @@ const SceneOpponentAnnounce = (): any => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
-      {/* Glitch filter over the scene */}
+      {/* Glitch filter - Focus on Red for brand color and to avoid grayish overlap */}
       <SvgDefs frame={frame} />
-      <AbsoluteFill style={{ filter: 'url(#glitch-red)', opacity: 0.8, transform: `translateX(${(frame % 3) * 15}px)` }}>
-        <div style={{ flex: 1, backgroundColor: '#220000' }} />
-      </AbsoluteFill>
-      <AbsoluteFill style={{ filter: 'url(#glitch-cyan)', opacity: 0.8, transform: `translateX(${-(frame % 3) * 15}px)` }}>
-        <div style={{ flex: 1, backgroundColor: '#002222' }} />
+      
+      {/* Deep Red Glow Background */}
+      <AbsoluteFill style={{
+        background: 'radial-gradient(circle at 50% 50%, #440000 0%, #000 70%)',
+        opacity: interpolate(frame, [0, 10], [0, 1]),
+      }} />
+
+      <AbsoluteFill style={{ filter: 'url(#glitch-red)', opacity: 0.6, transform: `translateX(${(frame % 2) * 20}px)` }}>
+        <div style={{ flex: 1, border: '40px solid #660000' }} />
       </AbsoluteFill>
 
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <TypingSaberText
-          text="対戦相手"
+        <KineticText
+          text="対戦相手は！？"
           frame={frame}
           fps={fps}
-          fontSize={180}
+          fontSize={120}
           color="#FFF"
           glowColor="#FF0000"
           style={{ 
-            letterSpacing: 30,
-            transform: `scale(${interpolate(scale, [0, 1], [3.0, 1])}) skewX(-15deg)`,
+            letterSpacing: 20,
+            transform: `scale(${interpolate(scale, [0, 1], [4.0, 1])}) rotate(${interpolate(scale, [0, 1], [360, 0])}deg) skewX(-15deg)`,
             opacity: textFlash,
           }}
         />
@@ -694,18 +739,19 @@ const SceneOpponent = (): any => {
              width: 800, height: 800, borderRadius: '50%', overflow: 'hidden', 
              border: '10px solid white', marginBottom: 20, boxShadow: '0 0 50px red' 
           }}>
-            <Img src={staticFile('assets/images-01/mrm0115.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+ Sarah: Correct path for opponent.
           </div>
-          <TypingSaberText
+          <KineticText
             text="限界突破まみ🎽"
             frame={frame}
             fps={fps}
             startFrame={15}
-            fontSize={130}
+            fontSize={140}
             color="white"
             glowColor="#ff0000"
             style={{ 
-              WebkitTextStroke: '3px #800',
+              letterSpacing: 4,
               whiteSpace: 'nowrap'
             }}
           />
@@ -765,23 +811,22 @@ const SceneVs = (): any => {
             transform: `scale(${pop})`,
             gap: 20 
           }}>
-            {/* Top: Eugene */}
             <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px orange)' }}>
               <div style={{ 
-                width: 450, height: 450, borderRadius: '50%', overflow: 'hidden', // 300 -> 450
-                border: '15px solid #FFE4B5', margin: '0 auto 10px', boxShadow: '0 0 80px orange' 
+                width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
+                border: '15px solid #FFE4B5', margin: '0 auto 15px', boxShadow: '0 0 100px orange' 
               }}>
                 <Img src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <TypingSaberText
-                text="ユージン"
+              <KineticText
+                text="🔆≒ユージン≒🔆"
                 frame={frame}
                 fps={fps}
                 startFrame={10}
-                fontSize={80}
+                fontSize={90}
                 color="#FFE4B5"
                 glowColor="orange"
-                style={{ WebkitTextStroke: '2px #840' }}
+                style={{ letterSpacing: 4 }}
               />
             </div>
             
@@ -802,23 +847,22 @@ const SceneVs = (): any => {
                </div>
             </div>
             
-            {/* Bottom: Mami */}
             <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px red)' }}>
               <div style={{ 
-                width: 450, height: 450, borderRadius: '50%', overflow: 'hidden', // 300 -> 450
-                border: '15px solid white', margin: '20px auto 10px', boxShadow: '0 0 80px red' 
+                width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
+                border: '15px solid white', margin: '15px auto 10px', boxShadow: '0 0 100px red' 
               }}>
-                <Img src={staticFile('assets/images-01/mrm0115.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <TypingSaberText
-                text="まみ"
+              <KineticText
+                text="限界突破まみ🎽"
                 frame={frame}
                 fps={fps}
                 startFrame={20}
-                fontSize={80}
+                fontSize={90}
                 color="#FFF"
                 glowColor="red"
-                style={{ WebkitTextStroke: '2px #800' }}
+                style={{ letterSpacing: 4 }}
               />
             </div>
           </div>
@@ -868,11 +912,11 @@ const SceneRules = (): any => {
             display: 'flex', justifyContent: 'center', alignItems: 'center'
           }}>
             <TypingSaberText
-              text="「やり直し無し（一本勝負）」"
+              text="やり直し無し<br/>一本勝負"
               frame={frame}
               fps={fps}
               startFrame={20}
-              fontSize={120}
+              fontSize={140}
               color="#000"
               glowColor="transparent"
               style={{ fontWeight: 900 }}
@@ -891,7 +935,7 @@ const SceneRules = (): any => {
             display: 'flex', justifyContent: 'center', alignItems: 'center'
           }}>
             <TypingSaberText
-              text="「フルアイテム」"
+              text="フルアイテム"
               frame={frame}
               fps={fps}
               startFrame={50}
@@ -947,20 +991,29 @@ const SceneEnding = (): any => {
           ))
         )}
 
-        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <TypingSaberText
-            text="配信再開の<br/>３月<br/>有終の美を<br/>飾りたいです！！"
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 60px' }}>
+          {/* 読みやすさのための為暗色バック */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.7) 70%, transparent 100%)',
+          }} />
+          <KineticText
+            text="配信再開の⁠
+３月
+有終の美を
+飾りたいです！！"
             frame={frame}
             fps={fps}
             startFrame={30}
-            fontSize={120}
-            color="#FFF"
-            glowColor="#FF0000"
+            fontSize={110}
+            color="#FFFFFF"
+            glowColor="#FF4400"
             style={{ 
-              lineHeight: 1.7, 
+              lineHeight: 1.5, 
               letterSpacing: 5,
-              WebkitTextStroke: '6px #200',
-              filter: `drop-shadow(0 20px 50px black)`,
+              position: 'relative',
+              zIndex: 2,
             }}
           />
         </AbsoluteFill>
@@ -981,17 +1034,15 @@ const SceneLogo = (): any => {
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', justifyContent: 'center', alignItems: 'center' }}>
-      {/* 
-        Ensure J.O.L logo png exists at static/assets/images-01/logo.png
-        If standard Path doesn't match, we rely on text fallback or user replacing it. 
-      */}
-      <div style={{
-        fontFamily, fontSize: 160, fontWeight: 900, color: '#FFF', 
-        letterSpacing: 20, opacity, transform: `scale(${scale})`,
-        textShadow: '0 0 60px rgba(255,255,255,0.8)'
-      }}>
-        J.O.L
-      </div>
+      <Img
+        src={staticFile('jol-logo-800.png')}
+        style={{
+          width: 800,
+          opacity,
+          transform: `scale(${scale})`,
+          filter: 'drop-shadow(0 0 80px rgba(255,255,255,0.6))',
+        }}
+      />
     </AbsoluteFill>
   );
 };
