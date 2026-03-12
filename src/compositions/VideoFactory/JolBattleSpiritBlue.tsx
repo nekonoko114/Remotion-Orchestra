@@ -324,6 +324,153 @@ const SvgDefs: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
+const MirrorLiver: React.FC<{ 
+  frame: number; 
+  imageSrc: string; 
+  color: string; 
+  scale?: number;
+  zoomProgress?: number;
+}> = ({ 
+  frame, 
+  imageSrc, 
+  color,
+  scale = 1,
+  zoomProgress = 0
+}) => {
+  const { fps } = useVideoConfig();
+  
+  // 各パネルの出現タイミングをずらす (左 -> 右 -> 真ん中)
+  const leftOpen = spring({ frame, fps, config: { stiffness: 100, damping: 15 } });
+  const rightOpen = spring({ frame: frame - 10, fps, config: { stiffness: 100, damping: 15 } });
+  const centerOpen = spring({ frame: frame - 20, fps, config: { stiffness: 100, damping: 15 } });
+
+  // グリッチ演出用のランダム値 (出現時のみ激しく)
+  const glitchIntensity = (t: number) => Math.max(0, 1 - t / 20) * (random(frame + t) > 0.7 ? 1 : 0);
+  const leftGlitch = glitchIntensity(frame);
+  const rightGlitch = glitchIntensity(frame - 10);
+  const centerGlitch = glitchIntensity(frame - 20);
+
+  const getGlitchStyle = (intensity: number) => ({
+    filter: intensity > 0 ? `hue-rotate(${random(frame) * 360}deg) brightness(1.5)` : 'none',
+    transform: `translate(${(random(frame * 2) - 0.5) * 40 * intensity}px, ${(random(frame * 3) - 0.5) * 40 * intensity}px)`,
+    opacity: intensity > 0.5 && random(frame) > 0.5 ? 0.3 : 1
+  });
+
+  return (
+    <div style={{
+      perspective: '1200px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: 800 * scale,
+      position: 'relative',
+      transform: `scale(${scale * (1 + zoomProgress * 4)}) translateY(${zoomProgress * 200}px)`,
+    }}>
+      {/* 左鏡 */}
+      <div style={{
+        position: 'absolute',
+        width: 500, height: 700, borderRadius: 40, overflow: 'hidden',
+        border: `8px solid ${color}`,
+        boxShadow: `0 0 50px ${color}`,
+        transformOrigin: 'right center',
+        transform: `translateX(${-240 * leftOpen}px) rotateY(${35 * leftOpen}deg) ${getGlitchStyle(leftGlitch).transform}`,
+        opacity: leftOpen > 0.01 ? (0.6 * leftOpen) : 0,
+        filter: getGlitchStyle(leftGlitch).filter,
+        zIndex: 1,
+      }}>
+        <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} />
+      </div>
+
+      {/* 右鏡 */}
+      <div style={{
+        position: 'absolute',
+        width: 500, height: 700, borderRadius: 40, overflow: 'hidden',
+        border: `8px solid ${color}`,
+        boxShadow: `0 0 50px ${color}`,
+        transformOrigin: 'left center',
+        transform: `translateX(${240 * rightOpen}px) rotateY(${-35 * rightOpen}deg) ${getGlitchStyle(rightGlitch).transform}`,
+        opacity: rightOpen > 0.01 ? (0.6 * rightOpen) : 0,
+        filter: getGlitchStyle(rightGlitch).filter,
+        zIndex: 1,
+      }}>
+        <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} />
+      </div>
+
+      {/* メイン（中央） */}
+      <div style={{
+        width: 600, height: 800, borderRadius: 50, overflow: 'hidden',
+        border: `12px solid #fff`,
+        boxShadow: `0 0 100px #fff, 0 0 50px ${color}`,
+        zIndex: 10,
+        transform: `scale(${interpolate(centerOpen, [0, 1], [0.8, 1])}) ${getGlitchStyle(centerGlitch).transform}`,
+        opacity: centerOpen > 0.01 ? 1 : 0,
+        filter: getGlitchStyle(centerGlitch).filter,
+      }}>
+        <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </div>
+    </div>
+  );
+};
+
+const GlobalFrame: React.FC = () => {
+  const frame = useCurrentFrame();
+  const pulse = Math.sin(frame / 10) * 0.2 + 0.8;
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
+      <div style={{ 
+        position: 'absolute', inset: 0,
+        border: '12px solid rgba(0, 100, 255, 0.8)', 
+        boxShadow: `inset 0 0 80px rgba(0, 0, 255, ${0.4 * pulse}), 0 0 80px rgba(0, 0, 255, ${0.4 * pulse})`,
+      }} />
+    </AbsoluteFill>
+  );
+};
+
+const GlitchedIcon: React.FC<{ 
+  src: string; 
+  frame: number; 
+  size: number; 
+  borderColor: string; 
+  glowColor: string;
+  style?: React.CSSProperties;
+}> = ({ src, frame, size, borderColor, glowColor, style }) => {
+  const glitchTrigger = random(Math.floor(frame / 2)) > 0.85;
+  const intensity = glitchTrigger ? 1 : 0;
+  
+  const glitchStyle = {
+    transform: intensity > 0 
+      ? `translate(${(random(frame + 1) - 0.5) * 40}px, ${(random(frame + 2) - 0.5) * 40}px) scale(${1 + (random(frame + 3) - 0.5) * 0.1})`
+      : 'none',
+    filter: intensity > 0 
+      ? `hue-rotate(${random(frame + 4) * 360}deg) brightness(1.5) contrast(1.5) saturate(1.5)`
+      : 'none',
+    opacity: intensity > 0 && random(frame + 5) > 0.7 ? 0.3 : 1,
+  };
+
+  return (
+    <div style={{ 
+      width: size, height: size, borderRadius: '50%', overflow: 'hidden',
+      border: `15px solid ${borderColor}`, 
+      boxShadow: `0 0 100px ${glowColor}, inset 0 0 50px ${glowColor}`,
+      position: 'relative',
+      backgroundColor: '#000',
+      ...style,
+      ...glitchStyle
+    }}>
+      <Img src={src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      {intensity > 0 && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: `repeating-linear-gradient(0deg, transparent 0px, rgba(255,255,255,0.2) 2px, transparent 4px)`,
+          pointerEvents: 'none'
+        }} />
+      )}
+    </div>
+  );
+};
+
 const LightLeak: React.FC<{ frame: number; color?: string }> = ({ frame, color = '#0066ff' }) => {
   const opacity = interpolate(
     Math.sin(frame * 0.05),
@@ -691,9 +838,6 @@ const SceneLiver = (): any => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const flash = Math.max(0, 1 - frame / 15);
-  const slam = spring({ frame: frame - 10, fps, config: { stiffness: 600, damping: 12, mass: 1.5 } });
-  const scale = interpolate(slam, [0, 0.5, 1], [6, 0.8, 1]);
-  const yPos = interpolate(slam, [0, 1], [-1200, 0]);
   const bounceIntensity = Math.abs(Math.sin((frame - 10) / 4)) * Math.max(0, 1 - (frame - 10) / 30) * 100;
   const nameGlitchOffset = Math.max(0, 1 - (frame - 30) / 20) * (random(frame) - 0.5) * 40;
 
@@ -707,19 +851,18 @@ const SceneLiver = (): any => {
         opacity={0.4} 
       />
 
-      {/* 激しく落下するアイコン */}
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{
-          width: 700, height: 700, borderRadius: '50%', backgroundColor: '#00000a', 
-          border: '24px solid #0088ff',
-          boxShadow: `0 0 350px rgba(0,100,255,1), inset 0 0 150px rgba(0,100,255,0.5)`, 
-          display: 'flex', justifyContent: 'center', alignItems: 'center',
-          transform: `scale(${scale}) translateY(${yPos + bounceIntensity}px)`,
-          opacity: slam > 0.05 ? 1 : 0, 
-          filter: `drop-shadow(0 0 100px #0044ff)`,
-          overflow: 'hidden',
-        }}>
-          <Img src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div style={{ transform: `translateY(${bounceIntensity}px)` }}>
+          <MirrorLiver 
+            frame={frame} 
+            imageSrc={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} 
+            color="#0088ff" 
+            zoomProgress={spring({
+              frame: frame - (180 - 10),
+              fps,
+              config: { stiffness: 200, damping: 20 }
+            })}
+          />
         </div>
 
         <TypingSaberText
@@ -731,7 +874,7 @@ const SceneLiver = (): any => {
           color="#00FFFF"
           glowColor="#0066FF"
           style={{ 
-            marginTop: 100, 
+            marginTop: 40, 
             WebkitTextStroke: '4px #002255', 
             letterSpacing: 5,
             transform: `scale(${spring({ frame: frame - 25, fps, config: { stiffness: 400 } })}) translateX(${nameGlitchOffset}px)`,
@@ -804,7 +947,7 @@ const SceneOpponent = (): any => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#000005', overflow: 'hidden' }}>
       <KaleidoscopeBackground 
-        imageSrc={staticFile('assets/images-01/mrm0115-01.jpg')} 
+        imageSrc={staticFile('assets/images-01/mrm0115-01.png')} 
         frame={frame} 
         opacity={0.4} 
       />
@@ -822,7 +965,7 @@ const SceneOpponent = (): any => {
              width: 800, height: 800, borderRadius: '50%', overflow: 'hidden', 
              border: '10px solid white', marginBottom: 20, boxShadow: '0 0 50px #0066ff' 
           }}>
-            <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <Img src={staticFile('assets/images-01/mrm0115-01.png')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <KineticText
             text="限界突破まみ🎽"
@@ -877,12 +1020,14 @@ const SceneVs = (): any => {
             gap: 20 
           }}>
             <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px #00aaff)' }}>
-              <div style={{ 
-                width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
-                border: '15px solid #E0FFFF', margin: '0 auto 15px', boxShadow: '0 0 100px #00aaff' 
-              }}>
-                <Img src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
+              <GlitchedIcon 
+                src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')}
+                frame={frame}
+                size={600}
+                borderColor="#E0FFFF"
+                glowColor="#00aaff"
+                style={{ margin: '0 auto 15px' }}
+              />
               <KineticText
                 text="🔆≒ユージン≒🔆"
                 frame={frame}
@@ -913,12 +1058,14 @@ const SceneVs = (): any => {
             </div>
             
             <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px #0066ff)' }}>
-              <div style={{ 
-                width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
-                border: '15px solid white', margin: '15px auto 10px', boxShadow: '0 0 100px #0066ff' 
-              }}>
-                <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
+              <GlitchedIcon 
+                src={staticFile('assets/images-01/mrm0115-01.png')}
+                frame={frame}
+                size={600}
+                borderColor="white"
+                glowColor="#0066ff"
+                style={{ margin: '15px auto 10px' }}
+              />
               <KineticText
                 text="限界突破まみ🎽"
                 frame={frame}
@@ -1121,6 +1268,7 @@ export const JolBattleSpiritBlue: React.FC = () => {
 
   return (
     <AbsoluteFill>
+      <GlobalFrame />
       <Audio src={staticFile('assets/audio/music/冷蔵庫のメモ.mp3')} volume={0.6} loop />
       <LightLeak frame={useCurrentFrame()} />
 

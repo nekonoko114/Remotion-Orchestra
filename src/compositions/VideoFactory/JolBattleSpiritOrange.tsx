@@ -521,44 +521,61 @@ const SceneDoublingGrid: React.FC<{ name: string; image: string }> = ({ name, im
       
       {/* 動的グリッド */}
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${cols}, 1fr)`,
-        gridTemplateRows: `repeat(${rows}, 1fr)`,
-        gap: `${Math.max(2, 5 - exponent * 2)}px`,
-        padding: '10px 0', // 左右のパディングをなくして端まで広げる
         width: '100%',
         height: '100%',
-        boxSizing: 'border-box'
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}>
-        {new Array(count).fill(0).map((_, i) => {
-          // パパパパっとした非常に速い出現
-          const s = spring({ 
-            frame: frame % 30, 
-            fps, 
-            config: { stiffness: 1000, damping: 50, mass: 0.5 } 
-          });
+        {count === 1 ? (
+          <div style={{
+            width: 800, height: 800, borderRadius: '50%', overflow: 'hidden',
+            border: '15px solid #fff',
+            boxShadow: '0 0 100px orange, 0 0 50px orange',
+            transform: `scale(${spring({ frame: frame % (fpb * beatInterval), fps, config: { stiffness: 200, damping: 20 } })})`,
+          }}>
+            <Img src={staticImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </div>
+        ) : (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${cols}, 1fr)`,
+            gridTemplateRows: `repeat(${rows}, 1fr)`,
+            gap: `${Math.max(2, 5 - exponent * 2)}px`,
+            padding: '10px 0',
+            width: '100%',
+            height: '100%',
+            boxSizing: 'border-box'
+          }}>
+            {new Array(count).fill(0).map((_, i) => {
+              const s = spring({ 
+                frame: frame % 30, 
+                fps, 
+                config: { stiffness: 1000, damping: 50, mass: 0.5 } 
+              });
 
-          return (
-            <div key={i} style={{
-              position: 'relative',
-              width: '100%',
-              // aspectRatio を削除し、Gridセルのサイズに合わせる
-              borderRadius: '50%', 
-              overflow: 'hidden',
-              border: `${Math.max(1, 4 - exponent * 0.5)}px solid orange`,
-              transform: `scale(${s}) rotate(${(random(i + name + exponent) - 0.5) * 5}deg)`,
-              boxShadow: `0 0 ${Math.max(5, 20 - exponent * 3)}px rgba(255,165,0,0.5)`,
-              margin: 'auto',
-            }}>
-              <Img src={staticImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div style={{
-                position: 'absolute',
-                inset: 0,
-                background: `linear-gradient(${random(i + name + exponent) * 360}deg, rgba(255,100,0,0.2), transparent)`,
-              }} />
-            </div>
-          );
-        })}
+              return (
+                <div key={i} style={{
+                  position: 'relative',
+                  width: '100%',
+                  borderRadius: '50%', 
+                  overflow: 'hidden',
+                  border: `${Math.max(1, 4 - exponent * 0.5)}px solid orange`,
+                  transform: `scale(${s}) rotate(${(random(i + name + exponent) - 0.5) * 5}deg)`,
+                  boxShadow: `0 0 ${Math.max(5, 20 - exponent * 3)}px rgba(255,165,0,0.5)`,
+                  margin: 'auto',
+                }}>
+                  <Img src={staticImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: `linear-gradient(${random(i + name + exponent) * 360}deg, rgba(255,100,0,0.2), transparent)`,
+                  }} />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* 名前ラベル */}

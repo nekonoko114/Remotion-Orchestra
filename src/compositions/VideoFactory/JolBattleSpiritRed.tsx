@@ -175,6 +175,153 @@ const RotatingFocusLines: React.FC<{ frame: number; color?: string; count?: numb
   );
 };
 
+const GlobalFrame: React.FC = () => {
+  const frame = useCurrentFrame();
+  const pulse = Math.sin(frame / 10) * 0.2 + 0.8;
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
+      <div style={{ 
+        position: 'absolute', inset: 0,
+        border: '12px solid rgba(255, 30, 0, 0.8)', 
+        boxShadow: `inset 0 0 80px rgba(255, 0, 0, ${0.4 * pulse}), 0 0 80px rgba(255, 0, 0, ${0.4 * pulse})`,
+      }} />
+    </AbsoluteFill>
+  );
+};
+
+const GlitchedIcon: React.FC<{ 
+  src: string; 
+  frame: number; 
+  size: number; 
+  borderColor: string; 
+  glowColor: string;
+  style?: React.CSSProperties;
+}> = ({ src, frame, size, borderColor, glowColor, style }) => {
+  const glitchTrigger = random(Math.floor(frame / 2)) > 0.85;
+  const intensity = glitchTrigger ? 1 : 0;
+  
+  const glitchStyle = {
+    transform: intensity > 0 
+      ? `translate(${(random(frame + 1) - 0.5) * 40}px, ${(random(frame + 2) - 0.5) * 40}px) scale(${1 + (random(frame + 3) - 0.5) * 0.1})`
+      : 'none',
+    filter: intensity > 0 
+      ? `hue-rotate(${random(frame + 4) * 360}deg) brightness(1.5) contrast(1.5) saturate(1.5)`
+      : 'none',
+    opacity: intensity > 0 && random(frame + 5) > 0.7 ? 0.3 : 1,
+  };
+
+  return (
+    <div style={{ 
+      width: size, height: size, borderRadius: '50%', overflow: 'hidden',
+      border: `15px solid ${borderColor}`, 
+      boxShadow: `0 0 100px ${glowColor}, inset 0 0 50px ${glowColor}`,
+      position: 'relative',
+      backgroundColor: '#000',
+      ...style,
+      ...glitchStyle
+    }}>
+      <Img src={src} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      {intensity > 0 && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: `repeating-linear-gradient(0deg, transparent 0px, rgba(255,255,255,0.2) 2px, transparent 4px)`,
+          pointerEvents: 'none'
+        }} />
+      )}
+    </div>
+  );
+};
+
+const MirrorLiver: React.FC<{ 
+  frame: number; 
+  imageSrc: string; 
+  color: string; 
+  scale?: number;
+  zoomProgress?: number;
+}> = ({ 
+  frame, 
+  imageSrc, 
+  color,
+  scale = 1,
+  zoomProgress = 0
+}) => {
+  const { fps } = useVideoConfig();
+  
+  // 各パネルの出現タイミングをずらす (左 -> 右 -> 真ん中)
+  const leftOpen = spring({ frame, fps, config: { stiffness: 100, damping: 15 } });
+  const rightOpen = spring({ frame: frame - 10, fps, config: { stiffness: 100, damping: 15 } });
+  const centerOpen = spring({ frame: frame - 20, fps, config: { stiffness: 100, damping: 15 } });
+
+  // グリッチ演出用のランダム値 (出現時のみ激しく)
+  const glitchIntensity = (t: number) => Math.max(0, 1 - t / 20) * (random(frame + t) > 0.7 ? 1 : 0);
+  const leftGlitch = glitchIntensity(frame);
+  const rightGlitch = glitchIntensity(frame - 10);
+  const centerGlitch = glitchIntensity(frame - 20);
+
+  const getGlitchStyle = (intensity: number) => ({
+    filter: intensity > 0 ? `hue-rotate(${random(frame) * 360}deg) brightness(1.5)` : 'none',
+    transform: `translate(${(random(frame * 2) - 0.5) * 40 * intensity}px, ${(random(frame * 3) - 0.5) * 40 * intensity}px)`,
+    opacity: intensity > 0.5 && random(frame) > 0.5 ? 0.3 : 1
+  });
+
+  return (
+    <div style={{
+      perspective: '1200px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: 800 * scale,
+      position: 'relative',
+      transform: `scale(${scale * (1 + zoomProgress * 4)}) translateY(${zoomProgress * 200}px)`,
+    }}>
+      {/* 左鏡 */}
+      <div style={{
+        position: 'absolute',
+        width: 500, height: 700, borderRadius: 40, overflow: 'hidden',
+        border: `8px solid ${color}`,
+        boxShadow: `0 0 50px ${color}`,
+        transformOrigin: 'right center',
+        transform: `translateX(${-240 * leftOpen}px) rotateY(${35 * leftOpen}deg) ${getGlitchStyle(leftGlitch).transform}`,
+        opacity: leftOpen > 0.01 ? (0.6 * leftOpen) : 0,
+        filter: getGlitchStyle(leftGlitch).filter,
+        zIndex: 1,
+      }}>
+        <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} />
+      </div>
+
+      {/* 右鏡 */}
+      <div style={{
+        position: 'absolute',
+        width: 500, height: 700, borderRadius: 40, overflow: 'hidden',
+        border: `8px solid ${color}`,
+        boxShadow: `0 0 50px ${color}`,
+        transformOrigin: 'left center',
+        transform: `translateX(${240 * rightOpen}px) rotateY(${-35 * rightOpen}deg) ${getGlitchStyle(rightGlitch).transform}`,
+        opacity: rightOpen > 0.01 ? (0.6 * rightOpen) : 0,
+        filter: getGlitchStyle(rightGlitch).filter,
+        zIndex: 1,
+      }}>
+        <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} />
+      </div>
+
+      {/* メイン（中央） */}
+      <div style={{
+        width: 600, height: 800, borderRadius: 50, overflow: 'hidden',
+        border: `12px solid #fff`,
+        boxShadow: `0 0 100px #fff, 0 0 50px ${color}`,
+        zIndex: 10,
+        transform: `scale(${interpolate(centerOpen, [0, 1], [0.8, 1])}) ${getGlitchStyle(centerGlitch).transform}`,
+        opacity: centerOpen > 0.01 ? 1 : 0,
+        filter: getGlitchStyle(centerGlitch).filter,
+      }}>
+        <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </div>
+    </div>
+  );
+};
+
 // SVG filter defs
 const SvgDefs: React.FC<{ frame: number }> = ({ frame }) => {
   const freq = 0.01 + Math.sin(frame / 20) * 0.005; 
@@ -477,9 +624,6 @@ const SceneLiver = (): any => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const flash = Math.max(0, 1 - frame / 15);
-  const slam = spring({ frame: frame - 10, fps, config: { stiffness: 600, damping: 12, mass: 1.5 } });
-  const scale = interpolate(slam, [0, 0.5, 1], [6, 0.8, 1]);
-  const yPos = interpolate(slam, [0, 1], [-1200, 0]);
   const bounceIntensity = Math.abs(Math.sin((frame - 10) / 4)) * Math.max(0, 1 - (frame - 10) / 30) * 100;
   const nameGlitchOffset = Math.max(0, 1 - (frame - 30) / 20) * (random(frame) - 0.5) * 40;
 
@@ -493,19 +637,18 @@ const SceneLiver = (): any => {
         opacity={0.4}
       />
 
-      {/* 激しく落下するアイコン */}
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{
-          width: 700, height: 700, borderRadius: '50%', backgroundColor: '#0a0000', 
-          border: '24px solid #ff4400',
-          boxShadow: `0 0 350px rgba(255,50,0,1), inset 0 0 150px rgba(255,50,0,0.5)`, 
-          display: 'flex', justifyContent: 'center', alignItems: 'center',
-          transform: `scale(${scale}) translateY(${yPos + bounceIntensity}px)`,
-          opacity: slam > 0.05 ? 1 : 0, 
-          filter: `drop-shadow(0 0 100px #ff0000)`,
-          overflow: 'hidden',
-        }}>
-          <Img src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div style={{ transform: `translateY(${bounceIntensity}px)` }}>
+          <MirrorLiver 
+            frame={frame} 
+            imageSrc={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} 
+            color="#ff4400" 
+            zoomProgress={spring({
+              frame: frame - (180 - 10),
+              fps,
+              config: { stiffness: 200, damping: 20 }
+            })}
+          />
         </div>
 
         <TypingSaberText
@@ -517,7 +660,7 @@ const SceneLiver = (): any => {
           color="#FFD700"
           glowColor="#FF6600"
           style={{ 
-            marginTop: 100, 
+            marginTop: 40, 
             WebkitTextStroke: '4px #500', 
             letterSpacing: 5,
             transform: `scale(${spring({ frame: frame - 25, fps, config: { stiffness: 400 } })}) translateX(${nameGlitchOffset}px)`,
@@ -591,7 +734,7 @@ const SceneOpponent = (): any => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#050000', overflow: 'hidden' }}>
       <KaleidoscopeBackground 
-        imageSrc={staticFile('assets/images-01/mrm0115-01.jpg')} 
+        imageSrc={staticFile('assets/images-01/mrm0115-01.png')} 
         frame={frame} 
         opacity={0.4} 
       />
@@ -609,8 +752,7 @@ const SceneOpponent = (): any => {
              width: 800, height: 800, borderRadius: '50%', overflow: 'hidden', 
              border: '10px solid white', marginBottom: 20, boxShadow: '0 0 50px red' 
           }}>
-            <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
- Sarah: Correct path for opponent.
+            <Img src={staticFile('assets/images-01/mrm0115-01.png')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <KineticText
             text="限界突破まみ🎽"
@@ -665,13 +807,15 @@ const SceneVs = (): any => {
             transform: `scale(${pop})`,
             gap: 20 
           }}>
-            <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px orange)' }}>
-              <div style={{ 
-                width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
-                border: '15px solid #FFE4B5', margin: '0 auto 15px', boxShadow: '0 0 100px orange' 
-              }}>
-                <Img src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
+            <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px red)' }}>
+              <GlitchedIcon 
+                src={staticFile('assets/images-01/t.o.p_u_jin_.jpeg')}
+                frame={frame}
+                size={600}
+                borderColor="#fff"
+                glowColor="#ff0000"
+                style={{ margin: '15px auto 10px' }}
+              />
               <KineticText
                 text="🔆≒ユージン≒🔆"
                 frame={frame}
@@ -683,31 +827,73 @@ const SceneVs = (): any => {
                 style={{ letterSpacing: 4 }}
               />
             </div>
-            
+
             {/* VS Glitch Text - Center */}
             <div style={{ position: 'relative', height: 120, zIndex: 10 }}>
-               <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-                 <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: 'red', fontStyle: 'italic', transform: `translate(-20px, 10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
-                 <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: 'cyan', fontStyle: 'italic', transform: `translate(20px, -10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
-                 <div style={{ 
-                   position: 'relative',
-                   fontSize: 260, fontWeight: 900, color: 'white', fontStyle: 'italic', 
-                   transform: `rotate(${Math.sin(frame / 3) * 15}deg)`, 
-                   WebkitTextStroke: '8px black',
-                   textShadow: '0 0 100px rgba(255,255,255,0.8)'
-                 }}>
-                   VS
-                 </div>
-               </div>
-            </div>
-            
-            <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px red)' }}>
-              <div style={{ 
-                width: 600, height: 600, borderRadius: '50%', overflow: 'hidden',
-                border: '15px solid white', margin: '15px auto 10px', boxShadow: '0 0 100px red' 
-              }}>
-                <Img src={staticFile('assets/images-01/mrm0115-01.jpg')} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    fontSize: 260,
+                    fontWeight: 900,
+                    color: 'red',
+                    fontStyle: 'italic',
+                    transform: `translate(-20px, 10px) rotate(${
+                      Math.sin(frame / 3) * 15
+                    }deg)`,
+                    opacity: 0.7,
+                  }}
+                >
+                  VS
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    fontSize: 260,
+                    fontWeight: 900,
+                    color: 'cyan',
+                    fontStyle: 'italic',
+                    transform: `translate(20px, -10px) rotate(${
+                      Math.sin(frame / 3) * 15
+                    }deg)`,
+                    opacity: 0.7,
+                  }}
+                >
+                  VS
+                </div>
+                <div
+                  style={{
+                    position: 'relative',
+                    fontSize: 260,
+                    fontWeight: 900,
+                    color: 'white',
+                    fontStyle: 'italic',
+                    transform: `rotate(${Math.sin(frame / 3) * 15}deg)`,
+                    WebkitTextStroke: '8px black',
+                    textShadow: '0 0 100px rgba(255,255,255,0.8)',
+                  }}
+                >
+                  VS
+                </div>
               </div>
+            </div>
+
+            <div style={{ textAlign: 'center', filter: 'drop-shadow(0 0 100px #ff4400)' }}>
+              <GlitchedIcon
+                src={staticFile('assets/images-01/mrm0115-01.png')}
+                frame={frame}
+                size={600}
+                borderColor="#FFE4B5"
+                glowColor="#ff4400"
+                style={{ margin: '0 auto 15px' }}
+              />
               <KineticText
                 text="限界突破まみ🎽"
                 frame={frame}
@@ -737,56 +923,92 @@ const SceneRules = (): any => {
 
   const r1 = spring({ frame: frame - 10, fps, config: { stiffness: 600, damping: 10 } });
   const r2 = spring({ frame: frame - 40, fps, config: { stiffness: 600, damping: 10 } });
-  
+
   // 525-645フレーム（ルールシーン）の揺れを大幅軽減 (100 -> 30)
-  const rulesImpact = Math.max(0, 1 - Math.max(0, frame - 10) / 6) + Math.max(0, 1 - Math.max(0, frame - 40) / 6);
+  const rulesImpact =
+    Math.max(0, 1 - Math.max(0, frame - 10) / 6) +
+    Math.max(0, 1 - Math.max(0, frame - 40) / 6);
   const shakeX = (random(frame) - 0.5) * 30 * Math.min(1, rulesImpact);
   const shakeY = (random(frame + 77) - 0.5) * 30 * Math.min(1, rulesImpact);
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#040000', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
-      
+
       {/* 画面切り替え時のフラッシュ */}
-      {rulesImpact > 0.8 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: rulesImpact * 0.8, zIndex: 10 }} />}
+      {rulesImpact > 0.8 && (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundColor: 'white',
+            opacity: rulesImpact * 0.8,
+            zIndex: 10,
+          }}
+        />
+      )}
 
       {new Array(30).fill(0).map((_, i) => (
-        <Particle key={i} seed={i * 19 + 800} frame={frame} color={i % 2 === 0 ? '#ff1100' : '#ff5500'} />
+        <Particle
+          key={i}
+          seed={i * 19 + 800}
+          frame={frame}
+          color={i % 2 === 0 ? '#ff1100' : '#ff5500'}
+        />
       ))}
 
-      <AbsoluteFill style={{ transform: `translate(${shakeX}px, ${shakeY}px)`, justifyContent: 'center', alignItems: 'center', gap: 80 }}>
-        <div style={{
-          transform: `scale(${interpolate(r1, [0, 0.5, 1], [8, 0.9, 1])}) rotate(${-(interpolate(r1, [0, 1], [20, 5]))}deg)`,
-          opacity: r1 > 0.05 ? 1 : 0,
-          filter: `drop-shadow(0 0 100px #ff3300)`,
-        }}>
-            <TypingSaberText
-              text="やり直し無し<br/>一本勝負"
-              frame={frame}
-              fps={fps}
-              startFrame={20}
-              fontSize={160}
-              color="#FFF"
-              glowColor="#ff2200"
-              style={{ fontWeight: 900 }}
-            />
+      <AbsoluteFill
+        style={{
+          transform: `translate(${shakeX}px, ${shakeY}px)`,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 80,
+        }}
+      >
+        <div
+          style={{
+            transform: `scale(${interpolate(
+              r1,
+              [0, 0.5, 1],
+              [8, 0.9, 1],
+            )}) rotate(${-(interpolate(r1, [0, 1], [20, 5]))}deg)`,
+            opacity: r1 > 0.05 ? 1 : 0,
+            filter: `drop-shadow(0 0 100px #ff3300)`,
+          }}
+        >
+          <TypingSaberText
+            text="やり直し無し<br/>一本勝負"
+            frame={frame}
+            fps={fps}
+            startFrame={20}
+            fontSize={160}
+            color="#FFF"
+            glowColor="#ff2200"
+            style={{ fontWeight: 900 }}
+          />
         </div>
 
-        <div style={{
-          transform: `scale(${interpolate(r2, [0, 0.5, 1], [8, 0.9, 1])}) rotate(${interpolate(r2, [0, 1], [-20, 5])}deg)`,
-          opacity: r2 > 0.05 ? 1 : 0,
-          filter: `drop-shadow(0 0 100px #ffaa00)`,
-        }}>
-            <TypingSaberText
-              text="フルアイテム"
-              frame={frame}
-              fps={fps}
-              startFrame={50}
-              fontSize={160}
-              color="#FFF"
-              glowColor="#ff8800"
-              style={{ fontWeight: 900 }}
-            />
+        <div
+          style={{
+            transform: `scale(${interpolate(
+              r2,
+              [0, 0.5, 1],
+              [8, 0.9, 1],
+            )}) rotate(${interpolate(r2, [0, 1], [-20, 5])}deg)`,
+            opacity: r2 > 0.05 ? 1 : 0,
+            filter: `drop-shadow(0 0 100px #ffaa00)`,
+          }}
+        >
+          <TypingSaberText
+            text="フルアイテム"
+            frame={frame}
+            fps={fps}
+            startFrame={50}
+            fontSize={160}
+            color="#FFF"
+            glowColor="#ff8800"
+            style={{ fontWeight: 900 }}
+          />
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
@@ -800,40 +1022,62 @@ const SceneEnding = (): any => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const fadeOut = interpolate(frame, [240, 300], [1, 0], { extrapolateRight: 'clamp' }); // Fade to black at end
+  const fadeOut = interpolate(frame, [240, 300], [1, 0], {
+    extrapolateRight: 'clamp',
+  }); // Fade to black at end
 
   const content = (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
-      
-      {/* 画面切り替え時のフラッシュ */}
-      {frame < 10 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: 1 - frame / 10, zIndex: 10 }} />}
-      
-      <AbsoluteFill style={{ opacity: fadeOut }}>
-        {new Array(60).fill(0).map((_, i) => (
-          <Particle key={i} seed={i * 31} frame={frame} color={i % 2 === 0 ? '#ff4400' : '#ff0000'} />
-        ))}
 
-        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 60px' }}>
-          {/* 読みやすさのための為暗色バック */}
-          <div style={{
+      {/* 画面切り替え時のフラッシュ */}
+      {frame < 10 && (
+        <div
+          style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.7) 70%, transparent 100%)',
-          }} />
+            backgroundColor: 'white',
+            opacity: 1 - frame / 10,
+            zIndex: 10,
+          }}
+        />
+      )}
+
+      <AbsoluteFill style={{ opacity: fadeOut }}>
+        {new Array(60).fill(0).map((_, i) => (
+          <Particle
+            key={i}
+            seed={i * 31}
+            frame={frame}
+            color={i % 2 === 0 ? '#ff4400' : '#ff0000'}
+          />
+        ))}
+
+        <AbsoluteFill
+          style={{ justifyContent: 'center', alignItems: 'center', padding: '0 60px' }}
+        >
+          {/* 読みやすさのための為暗色バック */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background:
+                'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.7) 70%, transparent 100%)',
+            }}
+          />
           <KineticText
-            text="配信再開の⁠
-３月
-有終の美を
-飾りたいです！！"
+            text="配信再開の
+            ⁠３月
+            有終の美を
+            飾りたい！"
             frame={frame}
             fps={fps}
             startFrame={30}
-            fontSize={110}
+            fontSize={140}
             color="#FFFFFF"
             glowColor="#FF4400"
-            style={{ 
-              lineHeight: 1.5, 
+            style={{
+              lineHeight: 1.5,
               letterSpacing: 5,
               position: 'relative',
               zIndex: 2,
@@ -870,22 +1114,21 @@ const SceneLogo = (): any => {
   );
 };
 
-
 // ========================
 // Main Composition
 // ========================
 export const JolBattleSpiritRed: React.FC = () => {
   const { fps } = useVideoConfig();
-  
+
   // Timing Adjustments: OP_DUR extended to 6s, DATE_DUR extended to 4s
-  const OP_DUR = 6 * fps;      
-  const DATE_DUR = 4 * fps;    
+  const OP_DUR = 6 * fps;
+  const DATE_DUR = 4 * fps;
   const INTRO_LIVER_DUR = 6 * fps; // 9 -> 6
-  const MSG_DUR = 1.5 * fps;   
-  const OPPONENT_DUR = 3 * fps; 
-  const VS_DUR = 4 * fps;      
-  const RULE_DUR = 3 * fps;    
-  const ENDING_DUR = 5 * fps;  
+  const MSG_DUR = 1.5 * fps;
+  const OPPONENT_DUR = 3 * fps;
+  const VS_DUR = 4 * fps;
+  const RULE_DUR = 3 * fps;
+  const ENDING_DUR = 5 * fps;
   const LOGO_DUR = 3 * fps;
 
   const s1 = 0;
@@ -902,8 +1145,9 @@ export const JolBattleSpiritRed: React.FC = () => {
 
   return (
     <AbsoluteFill>
-      <Audio src={staticFile('assets/audio/music/冷蔵庫のメモ.mp3')} volume={0.6} loop />
-      <LightLeak frame={useCurrentFrame()} />
+      <GlobalFrame />
+      <Audio src={staticFile('assets/audio/music/Breathing-Lighter.mp3')} volume={0.6} loop startFrom={1470} />
+      <LightLeak frame={useCurrentFrame()} color="#ff2200" />
 
       <Sequence from={s1} durationInFrames={OP_DUR}><SceneOpening /></Sequence>
       <Sequence from={s2} durationInFrames={DATE_DUR}><SceneDate /></Sequence>
