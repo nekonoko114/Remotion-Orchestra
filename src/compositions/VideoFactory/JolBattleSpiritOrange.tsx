@@ -10,7 +10,7 @@ export const orangeTheme: BattleSpiritTheme = {
   particleColor1: '#cc5500',
   particleColor2: '#ffbb00',
   music: {
-    src: 'assets/p-01.mp3',
+    src: 'assets/audio/music/冷蔵庫のメモ.mp3',
     startFrom: (126 * 30),
     volume: 0.6,
   },
