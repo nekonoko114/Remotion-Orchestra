@@ -31,7 +31,7 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
 
-  const OP_DUR = 6 * fps;
+  const OP_DUR = 5 * fps;
   const DATE_DUR = 4 * fps;
   const INTRO_LIVER_DUR = theme.liverIntroDuration ?? 6 * fps;
   const MSG_DUR = 1.5 * fps;
@@ -61,7 +61,7 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
       const progress = (frame % 10) / 10;
       
       // Dramatic zoom base
-      const baseZoom = 2.0;
+      const baseZoom = 1.5;
       
       const positions = [
         { x: -100, y: -100, z: 1.2 }, // Top-Left + Zoom
@@ -88,10 +88,10 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
 
   const cameraStyle = getCameraStyle();
   
-  // Glitch Logic: 20fr before 615fr, 5fr after 615fr
-  const glitchInterval = frame >= 615 ? 5 : 20;
-  const showGlitch = (frame % glitchInterval) < 3;
-  const glitchRotation = frame >= 615 ? (Math.floor(frame / 5) * 30) % 180 : 0;
+  // Glitch Logic: 20fr before 615fr, 5fr after 615fr, back to 20fr after 769fr
+  const glitchInterval = frame >= 769 ? 20 : (frame >= 615 ? 5 : 20);
+  const showGlitch = (frame % glitchInterval) < (frame >= 615 && frame < 769 ? 3 : 4);
+  const glitchRotation = (frame >= 615 && frame < 769) ? (Math.floor(frame / 5) * 30) % 180 : 0;
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', ...cameraStyle }}>
