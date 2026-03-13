@@ -771,6 +771,51 @@ export const SpeedLinesBackground: React.FC<{
   );
 };
 
+export const GlitchNoise: React.FC<{ frame: number; opacity?: number }> = ({ frame, opacity = 0.3 }) => {
+    const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const { width, height } = useVideoConfig();
+  
+    React.useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+  
+      ctx.clearRect(0, 0, width, height);
+  
+      const sliceCount = 15;
+      for (let i = 0; i < sliceCount; i++) {
+          const sliceH = height / sliceCount;
+          const xOffset = (random(i + frame) - 0.5) * 150;
+          const sliceW = width + 300;
+          
+          if (random(i + frame * 8) > 0.6) {
+              const r = random(frame + i) > 0.5 ? 255 : 0;
+              const g = random(frame + i + 1) > 0.5 ? 255 : 0;
+              const b = random(frame + i + 2) > 0.5 ? 255 : 0;
+              ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity * 0.4})`;
+              ctx.fillRect(xOffset - 150, i * sliceH, sliceW, sliceH);
+          }
+      }
+      
+      // Fine static
+      for (let i = 0; i < 200; i++) {
+          const x = random(i + frame) * width;
+          const y = random(i + frame + 3) * height;
+          const size = random(i + frame + 4) * 3;
+          ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.6})`;
+          ctx.fillRect(x, y, size, size);
+      }
+  
+    }, [frame, width, height, opacity]);
+  
+    return (
+      <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 998 }}>
+        <canvas ref={canvasRef} width={width} height={height} style={{ width: '100%', height: '100%', mixBlendMode: 'overlay' }} />
+      </AbsoluteFill>
+    );
+  };
+
 export const FlashOverlay: React.FC<{ frame: number; triggerFrames: number[] }> = ({ frame, triggerFrames }) => {
   const isTriggered = triggerFrames.some(f => frame >= f && frame < f + 5);
   const triggerFrame = triggerFrames.find(f => frame >= f && frame < f + 5);

@@ -6,13 +6,14 @@ import {
   useVideoConfig,
   Audio,
   staticFile,
-  spring,
+  interpolate,
 } from 'remotion';
 import {
   LightLeak,
   GlobalFrameThemed,
   SpeedLinesBackground,
   FlashOverlay,
+  GlitchNoise,
 } from './BattleSharedComponents';
 import { BattleSpiritTheme } from './types';
 
@@ -53,24 +54,52 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
   // Rapid flash logic
   const flashTriggers = [s2, s3, s4, s5, s6, s7, s8, s9];
 
-  // Global shake effect for speed
-  const shake = spring({
-    frame: frame % 10,
-    fps,
-    config: { stiffness: 1000, damping: 10 },
-  });
-  const shakeX = (Math.random() - 0.5) * 10 * shake;
-  const shakeY = (Math.random() - 0.5) * 10 * shake;
+  // Hyper-Speed Camera Logic (10fr cycles)
+  const getCameraStyle = () => {
+    if (frame >= s1 && frame < s2) {
+      const cycle = Math.floor(frame / 10) % 6;
+      const progress = (frame % 10) / 10;
+      
+      // Dramatic zoom base
+      const baseZoom = 2.0;
+      
+      const positions = [
+        { x: -100, y: -100, z: 1.2 }, // Top-Left + Zoom
+        { x: 100, y: 100, z: 0.8 },   // Bottom-Right + Wide
+        { x: 200, y: -50, z: 1.5 },   // Far-Right + Tight
+        { x: -200, y: 50, z: 1.3 },   // Far-Left + Tight
+        { x: 0, y: 300, z: 1.1 },     // Extreme Bottom
+        { x: 0, y: -300, z: 1.4 },    // Extreme Top
+      ];
+
+      const pos = positions[cycle];
+      
+      // Instant switch logic (or very fast interpolation)
+      const x = interpolate(progress, [0, 0.1, 1], [pos.x, pos.x, pos.x * 1.5]);
+      const y = interpolate(progress, [0, 0.1, 1], [pos.y, pos.y, pos.y * 1.5]);
+      const z = baseZoom * interpolate(progress, [0, 1], [pos.z, pos.z * 1.2]);
+
+      return {
+        transform: `translate(${x}px, ${y}px) scale(${z})`,
+      };
+    }
+    return { transform: 'scale(1)' };
+  };
+
+  const cameraStyle = getCameraStyle();
+  const showGlitch = (frame % 20) < 4; // Trigger glitch for 4 frames every 20 frames
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#000', transform: `translate(${shakeX}px, ${shakeY}px)` }}>
+    <AbsoluteFill style={{ backgroundColor: '#000', ...cameraStyle }}>
       <GlobalFrameThemed color={theme.themeColor} glowColor={theme.glowColor} />
       <Audio src={staticFile(theme.music.src)} volume={theme.music.volume ?? 0.6} loop startFrom={theme.music.startFrom} />
       
       {/* Background Speed Effects */}
       <Sequence from={0}>
-        <SpeedLinesBackground frame={frame} color={theme.themeColor} opacity={0.3} />
+        <SpeedLinesBackground frame={frame} color={theme.themeColor} opacity={0.4} count={150} />
       </Sequence>
+      
+      {showGlitch && <GlitchNoise frame={frame} opacity={0.4} />}
 
       <LightLeak frame={frame} color={theme.lightLeakColor || theme.themeColor} />
       <FlashOverlay frame={frame} triggerFrames={flashTriggers} />
