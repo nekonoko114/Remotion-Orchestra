@@ -13,7 +13,7 @@ import {
   GlobalFrameThemed,
   FlashOverlay,
   GlitchNoise,
-  ThreeCyberTunnel,
+  CyberTunnel2D,
 } from './BattleSharedComponents';
 import { BattleSpiritTheme } from './types';
 
@@ -103,7 +103,7 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
       
       {/* Background Speed Effects */}
       <Sequence from={0}>
-        <ThreeCyberTunnel frame={frame} color={theme.themeColor} />
+        <CyberTunnel2D frame={frame} color={theme.themeColor} />
       </Sequence>
       
       {showGlitch && <GlitchNoise frame={frame} opacity={0.6} rotation={glitchRotation} />}

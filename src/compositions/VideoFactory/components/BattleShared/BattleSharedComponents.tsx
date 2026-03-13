@@ -1,4 +1,3 @@
-/// <reference types="@react-three/fiber" />
 import React from 'react';
 import {
   AbsoluteFill,
@@ -10,8 +9,6 @@ import {
   Img,
   staticFile,
 } from 'remotion';
-import { ThreeCanvas } from '@remotion/three';
-import { PerspectiveCamera } from '@react-three/drei';
 import { loadFont } from '@remotion/google-fonts/NotoSansJP';
 
 const { fontFamily } = loadFont('normal', {
@@ -839,63 +836,103 @@ export const FlashOverlay: React.FC<{ frame: number; triggerFrames: number[] }> 
   );
 };
 
-export const ThreeCyberTunnel: React.FC<{ frame: number; color?: string }> = ({ frame, color = '#ffdd44' }) => {
-    const { width, height } = useVideoConfig();
-    
-    return (
+/**
+ * 2D Cyber Tunnel Effect
+ * Higher performance than Three.js while providing similar depth
+ */
+export const CyberTunnel2D: React.FC<{ frame: number; color?: string }> = ({ frame, color = '#ffdd44' }) => {
+  const ringCount = 10;
+  
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', backgroundColor: '#000' }}>
+      {/* Dynamic Background Speed Lines */}
       <AbsoluteFill>
-        <ThreeCanvas width={width} height={height}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-          
-          <Scene3D frame={frame} color={color} />
-        </ThreeCanvas>
+        {new Array(24).fill(0).map((_, i) => (
+            <div
+              key={`line-${i}`}
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                width: 2000,
+                height: 1,
+                background: `linear-gradient(to right, transparent, ${color}, transparent)`,
+                transform: `rotate(${i * 15 + frame * 0.1}deg) translateX(-50%)`,
+                opacity: 0.1,
+                transformOrigin: 'center center',
+              }}
+            />
+        ))}
       </AbsoluteFill>
-    );
-  };
-  
-const Scene3D: React.FC<{ frame: number; color: string }> = ({ frame, color }) => {
-    const tunnelLength = 60;
-    const ringCount = 20;
-    
-    return (
-      <group>
-        <group rotation={[Math.PI / 2, 0, 0]}>
-          <gridHelper args={[200, 40, color, color]} position={[0, -3, 0]} opacity={0.3} transparent />
-          <gridHelper args={[200, 40, color, color]} position={[0, 3, 0]} opacity={0.3} transparent />
-        </group>
+
+      {/* Pulsing Depth Rings */}
+      {new Array(ringCount).fill(0).map((_, i) => {
+        const offset = i / ringCount;
+        const progress = (frame * 0.03 + offset) % 1;
+        const scale = interpolate(progress, [0, 1], [0.1, 10]);
+        const opacity = interpolate(progress, [0, 0.2, 0.8, 1], [0, 1, 0.8, 0]);
+        const blur = interpolate(progress, [0, 1], [1, 15]);
         
-        <group rotation={[Math.PI / 2, 0, Math.PI / 2]}>
-          <gridHelper args={[200, 40, color, color]} position={[0, -3, 0]} opacity={0.1} transparent />
-          <gridHelper args={[200, 40, color, color]} position={[0, 3, 0]} opacity={0.1} transparent />
-        </group>
-  
-        {Array.from({ length: ringCount }).map((_, i) => {
-          const moveSpeed = 0.8;
-          const zBase = (i * (tunnelLength / ringCount) + frame * moveSpeed) % tunnelLength;
-          const zPos = 10 - zBase;
-          
-          const opacity = interpolate(zPos, [-tunnelLength + 10, 0, 10], [0, 1, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
-          
-          return (
-            <mesh key={i} position={[0, 0, zPos]} rotation={[0, 0, frame * 0.02 + i]}>
-              <torusGeometry args={[3, 0.03, 16, 100]} />
-              <meshStandardMaterial 
-                  color={color} 
-                  emissive={color} 
-                  emissiveIntensity={4} 
-                  transparent 
-                  opacity={opacity * 0.8} 
-              />
-            </mesh>
-          );
-        })}
-  
-        <mesh position={[0, 0, -50]}>
-          <sphereGeometry args={[5, 32, 32]} />
-          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={10} transparent opacity={0.1} />
-        </mesh>
-      </group>
-    );
+        return (
+          <div
+            key={`ring-${i}`}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              width: 800,
+              height: 800,
+              border: `2px solid ${color}`,
+              borderRadius: '50%',
+              transform: `translate(-50%, -50%) scale(${scale})`,
+              opacity: opacity * 0.5,
+              filter: `blur(${blur}px)`,
+              boxShadow: `0 0 30px ${color}, inset 0 0 30px ${color}`,
+            }}
+          />
+        );
+      })}
+
+      {/* Cyber Grid Perspective */}
+      <AbsoluteFill style={{ perspective: '800px' }}>
+         <div style={{
+           position: 'absolute',
+           bottom: 0, width: '200%', height: '50%', left: '-50%',
+           backgroundImage: `
+             repeating-linear-gradient(90deg, transparent 0px, ${color}44 1px, transparent 40px),
+             repeating-linear-gradient(0deg, transparent 0px, ${color}44 1px, transparent 40px)
+           `,
+           backgroundPosition: `center ${frame * 2}px`,
+           transform: 'rotateX(75deg)',
+           transformOrigin: 'bottom center',
+           opacity: 0.2,
+         }} />
+         <div style={{
+           position: 'absolute',
+           top: 0, width: '200%', height: '50%', left: '-50%',
+           backgroundImage: `
+             repeating-linear-gradient(90deg, transparent 0px, ${color}44 1px, transparent 40px),
+             repeating-linear-gradient(0deg, transparent 0px, ${color}44 1px, transparent 40px)
+           `,
+           backgroundPosition: `center ${-frame * 2}px`,
+           transform: 'rotateX(-75deg)',
+           transformOrigin: 'top center',
+           opacity: 0.2,
+         }} />
+      </AbsoluteFill>
+
+      {/* Core Glow */}
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        width: 600,
+        height: 600,
+        transform: 'translate(-50%, -50%)',
+        background: `radial-gradient(circle, ${color} 0%, transparent 75%)`,
+        opacity: 0.3,
+        filter: 'blur(50px)',
+      }} />
+    </AbsoluteFill>
+  );
 };
