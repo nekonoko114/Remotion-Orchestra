@@ -8,6 +8,7 @@ import {
 } from 'remotion';
 import {
   SunsetBackground,
+  EmeraldBackground,
   CustomBackgroundImage,
   KineticText,
 } from '../BattleSharedComponents';
@@ -18,7 +19,7 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
   const { fps } = useVideoConfig();
 
   const phase = Math.floor(frame / 60);
-  const text = phase === 0 ? "ガチバトル<br/>決定‼️" : phase === 1 ? (theme.themeColor === 'orange' ? "みんな<br/>私についてきな！" : "全員の力で<br/>バチバチに行くぞ!") : (theme.themeColor === 'orange' ? "さぁ行くよ‼️" : "俺に力を<br/>貸してくれ！"); 
+  const text = phase === 0 ? "ガチバトル<br/>決定‼️" : phase === 1 ? (theme.themeColor === 'orange' ? "みんな<br/>私についてきな！" : theme.themeColor === 'green' ? "大自然のパワー<br/>見せてあげる！" : "全員の力で<br/>バチバチに行くぞ!") : (theme.themeColor === 'orange' ? "さぁ行くよ‼️" : theme.themeColor === 'green' ? "準備はいい？" : "俺に力を<br/>貸してくれ！"); 
 
   const localFrame = frame % 60;
   const entry = spring({ frame: localFrame, fps, config: { stiffness: 400, damping: 15 } });
@@ -26,7 +27,7 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#050000' }}>
-      {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame} /> : null)}
+      {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame} /> : theme.themeColor === 'green' ? <EmeraldBackground frame={frame} /> : null)}
       
       <div style={{
         position: 'absolute', inset: 0, zIndex: 4, pointerEvents: 'none',
@@ -36,7 +37,7 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: `radial-gradient(ellipse at 50% 50%, ${theme.themeColor === 'orange' ? 'rgba(120,10,0,' : 'rgba(120,10,0,'}${0.7 * pulse}) 0%, transparent 70%)`,
+        background: `radial-gradient(ellipse at 50% 50%, ${theme.themeColor === 'orange' ? 'rgba(120,10,0,' : theme.themeColor === 'green' ? 'rgba(0,120,50,' : 'rgba(120,10,0,'}${0.7 * pulse}) 0%, transparent 70%)`,
       }} />
 
       {localFrame < 20 && (

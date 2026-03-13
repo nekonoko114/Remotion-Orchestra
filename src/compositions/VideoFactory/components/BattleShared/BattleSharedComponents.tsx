@@ -348,3 +348,17 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
     </AbsoluteFill>
   );
 };
+export const EmeraldBackground: React.FC<{ frame: number; opacity?: number }> = ({ frame, opacity = 1 }) => {
+  const progress = frame / (35 * 30); 
+  const scale = interpolate(progress, [0, 1], [1, 3.5]);
+  const translateY = interpolate(progress, [0, 1], [0, -200]);
+
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', opacity }}>
+      <div style={{ width: '100%', height: '100%', transform: `scale(${scale}) translateY(${translateY}px)`, transformOrigin: '50% 50%' }}>
+        <Img src={staticFile('assets/anime_emerald_forest_background.png')} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.9) contrast(1.1)' }} />
+      </div>
+      <AbsoluteFill style={{ background: 'radial-gradient(circle, rgba(0,255,100,0.2) 0%, rgba(0,30,0,0.4) 100%)', mixBlendMode: 'overlay' }} />
+    </AbsoluteFill>
+  );
+};

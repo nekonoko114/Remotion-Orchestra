@@ -43,6 +43,10 @@ import {
   JolBattleSpiritOrange,
   JOL_ORANGE_DURATION,
 } from './compositions/VideoFactory/JolBattleSpiritOrange';
+import {
+  JolBattleSpiritGreen,
+  JOL_GREEN_DURATION,
+} from './compositions/VideoFactory/JolBattleSpiritGreen';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import './index.css';
 import React from 'react';
@@ -333,6 +337,45 @@ export const RemotionRoot: React.FC = () => {
           },
           lightLeakColor: '#ff8800',
           reverseVsOrder: true,
+        }}
+      />
+      <Composition
+        id="JOL-BATTLE-SPIRIT-GREEN"
+        component={JolBattleSpiritGreen}
+        durationInFrames={JOL_GREEN_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={BattleSpiritThemeSchema}
+        defaultProps={{
+          themeColor: 'green',
+          glowColor: 'rgba(0, 255, 100, 0.8)',
+          particleColor1: '#006600',
+          particleColor2: '#00cc44',
+          music: {
+            src: 'assets/audio/music/Siege_Buster.mp3',
+            startFrom: 126 * 30,
+            volume: 0.6,
+          },
+          opponent: {
+            name: '🌸さくら🌸',
+            image: 'assets/images-01/l5332541.jpeg',
+            borderColor: '#fff',
+            glowColor: 'green',
+          },
+          liver: {
+            name: '🏙️飛鳥あすか🏙️',
+            image: 'assets/images-01/asuka_portrait.webp',
+            borderColor: '#00FF7F',
+            glowColor: '#00FF00',
+          },
+          endingText: 'この戦いは<br/>絶対に負けられない。',
+          features: {
+            useGlitch: true,
+            useMirror: true,
+            useDoublingGrid: false,
+          },
+          lightLeakColor: '#00ff88',
         }}
       />
     </>
