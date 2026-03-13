@@ -8,7 +8,7 @@ export const blueTheme: BattleSpiritTheme = {
   particleColor1: '#0000cc',
   particleColor2: '#0088ff',
   music: {
-    src: 'assets/p-02.mp3',
+    src: 'assets/audio/music/Breathing-Lighter.mp3',
     startFrom: (126 * 30),
     volume: 0.6,
   },

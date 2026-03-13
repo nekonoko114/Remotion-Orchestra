@@ -60,6 +60,7 @@ import {
 } from './compositions/VideoFactory/JolBattleSpeedOrange';
 import { MagicCircleShowcase } from './compositions/VideoFactory/MagicCircleShowcase';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
+import { AssetPanel } from './components/AssetPanel';
 import './index.css';
 import React from 'react';
 
@@ -316,7 +317,7 @@ export const RemotionRoot: React.FC = () => {
           particleColor1: '#0000cc',
           particleColor2: '#0088ff',
           music: {
-            src: 'assets/p-02.mp3',
+            src: 'assets/audio/music/Breathing-Lighter.mp3',
             startFrom: 126 * 30,
             volume: 0.6,
           },
@@ -388,6 +389,7 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
       />
+      <AssetPanel />
     </>
   );
 };

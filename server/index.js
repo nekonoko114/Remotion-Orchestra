@@ -292,6 +292,25 @@ app.get('/api/assets', (req, res) => {
   });
 });
 
+// 5. Download Pixabay Asset
+app.post('/api/download-pixabay', (req, res) => {
+  const { url, category, id } = req.body;
+  const scriptPath = path.join(ROOT_DIR, 'scripts/download-asset.js');
+  
+  // Use node to run the script
+  const cmd = `node "${scriptPath}" "${url}" "${category}" "${id}"`;
+  
+  console.log(`Executing: ${cmd}`);
+  
+  shell.exec(cmd, { async: true }, (code, stdout, stderr) => {
+    if (code !== 0) {
+      console.error(`Download failed: ${stderr}`);
+      return res.status(500).json({ error: 'Download failed', details: stderr });
+    }
+    res.json({ success: true, message: 'Download complete', stdout });
+  });
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Orchestra Controller running at http://localhost:${PORT}`);
