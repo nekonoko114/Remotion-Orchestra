@@ -254,6 +254,7 @@ export const RemotionRoot: React.FC = () => {
           },
           liverIntroDuration: 120,
           reverseVsOrder: true,
+          customBackground: 'assets/images-01/red-energy-bg.png',
         }}
       />
       <Composition

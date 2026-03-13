@@ -31,6 +31,7 @@ export const BattleSpiritThemeSchema = z.object({
   lightLeakColor: z.string().optional(),
   liverIntroDuration: z.number().optional(),
   reverseVsOrder: z.boolean().optional(),
+  customBackground: z.string().optional(),
 });
 
 export type BattleSpiritTheme = z.infer<typeof BattleSpiritThemeSchema>;

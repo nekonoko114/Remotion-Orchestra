@@ -326,3 +326,25 @@ export const SunsetBackground: React.FC<{ frame: number; opacity?: number }> = (
     </AbsoluteFill>
   );
 };
+
+export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opacity?: number }> = ({ src, frame, opacity = 1 }) => {
+  const scale = 1.1 + Math.sin(frame * 0.02) * 0.05;
+  const rotate = Math.sin(frame * 0.01) * 2;
+
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', opacity }}>
+      <div style={{ 
+        width: '100%', height: '100%', 
+        transform: `scale(${scale}) rotate(${rotate}deg)`,
+        transformOrigin: '50% 50%' 
+      }}>
+        <Img src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </div>
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'radial-gradient(circle, transparent 20%, rgba(0,0,0,0.4) 100%)',
+        mixBlendMode: 'multiply'
+      }} />
+    </AbsoluteFill>
+  );
+};
