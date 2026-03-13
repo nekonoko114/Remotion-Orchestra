@@ -1,5 +1,5 @@
+/// <reference types="@react-three/fiber" />
 import React from 'react';
-import '@react-three/fiber';
 import {
   AbsoluteFill,
   useCurrentFrame,
