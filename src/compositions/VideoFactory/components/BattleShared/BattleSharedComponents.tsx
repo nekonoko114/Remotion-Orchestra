@@ -370,12 +370,27 @@ export const MagicCircle: React.FC<{
   rotationX?: number;
   rotationY?: number;
   perspective?: number;
-}> = ({ frame, color, size = 600, rotationX = 0, rotationY = 0, perspective = 1000 }) => {
+  drawProgress?: number; // 0 to 1
+}> = ({ 
+  frame, 
+  color, 
+  size = 600, 
+  rotationX = 0, 
+  rotationY = 0, 
+  perspective = 1000,
+  drawProgress = 1,
+}) => {
   const rotationOuter = frame * 0.5;
   const rotationInner = -frame * 0.8;
   const pulse = 0.95 + 0.05 * Math.sin(frame * 0.1);
 
   const runes = "✦ ⚛ ❂ ۞ ✵ ✺ ✹ ✸ ✷ ✶ ✴ ✳ ✲ ✱ ✰ ⚡ ✮ ✭ ✬ ✫ ✪ ✩ ✧ ✦ ✡ ❂ ❉ ❈ ❊ ❋";
+
+  // Helper for drawing animation
+  const getDrawStyles = (length: number) => ({
+    strokeDasharray: length,
+    strokeDashoffset: length * (1 - drawProgress),
+  });
 
   return (
     <div style={{ 
@@ -401,11 +416,11 @@ export const MagicCircle: React.FC<{
           </defs>
 
           {/* Outer Ring */}
-          <circle cx="200" cy="200" r="180" fill="none" stroke={color} strokeWidth="2" opacity="0.4" />
-          <circle cx="200" cy="200" r="190" fill="none" stroke={color} strokeWidth="1" opacity="0.2" />
+          <circle cx="200" cy="200" r="180" fill="none" stroke={color} strokeWidth="2" opacity="0.4" style={getDrawStyles(1131)} />
+          <circle cx="200" cy="200" r="190" fill="none" stroke={color} strokeWidth="1" opacity="0.2" style={getDrawStyles(1194)} />
 
           {/* Runes Layer */}
-          <g style={{ transform: `rotate(${rotationOuter}deg)`, transformOrigin: '200px 200px' }}>
+          <g style={{ transform: `rotate(${rotationOuter}deg)`, transformOrigin: '200px 200px', opacity: drawProgress }}>
             <text fontSize="14" fill={color} opacity="0.8">
               <textPath href="#runePath" spacing="auto">
                 {runes} {runes}
@@ -422,6 +437,7 @@ export const MagicCircle: React.FC<{
               stroke={color}
               strokeWidth="3"
               opacity="0.6"
+              style={getDrawStyles(800)}
             />
             <path
               d="M 200,320 L 90,140 L 310,140 Z"
@@ -429,18 +445,19 @@ export const MagicCircle: React.FC<{
               stroke={color}
               strokeWidth="3"
               opacity="0.6"
+              style={getDrawStyles(800)}
             />
             
             {/* Inner Circles */}
-            <circle cx="200" cy="200" r="100" fill="none" stroke={color} strokeWidth="4" opacity="0.3" />
-            <circle cx="200" cy="200" r="40" fill="none" stroke={color} strokeWidth="2" />
+            <circle cx="200" cy="200" r="100" fill="none" stroke={color} strokeWidth="4" opacity="0.3" style={getDrawStyles(628)} />
+            <circle cx="200" cy="200" r="40" fill="none" stroke={color} strokeWidth="2" style={getDrawStyles(251)} />
             
             {/* Square */}
-            <rect x="130" y="130" width="140" height="140" fill="none" stroke={color} strokeWidth="1" opacity="0.4" transform="rotate(45 200 200)" />
+            <rect x="130" y="130" width="140" height="140" fill="none" stroke={color} strokeWidth="1" opacity="0.4" transform="rotate(45 200 200)" style={getDrawStyles(560)} />
           </g>
 
           {/* Orbitals */}
-          {[0, 90, 180, 270].map((angle, i) => {
+          {drawProgress > 0.8 && [0, 90, 180, 270].map((angle, i) => {
             const orbitAngle = rotationOuter * 1.5 + angle;
             const r = 165;
             const x = 200 + r * Math.cos((orbitAngle * Math.PI) / 180);

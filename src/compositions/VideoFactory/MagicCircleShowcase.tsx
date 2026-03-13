@@ -9,6 +9,11 @@ export const MagicCircleShowcase: React.FC = () => {
   const rotationX = interpolate(frame, [0, 300], [0, 360]);
   const rotationY = interpolate(frame, [0, 300], [0, 720]);
   
+  // Tracing animation
+  const drawProgress = interpolate(frame % 150, [0, 80], [0, 1], {
+    extrapolateRight: 'clamp',
+  });
+
   return (
     <AbsoluteFill style={{ backgroundColor: '#050a10' }}>
       {/* Background glow */}
@@ -21,8 +26,21 @@ export const MagicCircleShowcase: React.FC = () => {
         }} />
       </AbsoluteFill>
 
-      {/* Mode 1: 3D Showcase */}
+      {/* Mode 1: Tracing Mode */}
       <Sequence durationInFrames={150}>
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <MagicCircle 
+            frame={frame} 
+            color="#00ffaa" 
+            size={800} 
+            drawProgress={drawProgress}
+          />
+          <div style={labelStyle}>TRACING MODE (DRAWING)</div>
+        </AbsoluteFill>
+      </Sequence>
+
+      {/* Mode 2: 3D Showcase */}
+      <Sequence from={150} durationInFrames={150}>
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
           <MagicCircle 
             frame={frame} 
@@ -35,8 +53,8 @@ export const MagicCircleShowcase: React.FC = () => {
         </AbsoluteFill>
       </Sequence>
 
-      {/* Mode 2: Kaleidoscope Mode */}
-      <Sequence from={150} durationInFrames={150}>
+      {/* Mode 3: Kaleidoscope Mode */}
+      <Sequence from={300} durationInFrames={150}>
         <AbsoluteFill>
           <Kaleidoscope count={8}>
             <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -46,6 +64,22 @@ export const MagicCircleShowcase: React.FC = () => {
             </AbsoluteFill>
           </Kaleidoscope>
           <div style={labelStyle}>KALEIDOSCOPE MODE</div>
+        </AbsoluteFill>
+      </Sequence>
+
+      {/* Mode 4: Full Ritual */}
+      <Sequence from={450} durationInFrames={150}>
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Kaleidoscope count={6} opacity={0.3}>
+             <MagicCircle frame={frame} color="#00ffaa" size={1200} rotationX={60} rotationY={frame} />
+          </Kaleidoscope>
+          <MagicCircle 
+            frame={frame} 
+            color="#fff" 
+            size={600} 
+            drawProgress={interpolate(frame % 150, [0, 40], [0, 1], { extrapolateRight: 'clamp' })}
+          />
+          <div style={labelStyle}>FULL RITUAL DEMO</div>
         </AbsoluteFill>
       </Sequence>
     </AbsoluteFill>
