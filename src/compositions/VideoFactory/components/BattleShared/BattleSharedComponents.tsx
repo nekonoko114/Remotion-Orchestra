@@ -340,14 +340,30 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
       }}>
         <Img src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
-      <div style={{
-        position: 'absolute', inset: 0,
-        background: 'radial-gradient(circle, transparent 20%, rgba(0,0,0,0.4) 100%)',
-        mixBlendMode: 'multiply'
+    </AbsoluteFill>
+  );
+};
+
+export const MagicBackground: React.FC<{ frame: number }> = ({ frame }) => {
+  return (
+    <AbsoluteFill style={{ backgroundColor: '#050a10' }}>
+      <Img 
+        src={staticFile('assets/anime_magic_nebula_background.png')} 
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          objectFit: 'cover',
+          opacity: 0.8,
+          transform: `scale(${1.1 + Math.sin(frame * 0.01) * 0.05}) rotate(${Math.sin(frame * 0.005) * 2}deg)`,
+        }} 
+      />
+      <AbsoluteFill style={{ 
+        background: 'radial-gradient(circle, transparent 20%, rgba(5, 10, 20, 0.4) 100%)',
       }} />
     </AbsoluteFill>
   );
 };
+
 export const EmeraldBackground: React.FC<{ frame: number; opacity?: number }> = ({ frame, opacity = 1 }) => {
   const progress = frame / (35 * 30); 
   const scale = interpolate(progress, [0, 1], [1, 3.5]);

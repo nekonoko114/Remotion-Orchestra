@@ -9,6 +9,7 @@ import {
 import {
   SunsetBackground,
   EmeraldBackground,
+  MagicBackground,
   CustomBackgroundImage,
   KineticText,
 } from '../BattleSharedComponents';
@@ -19,7 +20,7 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
   const { fps } = useVideoConfig();
 
   const phase = Math.floor(frame / 60);
-  const text = phase === 0 ? "ガチバトル<br/>決定‼️" : phase === 1 ? (theme.themeColor === 'orange' ? "みんな<br/>私についてきな！" : theme.themeColor === 'green' ? "大自然のパワー<br/>見せてあげる！" : "全員の力で<br/>バチバチに行くぞ!") : (theme.themeColor === 'orange' ? "さぁ行くよ‼️" : theme.themeColor === 'green' ? "準備はいい？" : "俺に力を<br/>貸してくれ！"); 
+  const text = phase === 0 ? "ガチバトル<br/>決定‼️" : phase === 1 ? (theme.themeColor === 'orange' ? "みんな<br/>私についてきな！" : theme.themeColor === 'green' ? "大自然のパワー<br/>見せてあげる！" : theme.themeColor === 'purple' ? "古の魔力が<br/>今、呼び覚まされる..." : "全員の力で<br/>バチバチに行くぞ!") : (theme.themeColor === 'orange' ? "さぁ行くよ‼️" : theme.themeColor === 'green' ? "準備はいい？" : theme.themeColor === 'purple' ? "終焉の儀式を<br/>始めよう" : "俺に力を<br/>貸してくれ！"); 
 
   const localFrame = frame % 60;
   const entry = spring({ frame: localFrame, fps, config: { stiffness: 400, damping: 15 } });
@@ -27,7 +28,7 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#050000' }}>
-      {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame} /> : theme.themeColor === 'green' ? <EmeraldBackground frame={frame} /> : null)}
+      {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame} /> : theme.themeColor === 'green' ? <EmeraldBackground frame={frame} /> : theme.themeColor === 'purple' ? <MagicBackground frame={frame} /> : null)}
       
       <div style={{
         position: 'absolute', inset: 0, zIndex: 4, pointerEvents: 'none',
@@ -37,7 +38,7 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
 
       <div style={{
         position: 'absolute', inset: 0,
-        background: `radial-gradient(ellipse at 50% 50%, ${theme.themeColor === 'orange' ? 'rgba(120,10,0,' : theme.themeColor === 'green' ? 'rgba(0,120,50,' : 'rgba(120,10,0,'}${0.7 * pulse}) 0%, transparent 70%)`,
+        background: `radial-gradient(ellipse at 50% 50%, ${theme.themeColor === 'orange' ? 'rgba(120,10,0,' : theme.themeColor === 'green' ? 'rgba(0,120,50,' : theme.themeColor === 'purple' ? 'rgba(80,0,120,' : 'rgba(120,10,0,'}${0.7 * pulse}) 0%, transparent 70%)`,
       }} />
 
       {localFrame < 20 && (

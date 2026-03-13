@@ -10,6 +10,7 @@ import {
 import {
   LightLeak,
   GlobalFrameThemed,
+  MagicCircle,
 } from './BattleSharedComponents';
 import { BattleSpiritTheme } from './types';
 
@@ -56,6 +57,14 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ t
       <GlobalFrameThemed color={theme.themeColor} glowColor={theme.glowColor} />
       <Audio src={staticFile(theme.music.src)} volume={theme.music.volume ?? 0.6} loop startFrom={theme.music.startFrom} />
       <LightLeak frame={frame} color={theme.lightLeakColor || theme.themeColor} />
+      
+      {theme.themeColor === 'purple' && (
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', opacity: 0.3, pointerEvents: 'none' }}>
+          <div style={{ transform: `scale(1.5) rotate(${frame * 0.2}deg)` }}>
+            <MagicCircle frame={frame} color="#ffdd44" size={1200} rotationX={60} />
+          </div>
+        </AbsoluteFill>
+      )}
 
       <Sequence from={s1} durationInFrames={OP_DUR}><SceneOpening theme={theme} /></Sequence>
       <Sequence from={s2} durationInFrames={DATE_DUR}><SceneDate theme={theme} /></Sequence>
