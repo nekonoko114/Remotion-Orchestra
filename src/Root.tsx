@@ -47,6 +47,7 @@ import {
   JolBattleSpiritGreen,
   JOL_GREEN_DURATION,
 } from './compositions/VideoFactory/JolBattleSpiritGreen';
+import { MagicCircleShowcase } from './compositions/VideoFactory/MagicCircleShowcase';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import './index.css';
 import React from 'react';
@@ -377,6 +378,14 @@ export const RemotionRoot: React.FC = () => {
           },
           lightLeakColor: '#00ff88',
         }}
+      />
+      <Composition
+        id="Magic-Circle-Showcase"
+        component={MagicCircleShowcase}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
+        height={1920}
       />
     </>
   );
