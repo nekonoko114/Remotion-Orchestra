@@ -344,6 +344,85 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
   );
 };
 
+export const CanvasImageKaleidoscope: React.FC<{
+  src: string;
+  frame: number;
+  segments?: number;
+  opacity?: number;
+}> = ({ src, frame, segments = 12, opacity = 1 }) => {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const { width, height } = useVideoConfig();
+  const [image, setImage] = React.useState<HTMLImageElement | null>(null);
+
+  React.useEffect(() => {
+    const img = new Image();
+    img.src = staticFile(src);
+    img.onload = () => setImage(img);
+  }, [src]);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !image) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, width, height);
+    
+    const angle = (Math.PI * 2) / segments;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = Math.max(width, height) * 1.5;
+
+    // Time-based animation
+    const rotation = frame * 0.01;
+    const zoom = 1.2 + Math.sin(frame * 0.02) * 0.1;
+
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(rotation);
+
+    for (let i = 0; i < segments; i++) {
+      ctx.save();
+      ctx.rotate(i * angle);
+
+      // Create clipping slice
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, radius, -angle / 2, angle / 2);
+      ctx.closePath();
+      ctx.clip();
+
+      // Mirror alternate segments
+      if (i % 2 === 1) {
+        ctx.scale(1, -1);
+      }
+
+      // Draw image
+      const imgW = width * zoom;
+      const imgH = height * zoom;
+      ctx.drawImage(image, -imgW / 2, -imgH / 2, imgW, imgH);
+
+      ctx.restore();
+    }
+    ctx.restore();
+
+    // Vignette
+    const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius / 2);
+    grad.addColorStop(0, 'transparent');
+    grad.addColorStop(1, 'rgba(5, 5, 15, 0.7)');
+    ctx.fillStyle = grad;
+    ctx.globalAlpha = 0.8;
+    ctx.fillRect(0, 0, width, height);
+
+  }, [frame, image, width, height, segments]);
+
+  return (
+    <AbsoluteFill style={{ opacity }}>
+      <canvas ref={canvasRef} width={width} height={height} style={{ width: '100%', height: '100%' }} />
+    </AbsoluteFill>
+  );
+};
+
 export const CanvasKaleidoscope: React.FC<{
   color1?: string;
   color2?: string;
@@ -389,8 +468,28 @@ export const CanvasKaleidoscope: React.FC<{
 
       const drawRibbon = (offset: number, scale: number, col: string) => {
         ctx.strokeStyle = col;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 4;
         ctx.globalAlpha = opacity;
+        
+        // Draw filled shape background
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = col;
+        ctx.globalAlpha = opacity * 0.2;
+        for (let j = 0; j < 30; j++) {
+          const t = j / 30;
+          const r = t * radiusBase * scale;
+          const θ = Math.sin(t * 5 + time + offset) * (angleStep * 0.4);
+          const x = r * Math.cos(θ);
+          const y = r * Math.sin(θ);
+          if (j === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.lineTo(0,0);
+        ctx.fill();
+        ctx.restore();
+
+        // Main line
         ctx.beginPath();
         for (let j = 0; j < 60; j++) {
           const t = j / 60;
@@ -404,23 +503,29 @@ export const CanvasKaleidoscope: React.FC<{
         ctx.stroke();
 
         // Glowing dots
-        const dotR = radiusBase * 0.4 * scale;
+        const dotR = radiusBase * 0.5 * scale;
         const dotθ = Math.cos(time * 0.4 + offset) * (angleStep * 0.35);
         ctx.fillStyle = col;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = col;
         ctx.beginPath();
-        ctx.arc(dotR * Math.cos(dotθ), dotR * Math.sin(dotθ), 5, 0, Math.PI * 2);
+        ctx.arc(dotR * Math.cos(dotθ), dotR * Math.sin(dotθ), 8, 0, Math.PI * 2);
         ctx.fill();
+        ctx.shadowBlur = 0;
 
-        // Cross lines
+        // Geometric shards
         ctx.beginPath();
-        ctx.moveTo(radiusBase * 0.1, 0);
-        ctx.lineTo(radiusBase * 0.9 * Math.cos(angleStep * 0.3), radiusBase * 0.9 * Math.sin(angleStep * 0.3));
+        ctx.moveTo(radiusBase * 0.3, 0);
+        ctx.lineTo(radiusBase * 0.7 * Math.cos(angleStep * 0.3), radiusBase * 0.7 * Math.sin(angleStep * 0.3));
+        ctx.strokeStyle = col;
+        ctx.globalAlpha = opacity * 0.5;
         ctx.stroke();
       };
 
       drawRibbon(0, 1.2, color1);
       drawRibbon(Math.PI, 0.8, color2);
-      drawRibbon(time * 0.5, 1.5, color1);
+      drawRibbon(time * 0.5, 1.4, color2);
+      drawRibbon(time * 0.8, 0.6, color1);
 
       ctx.restore();
     }
@@ -450,18 +555,16 @@ export const CanvasKaleidoscope: React.FC<{
 export const MagicBackground: React.FC<{ frame: number }> = ({ frame }) => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#050a10' }}>
-      <CanvasKaleidoscope opacity={0.6} />
-      <Img 
-        src={staticFile('assets/anime_magic_nebula_background.png')} 
-        style={{ 
-          width: '100%', 
-          height: '100%', 
-          objectFit: 'cover',
-          opacity: 0.4,
-          mixBlendMode: 'screen',
-          transform: `scale(${1.1 + Math.sin(frame * 0.01) * 0.05}) rotate(${Math.sin(frame * 0.005) * 2}deg)`,
-        }} 
+      <CanvasImageKaleidoscope 
+        src="assets/anime_magic_nebula_background.png" 
+        frame={frame} 
+        opacity={0.8}
+        segments={12}
       />
+      
+      {/* Dynamic line kaleidoscope overlay */}
+      <CanvasKaleidoscope opacity={0.5} />
+
       <AbsoluteFill style={{ 
         background: 'radial-gradient(circle, transparent 20%, rgba(5, 10, 20, 0.6) 100%)',
       }} />
