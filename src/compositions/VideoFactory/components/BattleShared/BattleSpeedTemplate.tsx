@@ -86,12 +86,13 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
     return { transform: 'scale(1)' };
   };
 
-  const cameraStyle = getCameraStyle();
+  // Glitch Logic: Only in Opening (0-180fr) and High-Speed Section (583-780fr)
+  const isOpeningGlitch = frame < s2;
+  const isHighIntensityGlitch = frame >= 583 && frame <= 780;
   
-  // Glitch Logic: 20fr before 615fr, 5fr after 615fr, back to 20fr after 769fr
-  const glitchInterval = frame >= 769 ? 20 : (frame >= 615 ? 5 : 20);
-  const showGlitch = (frame % glitchInterval) < (frame >= 615 && frame < 769 ? 3 : 4);
-  const glitchRotation = (frame >= 615 && frame < 769) ? (Math.floor(frame / 5) * 30) % 180 : 0;
+  const glitchInterval = isHighIntensityGlitch ? 5 : 20;
+  const showGlitch = (isOpeningGlitch || isHighIntensityGlitch) && (frame % glitchInterval) < 3;
+  const glitchRotation = isHighIntensityGlitch ? (Math.floor(frame / 5) * 30) % 180 : 0;
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', ...cameraStyle }}>
