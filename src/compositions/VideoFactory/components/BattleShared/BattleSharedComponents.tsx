@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   AbsoluteFill,
   useCurrentFrame,
@@ -9,6 +9,8 @@ import {
   Img,
   staticFile,
 } from 'remotion';
+import { ThreeCanvas } from '@remotion/three';
+import { PerspectiveCamera } from '@react-three/drei';
 import { loadFont } from '@remotion/google-fonts/NotoSansJP';
 
 const { fontFamily } = loadFont('normal', {
@@ -834,4 +836,65 @@ export const FlashOverlay: React.FC<{ frame: number; triggerFrames: number[] }> 
   return (
     <AbsoluteFill style={{ backgroundColor: 'white', opacity, pointerEvents: 'none', zIndex: 999 }} />
   );
+};
+
+export const ThreeCyberTunnel: React.FC<{ frame: number; color?: string }> = ({ frame, color = '#ffdd44' }) => {
+    const { width, height } = useVideoConfig();
+    
+    return (
+      <AbsoluteFill>
+        <ThreeCanvas width={width} height={height}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <PerspectiveCamera makeDefault position={[0, 0, 5]} />
+          
+          <Scene3D frame={frame} color={color} />
+        </ThreeCanvas>
+      </AbsoluteFill>
+    );
+  };
+  
+const Scene3D: React.FC<{ frame: number; color: string }> = ({ frame, color }) => {
+    const tunnelLength = 60;
+    const ringCount = 20;
+    
+    return (
+      <group>
+        <group rotation={[Math.PI / 2, 0, 0]}>
+          <gridHelper args={[200, 40, color, color]} position={[0, -3, 0]} opacity={0.3} transparent />
+          <gridHelper args={[200, 40, color, color]} position={[0, 3, 0]} opacity={0.3} transparent />
+        </group>
+        
+        <group rotation={[Math.PI / 2, 0, Math.PI / 2]}>
+          <gridHelper args={[200, 40, color, color]} position={[0, -3, 0]} opacity={0.1} transparent />
+          <gridHelper args={[200, 40, color, color]} position={[0, 3, 0]} opacity={0.1} transparent />
+        </group>
+  
+        {Array.from({ length: ringCount }).map((_, i) => {
+          const moveSpeed = 0.8;
+          const zBase = (i * (tunnelLength / ringCount) + frame * moveSpeed) % tunnelLength;
+          const zPos = 10 - zBase;
+          
+          const opacity = interpolate(zPos, [-tunnelLength + 10, 0, 10], [0, 1, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
+          
+          return (
+            <mesh key={i} position={[0, 0, zPos]} rotation={[0, 0, frame * 0.02 + i]}>
+              <torusGeometry args={[3, 0.03, 16, 100]} />
+              <meshStandardMaterial 
+                  color={color} 
+                  emissive={color} 
+                  emissiveIntensity={4} 
+                  transparent 
+                  opacity={opacity * 0.8} 
+              />
+            </mesh>
+          );
+        })}
+  
+        <mesh position={[0, 0, -50]}>
+          <sphereGeometry args={[5, 32, 32]} />
+          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={10} transparent opacity={0.1} />
+        </mesh>
+      </group>
+    );
 };

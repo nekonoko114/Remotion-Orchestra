@@ -11,9 +11,9 @@ import {
 import {
   LightLeak,
   GlobalFrameThemed,
-  SpeedLinesBackground,
   FlashOverlay,
   GlitchNoise,
+  ThreeCyberTunnel,
 } from './BattleSharedComponents';
 import { BattleSpiritTheme } from './types';
 
@@ -86,6 +86,8 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
     return { transform: 'scale(1)' };
   };
 
+  const cameraStyle = getCameraStyle();
+
   // Glitch Logic: Only in Opening (0-180fr) and High-Speed Section (583-780fr)
   const isOpeningGlitch = frame < s2;
   const isHighIntensityGlitch = frame >= 583 && frame <= 780;
@@ -101,7 +103,7 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
       
       {/* Background Speed Effects */}
       <Sequence from={0}>
-        <SpeedLinesBackground frame={frame} color={theme.themeColor} opacity={0.4} count={150} />
+        <ThreeCyberTunnel frame={frame} color={theme.themeColor} />
       </Sequence>
       
       {showGlitch && <GlitchNoise frame={frame} opacity={0.6} rotation={glitchRotation} />}
