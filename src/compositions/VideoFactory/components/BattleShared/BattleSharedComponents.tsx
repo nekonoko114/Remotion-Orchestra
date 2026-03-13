@@ -723,3 +723,63 @@ export const Kaleidoscope: React.FC<{
     </AbsoluteFill>
   );
 };
+
+export const SpeedLinesBackground: React.FC<{
+  color?: string;
+  count?: number;
+  frame: number;
+  opacity?: number;
+}> = ({ color = '#ffffff', count = 100, frame, opacity = 1 }) => {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const { width, height } = useVideoConfig();
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = opacity;
+    ctx.lineWidth = 2;
+
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    for (let i = 0; i < count; i++) {
+      const angle = random(i + frame * 10) * Math.PI * 2;
+      const length = 200 + random(i + frame * 20) * 800;
+      const startDist = 100 + random(i + frame * 30) * 200;
+
+      const x1 = centerX + Math.cos(angle) * startDist;
+      const y1 = centerY + Math.sin(angle) * startDist;
+      const x2 = centerX + Math.cos(angle) * (startDist + length);
+      const y2 = centerY + Math.sin(angle) * (startDist + length);
+
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+  }, [frame, width, height, color, count, opacity]);
+
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden' }}>
+      <canvas ref={canvasRef} width={width} height={height} style={{ width: '100%', height: '100%' }} />
+    </AbsoluteFill>
+  );
+};
+
+export const FlashOverlay: React.FC<{ frame: number; triggerFrames: number[] }> = ({ frame, triggerFrames }) => {
+  const isTriggered = triggerFrames.some(f => frame >= f && frame < f + 5);
+  const triggerFrame = triggerFrames.find(f => frame >= f && frame < f + 5);
+  
+  const opacity = isTriggered ? interpolate(frame - (triggerFrame || 0), [0, 5], [1, 0]) : 0;
+
+  if (!isTriggered) return null;
+
+  return (
+    <AbsoluteFill style={{ backgroundColor: 'white', opacity, pointerEvents: 'none', zIndex: 999 }} />
+  );
+};

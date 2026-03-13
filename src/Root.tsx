@@ -53,6 +53,11 @@ import {
   magicTheme,
   JOL_MAGIC_DURATION,
 } from './compositions/VideoFactory/JolBattleSpiritMagic';
+import {
+  JolBattleSpeedOrange,
+  speedOrangeTheme,
+  JOL_SPEED_ORANGE_DURATION,
+} from './compositions/VideoFactory/JolBattleSpeedOrange';
 import { MagicCircleShowcase } from './compositions/VideoFactory/MagicCircleShowcase';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import './index.css';
@@ -287,6 +292,16 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         defaultProps={magicTheme}
       />
+      <Composition
+        id="JOL-BATTLE-SPEED-ORANGE"
+        component={JolBattleSpeedOrange}
+        durationInFrames={JOL_SPEED_ORANGE_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={speedOrangeTheme}
+      />
+
       <Composition
         id="JOL-BATTLE-SPIRIT-BLUE"
         component={JolBattleSpiritBlue}
