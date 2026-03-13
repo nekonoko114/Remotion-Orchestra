@@ -303,7 +303,7 @@ export const SvgDefs: React.FC<{ frame: number }> = ({ frame }) => {
           <feTurbulence type="fractalNoise" baseFrequency={`${freq} 0.02`} numOctaves="3" seed={frame % 100} result="n" />
           <feDisplacementMap in="SourceGraphic" in2="n" scale={scale} xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="bloom" x="-30%" y="-30%" width="160%" height="160%">
+        <filter id="bloom" x="-30%" y="-30%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="14" result="b" />
           <feComposite in="SourceGraphic" in2="b" operator="over" />
         </filter>
@@ -344,21 +344,126 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
   );
 };
 
+export const CanvasKaleidoscope: React.FC<{
+  color1?: string;
+  color2?: string;
+  count?: number;
+  opacity?: number;
+}> = ({
+  color1 = '#8800ff',
+  color2 = '#ffdd44',
+  count = 12,
+  opacity = 1,
+}) => {
+  const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, width, height);
+    
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const angleStep = (Math.PI * 2) / count;
+    const time = frame * 0.02;
+    const radiusBase = Math.min(width, height) * 0.8;
+
+    ctx.save();
+    ctx.translate(centerX, centerY);
+
+    for (let i = 0; i < count; i++) {
+      ctx.save();
+      ctx.rotate(i * angleStep);
+
+      // Create a symmetrical slice
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, radiusBase * 1.5, -angleStep / 2, angleStep / 2);
+      ctx.closePath();
+      ctx.clip();
+
+      const drawRibbon = (offset: number, scale: number, col: string) => {
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = opacity;
+        ctx.beginPath();
+        for (let j = 0; j < 60; j++) {
+          const t = j / 60;
+          const r = t * radiusBase * scale;
+          const θ = Math.sin(t * 8 + time + offset) * (angleStep * 0.45);
+          const x = r * Math.cos(θ);
+          const y = r * Math.sin(θ);
+          if (j === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Glowing dots
+        const dotR = radiusBase * 0.4 * scale;
+        const dotθ = Math.cos(time * 0.4 + offset) * (angleStep * 0.35);
+        ctx.fillStyle = col;
+        ctx.beginPath();
+        ctx.arc(dotR * Math.cos(dotθ), dotR * Math.sin(dotθ), 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cross lines
+        ctx.beginPath();
+        ctx.moveTo(radiusBase * 0.1, 0);
+        ctx.lineTo(radiusBase * 0.9 * Math.cos(angleStep * 0.3), radiusBase * 0.9 * Math.sin(angleStep * 0.3));
+        ctx.stroke();
+      };
+
+      drawRibbon(0, 1.2, color1);
+      drawRibbon(Math.PI, 0.8, color2);
+      drawRibbon(time * 0.5, 1.5, color1);
+
+      ctx.restore();
+    }
+    ctx.restore();
+
+    // Edge vignette
+    const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radiusBase);
+    grad.addColorStop(0, 'transparent');
+    grad.addColorStop(1, 'rgba(5, 5, 15, 0.9)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, width, height);
+
+  }, [frame, width, height, count, color1, color2, opacity]);
+
+  return (
+    <AbsoluteFill>
+      <canvas
+        ref={canvasRef}
+        width={width}
+        height={height}
+        style={{ width: '100%', height: '100%' }}
+      />
+    </AbsoluteFill>
+  );
+};
+
 export const MagicBackground: React.FC<{ frame: number }> = ({ frame }) => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#050a10' }}>
+      <CanvasKaleidoscope opacity={0.6} />
       <Img 
         src={staticFile('assets/anime_magic_nebula_background.png')} 
         style={{ 
           width: '100%', 
           height: '100%', 
           objectFit: 'cover',
-          opacity: 0.8,
+          opacity: 0.4,
+          mixBlendMode: 'screen',
           transform: `scale(${1.1 + Math.sin(frame * 0.01) * 0.05}) rotate(${Math.sin(frame * 0.005) * 2}deg)`,
         }} 
       />
       <AbsoluteFill style={{ 
-        background: 'radial-gradient(circle, transparent 20%, rgba(5, 10, 20, 0.4) 100%)',
+        background: 'radial-gradient(circle, transparent 20%, rgba(5, 10, 20, 0.6) 100%)',
       }} />
     </AbsoluteFill>
   );
