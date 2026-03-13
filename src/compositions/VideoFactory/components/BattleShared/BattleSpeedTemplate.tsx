@@ -87,7 +87,11 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
   };
 
   const cameraStyle = getCameraStyle();
-  const showGlitch = (frame % 20) < 4; // Trigger glitch for 4 frames every 20 frames
+  
+  // Glitch Logic: 20fr before 615fr, 5fr after 615fr
+  const glitchInterval = frame >= 615 ? 5 : 20;
+  const showGlitch = (frame % glitchInterval) < 3;
+  const glitchRotation = frame >= 615 ? (Math.floor(frame / 5) * 30) % 180 : 0;
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', ...cameraStyle }}>
@@ -99,7 +103,7 @@ export const BattleSpeedTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ th
         <SpeedLinesBackground frame={frame} color={theme.themeColor} opacity={0.4} count={150} />
       </Sequence>
       
-      {showGlitch && <GlitchNoise frame={frame} opacity={0.4} />}
+      {showGlitch && <GlitchNoise frame={frame} opacity={0.6} rotation={glitchRotation} />}
 
       <LightLeak frame={frame} color={theme.lightLeakColor || theme.themeColor} />
       <FlashOverlay frame={frame} triggerFrames={flashTriggers} />

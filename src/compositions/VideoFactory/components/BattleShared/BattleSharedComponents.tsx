@@ -771,7 +771,7 @@ export const SpeedLinesBackground: React.FC<{
   );
 };
 
-export const GlitchNoise: React.FC<{ frame: number; opacity?: number }> = ({ frame, opacity = 0.3 }) => {
+export const GlitchNoise: React.FC<{ frame: number; opacity?: number; rotation?: number }> = ({ frame, opacity = 0.3, rotation = 0 }) => {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const { width, height } = useVideoConfig();
   
@@ -782,32 +782,39 @@ export const GlitchNoise: React.FC<{ frame: number; opacity?: number }> = ({ fra
       if (!ctx) return;
   
       ctx.clearRect(0, 0, width, height);
+      
+      ctx.save();
+      ctx.translate(width / 2, height / 2);
+      ctx.rotate((rotation * Math.PI) / 180);
+      ctx.translate(-width / 2, -height / 2);
   
       const sliceCount = 15;
       for (let i = 0; i < sliceCount; i++) {
           const sliceH = height / sliceCount;
-          const xOffset = (random(i + frame) - 0.5) * 150;
-          const sliceW = width + 300;
+          const xOffset = (random(i + frame) - 0.5) * 150 * (rotation !== 0 ? 2 : 1);
+          const sliceW = width + 600;
           
           if (random(i + frame * 8) > 0.6) {
               const r = random(frame + i) > 0.5 ? 255 : 0;
               const g = random(frame + i + 1) > 0.5 ? 255 : 0;
               const b = random(frame + i + 2) > 0.5 ? 255 : 0;
               ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${opacity * 0.4})`;
-              ctx.fillRect(xOffset - 150, i * sliceH, sliceW, sliceH);
+              ctx.fillRect(xOffset - 300, i * sliceH - 100, sliceW, sliceH + 200);
           }
       }
       
       // Fine static
       for (let i = 0; i < 200; i++) {
-          const x = random(i + frame) * width;
-          const y = random(i + frame + 3) * height;
+          const x = (random(i + frame) - 0.1) * width * 1.2;
+          const y = (random(i + frame + 3) - 0.1) * height * 1.2;
           const size = random(i + frame + 4) * 3;
           ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.6})`;
           ctx.fillRect(x, y, size, size);
       }
   
-    }, [frame, width, height, opacity]);
+      ctx.restore();
+  
+    }, [frame, width, height, opacity, rotation]);
   
     return (
       <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 998 }}>
