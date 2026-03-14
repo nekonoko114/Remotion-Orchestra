@@ -294,11 +294,11 @@ app.get('/api/assets', (req, res) => {
 
 // 5. Download Pixabay Asset
 app.post('/api/download-pixabay', (req, res) => {
-  const { url, category, id } = req.body;
+  const { url, mediaType, id, ext, tags } = req.body;
   const scriptPath = path.join(ROOT_DIR, 'scripts/download-asset.js');
   
-  // Use node to run the script
-  const cmd = `node "${scriptPath}" "${url}" "${category}" "${id}"`;
+  // Use node to run the script. Pass mediaType, extension, and tags.
+  const cmd = `node "${scriptPath}" "${url}" "${mediaType}" "${id}" "${ext}" "${tags || ''}"`;
   
   console.log(`Executing: ${cmd}`);
   

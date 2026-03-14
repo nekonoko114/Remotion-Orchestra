@@ -24,15 +24,30 @@ async function downloadAsset(url, destination) {
   });
 }
 
-// Example usage: node scripts/download-asset.js [url] [category] [id]
-const [,, url, category, id] = process.argv;
+// Example usage: node scripts/download-asset.js [url] [mediaType] [id] [ext] [tags]
+const [,, url, mediaType, id, ext, tags] = process.argv;
 
-if (!url || !category || !id) {
-  console.log('Usage: node scripts/download-asset.js [url] [category] [id]');
+if (!url || !mediaType || !id || !ext) {
+  console.log('Usage: node scripts/download-asset.js [url] [mediaType] [id] [ext] [tags]');
   process.exit(1);
 }
 
-const dest = path.join(__dirname, '..', 'public', 'assets', 'pixabay', category, `pixabay_${id}.mp4`);
+// Clean up tags for filename if provided
+let tagPrefix = '';
+if (tags && typeof tags === 'string') {
+  tagPrefix = tags
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/gi, '_') // Replace non-alphanumeric with underscore
+    .replace(/^_+|_+$/g, '')      // Trim leading/trailing underscores
+    .substring(0, 50);            // Limit length
+  
+  if (tagPrefix.length > 0) {
+    tagPrefix += '_';
+  }
+}
+
+// Media type determines the subfolder (videos, images, audio)
+const dest = path.join(__dirname, '..', 'public', 'assets', 'pixabay', mediaType, `pixabay_${tagPrefix}${id}.${ext}`);
 
 console.log(`Downloading ${url} to ${dest}...`);
 
