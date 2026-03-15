@@ -25,7 +25,7 @@ export const SceneEndingList: React.FC<{ theme: BattleSpiritTheme; duration: num
         {new Array(60).fill(0).map((_, i) => <Particle key={i} seed={i * 31} frame={frame} color={i % 2 === 0 ? theme.particleColor1 : theme.particleColor2} />)}
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 60px' }}>
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.7) 70%, transparent 100%)' }} />
-          <KineticText text={theme.endingText} frame={frame} fps={fps} startFrame={30} fontSize={120} color="#FFFFFF" glowColor={theme.themeColor} style={{ lineHeight: 1.5, letterSpacing: 5, position: 'relative', zIndex: 2 }} />
+          <KineticText text={theme.endingText} frame={frame} fps={fps} startFrame={30} fontSize={100} color="#FFFFFF" glowColor={theme.themeColor} style={{ lineHeight: 1.5, letterSpacing: 5, position: 'relative', zIndex: 2 }} />
         </AbsoluteFill>
       </AbsoluteFill>
     </AbsoluteFill>

@@ -308,7 +308,7 @@ export const RemotionRoot: React.FC = () => {
             borderColor: '#FFF',
             glowColor: '#0066ff',
           },
-          endingText: 'この戦いは<br/>絶対に負けられない。',
+          endingText: 'この戦いは<br/>絶対に負けられない',
           features: {
             useGlitch: true,
             useMirror: true,
@@ -346,7 +346,7 @@ export const RemotionRoot: React.FC = () => {
             borderColor: '#FFE4B5',
             glowColor: 'orange',
           },
-          endingText: 'この戦いは<br/>絶対に負けられない。',
+          endingText: 'この戦いは<br/>絶対に<br/>負けられない',
           features: {
             useGlitch: false,
             useMirror: false,
