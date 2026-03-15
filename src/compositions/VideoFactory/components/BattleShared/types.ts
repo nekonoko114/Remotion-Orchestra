@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+export const EffectStackConfigSchema = z.object({
+  src: z.string(),
+  opacity: z.number().optional().default(0.65),
+  blendMode: z.string().optional().default('screen'),
+  zIndex: z.number().optional().default(10),
+  muted: z.boolean().optional().default(true),
+});
+
 export const BattleSpiritThemeSchema = z.object({
   themeColor: z.string(),
   glowColor: z.string(),
@@ -32,6 +40,8 @@ export const BattleSpiritThemeSchema = z.object({
   liverIntroDuration: z.number().optional(),
   reverseVsOrder: z.boolean().optional(),
   customBackground: z.string().optional(),
+  sceneLiverEffect: EffectStackConfigSchema.optional(),
+  sceneVsEffect: EffectStackConfigSchema.optional(),
 });
 
 export type BattleSpiritTheme = z.infer<typeof BattleSpiritThemeSchema>;

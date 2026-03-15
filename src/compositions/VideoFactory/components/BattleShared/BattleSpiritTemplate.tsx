@@ -28,7 +28,7 @@ import { SceneLogo } from './scenes/SceneLogo';
 // Main Template component
 // ========================
 
-export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
+export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme; children?: React.ReactNode }> = ({ theme, children }) => {
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
 
@@ -65,6 +65,8 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme }> = ({ t
           </div>
         </AbsoluteFill>
       )}
+
+      {children}
 
       <Sequence from={s1} durationInFrames={OP_DUR}><SceneOpening theme={theme} /></Sequence>
       <Sequence from={s2} durationInFrames={DATE_DUR}><SceneDate theme={theme} /></Sequence>

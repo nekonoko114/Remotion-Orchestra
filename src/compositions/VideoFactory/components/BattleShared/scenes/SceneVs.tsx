@@ -13,6 +13,7 @@ import {
   KaleidoscopeBackground,
   GlitchedIcon,
   KineticText,
+  VideoEffectStack,
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
 
@@ -55,6 +56,9 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
           </div>
         </AbsoluteFill>
       </AbsoluteFill>
+
+      {/* --- EFFECT STACK --- */}
+      <VideoEffectStack config={theme.sceneVsEffect} />
     </AbsoluteFill>
   );
 };

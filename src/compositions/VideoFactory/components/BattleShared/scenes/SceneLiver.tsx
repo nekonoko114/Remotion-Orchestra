@@ -15,6 +15,7 @@ import {
   MirrorLiver,
   SvgDefs,
   KineticText,
+  VideoEffectStack,
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
 
@@ -56,6 +57,9 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number }
             {theme.liver.name}
           </div>
         </AbsoluteFill>
+
+        {/* --- EFFECT STACK --- */}
+        <VideoEffectStack config={theme.sceneLiverEffect} />
       </AbsoluteFill>
     );
   }
@@ -98,7 +102,10 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number }
           }}
         />
       </AbsoluteFill>
-      {flash > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flash }} />}
+      {flash > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flash, zIndex: 5 }} />}
+      
+      {/* --- EFFECT STACK --- */}
+      <VideoEffectStack config={theme.sceneLiverEffect} />
     </AbsoluteFill>
   );
 };

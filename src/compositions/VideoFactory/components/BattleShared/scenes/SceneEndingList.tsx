@@ -18,7 +18,7 @@ export const SceneEndingList: React.FC<{ theme: BattleSpiritTheme; duration: num
   const fadeOut = interpolate(frame, [duration - 60, duration], [1, 0], { extrapolateRight: 'clamp' });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+    <AbsoluteFill style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
       {frame < 10 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: 1 - frame / 10, zIndex: 10 }} />}
       <AbsoluteFill style={{ opacity: fadeOut }}>

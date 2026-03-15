@@ -8,6 +8,7 @@ import {
   random,
   Img,
   staticFile,
+  OffthreadVideo,
 } from 'remotion';
 import { loadFont } from '@remotion/google-fonts/NotoSansJP';
 
@@ -15,6 +16,34 @@ const { fontFamily } = loadFont('normal', {
   weights: ['400', '700', '900'],
   ignoreTooManyRequestsWarning: true,
 });
+
+export const VideoEffectStack: React.FC<{
+  config?: {
+    src: string;
+    opacity?: number;
+    blendMode?: string;
+    zIndex?: number;
+    muted?: boolean;
+  };
+}> = ({ config }) => {
+  if (!config || !config.src) return null;
+  return (
+    <AbsoluteFill
+      style={{
+        opacity: config.opacity ?? 0.65,
+        mixBlendMode: (config.blendMode as React.CSSProperties['mixBlendMode']) ?? 'screen',
+        pointerEvents: 'none',
+        zIndex: config.zIndex ?? 10,
+      }}
+    >
+      <OffthreadVideo
+        src={staticFile(config.src)}
+        muted={config.muted ?? true}
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      />
+    </AbsoluteFill>
+  );
+};
 
 export const KaleidoscopeBackground: React.FC<{
   imageSrc: string;
