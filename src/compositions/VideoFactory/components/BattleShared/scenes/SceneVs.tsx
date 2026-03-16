@@ -27,6 +27,12 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   const shakeX = (random(frame) - 0.5) * 60 * shakeDecay; 
   const shakeY = (random(frame + 9) - 0.5) * 60 * shakeDecay; 
   const flashOpacity = Math.max(0, 1 - frame / 4); 
+  
+  // Wiggle effect variables (subtle floating motion)
+  const wiggleLift1 = Math.sin(frame / 15) * 20;
+  const wiggleRot1 = Math.cos(frame / 20) * 3;
+  const wiggleLift2 = Math.cos(frame / 12) * 20;
+  const wiggleRot2 = Math.sin(frame / 18) * 3;
 
   const topPlayer = theme.reverseVsOrder ? theme.liver : theme.opponent;
   const bottomPlayer = theme.reverseVsOrder ? theme.opponent : theme.liver;
@@ -54,12 +60,12 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
           {theme.themeColor === 'orange' ? (
             // --- 斜めレイアウト (Orange Theme) ---
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', transform: `scale(${interpolate(pop, [0, 1], [0.8, 0.95])})`, gap: 80, width: '100%' }}>
-              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})`, display: 'flex', flexDirection: 'column', alignItems: 'center', transform: 'translateY(-200px)' }}>
+              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})`, display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `translateY(${-200 + wiggleLift1}px) rotate(${wiggleRot1}deg)` }}>
                 <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={420} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ marginBottom: 15 }} enabled={theme.features.useGlitch} />
                 <KineticText text={topPlayer.name} frame={frame} fps={fps} startFrame={10} fontSize={60} color={topPlayer.borderColor} glowColor={topPlayer.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 2, whiteSpace: 'nowrap' }} />
               </div>
 
-              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})`, display: 'flex', flexDirection: 'column', alignItems: 'center', transform: 'translateY(200px)' }}>
+              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})`, display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `translateY(${200 + wiggleLift2}px) rotate(${wiggleRot2}deg)` }}>
                 <GlitchedIcon src={staticFile(bottomPlayer.image)} frame={frame} size={420} borderColor={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ marginBottom: 15 }} enabled={theme.features.useGlitch} />
                 <KineticText text={bottomPlayer.name} frame={frame} fps={fps} startFrame={20} fontSize={60} color={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 2, whiteSpace: 'nowrap' }} />
               </div>
