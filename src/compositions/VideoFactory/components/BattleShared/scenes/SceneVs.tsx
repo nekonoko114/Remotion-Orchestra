@@ -53,6 +53,15 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
             {/* 赤と青のVS背景などに合わせた色調補正（必要であれば） */}
             <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255, 120, 0, 0.1)', mixBlendMode: 'color' }} />
           </AbsoluteFill>
+        ) : theme.themeColor === '#ff2200' ? (
+          <AbsoluteFill style={{ overflow: 'hidden', backgroundColor: '#300' }}>
+            <OffthreadVideo 
+              src={staticFile('assets/pixabay/videos/fire-explotion.mp4')} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8, transform: 'scale(1.2)' }} 
+              muted 
+            />
+            <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255, 0, 0, 0.2)', mixBlendMode: 'color' }} />
+          </AbsoluteFill>
         ) : (
           <KaleidoscopeBackground imageSrc={staticFile(theme.opponent.image)} frame={frame} opacity={0.3} glowColor={theme.glowColor} />
         )}
