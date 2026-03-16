@@ -252,14 +252,14 @@ export const RemotionRoot: React.FC = () => {
           customBackground: 'assets/images-01/red-energy-bg.png',
           sceneLiverEffect: {
             src: 'assets/pixabay/videos/fire-flower01.mp4',
-            opacity: 0.65,
             blendMode: 'plus-lighter',
             zIndex: 10,
             muted: true,
+            opacity: 0,
           },
           sceneVsEffect: {
             src: 'assets/pixabay/videos/fire-explotion.mp4',
-            opacity: 0.3,
+            opacity: 0,
             blendMode: 'screen',
             zIndex: 600,
             muted: true,
