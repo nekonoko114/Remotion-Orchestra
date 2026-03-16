@@ -30,10 +30,10 @@ export const SceneRules: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) =>
       {new Array(30).fill(0).map((_, i) => <Particle key={i} seed={i * 19 + 800} frame={frame} color={i % 2 === 0 ? theme.particleColor1 : theme.particleColor2} />)}
       <AbsoluteFill style={{ transform: `translate(${shakeX}px, ${shakeY}px)`, justifyContent: 'center', alignItems: 'center', gap: 80 }}>
         <div style={{ transform: `scale(${interpolate(r1, [0, 0.5, 1], [8, 0.9, 1])}) rotate(${-(interpolate(r1, [0, 1], [20, 5]))}deg)`, opacity: r1 > 0.05 ? 1 : 0, filter: `drop-shadow(0 0 100px ${theme.themeColor})` }}>
-          <KineticText text="やり直し無し<br/>一本勝負" frame={frame} fps={fps} startFrame={20} fontSize={160} color="#FFF" glowColor={theme.glowColor} style={{ fontWeight: 900 }} />
+          <KineticText text="やり直し無し<br/>一本勝負" frame={frame} fps={fps} startFrame={20} fontSize={160} color="#FFF" glowColor={theme.glowColor} fontFamily={theme.fontFamily} style={{ fontWeight: 900 }} />
         </div>
         <div style={{ transform: `scale(${interpolate(r2, [0, 0.5, 1], [8, 0.9, 1])}) rotate(${interpolate(r2, [0, 1], [-20, 5])}deg)`, opacity: r2 > 0.05 ? 1 : 0, filter: `drop-shadow(0 0 100px orange)` }}>
-          <KineticText text="フルアイテム" frame={frame} fps={fps} startFrame={50} fontSize={160} color="#FFF" glowColor="orange" style={{ fontWeight: 900 }} />
+          <KineticText text="フルアイテム" frame={frame} fps={fps} startFrame={50} fontSize={160} color="#FFF" glowColor="orange" fontFamily={theme.fontFamily} style={{ fontWeight: 900 }} />
         </div>
       </AbsoluteFill>
     </AbsoluteFill>

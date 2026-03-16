@@ -26,7 +26,7 @@ export const SceneOpponentAnnounce: React.FC<{ theme: BattleSpiritTheme }> = ({ 
         <div style={{ flex: 1, border: `40px solid ${theme.themeColor}` }} />
       </AbsoluteFill>
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <KineticText text="対戦相手は！？" frame={frame} fps={fps} fontSize={120} color="#FFF" glowColor={theme.glowColor} style={{ letterSpacing: 20, transform: `scale(${interpolate(scale, [0, 1], [4.0, 1])}) rotate(${interpolate(scale, [0, 1], [360, 0])}deg) skewX(-15deg)`, opacity: textFlash }} />
+        <KineticText text="対戦相手は！？" frame={frame} fps={fps} fontSize={120} color="#FFF" glowColor={theme.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 20, transform: `scale(${interpolate(scale, [0, 1], [4.0, 1])}) rotate(${interpolate(scale, [0, 1], [360, 0])}deg) skewX(-15deg)`, opacity: textFlash }} />
       </AbsoluteFill>
     </AbsoluteFill>
   );

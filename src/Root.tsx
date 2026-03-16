@@ -58,7 +58,10 @@ import {
   speedOrangeTheme,
   JOL_SPEED_ORANGE_DURATION,
 } from './compositions/VideoFactory/JolBattleSpeedOrange';
-import { EffectCatalogShowcase, EFFECT_SHOWCASE_DURATION } from './compositions/VideoFactory/EffectCatalogShowcase';
+import {
+  EffectCatalogShowcase,
+  EFFECT_SHOWCASE_DURATION,
+} from './compositions/VideoFactory/EffectCatalogShowcase';
 import { EffectCatalog } from './compositions/VideoFactory/components/EffectCatalog/effect-catalog';
 import { MagicCircleShowcase } from './compositions/VideoFactory/MagicCircleShowcase';
 import { AdvancedMagicCircleShowcase } from './compositions/VideoFactory/AdvancedMagicCircleShowcase';
@@ -183,7 +186,6 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
       />
-
       {/* エフェクトカタログ (Effect Factory) */}
       <Composition
         id="EffectCatalogShowcase"
@@ -193,7 +195,6 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
       />
-
       <Composition
         id="Stitch-Gaming-Overlay"
         component={StitchOverlay}
@@ -240,7 +241,7 @@ export const RemotionRoot: React.FC = () => {
             borderColor: '#ff0000',
             glowColor: '#FF6600',
           },
-          endingText: '配信再開の<br/>３月<br/>有終の美を<br/>飾りたいです！！',
+          endingText: '配信再開の<br/>３月<br/>有終の美を<br/>飾りたい！！',
           features: {
             useGlitch: true,
             useMirror: true,
@@ -357,6 +358,7 @@ export const RemotionRoot: React.FC = () => {
           liver: {
             name: '限界突破まみ🎽',
             image: 'assets/images-01/mrm0115-01.png',
+            gridImage: 'assets/images-01/mrm0115.jpeg',
             borderColor: '#FFE4B5',
             glowColor: 'orange',
           },
@@ -364,10 +366,12 @@ export const RemotionRoot: React.FC = () => {
           features: {
             useGlitch: false,
             useMirror: false,
-            useDoublingGrid: true,
+            useDoublingGrid: false,
+            useGridConvergence: true,
           },
           lightLeakColor: '#ff8800',
           reverseVsOrder: true,
+          fontFamily: '"Mochiy Pop One", sans-serif',
         }}
       />
       <Composition
@@ -378,7 +382,6 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
       />
-
       <Composition
         id="AdvancedMagicCircleShowcase"
         component={AdvancedMagicCircleShowcase}

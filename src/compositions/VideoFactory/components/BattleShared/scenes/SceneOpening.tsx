@@ -70,11 +70,13 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
           frame={localFrame}
           fps={fps}
           fontSize={theme.themeColor !== 'orange' && phase === 2 ? 210 : 120}
-          color="#fff5f0"
+          color="#FFFFFF"
           glowColor={theme.glowColor}
-          style={{ 
-            lineHeight: 1.2, 
+          fontFamily={theme.fontFamily}
+          style={{
+            lineHeight: 1.2,
             letterSpacing: 10,
+            filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.8))',
             ...(theme.themeColor !== 'orange' && phase === 2 ? {
               writingMode: 'vertical-rl',
               textOrientation: 'mixed',

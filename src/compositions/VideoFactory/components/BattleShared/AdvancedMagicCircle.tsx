@@ -57,7 +57,7 @@ const LightPillar: React.FC<{ frame: number; color: string; scaleProgress: numbe
       position: 'absolute',
       left: '50%',
       top: '50%', // the exact vertical center of the screen
-      width: 400 * scaleProgress,
+      width: 1200 * scaleProgress, // ✨ Made 3 times wider! (was 400)
       height: 2000, // Very tall
       // Translate X to center horizontally. Translate Y by -100% to make it shoot UPWARDS from the top:50% point.
       transform: 'translate(-50%, -100%)',

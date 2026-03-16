@@ -16,14 +16,15 @@ export const orangeTheme: BattleSpiritTheme = {
     volume: 0.6,
   },
   opponent: {
-    name: '限界突破まみ🎽',
-    image: 'assets/images-01/mrm0115-01.png',
+    name: '🔆≒ユージン≒🔆',
+    image: 'assets/images-01/t.o.p_u_jin_.jpeg',
     borderColor: '#FFE4B5',
     glowColor: 'orange',
   },
   liver: {
-    name: '🔆≒ユージン≒🔆',
-    image: 'assets/images-01/t.o.p_u_jin_.jpeg',
+    name: '限界突破まみ🎽',
+    image: 'assets/images-01/mrm0115-01.png',
+    gridImage: 'assets/images-01/mrm0115.jpeg',
     borderColor: '#fff',
     glowColor: '#ff4400',
   },
@@ -31,9 +32,11 @@ export const orangeTheme: BattleSpiritTheme = {
   features: {
     useGlitch: false,
     useMirror: false,
-    useDoublingGrid: true,
+    useDoublingGrid: false,
+    useGridConvergence: true,
   },
   lightLeakColor: '#ff8800',
+  fontFamily: '"Mochiy Pop One", sans-serif',
 };
 
 export const JolBattleSpiritOrange: React.FC<BattleSpiritTheme> = (props) => {

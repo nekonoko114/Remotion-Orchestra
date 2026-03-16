@@ -252,12 +252,13 @@ export const KineticText: React.FC<{
   glowColor: string;
   stagger?: number;
   style?: React.CSSProperties;
-}> = ({ text, frame, fps, startFrame = 0, fontSize, color, glowColor, stagger = 8, style }) => {
+  fontFamily?: string;
+}> = ({ text, frame, fps, startFrame = 0, fontSize, color, glowColor, stagger = 8, style, fontFamily: customFontFamily }) => {
   const t = frame - startFrame;
   const lines = text.replace(/<br\s*\/?>/gi, '\n').split('\n');
 
   return (
-    <div style={{ fontFamily, textAlign: 'center', ...style }}>
+    <div style={{ fontFamily: customFontFamily || fontFamily, textAlign: 'center', ...style }}>
       {lines.map((line, i) => {
         const lineStart = i * stagger;
         const s = spring({ frame: t - lineStart, fps, config: { stiffness: 500, damping: 20, mass: 1 } });
@@ -349,7 +350,7 @@ export const SunsetBackground: React.FC<{ frame: number; opacity?: number }> = (
   return (
     <AbsoluteFill style={{ overflow: 'hidden', opacity }}>
       <div style={{ width: '100%', height: '100%', transform: `scale(${scale}) translateY(${translateY}px)`, transformOrigin: '50% 50%' }}>
-        <Img src={staticFile('assets/anime_sunset_background.png')} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.9) contrast(1.1)' }} />
+        <Img src={staticFile('assets/anime_sunset_background_no_girl.png')} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.9) contrast(1.1)' }} />
       </div>
       <AbsoluteFill style={{ background: 'radial-gradient(circle, rgba(255,100,0,0.2) 0%, rgba(30,0,0,0.4) 100%)', mixBlendMode: 'overlay' }} />
     </AbsoluteFill>
@@ -967,3 +968,4 @@ export const CyberTunnel2D: React.FC<{ frame: number; color?: string }> = ({ fra
 };
 export * from './DoublingGridEffect';
 export * from './MirrorLiverEffect';
+export * from './GridConvergenceEffect';

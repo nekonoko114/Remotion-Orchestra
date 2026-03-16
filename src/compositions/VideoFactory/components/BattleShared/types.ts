@@ -27,6 +27,7 @@ export const BattleSpiritThemeSchema = z.object({
   liver: z.object({
     name: z.string(),
     image: z.string(),
+    gridImage: z.string().optional(), // 16分割用画像（指定がない場合はimageを使用）
     borderColor: z.string(),
     glowColor: z.string(),
   }),
@@ -35,6 +36,7 @@ export const BattleSpiritThemeSchema = z.object({
     useGlitch: z.boolean(),
     useMirror: z.boolean(),
     useDoublingGrid: z.boolean(),
+    useGridConvergence: z.boolean().optional(),
   }),
   lightLeakColor: z.string().optional(),
   liverIntroDuration: z.number().optional(),
@@ -42,6 +44,7 @@ export const BattleSpiritThemeSchema = z.object({
   customBackground: z.string().optional(),
   sceneLiverEffect: EffectStackConfigSchema.optional(),
   sceneVsEffect: EffectStackConfigSchema.optional(),
+  fontFamily: z.string().optional(),
 });
 
 export type BattleSpiritTheme = z.infer<typeof BattleSpiritThemeSchema>;

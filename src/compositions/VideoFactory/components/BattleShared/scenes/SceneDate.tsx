@@ -48,6 +48,7 @@ export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => 
             fontSize={210}
             color="#FFF"
             glowColor={theme.glowColor}
+            fontFamily={theme.fontFamily}
             style={{ marginBottom: 20 }}
           />
           <KineticText
@@ -58,6 +59,7 @@ export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => 
             fontSize={140}
             color="#FFF"
             glowColor={theme.glowColor}
+            fontFamily={theme.fontFamily}
             style={{ letterSpacing: 10 }}
           />
         </div>
@@ -74,6 +76,7 @@ export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => 
             fontSize={240}
             color="#FFF"
             glowColor={theme.glowColor}
+            fontFamily={theme.fontFamily}
             style={{ fontWeight: 900 }}
           />
         </div>
@@ -90,6 +93,7 @@ export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => 
             fontSize={240}
             color="#FFF"
             glowColor={theme.glowColor}
+            fontFamily={theme.fontFamily}
             style={{ fontWeight: 900 }}
           />
         </div>
