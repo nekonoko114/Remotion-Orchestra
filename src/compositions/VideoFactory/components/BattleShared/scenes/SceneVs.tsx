@@ -6,6 +6,8 @@ import {
   spring,
   random,
   staticFile,
+  OffthreadVideo,
+  interpolate,
 } from 'remotion';
 import {
   SvgDefs,
@@ -35,25 +37,61 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
       {flashOpacity > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flashOpacity, zIndex: 10 }} />}
       <RotatingFocusLines frame={frame} color={theme.themeColor} />
       <AbsoluteFill style={{ transform: `scale(${1 + shakeDecay * 0.1}) translate(${shakeX}px, ${shakeY}px)` }}>
-        <KaleidoscopeBackground imageSrc={staticFile(theme.opponent.image)} frame={frame} opacity={0.3} glowColor={theme.glowColor} />
+        {theme.themeColor === 'orange' ? (
+          <AbsoluteFill style={{ overflow: 'hidden' }}>
+            <OffthreadVideo 
+              src={staticFile('assets/pixabay/videos/pixabay_vs.mp4')} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scale(1.2)' }} 
+              muted 
+            />
+            {/* 赤と青のVS背景などに合わせた色調補正（必要であれば） */}
+            <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255, 120, 0, 0.1)', mixBlendMode: 'color' }} />
+          </AbsoluteFill>
+        ) : (
+          <KaleidoscopeBackground imageSrc={staticFile(theme.opponent.image)} frame={frame} opacity={0.3} glowColor={theme.glowColor} />
+        )}
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `scale(${pop})`, gap: 20 }}>
-            <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})` }}>
-              <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={600} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
-              <KineticText text={topPlayer.name} frame={frame} fps={fps} startFrame={10} fontSize={90} color={topPlayer.borderColor} glowColor={topPlayer.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 4 }} />
+          {theme.themeColor === 'orange' ? (
+            // --- 左右レイアウト (Orange Theme) ---
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', transform: `scale(${interpolate(pop, [0, 1], [0.8, 0.95])})`, gap: 40, width: '100%' }}>
+              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})`, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={420} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ marginBottom: 15 }} enabled={theme.features.useGlitch} />
+                <KineticText text={topPlayer.name} frame={frame} fps={fps} startFrame={10} fontSize={60} color={topPlayer.borderColor} glowColor={topPlayer.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 2, whiteSpace: 'nowrap' }} />
+              </div>
+              
+              <div style={{ position: 'relative', width: 200, height: 400, zIndex: 10, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                 <div style={{ position: 'absolute', transform: 'scale(0.8)' }}>
+                   <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: theme.themeColor, fontStyle: 'italic', transform: `translate(-20px, 10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
+                   <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: 'cyan', fontStyle: 'italic', transform: `translate(20px, -10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
+                   <div style={{ position: 'relative', fontSize: 260, fontWeight: 900, color: 'white', fontStyle: 'italic', transform: `rotate(${Math.sin(frame / 3) * 15}deg)`, WebkitTextStroke: '8px black', textShadow: `0 0 100px ${theme.glowColor}` }}>VS</div>
+                 </div>
+              </div>
+
+              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})`, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <GlitchedIcon src={staticFile(bottomPlayer.image)} frame={frame} size={420} borderColor={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ marginBottom: 15 }} enabled={theme.features.useGlitch} />
+                <KineticText text={bottomPlayer.name} frame={frame} fps={fps} startFrame={20} fontSize={60} color={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 2, whiteSpace: 'nowrap' }} />
+              </div>
             </div>
-            <div style={{ position: 'relative', height: 120, zIndex: 10 }}>
-               <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-                 <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: theme.themeColor, fontStyle: 'italic', transform: `translate(-20px, 10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
-                 <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: 'cyan', fontStyle: 'italic', transform: `translate(20px, -10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
-                 <div style={{ position: 'relative', fontSize: 260, fontWeight: 900, color: 'white', fontStyle: 'italic', transform: `rotate(${Math.sin(frame / 3) * 15}deg)`, WebkitTextStroke: '8px black', textShadow: `0 0 100px ${theme.glowColor}` }}>VS</div>
-               </div>
+          ) : (
+            // --- 上下レイアウト (Standard) ---
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `scale(${pop})`, gap: 20 }}>
+              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})` }}>
+                <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={600} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
+                <KineticText text={topPlayer.name} frame={frame} fps={fps} startFrame={10} fontSize={90} color={topPlayer.borderColor} glowColor={topPlayer.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 4 }} />
+              </div>
+              <div style={{ position: 'relative', height: 120, zIndex: 10 }}>
+                 <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
+                   <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: theme.themeColor, fontStyle: 'italic', transform: `translate(-20px, 10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
+                   <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: 'cyan', fontStyle: 'italic', transform: `translate(20px, -10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
+                   <div style={{ position: 'relative', fontSize: 260, fontWeight: 900, color: 'white', fontStyle: 'italic', transform: `rotate(${Math.sin(frame / 3) * 15}deg)`, WebkitTextStroke: '8px black', textShadow: `0 0 100px ${theme.glowColor}` }}>VS</div>
+                 </div>
+              </div>
+              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})` }}>
+                <GlitchedIcon src={staticFile(bottomPlayer.image)} frame={frame} size={600} borderColor={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ margin: '15px auto 10px' }} enabled={theme.features.useGlitch} />
+                <KineticText text={bottomPlayer.name} frame={frame} fps={fps} startFrame={20} fontSize={90} color={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 4 }} />
+              </div>
             </div>
-            <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})` }}>
-              <GlitchedIcon src={staticFile(bottomPlayer.image)} frame={frame} size={600} borderColor={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ margin: '15px auto 10px' }} enabled={theme.features.useGlitch} />
-              <KineticText text={bottomPlayer.name} frame={frame} fps={fps} startFrame={20} fontSize={90} color={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} fontFamily={theme.fontFamily} style={{ letterSpacing: 4 }} />
-            </div>
-          </div>
+          )}
         </AbsoluteFill>
       </AbsoluteFill>
 
