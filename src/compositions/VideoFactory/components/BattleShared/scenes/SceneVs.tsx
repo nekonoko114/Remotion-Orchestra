@@ -60,14 +60,6 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
           {theme.themeColor === 'orange' ? (
             // --- 斜めレイアウト (Orange Theme) ---
             <>
-              {/* 背景の巨大VSロゴ */}
-              <div style={{ position: 'absolute', transform: `scale(${interpolate(pop, [0, 1], [0.5, 1.1])})`, zIndex: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div style={{ display: 'flex', fontSize: 650, fontWeight: 900, fontFamily: theme.fontFamily, fontStyle: 'italic', transform: `rotate(${Math.sin(frame / 5) * 10}deg)`, WebkitTextStroke: '15px white', filter: 'drop-shadow(0 0 100px rgba(255,50,0,1))' }}>
-                  <span style={{ color: '#ff8800', marginRight: 20 }}>V</span>
-                  <span style={{ color: '#ff0000' }}>S</span>
-                </div>
-              </div>
-
               <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', transform: `scale(${interpolate(pop, [0, 1], [0.8, 0.95])})`, gap: 80, width: '100%', zIndex: 1 }}>
                 <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})`, display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `translateY(${-550 + wiggleLift1}px) rotate(${wiggleRot1}deg)` }}>
                 <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={420} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ marginBottom: 15 }} enabled={theme.features.useGlitch} />
