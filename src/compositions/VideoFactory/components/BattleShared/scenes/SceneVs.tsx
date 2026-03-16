@@ -40,7 +40,7 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
         {theme.themeColor === 'orange' ? (
           <AbsoluteFill style={{ overflow: 'hidden' }}>
             <OffthreadVideo 
-              src={staticFile('assets/pixabay/videos/pixabay_vs.mp4')} 
+              src={staticFile('assets/pixabay/effects/pixabay_vs.mp4')} 
               style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scale(1.2)' }} 
               muted 
             />
