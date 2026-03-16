@@ -58,7 +58,10 @@ import {
   speedOrangeTheme,
   JOL_SPEED_ORANGE_DURATION,
 } from './compositions/VideoFactory/JolBattleSpeedOrange';
+import { EffectCatalogShowcase, EFFECT_SHOWCASE_DURATION } from './compositions/VideoFactory/EffectCatalogShowcase';
+import { EffectCatalog } from './compositions/VideoFactory/components/EffectCatalog/effect-catalog';
 import { MagicCircleShowcase } from './compositions/VideoFactory/MagicCircleShowcase';
+import { AdvancedMagicCircleShowcase } from './compositions/VideoFactory/AdvancedMagicCircleShowcase';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import { AssetPanel } from './components/AssetPanel';
 import './index.css';
@@ -180,6 +183,17 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
       />
+
+      {/* エフェクトカタログ (Effect Factory) */}
+      <Composition
+        id="EffectCatalogShowcase"
+        component={EffectCatalogShowcase}
+        durationInFrames={EffectCatalog.length * EFFECT_SHOWCASE_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+
       <Composition
         id="Stitch-Gaming-Overlay"
         component={StitchOverlay}
@@ -359,10 +373,19 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Magic-Circle-Showcase"
         component={MagicCircleShowcase}
-        durationInFrames={600}
+        durationInFrames={180 * 2} // 180 frames per sequence * 2 standard modes (+1 tracing mode if needed)
         fps={30}
-        width={1080}
-        height={1920}
+        width={1920}
+        height={1080}
+      />
+
+      <Composition
+        id="AdvancedMagicCircleShowcase"
+        component={AdvancedMagicCircleShowcase}
+        durationInFrames={450} // 150 frames * 3 colors
+        fps={30}
+        width={1920}
+        height={1080}
       />
       <AssetPanel />
     </>
