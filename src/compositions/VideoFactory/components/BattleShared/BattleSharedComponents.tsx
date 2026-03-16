@@ -965,3 +965,5 @@ export const CyberTunnel2D: React.FC<{ frame: number; color?: string }> = ({ fra
     </AbsoluteFill>
   );
 };
+export * from './DoublingGridEffect';
+export * from './MirrorLiverEffect';
