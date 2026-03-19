@@ -101,7 +101,7 @@ export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => 
                 fps={fps}
                 startFrame={45}
                 fontSize={theme.themeColor === '#e0f7fa' ? 200 : 160}
-                color={theme.themeColor === '#e0f7fa' ? '#FFEA00' : '#FFF'}
+                color={(theme.themeColor === '#e0f7fa' || theme.themeColor === '#fce4ec') ? '#FFEA00' : '#FFF'}
                 glowColor={theme.glowColor}
                 fontFamily={theme.fontFamily} animationType={theme.textAnimation}
                 style={{ fontWeight: 900 }}

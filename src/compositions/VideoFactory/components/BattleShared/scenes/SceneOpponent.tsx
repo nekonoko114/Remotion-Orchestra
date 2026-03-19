@@ -43,11 +43,29 @@ export const SceneOpponent: React.FC<{ theme: BattleSpiritTheme }> = ({ theme })
           <div style={{ width: 800, height: 800, borderRadius: '50%', overflow: 'hidden', border: `10px solid white`, marginBottom: 20, boxShadow: `0 0 50px ${theme.themeColor}` }}>
             <Img src={staticFile(theme.opponent.image)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
-          {theme.themeColor !== 'orange' && (
+          {theme.themeColor !== 'orange' && theme.themeColor !== '#fce4ec' && (
             <KineticText text={theme.opponent.name} frame={frame} fps={fps} startFrame={15} fontSize={120} color="white" glowColor={theme.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation} style={{ letterSpacing: 4, whiteSpace: 'nowrap' }} />
           )}
         </div>
       </AbsoluteFill>
+
+      {theme.themeColor === '#fce4ec' && (
+        <AbsoluteFill style={{ justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 150 }}>
+          <div style={{ 
+            background: 'rgba(255,255,255,0.95)', 
+            padding: '20px 80px', 
+            borderRadius: '50px', 
+            border: `6px solid ${theme.themeColor}`, 
+            fontSize: 70, 
+            fontWeight: 900, 
+            color: theme.glowColor, 
+            boxShadow: `0 0 50px ${theme.glowColor}`,
+            transform: `translateY(${Math.sin(frame / 10) * 10}px)`
+          }}>
+            {theme.opponent.name}
+          </div>
+        </AbsoluteFill>
+      )}
       
       {theme.themeColor === 'orange' && (
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', pointerEvents: 'none' }}>

@@ -4,6 +4,8 @@ import {
   useCurrentFrame,
   staticFile,
   interpolate,
+  spring,
+  Img,
 } from 'remotion';
 import {
   KaleidoscopeBackground,
@@ -67,6 +69,89 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; 
         </AbsoluteFill>
         {/* --- EFFECT STACK --- */}
         <VideoEffectStack config={theme.sceneLiverEffect} />
+      </AbsoluteFill>
+    );
+  }
+
+  // --- Custom 3:7 Layout specifically for Spring Sakura Theme ---
+  if (theme.themeColor === '#fce4ec') {
+    const part1Duration = Math.floor(duration * 0.3);
+    const isPart1 = frame < part1Duration;
+    const currentImage = isPart1 ? theme.liver.image : (theme.liver.altImage || theme.liver.image);
+    
+    const entranceScale = isPart1 ? interpolate(frame, [0, part1Duration], [0.8, 1.1]) : 1;
+    const entranceOpacity = isPart1 ? interpolate(frame, [0, 10], [0, 1], { extrapolateRight: 'clamp' }) : 1;
+    
+    const p2Frame = frame - part1Duration;
+    const p2Scale = !isPart1 ? interpolate(p2Frame, [0, duration - part1Duration], [0.95, 1.05]) : 0;
+    const p2Pop = !isPart1 ? spring({ frame: p2Frame, fps: 30, config: { damping: 12 } }) : 0;
+    
+    const MathBpm = theme.music?.bpm || 144;
+    const framesPerBeat = (60 / MathBpm) * 30;
+    const colorStep = Math.floor(frame / (framesPerBeat * 0.5));
+    const colorFilters = [
+      'brightness(1.2) contrast(1.1)',
+      'brightness(1.4) saturate(1.5) hue-rotate(15deg)',
+      'brightness(1.3) contrast(1.2)',
+      'brightness(1.5) saturate(1.2) hue-rotate(-10deg)'
+    ];
+    const dynamicFilter = colorFilters[colorStep % colorFilters.length];
+
+    let dynamicTransform = 'none';
+    if (isPart1) {
+      // 350fr~365fr -> 20~35 inside SceneLiver (duration 330~539)
+      const rotZ = interpolate(frame, [20, 35], [0, 360], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+      dynamicTransform = `rotate(${rotZ}deg)`;
+    } else {
+      // 445fr~ -> 115~ inside SceneLiver
+      const rotY = interpolate(frame, [115, duration], [0, 1080], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+      dynamicTransform = `perspective(1000px) rotateY(${rotY}deg)`;
+    }
+
+    return (
+      <AbsoluteFill style={{ overflow: 'visible', backgroundColor: '#000', filter: dynamicFilter, transform: dynamicTransform, transformOrigin: 'center' }}>
+        <AbsoluteFill style={{ width: 2500, height: 2500, left: (1080 - 2500) / 2, top: (1920 - 2500) / 2 }}>
+          <CustomBackgroundImage src={theme.customBackground!} frame={frame + 300} opacity={0.8} />
+        </AbsoluteFill>
+
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
+          {isPart1 ? (
+             <div style={{ transform: `scale(${entranceScale})`, opacity: entranceOpacity, filter: `drop-shadow(0 0 100px ${theme.glowColor})` }}>
+               <Img src={staticFile(currentImage)} style={{ width: 850, height: 1200, objectFit: 'contain' }} />
+             </div>
+          ) : (
+             <div style={{ 
+               transform: `scale(${p2Scale * p2Pop})`, 
+               border: `15px solid white`, 
+               borderRadius: 40,
+               boxShadow: `0 0 150px ${theme.glowColor}, inset 0 0 50px ${theme.glowColor}`,
+               overflow: 'hidden',
+               width: 850,
+               height: 1100,
+               filter: `drop-shadow(0 0 50px ${theme.themeColor})`,
+               position: 'relative'
+             }}>
+               <Img src={staticFile(currentImage)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+               <div style={{ position: 'absolute', inset: 0, border: '4px solid gold', borderRadius: 25, margin: 12, pointerEvents: 'none' }} />
+             </div>
+          )}
+        </AbsoluteFill>
+        
+        <AbsoluteFill style={{ justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 150 }}>
+           <div style={{ 
+             background: 'rgba(255,255,255,0.95)', 
+             padding: '20px 80px', 
+             borderRadius: '50px', 
+             border: `6px solid ${theme.themeColor}`, 
+             fontSize: 70, 
+             fontWeight: 900, 
+             color: theme.glowColor, 
+             boxShadow: `0 0 50px ${theme.glowColor}`,
+             transform: `translateY(${Math.sin(frame / 10) * 10}px)`
+           }}>
+             {theme.liver.name}
+           </div>
+        </AbsoluteFill>
       </AbsoluteFill>
     );
   }
