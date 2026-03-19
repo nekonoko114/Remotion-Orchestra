@@ -6,8 +6,6 @@ import {
   useVideoConfig,
   Audio,
   staticFile,
-  OffthreadVideo,
-  interpolate,
 } from 'remotion';
 import {
   LightLeak,
@@ -16,7 +14,9 @@ import {
   SnowEffect,
   GiantSnowflakeEffect,
   PanningVideoBackground,
+  SakuraEndingBackground,
 } from './BattleSharedComponents';
+import { SakuraPetalsEffect } from './EffectsMega15';
 import { BattleSpiritTheme } from './types';
 
 import { SceneOpening } from './scenes/SceneOpening';
@@ -75,18 +75,29 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme; children
 
       <Sequence from={s1} durationInFrames={OP_DUR}><SceneOpening theme={theme} /></Sequence>
       <Sequence from={s2} durationInFrames={DATE_DUR}><SceneDate theme={theme} /></Sequence>
-      <Sequence from={s3} durationInFrames={INTRO_LIVER_DUR}><SceneLiver theme={theme} duration={INTRO_LIVER_DUR} /></Sequence>
+      <Sequence from={s3} durationInFrames={INTRO_LIVER_DUR}><SceneLiver theme={theme} duration={INTRO_LIVER_DUR} startFrame={s3} /></Sequence>
       {MSG_DUR > 0 && <Sequence from={s4} durationInFrames={MSG_DUR}><SceneOpponentAnnounce theme={theme} /></Sequence>}
       <Sequence from={s5} durationInFrames={OPPONENT_DUR}><SceneOpponent theme={theme} /></Sequence>
       <Sequence from={s6} durationInFrames={VS_DUR}><SceneVs theme={theme} /></Sequence>
-      {theme.themeColor === '#e0f7fa' && (
+      {(theme.themeColor === '#e0f7fa' || theme.themeColor === '#fce4ec') && (
         <Sequence from={s7} durationInFrames={RULE_DUR + ENDING_DUR}>
-          <PanningVideoBackground
-            src="assets/pixabay/videos/pixabay_snow_globe_snowman_christmas_texture_snow_particle_98978.mp4"
-            frame={frame}
-            startFrame={s7}
-            duration={RULE_DUR + ENDING_DUR}
-          />
+          {theme.themeColor === '#fce4ec' ? (
+            <AbsoluteFill style={{ overflow: 'hidden' }}>
+              <Sequence from={0} durationInFrames={RULE_DUR}>
+                <SakuraEndingBackground type="day" frame={frame - s7} duration={RULE_DUR} />
+              </Sequence>
+              <Sequence from={RULE_DUR} durationInFrames={ENDING_DUR + 300}>
+                <SakuraEndingBackground type="night" frame={frame - (s7 + RULE_DUR)} duration={ENDING_DUR} />
+              </Sequence>
+            </AbsoluteFill>
+          ) : (
+            <PanningVideoBackground
+              src="assets/pixabay/videos/pixabay_snow_globe_snowman_christmas_texture_snow_particle_98978.mp4"
+              frame={frame}
+              startFrame={s7}
+              duration={RULE_DUR + ENDING_DUR}
+            />
+          )}
         </Sequence>
       )}
 
@@ -99,6 +110,11 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme; children
         <AbsoluteFill style={{ pointerEvents: 'none' }}>
           <SnowEffect frame={frame} />
           <GiantSnowflakeEffect frame={frame} color="#ffffff" glowColor={theme.glowColor} />
+        </AbsoluteFill>
+      )}
+      {theme.features?.useSakuraEffect && (
+        <AbsoluteFill style={{ pointerEvents: 'none' }}>
+          <SakuraPetalsEffect />
         </AbsoluteFill>
       )}
     </AbsoluteFill>

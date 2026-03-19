@@ -209,7 +209,6 @@ export const FloatingDustMotesEffect: React.FC = () => {
         const seed = i * 4444;
         const xAmplitude = random(seed) * 100 + 50;
         const ySpeed = random(seed + 1) * 1 + 0.5; // Very slow
-        const startY = random(seed + 2) * height;
         const cycle = frame * ySpeed;
         const y = height - (cycle % (height + 200)) + 100;
         const x = (random(seed + 3) * width) + Math.sin(frame / (random(seed + 4)*50 + 20)) * xAmplitude;
@@ -290,7 +289,7 @@ export const VignettePulseEffect: React.FC = () => {
   const pulse = Math.abs(Math.sin(frame / 8)) * 30; // 0 to 30 blur increase
   
   return (
-    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 1000, pointerEvents: 'none' }}>
+    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 1000 }}>
       <div style={{
         width: '100%', height: '100%',
         boxShadow: `inset 0 0 ${150 + pulse}px rgba(0,0,0,0.8)`
@@ -304,7 +303,7 @@ export const VignettePulseEffect: React.FC = () => {
 // ===============================
 export const LaserScopeEffect: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps, width, height } = useVideoConfig();
+  const { width, height } = useVideoConfig();
   
   // Create a spring-based locking movement
   // To avoid useVideoConfig in loops, we use random steps

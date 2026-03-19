@@ -1,5 +1,19 @@
 import React from 'react';
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, random, interpolate, spring } from 'remotion';
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, random, interpolate, Img, staticFile } from 'remotion';
+
+const SAKURA_IMAGES = [
+  'assets/images/sakura-fill-01.svg',
+  'assets/images/sakura-fill-02.svg',
+  'assets/images/sakura-fill-03.svg',
+  'assets/images/sakura-fill-04.svg',
+  'assets/images/sakura-fill-05.svg',
+  'assets/images/sakura-fill-06.svg',
+  'assets/images/sakura-fill-07.svg',
+  'assets/images/sakura-fill-08.svg',
+  'assets/images/sakura-one-01.svg',
+  'assets/images/sakura-one-02.svg',
+  'assets/images/sakura-one-03.svg',
+];
 
 // ===============================
 // 1. Sakura Petals Effect
@@ -14,21 +28,24 @@ export const SakuraPetalsEffect: React.FC = () => {
       {new Array(petals).fill(0).map((_, i) => {
         const seed = i * 1337;
         const startX = random(seed) * width;
-        const speedY = random(seed + 1) * 3 + 2;
-        const speedX = random(seed + 2) * 2 - 1;
+        const speedY = random(seed + 1) * 15 + 8; // Faster falling
+        const speedX = random(seed + 2) * 5 - 2;
         const y = (frame * speedY) % (height + 100) - 50;
         const x = startX + frame * speedX + Math.sin(frame / 20 + seed) * 30;
         const rot = frame * (random(seed + 3) * 3 + 1);
-        const scale = random(seed + 4) * 0.5 + 0.5;
+        const scale = random(seed + 4) * 1.5 + 0.8; // 0.8 to 2.3 for depth
+        const imgIndex = Math.floor(random(seed + 5) * SAKURA_IMAGES.length);
 
         return (
           <div key={i} style={{
             position: 'absolute', top: 0, left: 0,
             transform: `translate(${x}px, ${y}px) rotate(${rot}deg) scale(${scale})`,
-            width: 20, height: 10, backgroundColor: '#ffb7c5',
-            borderRadius: '10px 0 10px 0', opacity: 0.8,
-            boxShadow: '0 0 5px #ffb7c5'
-          }} />
+            width: 40, height: 40, 
+            opacity: interpolate(y, [-50, 0, height, height+100], [0, 1, 1, 0]),
+            filter: 'drop-shadow(0 0 5px rgba(255, 183, 197, 0.6))'
+          }}>
+            <Img src={staticFile(SAKURA_IMAGES[imgIndex])} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          </div>
         );
       })}
     </AbsoluteFill>

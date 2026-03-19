@@ -36,14 +36,14 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
         opacity: 0.6,
       }} />
 
-      {!theme.features?.useSnowEffect && (
+      {!theme.features?.useSnowEffect && !theme.features?.hideDefaultParticles && (
         <div style={{
           position: 'absolute', inset: 0,
           background: `radial-gradient(ellipse at 50% 50%, ${theme.themeColor === 'orange' ? 'rgba(120,10,0,' : theme.themeColor === 'green' ? 'rgba(0,120,50,' : theme.themeColor === 'purple' ? 'rgba(80,0,120,' : 'rgba(120,10,0,'}${0.7 * pulse}) 0%, transparent 70%)`,
         }} />
       )}
 
-      {!theme.features?.useSnowEffect && (
+      {!theme.features?.useSnowEffect && !theme.features?.hideDefaultParticles && (
         <>
           <ShockwaveEffect 
             frame={localFrame} 

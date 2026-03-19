@@ -31,7 +31,7 @@ export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => 
     <AbsoluteFill style={{ backgroundColor: '#050000', overflow: 'hidden' }}>
       {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame + 180} opacity={0.8} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame + 180} opacity={0.8} /> : null)}
       <SvgDefs frame={frame} />
-      {new Array(30).fill(0).map((_, i) => (
+      {!theme.features?.hideDefaultParticles && new Array(30).fill(0).map((_, i) => (
         <Particle key={i} seed={i * 8} frame={frame} color={i % 2 === 0 ? theme.particleColor1 : theme.particleColor2} direction={theme.themeColor === '#e0f7fa' ? 'down' : 'up'} />
       ))}
       

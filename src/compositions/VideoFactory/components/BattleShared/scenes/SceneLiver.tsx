@@ -16,10 +16,14 @@ import {
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
 
-export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number }> = ({ theme, duration }) => {
+export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; startFrame?: number }> = ({ theme, duration, startFrame = 0 }) => {
   const frame = useCurrentFrame();
+  const absoluteFrame = frame + startFrame;
+  const isAltImageActive = theme.liver.altImage && theme.liver.altImageStartFrame && theme.liver.altImageEndFrame && absoluteFrame >= theme.liver.altImageStartFrame && absoluteFrame <= theme.liver.altImageEndFrame;
+  const displayImage = isAltImageActive ? theme.liver.altImage! : theme.liver.image;
+
   if (theme.features.useDoublingGrid) {
-    const staticImage = staticFile(theme.liver.image);
+    const staticImage = staticFile(displayImage);
 
     return (
       <AbsoluteFill style={{ backgroundColor: '#100800', overflow: 'hidden' }}>
@@ -44,7 +48,7 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number }
   }
 
   if (theme.features.useGridConvergence) {
-    const staticImage = staticFile(theme.liver.image);
+    const staticImage = staticFile(displayImage);
     return (
       <AbsoluteFill style={{ backgroundColor: '#100800', overflow: 'hidden' }}>
         {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame + 300} opacity={0.4} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame + 300} opacity={0.4} /> : null)}
@@ -113,7 +117,7 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number }
       
       <AbsoluteFill style={{ opacity: sceneOpacity }}>
         <MirrorLiverEffect 
-          imageSrc={theme.liver.image}
+          imageSrc={displayImage}
           name={theme.liver.name}
           frame={partFrame}
           duration={partDuration}

@@ -19,8 +19,6 @@ import {
   TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
   GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
 } from './compositions/VideoFactory/RankingTime';
-import { BattleCrystal } from './compositions/VideoFactory/BattleCrystal';
-import { BattleWater } from './compositions/VideoFactory/BattleWater';
 import { BattleKawaii } from './compositions/VideoFactory/BattleKawaii';
 import {
   PastelDreamShowcase,
@@ -31,10 +29,6 @@ import { SoregayasashisaMV } from './compositions/Soregayasashisa';
 import narandaMamadeMusicAnalysis from './compositions/NarandaMamade/music_analysis.json';
 import { NovaShowMV } from './components/NovaShowMV';
 import { KimitonaraComposition } from './compositions/Kimitonara';
-import {
-  GenkitComposition,
-  genkitCompositionSchema,
-} from './compositions/Genkit';
 import { StitchOverlay } from './compositions/Stitch';
 import { RookieRanking } from './compositions/VideoFactory/RookieRanking';
 import { JolBattleSpiritRed } from './compositions/VideoFactory/JolBattleSpiritRed';
@@ -62,6 +56,10 @@ import {
   JolBattleWhiteSnow,
   JOL_WHITE_DURATION,
 } from './compositions/VideoFactory/JolBattleWhiteSnow';
+import {
+  JolBattleSpringSakura,
+  JOL_SAKURA_DURATION,
+} from './compositions/VideoFactory/JolBattleSpringSakura';
 import {
   ShowcaseBackgrounds, SHOWCASE_BG_DURATION,
   ShowcaseEffects, SHOWCASE_FX_DURATION,
@@ -465,6 +463,75 @@ export const RemotionRoot: React.FC = () => {
           },
           customBackground: 'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
           opponentBackground: 'assets/images-01/meadow_animals_bg.png',
+        }}
+      />
+      <Composition
+        id="JOL-BATTLE-SPIRIT-SPRING"
+        component={JolBattleSpringSakura}
+        durationInFrames={JOL_SAKURA_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={BattleSpiritThemeSchema}
+        defaultProps={{
+          themeColor: '#fce4ec',
+          glowColor: '#f06292',
+          textStroke: '3px #c2185b',
+          textAnimation: 'kinetic',
+          particleColor1: '#ffffff',
+          particleColor2: '#f8bbd0',
+          music: {
+            src: 'assets/audio/music/その先へ.mp3',
+            startFrom: 48 * 30,
+            volume: 0.6,
+            bpm: 144,
+          },
+          customDurations: {
+            opening: 180,
+            date: 150,
+            liverIntro: 210,
+            msg: 0,
+            opponent: 105,
+            vs: 90,
+            rule: 120,
+            ending: 120,
+            logo: 90,
+          },
+          openingText: ['予約バトル', '決まりました！', 'みんな<br/>応援してね❤️'],
+          dateText: ['2026年<br/>3月28日', 'SATURDAY', '22時30分', 'START!'],
+          rulesText: ['【ルール】','グローブ2', 'アイテム他なし', '一本勝負'],
+          endingText: '初予約バトルー！<br/>いつもの<br/>なるりれらしく',
+          reverseVsOrder: true,
+          opponent: {
+            name: '🐄モゥーミルク🍼🐃',
+            image: 'assets/images-01/user1817765055425.jpeg',
+            borderColor: '#aed581', 
+            glowColor: '#7cb342',
+          },
+          liver: {
+            name: 'なるりれ🦥🍉',
+            image: 'assets/images-01/karaindaisuki.png',
+            altImage: 'assets/images-01/karaindaisuki-photo.jpg',
+            altImageStartFrame: 420,
+            altImageEndFrame: 469,
+            borderColor: '#ffffff',
+            glowColor: '#ff80ab',
+          },
+          features: {
+            useGlitch: false,
+            useMirror: false,
+            useDoublingGrid: false,
+            useGridConvergence: false,
+            useSnowEffect: false,
+            useSakuraEffect: true,
+            useKaleidoscope: false,
+            useSpinIntro: true,
+            useCircleLiver: true,
+            hideDefaultParticles: true,
+          },
+          customBackground: 'assets/pixabay/videos/pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769.mp4',
+          opponentBackground: 'assets/images-01/meadow_animals_bg.png',
+          fontFamily: '"Mochiy Pop One", sans-serif',
         }}
       />
       <Composition id="Catalog-Backgrounds" component={ShowcaseBackgrounds} durationInFrames={SHOWCASE_BG_DURATION} fps={30} width={1080} height={1920} />

@@ -42,7 +42,7 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
       {flashOpacity > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flashOpacity, zIndex: 10 }} />}
-      {theme.themeColor !== '#e0f7fa' && <RotatingFocusLines frame={frame} color={theme.themeColor} />}
+      {theme.themeColor !== '#e0f7fa' && theme.themeColor !== '#fce4ec' && <RotatingFocusLines frame={frame} color={theme.themeColor} />}
       <AbsoluteFill style={{ transform: `scale(${1 + shakeDecay * 0.1}) translate(${shakeX}px, ${shakeY}px)` }}>
         {theme.themeColor === 'orange' ? (
           <AbsoluteFill style={{ overflow: 'hidden' }}>
@@ -71,6 +71,21 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
                muted 
              />
              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(45deg, rgba(255, 215, 0, 0.2), rgba(255, 255, 255, 0.4))', mixBlendMode: 'overlay' }} />
+          </AbsoluteFill>
+        ) : theme.themeColor === '#fce4ec' ? (
+          <AbsoluteFill style={{ overflow: 'hidden', backgroundColor: '#000' }}>
+            {/* VS Video with Pink Color Grading and Screen Blend Mode */}
+            <OffthreadVideo 
+              src={staticFile('assets/pixabay/effects/pixabay_vs.mp4')} 
+              style={{ 
+                position: 'absolute',
+                top: 0,
+                width: '100%', height: '100%', objectFit: 'cover', 
+                filter: 'sepia(1) hue-rotate(280deg) saturate(4) brightness(1.2)',
+                mixBlendMode: 'screen', opacity: 0.95
+              }} 
+              muted 
+            />
           </AbsoluteFill>
         ) : (
           theme.features.useKaleidoscope !== false && <KaleidoscopeBackground imageSrc={staticFile(theme.opponent.image)} frame={frame} opacity={0.3} glowColor={theme.glowColor} />

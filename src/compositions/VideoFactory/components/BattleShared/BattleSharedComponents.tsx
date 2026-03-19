@@ -383,16 +383,34 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
   const scale = 1.1 + Math.sin(frame * 0.02) * 0.05;
   const rotate = Math.sin(frame * 0.01) * 2;
   const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
+  
+  let startFrom = undefined;
+  let endAt = undefined;
+  if (src.includes('pixabay_intro_start_spiral_flash_particle_animation_circle_171429')) {
+    startFrom = 50;
+    endAt = 300;
+  }
+  
+  let panTransform = `scale(${scale}) rotate(${rotate}deg)`;
+  let customWidth: string | number = '100%';
+  
+  if (src.includes('pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769')) {
+    startFrom = 735;
+    endAt = 974;
+    customWidth = 3413;
+    const panX = interpolate(frame, [0, 1000], [0, -2333], { extrapolateRight: 'clamp' });
+    panTransform = `translateX(${panX}px)`;
+  }
 
   return (
     <AbsoluteFill style={{ overflow: 'hidden', opacity }}>
       <div style={{ 
-        width: '100%', height: '100%', 
-        transform: `scale(${scale}) rotate(${rotate}deg)`,
+        width: customWidth, height: '100%', 
+        transform: panTransform,
         transformOrigin: '50% 50%' 
       }}>
         {isVideo ? (
-          <OffthreadVideo src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+          <OffthreadVideo src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted startFrom={startFrom} endAt={endAt} />
         ) : (
           <Img src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         )}
@@ -1293,6 +1311,36 @@ export const CustomDateTextManager: React.FC<{
         />
       )}
     </>
+  );
+};
+
+export const SakuraEndingBackground: React.FC<{ type: 'day' | 'night'; frame: number; duration: number }> = ({ type, frame, duration }) => {
+  const framesPer2Beats = 25; // Approx 2 beats at 144 BPM and 30fps
+  const beatCycle = Math.floor(frame / framesPer2Beats) % 4;
+  const src = type === 'day' ? 'assets/images-01/spring_sakura_bg.png' : 'assets/images-01/spring_sakura_ending_night.png';
+  
+  // Continuous scale up
+  const scale = 1.0 + (frame / duration) * 0.15;
+
+  const gradings = [
+    'saturate(1.0) brightness(1.0)',
+    'saturate(1.4) brightness(1.1) hue-rotate(-15deg)', 
+    'saturate(1.2) brightness(1.05)',
+    'saturate(1.6) brightness(1.2) hue-rotate(15deg)', 
+  ];
+
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', backgroundColor: '#000' }}>
+      <Img 
+        src={staticFile(src)} 
+        style={{
+          width: '100%', height: '100%', objectFit: 'cover',
+          transform: `scale(${scale})`,
+          transformOrigin: 'center center',
+          filter: gradings[beatCycle]
+        }} 
+      />
+    </AbsoluteFill>
   );
 };
 
