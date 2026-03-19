@@ -380,6 +380,7 @@ export const SunsetBackground: React.FC<{ frame: number; opacity?: number }> = (
 };
 
 export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opacity?: number }> = ({ src, frame, opacity = 1 }) => {
+  const currentAbsoluteFrame = useCurrentFrame();
   const scale = 1.1 + Math.sin(frame * 0.02) * 0.05;
   const rotate = Math.sin(frame * 0.01) * 2;
   const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
@@ -402,8 +403,16 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
     panTransform = `translateX(${panX}px)`;
   }
 
+  const isSakuraBg = src.includes('pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769');
+  const bgBrightness = (isSakuraBg && currentAbsoluteFrame <= 329) 
+    ? interpolate(currentAbsoluteFrame, [0, 329], [1.0, 1.8]) 
+    : 1;
+  const bgSaturation = (isSakuraBg && currentAbsoluteFrame <= 329)
+    ? interpolate(currentAbsoluteFrame, [0, 329], [1.0, 1.2])
+    : 1;
+
   return (
-    <AbsoluteFill style={{ overflow: 'hidden', opacity }}>
+    <AbsoluteFill style={{ overflow: 'hidden', opacity, filter: `brightness(${bgBrightness}) saturate(${bgSaturation})` }}>
       <div style={{ 
         width: customWidth, height: '100%', 
         transform: panTransform,

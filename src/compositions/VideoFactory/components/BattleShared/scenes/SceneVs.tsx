@@ -116,12 +116,12 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
           ) : (
             // --- 上下レイアウト (Standard) ---
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `scale(${pop})`, gap: 20 }}>
-              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})`, transform: theme.themeColor === '#ff2200' ? 'translate(-195px, -240px)' : 'none' }}>
+              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})`, transform: (theme.themeColor === '#ff2200' || theme.themeColor === '#fce4ec') ? `translate(-195px, -240px) translateY(${wiggleLift1}px) rotate(${wiggleRot1}deg)` : `translateY(${wiggleLift1}px) rotate(${wiggleRot1}deg)` }}>
                 <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={500} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
                 <KineticText text={topPlayer.name} frame={frame} fps={fps} startFrame={10} fontSize={90} color={topPlayer.borderColor} glowColor={topPlayer.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation} style={{ letterSpacing: 4 }} />
               </div>
 
-              {theme.themeColor !== '#ff2200' && theme.themeColor !== '#e0f7fa' && (
+              {theme.themeColor !== '#ff2200' && theme.themeColor !== '#e0f7fa' && theme.themeColor !== '#fce4ec' && (
                 <div style={{ position: 'relative', height: 120, zIndex: 10 }}>
                    <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
                      <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: theme.themeColor, fontStyle: 'italic', transform: `translate(-20px, 10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>
@@ -131,7 +131,7 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
                 </div>
               )}
 
-              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})`, transform: theme.themeColor === '#ff2200' ? 'translate(195px, 240px)' : 'none' }}>
+              <div style={{ textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})`, transform: (theme.themeColor === '#ff2200' || theme.themeColor === '#fce4ec') ? `translate(195px, 240px) translateY(${wiggleLift2}px) rotate(${wiggleRot2}deg)` : `translateY(${wiggleLift2}px) rotate(${wiggleRot2}deg)` }}>
                 <GlitchedIcon src={staticFile(bottomPlayer.image)} frame={frame} size={500} borderColor={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ margin: '15px auto 10px' }} enabled={theme.features.useGlitch} />
                 <KineticText text={bottomPlayer.name} frame={frame} fps={fps} startFrame={20} fontSize={90} color={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation} style={{ letterSpacing: 4 }} />
               </div>

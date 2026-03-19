@@ -6,6 +6,7 @@ import {
   useVideoConfig,
   Audio,
   staticFile,
+  interpolateColors,
 } from 'remotion';
 import {
   LightLeak,
@@ -57,9 +58,15 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme; children
   const s8 = s7 + RULE_DUR;
   const s9 = s8 + ENDING_DUR;
 
+  const isSakuraTheme = theme.themeColor === '#fce4ec';
+  
+  // Interpolate from white to a visibly distinct pink, and keep it pink!
+  const currentThemeColor = isSakuraTheme ? interpolateColors(frame, [0, 329], ['#ffffff', '#ff80ab']) : theme.themeColor;
+  const currentGlowColor = isSakuraTheme ? interpolateColors(frame, [0, 329], ['#ffffff', theme.glowColor]) : theme.glowColor;
+
   return (
     <AbsoluteFill style={{ backgroundColor: '#000' }}>
-      <GlobalFrameThemed color={theme.themeColor} glowColor={theme.glowColor} />
+      <GlobalFrameThemed color={currentThemeColor} glowColor={currentGlowColor} />
       <Audio src={staticFile(theme.music.src)} volume={theme.music.volume ?? 0.6} loop startFrom={theme.music.startFrom} />
       <LightLeak frame={frame} color={theme.lightLeakColor || theme.themeColor} />
       
