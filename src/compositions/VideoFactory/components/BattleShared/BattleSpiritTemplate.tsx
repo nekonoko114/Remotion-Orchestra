@@ -15,6 +15,7 @@ import {
   MagicCircle,
   SnowEffect,
   GiantSnowflakeEffect,
+  PanningVideoBackground,
 } from './BattleSharedComponents';
 import { BattleSpiritTheme } from './types';
 
@@ -80,19 +81,12 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme; children
       <Sequence from={s6} durationInFrames={VS_DUR}><SceneVs theme={theme} /></Sequence>
       {theme.themeColor === '#e0f7fa' && (
         <Sequence from={s7} durationInFrames={RULE_DUR + ENDING_DUR}>
-          <AbsoluteFill style={{ zIndex: 0, overflow: 'hidden' }}>
-            <div style={{
-              position: 'absolute',
-              width: '200%', height: '100%', left: 0, top: 0,
-              transform: `translateX(${interpolate(frame - s7, [0, RULE_DUR + ENDING_DUR], [0, -50])}%)`
-            }}>
-              <OffthreadVideo
-                src={staticFile('assets/pixabay/videos/pixabay_snow_globe_snowman_christmas_texture_snow_particle_98978.mp4')}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                muted
-              />
-            </div>
-          </AbsoluteFill>
+          <PanningVideoBackground
+            src="assets/pixabay/videos/pixabay_snow_globe_snowman_christmas_texture_snow_particle_98978.mp4"
+            frame={frame}
+            startFrame={s7}
+            duration={RULE_DUR + ENDING_DUR}
+          />
         </Sequence>
       )}
 

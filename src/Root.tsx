@@ -63,6 +63,16 @@ import {
   JOL_WHITE_DURATION,
 } from './compositions/VideoFactory/JolBattleWhiteSnow';
 import {
+  ShowcaseBackgrounds, SHOWCASE_BG_DURATION,
+  ShowcaseEffects, SHOWCASE_FX_DURATION,
+  ShowcaseTransitions, SHOWCASE_TRANS_DURATION,
+  ShowcaseTextLayouts, SHOWCASE_TEXT_DURATION,
+} from './compositions/VideoFactory/ReusableComponentsShowcase';
+import {
+  TransitionsCatalogShowcase,
+  TRANSITION_SHOWCASE_DURATION,
+} from './compositions/VideoFactory/TransitionsCatalogShowcase';
+import {
   EffectCatalogShowcase,
   EFFECT_SHOWCASE_DURATION,
 } from './compositions/VideoFactory/EffectCatalogShowcase';
@@ -457,6 +467,11 @@ export const RemotionRoot: React.FC = () => {
           opponentBackground: 'assets/images-01/meadow_animals_bg.png',
         }}
       />
+      <Composition id="Catalog-Backgrounds" component={ShowcaseBackgrounds} durationInFrames={SHOWCASE_BG_DURATION} fps={30} width={1080} height={1920} />
+      <Composition id="Catalog-Effects" component={ShowcaseEffects} durationInFrames={SHOWCASE_FX_DURATION} fps={30} width={1080} height={1920} />
+      <Composition id="Catalog-Transitions" component={ShowcaseTransitions} durationInFrames={SHOWCASE_TRANS_DURATION} fps={30} width={1080} height={1920} />
+      <Composition id="Catalog-TextAndLayouts" component={ShowcaseTextLayouts} durationInFrames={SHOWCASE_TEXT_DURATION} fps={30} width={1080} height={1920} />
+      <Composition id="Catalog-Transitions-Ultimate-60" component={TransitionsCatalogShowcase} durationInFrames={TRANSITION_SHOWCASE_DURATION} fps={30} width={1080} height={1920} />
       <AssetPanel />
     </>
   );

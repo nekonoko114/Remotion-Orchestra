@@ -14,6 +14,7 @@ import {
   SvgDefs,
   Particle,
   SparkleEffect,
+  CustomDateTextManager,
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
 
@@ -50,44 +51,14 @@ export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => 
           transform: theme.textAnimation === 'fade' ? 'none' : `scale(${interpolate(drop1, [0, 1], [5, 1])}) translateY(${interpolate(drop1, [0, 1], [-800, 0])}px)`,
           opacity: theme.textAnimation === 'fade' ? 1 : (drop1 > 0.05 ? 1 : 0),
         }}>
-          {theme.themeColor === '#e0f7fa' ? (
-            <>
-              <KineticText
-                text={(theme.dateText?.[0] || '2026年<br/>3月27日').split('<br/>')[0] || '2026年'}
-                frame={frame}
-                fps={fps}
-                startFrame={10}
-                fontSize={120}
-                color="#FFF"
-                glowColor={theme.glowColor}
-                fontFamily={theme.fontFamily} animationType={theme.textAnimation}
-                style={{ marginBottom: 10 }}
-              />
-              <KineticText
-                text={(theme.dateText?.[0] || '2026年<br/>3月27日').split('<br/>')[1] || '3月28日'}
-                frame={frame}
-                fps={fps}
-                startFrame={15}
-                fontSize={200}
-                color="#FFF"
-                glowColor={theme.glowColor}
-                fontFamily={theme.fontFamily} animationType={theme.textAnimation}
-                style={{ marginBottom: 20 }}
-              />
-            </>
-          ) : (
-            <KineticText
-              text={theme.dateText?.[0] || '2026年<br/>3月27日'}
-              frame={frame}
-              fps={fps}
-              startFrame={10}
-              fontSize={140}
-              color="#FFF"
-              glowColor={theme.glowColor}
-              fontFamily={theme.fontFamily} animationType={theme.textAnimation}
-              style={{ marginBottom: 20 }}
-            />
-          )}
+          <CustomDateTextManager
+            text={theme.dateText?.[0] || '2026年<br/>3月27日'}
+            frame={frame} fps={fps} theme={theme}
+            fontSize1={theme.themeColor === '#e0f7fa' ? 120 : 140}
+            fontSize2={theme.themeColor === '#e0f7fa' ? 200 : undefined}
+            startFrame1={10}
+            startFrame2={15}
+          />
           <KineticText
             text={theme.dateText?.[1] || 'Friday'}
             frame={frame}

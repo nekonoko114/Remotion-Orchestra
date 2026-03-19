@@ -1185,4 +1185,115 @@ export const SparkleEffect: React.FC<{ frame: number; count?: number; color?: st
 
 export * from './DoublingGridEffect';
 export * from './MirrorLiverEffect';
+export const GreenScreenOverlay: React.FC<{
+  src: string;
+  frame: number;
+  startFrame?: number;
+  flipX?: boolean;
+  flipY?: boolean;
+  blendMode?: React.CSSProperties['mixBlendMode'];
+  opacity?: number;
+  zIndex?: number;
+}> = ({ src, frame, startFrame = 0, flipX = false, flipY = false, blendMode = 'screen', opacity = 1, zIndex = 5 }) => {
+  if (frame < startFrame) return null;
+  const transform = `scaleX(${flipX ? -1 : 1}) scaleY(${flipY ? -1 : 1})`;
+  
+  return (
+    <AbsoluteFill style={{ mixBlendMode: blendMode, transform, pointerEvents: 'none', zIndex, opacity }}>
+      <OffthreadVideo
+        src={staticFile(src)}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'url(#green-key)' }}
+        muted
+      />
+    </AbsoluteFill>
+  );
+};
+
+export const PanningVideoBackground: React.FC<{
+  src: string;
+  frame: number;
+  startFrame: number;
+  duration: number;
+  startX?: number;
+  endX?: number;
+  zIndex?: number;
+}> = ({ src, frame, startFrame, duration, startX = 0, endX = -50, zIndex = 0 }) => {
+  if (frame < startFrame || frame >= startFrame + duration) return null;
+  
+  return (
+    <AbsoluteFill style={{ zIndex, overflow: 'hidden' }}>
+      <div style={{
+        position: 'absolute',
+        width: '200%', height: '100%', left: 0, top: 0,
+        transform: `translateX(${interpolate(frame - startFrame, [0, duration], [startX, endX])}%)`
+      }}>
+        <OffthreadVideo
+          src={staticFile(src)}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          muted
+        />
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+export const VsDiagonalLayout: React.FC<{
+  frame: number;
+  fps: number;
+  topPlayer: any;
+  bottomPlayer: any;
+  theme: any;
+  popScale: number;
+}> = ({ frame, fps, topPlayer, bottomPlayer, theme, popScale }) => {
+  const wiggleLift1 = Math.sin(frame / 15) * 20;
+  const wiggleRot1 = Math.cos(frame / 20) * 3;
+  const wiggleLift2 = Math.cos(frame / 12) * 20;
+  const wiggleRot2 = Math.sin(frame / 18) * 3;
+
+  return (
+    <AbsoluteFill style={{ transform: `scale(${popScale})` }}>
+      <div style={{ position: 'absolute', left: 40, top: 140, textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})`, transform: `translateY(${wiggleLift1}px) rotate(${wiggleRot1}deg)` }}>
+        <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={460} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
+        <KineticText text={topPlayer.name} frame={frame} fps={fps} startFrame={10} fontSize={80} color={topPlayer.borderColor} glowColor={topPlayer.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation} style={{ letterSpacing: 4 }} />
+      </div>
+
+      <div style={{ position: 'absolute', right: 40, bottom: 200, textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})`, transform: `translateY(${wiggleLift2}px) rotate(${wiggleRot2}deg)` }}>
+        <GlitchedIcon src={staticFile(bottomPlayer.image)} frame={frame} size={460} borderColor={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
+        <KineticText text={bottomPlayer.name} frame={frame} fps={fps} startFrame={20} fontSize={80} color={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation} style={{ letterSpacing: 4 }} />
+      </div>
+    </AbsoluteFill>
+  );
+};
+
+export const CustomDateTextManager: React.FC<{
+  text: string;
+  frame: number;
+  fps: number;
+  theme: any;
+  fontSize1?: number;
+  fontSize2?: number;
+  startFrame1?: number;
+  startFrame2?: number;
+}> = ({ text, frame, fps, theme, fontSize1 = 120, fontSize2 = 200, startFrame1 = 10, startFrame2 = 15 }) => {
+  const parts = text.split('<br/>');
+  return (
+    <>
+      <KineticText
+        text={parts[0] || ''}
+        frame={frame} fps={fps} startFrame={startFrame1} fontSize={fontSize1}
+        color="#FFF" glowColor={theme.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation}
+        style={{ marginBottom: 10 }}
+      />
+      {parts.length > 1 && (
+        <KineticText
+          text={parts[1]}
+          frame={frame} fps={fps} startFrame={startFrame2} fontSize={fontSize2}
+          color="#FFF" glowColor={theme.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation}
+          style={{ marginBottom: 20 }}
+        />
+      )}
+    </>
+  );
+};
+
 export * from './GridConvergenceEffect';

@@ -3,13 +3,12 @@ import {
   AbsoluteFill,
   useCurrentFrame,
   useVideoConfig,
-  OffthreadVideo,
-  staticFile,
 } from 'remotion';
 import {
   SvgDefs,
   Particle,
   KineticText,
+  GreenScreenOverlay,
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
 
@@ -32,13 +31,13 @@ export const SceneEndingList: React.FC<{ theme: BattleSpiritTheme; duration: num
       </AbsoluteFill>
 
       {frame >= 30 && theme.themeColor === '#e0f7fa' && (
-        <AbsoluteFill style={{ mixBlendMode: 'screen', transform: 'scaleX(-1)', pointerEvents: 'none', zIndex: 5, opacity: 0.9 }}>
-          <OffthreadVideo
-            src={staticFile('assets/pixabay/videos/pixabay_heart_sparkle_overlay_green_screen_4k_love_gold_he_111573.mp4')}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'url(#green-key)' }}
-            muted
-          />
-        </AbsoluteFill>
+        <GreenScreenOverlay
+          src="assets/pixabay/videos/pixabay_heart_sparkle_overlay_green_screen_4k_love_gold_he_111573.mp4"
+          frame={frame}
+          startFrame={30}
+          flipX={true}
+          opacity={0.9}
+        />
       )}
     </AbsoluteFill>
   );

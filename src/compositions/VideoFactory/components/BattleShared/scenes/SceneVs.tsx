@@ -16,6 +16,7 @@ import {
   GlitchedIcon,
   KineticText,
   VideoEffectStack,
+  VsDiagonalLayout,
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
 
@@ -92,17 +93,11 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
             </>
           ) : theme.themeColor === '#e0f7fa' ? (
             // --- 完全対角レイアウト (White Theme) ---
-            <AbsoluteFill style={{ transform: `scale(${pop})` }}>
-              <div style={{ position: 'absolute', left: 40, top: 140, textAlign: 'center', filter: `drop-shadow(0 0 100px ${topPlayer.glowColor})`, transform: `translateY(${wiggleLift1}px) rotate(${wiggleRot1}deg)` }}>
-                <GlitchedIcon src={staticFile(topPlayer.image)} frame={frame} size={460} borderColor={topPlayer.borderColor} glowColor={topPlayer.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
-                <KineticText text={topPlayer.name} frame={frame} fps={fps} startFrame={10} fontSize={80} color={topPlayer.borderColor} glowColor={topPlayer.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation} style={{ letterSpacing: 4 }} />
-              </div>
-
-              <div style={{ position: 'absolute', right: 40, bottom: 200, textAlign: 'center', filter: `drop-shadow(0 0 100px ${bottomPlayer.glowColor})`, transform: `translateY(${wiggleLift2}px) rotate(${wiggleRot2}deg)` }}>
-                <GlitchedIcon src={staticFile(bottomPlayer.image)} frame={frame} size={460} borderColor={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} style={{ margin: '0 auto 15px' }} enabled={theme.features.useGlitch} />
-                <KineticText text={bottomPlayer.name} frame={frame} fps={fps} startFrame={20} fontSize={80} color={bottomPlayer.borderColor} glowColor={bottomPlayer.glowColor} fontFamily={theme.fontFamily} animationType={theme.textAnimation} style={{ letterSpacing: 4 }} />
-              </div>
-            </AbsoluteFill>
+            <VsDiagonalLayout 
+              frame={frame} fps={fps} 
+              topPlayer={topPlayer} bottomPlayer={bottomPlayer} 
+              theme={theme} popScale={pop} 
+            />
           ) : (
             // --- 上下レイアウト (Standard) ---
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `scale(${pop})`, gap: 20 }}>
