@@ -15,6 +15,10 @@ import {
   SnowEffect,
   GiantSnowflakeEffect,
   PanningVideoBackground,
+  CustomBackgroundImage,
+  SunsetBackground,
+  EmeraldBackground,
+  MagicBackground,
   SakuraEndingBackground,
 } from './BattleSharedComponents';
 import { SakuraPetalsEffect } from './EffectsMega15';
@@ -70,6 +74,21 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme; children
       <Audio src={staticFile(theme.music.src)} volume={theme.music.volume ?? 0.6} loop startFrom={theme.music.startFrom} />
       <LightLeak frame={frame} color={theme.lightLeakColor || theme.themeColor} />
       
+      {/* GLOBAL SCENE 1-3 BACKGROUND */}
+      {frame < s4 && (
+        <AbsoluteFill>
+          {theme.customBackground ? (
+             <CustomBackgroundImage src={theme.customBackground} frame={frame} opacity={0.8} />
+          ) : theme.themeColor === 'orange' ? (
+             <SunsetBackground frame={frame} opacity={0.8} />
+          ) : theme.themeColor === 'green' ? (
+             <EmeraldBackground frame={frame} />
+          ) : theme.themeColor === 'purple' ? (
+             <MagicBackground frame={frame} />
+          ) : null}
+        </AbsoluteFill>
+      )}
+
       {theme.themeColor === 'purple' && (
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', opacity: 0.3, pointerEvents: 'none' }}>
           <div style={{ transform: `scale(1.5) rotate(${frame * 0.2}deg)` }}>

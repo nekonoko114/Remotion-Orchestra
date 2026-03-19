@@ -9,6 +9,7 @@ import {
   Img,
   staticFile,
   OffthreadVideo,
+  Loop,
 } from 'remotion';
 import { loadFont } from '@remotion/google-fonts/NotoSansJP';
 
@@ -404,11 +405,11 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
   }
 
   const isSakuraBg = src.includes('pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769');
-  const bgBrightness = (isSakuraBg && currentAbsoluteFrame <= 329) 
-    ? interpolate(currentAbsoluteFrame, [0, 329], [1.0, 1.8]) 
+  const bgBrightness = (isSakuraBg && currentAbsoluteFrame <= 540) 
+    ? interpolate(currentAbsoluteFrame, [0, 540], [1.0, 1.4], { extrapolateRight: 'clamp' }) 
     : 1;
-  const bgSaturation = (isSakuraBg && currentAbsoluteFrame <= 329)
-    ? interpolate(currentAbsoluteFrame, [0, 329], [1.0, 1.2])
+  const bgSaturation = (isSakuraBg && currentAbsoluteFrame <= 540)
+    ? interpolate(currentAbsoluteFrame, [0, 540], [1.0, 1.2], { extrapolateRight: 'clamp' })
     : 1;
 
   return (
@@ -419,7 +420,9 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
         transformOrigin: '50% 50%' 
       }}>
         {isVideo ? (
-          <OffthreadVideo src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted startFrom={startFrom} endAt={endAt} />
+          <Loop durationInFrames={startFrom && endAt ? endAt - startFrom : (endAt || 1800)}>
+            <OffthreadVideo src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted startFrom={startFrom} endAt={endAt} />
+          </Loop>
         ) : (
           <Img src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         )}

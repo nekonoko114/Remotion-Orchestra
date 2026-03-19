@@ -477,7 +477,7 @@ export const RemotionRoot: React.FC = () => {
           themeColor: '#fce4ec',
           glowColor: '#f06292',
           textStroke: '3px #c2185b',
-          textAnimation: 'kinetic',
+          textAnimation: 'fade',
           particleColor1: '#ffffff',
           particleColor2: '#f8bbd0',
           music: {

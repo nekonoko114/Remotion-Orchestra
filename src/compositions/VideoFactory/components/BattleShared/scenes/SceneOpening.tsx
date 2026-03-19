@@ -3,17 +3,45 @@ import {
   AbsoluteFill,
   useCurrentFrame,
   useVideoConfig,
+  interpolate,
 } from 'remotion';
 import {
-  SunsetBackground,
-  EmeraldBackground,
-  MagicBackground,
-  CustomBackgroundImage,
   KineticText,
   ShockwaveEffect,
   LightPillarEffect,
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
+
+const SakuraPetalPath = "M 0,0 C 30,-30 50,-60 30,-100 C 15,-105 5,-90 0,-80 C -5,-90 -15,-105 -30,-100 C -50,-60 -30,-30 0,0 Z";
+
+const SakuraOutlineTracing: React.FC<{ frame: number; color?: string; glow?: string }> = ({ frame, color = '#ff80ab', glow = '#f06292' }) => {
+  const drawProgress = interpolate(frame, [0, 120], [100, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const fadeOut = interpolate(frame, [150, 180], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const fillAlpha = interpolate(frame, [100, 120], [0, 0.25], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  
+  return (
+    <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', opacity: fadeOut, pointerEvents: 'none', zIndex: 10 }}>
+      <svg width="1500" height="1500" viewBox="-150 -150 300 300" style={{ 
+        transform: `scale(${interpolate(frame, [0, 180], [1, 1.3])}) rotate(${frame * 0.1}deg)`,
+        filter: `drop-shadow(0 0 20px ${glow})`
+      }}>
+        {[0, 1, 2, 3, 4].map(i => (
+          <path
+            key={i}
+            d={SakuraPetalPath}
+            fill={`rgba(255, 128, 171, ${fillAlpha})`}
+            stroke={color}
+            strokeWidth="2"
+            pathLength="100"
+            strokeDasharray="100"
+            strokeDashoffset={drawProgress}
+            style={{ transform: `rotate(${i * 72}deg)`, transformOrigin: '0px 0px' }}
+          />
+        ))}
+      </svg>
+    </AbsoluteFill>
+  );
+};
 
 export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   const frame = useCurrentFrame();
@@ -27,8 +55,7 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
   const pulse = Math.pow(Math.max(0, 1 - localFrame / 45), 4) * 1.5 + 0.3;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#050000' }}>
-      {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame} /> : theme.themeColor === 'green' ? <EmeraldBackground frame={frame} /> : theme.themeColor === 'purple' ? <MagicBackground frame={frame} /> : null)}
+    <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
       
       <div style={{
         position: 'absolute', inset: 0, zIndex: 4, pointerEvents: 'none',
@@ -58,12 +85,16 @@ export const SceneOpening: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) 
         </>
       )}
 
-      <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 50px' }}>
+      {theme.themeColor === '#fce4ec' && frame < 180 && (
+        <SakuraOutlineTracing frame={frame} color="white" glow={theme.glowColor} />
+      )}
+
+      <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: '0 50px', zIndex: 100 }}>
         <KineticText
           text={text}
           frame={localFrame}
           fps={fps}
-          fontSize={theme.themeColor !== 'orange' && phase === 2 ? 210 : 120}
+          fontSize={(theme.themeColor === '#fce4ec' && phase === 0) ? 210 : (theme.themeColor !== 'orange' && phase === 2 ? 210 : 120)}
           color="#FFFFFF"
           glowColor={theme.glowColor}
           fontFamily={theme.fontFamily} animationType={theme.textAnimation}

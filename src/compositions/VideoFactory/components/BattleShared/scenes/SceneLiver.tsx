@@ -6,17 +6,44 @@ import {
   interpolate,
   spring,
   Img,
+  random,
 } from 'remotion';
 import {
   KaleidoscopeBackground,
-  SunsetBackground,
-  CustomBackgroundImage,
   VideoEffectStack,
   DoublingGridEffect,
   GridConvergenceEffect,
   MirrorLiverEffect,
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
+
+const GlassCrashOverlay: React.FC<{ frame: number }> = ({ frame }) => {
+  if (frame < 0 || frame > 30) return null;
+  const p = spring({ frame, fps: 30, config: { damping: 100, mass: 1 } });
+  
+  const shards = [
+    { clip: 'polygon(0 0, 40% 40%, 0 60%)', x: -100, y: -20, rot: -45 },
+    { clip: 'polygon(0 0, 100% 0, 40% 40%)', x: 20, y: -100, rot: 45 },
+    { clip: 'polygon(100% 0, 100% 100%, 60% 50%)', x: 100, y: 10, rot: 90 },
+    { clip: 'polygon(0 100%, 60% 50%, 100% 100%)', x: 20, y: 100, rot: -90 },
+    { clip: 'polygon(0 60%, 40% 40%, 60% 50%, 0 100%)', x: -50, y: 50, rot: -30 },
+  ];
+
+  return (
+    <AbsoluteFill style={{ zIndex: 200, pointerEvents: 'none' }}>
+      {shards.map((s, i) => (
+        <AbsoluteFill key={i} style={{ 
+          clipPath: s.clip, 
+          transform: `translate(${interpolate(p, [0, 1], [0, s.x])}%, ${interpolate(p, [0, 1], [0, s.y])}%) rotate(${interpolate(p, [0, 1], [0, s.rot])}deg) scale(${1 + p*0.2})`,
+          opacity: interpolate(p, [0.5, 1], [1, 0])
+        }}>
+          <div style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.3)', backdropFilter: 'blur(10px) brightness(1.2)', border: '2px solid rgba(255,255,255,0.8)' }} />
+        </AbsoluteFill>
+      ))}
+      <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: interpolate(p, [0, 0.1, 1], [0, 0.8, 0], { extrapolateRight: 'clamp' }) }} />
+    </AbsoluteFill>
+  );
+};
 
 export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; startFrame?: number }> = ({ theme, duration, startFrame = 0 }) => {
   const frame = useCurrentFrame();
@@ -28,8 +55,7 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; 
     const staticImage = staticFile(displayImage);
 
     return (
-      <AbsoluteFill style={{ backgroundColor: '#100800', overflow: 'hidden' }}>
-        {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame + 300} opacity={0.4} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame + 300} opacity={0.4} /> : null)}
+      <AbsoluteFill style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
         {theme.features.useKaleidoscope !== false && <KaleidoscopeBackground imageSrc={staticImage} frame={frame} opacity={0.3} />}
         <DoublingGridEffect 
           imageSrc={staticImage} 
@@ -52,8 +78,7 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; 
   if (theme.features.useGridConvergence) {
     const staticImage = staticFile(displayImage);
     return (
-      <AbsoluteFill style={{ backgroundColor: '#100800', overflow: 'hidden' }}>
-        {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame + 300} opacity={0.4} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame + 300} opacity={0.4} /> : null)}
+      <AbsoluteFill style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
         {theme.features.useKaleidoscope !== false && <KaleidoscopeBackground imageSrc={staticImage} frame={frame} opacity={0.3} />}
         <GridConvergenceEffect 
           imageSrc={staticImage} 
@@ -73,7 +98,45 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; 
     );
   }
 
-  // --- Custom 3:7 Layout specifically for Spring Sakura Theme ---
+  // --- Confetti Burst Effect ---
+  const ConfettiBurst = ({ frame, startFrame }: { frame: number, startFrame: number }) => {
+    if (frame < startFrame) return null;
+    const duration = 60; // 2 seconds of burst
+    if (frame >= startFrame + duration) return null;
+    
+    const p = interpolate(frame, [startFrame, startFrame + duration], [0, 1], { extrapolateRight: 'clamp' });
+    
+    return (
+      <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
+        {new Array(80).fill(0).map((_, i) => {
+          const seed = i * 153;
+          const angle = random(seed) * Math.PI * 2;
+          const speed = random(seed + 1) * 1500 + 500;
+          // Apply gravity
+          const gravity = Math.pow(p * 2, 2) * 500;
+          const dist = p * speed;
+          const x = Math.cos(angle) * dist;
+          const y = Math.sin(angle) * dist + gravity;
+          const size = random(seed + 2) * 40 + 15;
+          const rot = (frame - startFrame) * (random(seed + 3) * 20 - 10);
+          const color = ['#ff80ab', '#f06292', '#FFD700', '#ffffff', '#81d4fa'][i % 5];
+          const scale = interpolate(p, [0, 0.1, 0.8, 1], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+          
+          return (
+            <div key={i} style={{
+              position: 'absolute', left: '50%', top: '50%',
+              width: size, height: size, backgroundColor: color,
+              transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rot}deg) scale(${scale})`,
+              borderRadius: i % 3 === 0 ? '50%' : '5px',
+              boxShadow: `0 0 10px ${color}`
+            }} />
+          );
+        })}
+      </AbsoluteFill>
+    );
+  };
+
+  // --- Confetti Burst Effect ---
   if (theme.themeColor === '#fce4ec') {
     const part1Duration = Math.floor(duration * 0.3);
     const isPart1 = frame < part1Duration;
@@ -99,20 +162,21 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; 
 
     let dynamicTransform = 'none';
     if (isPart1) {
-      // 350fr~365fr -> 20~35 inside SceneLiver (duration 330~539)
-      const rotZ = interpolate(frame, [20, 35], [0, 360], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-      dynamicTransform = `rotate(${rotZ}deg)`;
+      // Shatter/Glass Crash shake starts at 350fr (relative 20)
+      const localFrame = frame - 20;
+      const shakeInt = localFrame >= 0 && localFrame < 15 ? Math.max(0, 1 -  localFrame / 15) : 0;
+      const shakeX = (random(localFrame) - 0.5) * 80 * shakeInt;
+      const shakeY = (random(localFrame + 1) - 0.5) * 80 * shakeInt;
+      dynamicTransform = `translate(${shakeX}px, ${shakeY}px) scale(${1 + shakeInt * 0.15})`;
     } else {
       // 445fr~ -> 115~ inside SceneLiver
-      const rotY = interpolate(frame, [115, duration], [0, 1080], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-      dynamicTransform = `perspective(1000px) rotateY(${rotY}deg)`;
+      dynamicTransform = 'none';
     }
 
     return (
-      <AbsoluteFill style={{ overflow: 'visible', backgroundColor: '#000', filter: dynamicFilter, transform: dynamicTransform, transformOrigin: 'center' }}>
-        <AbsoluteFill style={{ width: 2500, height: 2500, left: (1080 - 2500) / 2, top: (1920 - 2500) / 2 }}>
-          <CustomBackgroundImage src={theme.customBackground!} frame={frame + 300} opacity={0.8} />
-        </AbsoluteFill>
+      <AbsoluteFill style={{ overflow: 'visible', backgroundColor: 'transparent', filter: dynamicFilter, transform: dynamicTransform, transformOrigin: 'center' }}>
+        <ConfettiBurst frame={frame} startFrame={25} />
+        <GlassCrashOverlay frame={frame - 20} />
 
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
           {isPart1 ? (
@@ -121,7 +185,7 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; 
              </div>
           ) : (
              <div style={{ 
-               transform: `scale(${p2Scale * p2Pop})`, 
+               transform: `scale(${p2Scale * p2Pop}) translateY(${Math.sin((frame - 116) * 0.1) * 20}px) rotate(${Math.sin((frame - 116) * 0.05) * 5}deg)`, 
                border: `15px solid white`, 
                borderRadius: 40,
                boxShadow: `0 0 150px ${theme.glowColor}, inset 0 0 50px ${theme.glowColor}`,
@@ -195,11 +259,7 @@ export const SceneLiver: React.FC<{ theme: BattleSpiritTheme; duration: number; 
   }
 
   return (
-    <AbsoluteFill style={{ overflow: 'visible', transform: dynamicTransform, filter: dynamicFilter, transformOrigin: 'center', backgroundColor: '#020508' }}>
-      <AbsoluteFill style={{ width: 2500, height: 2500, left: (1080 - 2500) / 2, top: (1920 - 2500) / 2 }}>
-        {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame + 300} opacity={0.7} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame + 300} opacity={0.4} /> : null)}
-      </AbsoluteFill>
-      
+    <AbsoluteFill style={{ overflow: 'visible', transform: dynamicTransform, filter: dynamicFilter, transformOrigin: 'center', backgroundColor: 'transparent' }}>
       <AbsoluteFill style={{ opacity: sceneOpacity }}>
         <MirrorLiverEffect 
           imageSrc={displayImage}

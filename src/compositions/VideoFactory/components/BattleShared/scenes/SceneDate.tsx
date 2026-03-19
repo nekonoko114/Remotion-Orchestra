@@ -8,8 +8,6 @@ import {
   random,
 } from 'remotion';
 import {
-  SunsetBackground,
-  CustomBackgroundImage,
   KineticText,
   SvgDefs,
   Particle,
@@ -21,15 +19,13 @@ import { BattleSpiritTheme } from '../types';
 export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const flash = Math.max(0, 1 - frame / 8); 
   const drop1 = spring({ frame: frame - 5, fps, config: { stiffness: 400, damping: 10, mass: 2 } });
   const drop2 = spring({ frame: frame - 20, fps, config: { stiffness: 400, damping: 10, mass: 2 } });
   const shakeX = theme.textAnimation === 'fade' ? 0 : (random(frame) - 0.5) * 40 * Math.max(0, 1 - Math.abs(frame - 5) / 10);
   const shakeY = theme.textAnimation === 'fade' ? 0 : (random(frame + 11) - 0.5) * 40 * Math.max(0, 1 - Math.abs(frame - 25) / 10);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#050000', overflow: 'hidden' }}>
-      {theme.customBackground ? <CustomBackgroundImage src={theme.customBackground} frame={frame + 180} opacity={0.8} /> : (theme.themeColor === 'orange' ? <SunsetBackground frame={frame + 180} opacity={0.8} /> : null)}
+    <AbsoluteFill style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
       {!theme.features?.hideDefaultParticles && new Array(30).fill(0).map((_, i) => (
         <Particle key={i} seed={i * 8} frame={frame} color={i % 2 === 0 ? theme.particleColor1 : theme.particleColor2} direction={theme.themeColor === '#e0f7fa' ? 'down' : 'up'} />
@@ -37,12 +33,6 @@ export const SceneDate: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => 
       
       {theme.textAnimation === 'fade' && (
         <SparkleEffect frame={frame} count={25} glowColor="#ffea00" color="#fff9c4" />
-      )}
-      
-      {theme.textAnimation === 'fade' ? (
-        <div style={{ position: 'absolute', inset: 0, backgroundColor: theme.themeColor === '#e0f7fa' ? 'white' : 'black', opacity: interpolate(frame, [0, 20], [1, 0], { extrapolateRight: 'clamp' }), zIndex: 100, pointerEvents: 'none' }} />
-      ) : (
-        flash > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flash, zIndex: 100, pointerEvents: 'none' }} />
       )}
 
       <AbsoluteFill style={{ transform: `translate(${shakeX}px, ${shakeY}px)`, justifyContent: 'center', alignItems: 'center', gap: 60 }}>
