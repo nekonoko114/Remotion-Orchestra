@@ -468,7 +468,7 @@ export const RemotionRoot: React.FC = () => {
         }}
       />
       <Composition id="Catalog-Backgrounds" component={ShowcaseBackgrounds} durationInFrames={SHOWCASE_BG_DURATION} fps={30} width={1080} height={1920} />
-      <Composition id="Catalog-Effects" component={ShowcaseEffects} durationInFrames={SHOWCASE_FX_DURATION} fps={30} width={1080} height={1920} />
+      <Composition id="Catalog-Effects-Ultimate-42" component={ShowcaseEffects} durationInFrames={SHOWCASE_FX_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Catalog-Transitions" component={ShowcaseTransitions} durationInFrames={SHOWCASE_TRANS_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Catalog-TextAndLayouts" component={ShowcaseTextLayouts} durationInFrames={SHOWCASE_TEXT_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Catalog-Transitions-Ultimate-60" component={TransitionsCatalogShowcase} durationInFrames={TRANSITION_SHOWCASE_DURATION} fps={30} width={1080} height={1920} />

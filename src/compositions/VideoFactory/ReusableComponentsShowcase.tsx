@@ -8,6 +8,18 @@ import {
   EmeraldBackground, MagicCircle, SpeedLinesBackground, GlitchNoise, FlashOverlay,
   CyberTunnel2D, ShockwaveEffect, SnowEffect, LightPillarEffect, GiantSnowflakeEffect
 } from './components/BattleShared/BattleSharedComponents';
+import {
+  SakuraPetalsEffect, FireSparksEffect, MatrixRainEffect, SnowstormEffect,
+  CameraQuakeEffect, RGBPulseEffect, CinematicLensFlareEffect, LightLeaksEffect,
+  LightningBlitzEffect, ShockwaveRingEffect, RadialSpeedLinesEffect, VHSOverlayEffect,
+  DigitalGlitchEffect, HologramFlickerEffect, FilmGrainDustEffect
+} from './components/BattleShared/EffectsMega15';
+import {
+  GoldConfettiEffect, StarryNightEffect, PaintSplatterOverlay, CyberHexagonGridEffect,
+  WaterRipplesEffect, FilmBurnOverlayEffect, SonarRadarEffect, FloatingDustMotesEffect,
+  PrismCausticsEffect, GlitchTextStringEffect, VignettePulseEffect, LaserScopeEffect,
+  SpeedWarpTunnelEffect, CRTScanlineScrollEffect, MagicalAuraGlowEffect
+} from './components/BattleShared/EffectsUltra15';
 import { whiteSnowTheme } from './JolBattleWhiteSnow';
 
 const mockTopPlayer = whiteSnowTheme.liver;
@@ -58,6 +70,36 @@ const fxItems = [
   { name: 'SnowEffect', render: (f: number) => <SnowEffect frame={f} count={150} /> },
   { name: 'GiantSnowflakeEffect', render: (f: number) => <GiantSnowflakeEffect frame={f} /> },
   { name: 'LightPillarEffect', render: (f: number) => <LightPillarEffect frame={f} color="#00ffff" /> },
+  { name: 'Sakura Petals', render: () => <SakuraPetalsEffect /> },
+  { name: 'Fire Sparks', render: () => <FireSparksEffect /> },
+  { name: 'Matrix Digital Rain', render: () => <MatrixRainEffect /> },
+  { name: 'Snowstorm Blizzard', render: () => <SnowstormEffect /> },
+  { name: 'Camera Quake / Earthquake', render: () => <CameraQuakeEffect><AbsoluteFill style={{ backgroundColor: '#c62828', justifyContent: 'center', alignItems: 'center' }}><h1 style={{ fontSize: 200, color: '#fff', margin: 0 }}>DEMO</h1></AbsoluteFill></CameraQuakeEffect> },
+  { name: 'RGB Chromatic Pulse', render: () => <RGBPulseEffect><AbsoluteFill style={{ backgroundColor: '#0277bd', justifyContent: 'center', alignItems: 'center' }}><h1 style={{ fontSize: 200, color: '#ffdd00', margin: 0 }}>PULSE</h1></AbsoluteFill></RGBPulseEffect> },
+  { name: 'Cinematic Lens Flare', render: () => <CinematicLensFlareEffect /> },
+  { name: 'Light Leaks & Blooms', render: () => <LightLeaksEffect /> },
+  { name: 'Lightning Blitz Spark', render: () => <LightningBlitzEffect /> },
+  { name: 'Shockwave Ring', render: () => <ShockwaveRingEffect /> },
+  { name: 'Radial Speed Lines', render: () => <RadialSpeedLinesEffect /> },
+  { name: 'VHS Video Overlay', render: () => <VHSOverlayEffect /> },
+  { name: 'Digital Glitch Corrupt', render: () => <DigitalGlitchEffect><AbsoluteFill style={{ backgroundColor: '#00695c', justifyContent: 'center', alignItems: 'center' }}><h1 style={{ fontSize: 200, color: '#fff', margin: 0 }}>GLITCH</h1></AbsoluteFill></DigitalGlitchEffect> },
+  { name: 'Hologram Flicker Scan', render: () => <HologramFlickerEffect><AbsoluteFill style={{ backgroundColor: '#283593', justifyContent: 'center', alignItems: 'center' }}><h1 style={{ fontSize: 200, color: '#0ff', margin: 0 }}>HOLOGRAM</h1></AbsoluteFill></HologramFlickerEffect> },
+  { name: 'Film Grain & Dust', render: () => <FilmGrainDustEffect /> },
+  { name: 'Gold Confetti Celebration', render: () => <GoldConfettiEffect /> },
+  { name: 'Starry Night Twinkles', render: () => <StarryNightEffect /> },
+  { name: 'Paint Splatter Impact', render: () => <PaintSplatterOverlay /> },
+  { name: 'Cyber Hexagon Grid', render: () => <CyberHexagonGridEffect /> },
+  { name: 'Water Ripples Distortion', render: () => <WaterRipplesEffect /> },
+  { name: 'Film Burn Overlays', render: () => <FilmBurnOverlayEffect /> },
+  { name: 'Sonar Radar Screen', render: () => <SonarRadarEffect /> },
+  { name: 'Floating Dust Motes', render: () => <FloatingDustMotesEffect /> },
+  { name: 'Prism Light Caustics', render: () => <PrismCausticsEffect /> },
+  { name: 'Glitch Text Error Strings', render: () => <GlitchTextStringEffect /> },
+  { name: 'Vignette Darkness Pulse', render: () => <VignettePulseEffect /> },
+  { name: 'Laser Scope Lock-On', render: () => <LaserScopeEffect /> },
+  { name: 'Speed Warp Tunnel', render: () => <SpeedWarpTunnelEffect /> },
+  { name: 'CRT Thick Scanlines Roll', render: () => <CRTScanlineScrollEffect /> },
+  { name: 'Magical Aura Glow Pulse', render: () => <MagicalAuraGlowEffect><AbsoluteFill style={{ backgroundColor: '#4a148c', justifyContent: 'center', alignItems: 'center', width: 600, height: 600, top: '50%', left: '50%', transform: 'translate(-50%, -50%)', borderRadius: 300 }}><h1 style={{ fontSize: 100, color: '#fff', margin: 0 }}>MAGIC</h1></AbsoluteFill></MagicalAuraGlowEffect> },
 ];
 export const SHOWCASE_FX_DURATION = fxItems.length * 90;
 export const ShowcaseEffects: React.FC = () => {
