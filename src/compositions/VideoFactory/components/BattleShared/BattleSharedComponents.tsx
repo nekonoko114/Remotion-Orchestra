@@ -95,15 +95,17 @@ export const KaleidoscopeBackground: React.FC<{
   );
 };
 
-export const Particle: React.FC<{ seed: number; frame: number; color: string }> = ({ seed, frame, color }) => {
+export const Particle: React.FC<{ seed: number; frame: number; color: string; direction?: 'up' | 'down' }> = ({ seed, frame, color, direction = 'up' }) => {
   const life = 35 + random(seed + 5) * 30;
   const local = (frame + seed * 7) % life;
   const progress = local / life;
   const x = random(seed) * 1080;
-  const baseY = 1920 * (0.4 + random(seed + 1) * 0.8);
   const speed = 15 + random(seed + 2) * 20;
   const w = 15 + random(seed + 3) * 60;
-  const y = baseY - speed * local;
+  const baseY = direction === 'up' 
+    ? 1920 * (0.4 + random(seed + 1) * 0.8) 
+    : 1920 * (random(seed + 1) * 0.6 - 0.2);
+  const y = direction === 'up' ? baseY - speed * local : baseY + speed * local;
   const opacity = interpolate(progress, [0, 0.1, 0.5, 1], [0, 1, 0.8, 0]);
   const s = interpolate(progress, [0, 0.2, 1], [0.2, 1.2, 0]);
 
@@ -253,7 +255,9 @@ export const KineticText: React.FC<{
   stagger?: number;
   style?: React.CSSProperties;
   fontFamily?: string;
-}> = ({ text, frame, fps, startFrame = 0, fontSize, color, glowColor, stagger = 8, style, fontFamily: customFontFamily }) => {
+  textStroke?: string;
+  animationType?: 'kinetic' | 'fade';
+}> = ({ text, frame, fps, startFrame = 0, fontSize, color, glowColor, stagger = 8, style, fontFamily: customFontFamily, textStroke, animationType = 'kinetic' }) => {
   const t = frame - startFrame;
   const lines = text.replace(/<br\s*\/?>/gi, '\n').split('\n');
 
@@ -262,17 +266,22 @@ export const KineticText: React.FC<{
       {lines.map((line, i) => {
         const lineStart = i * stagger;
         const s = spring({ frame: t - lineStart, fps, config: { stiffness: 500, damping: 20, mass: 1 } });
-        const scale = interpolate(s, [0, 0.6, 1], [2.5, 0.9, 1]);
-        const translateY = interpolate(s, [0, 1], [-80, 0]);
-        const skewX = interpolate(s, [0, 0.4, 1], [-12, 4, 0]);
-        const opacity = interpolate(t - lineStart, [0, 4], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-        const flicker = 0.88 + random(frame * 5 + i * 100) * 0.24;
-        const impactBrightness = interpolate(t - lineStart, [0, 3, 8], [3.0, 1.5, 1.0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+        const scale = animationType === 'fade' 
+          ? interpolate(t - lineStart, [0, 30], [0.8, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' }) 
+          : interpolate(s, [0, 0.6, 1], [2.5, 0.9, 1]);
+        const translateY = animationType === 'fade' ? interpolate(t - lineStart, [0, 15], [20, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' }) : interpolate(s, [0, 1], [-80, 0]);
+        const skewX = animationType === 'fade' ? 0 : interpolate(s, [0, 0.4, 1], [-12, 4, 0]);
+        const opacity = animationType === 'fade' 
+          ? interpolate(t - lineStart, [0, 20], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })
+          : interpolate(t - lineStart, [0, 4], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+        const flicker = animationType === 'fade' ? 1 : 0.88 + random(frame * 5 + i * 100) * 0.24;
+        const impactBrightness = animationType === 'fade' ? 1.0 : interpolate(t - lineStart, [0, 3, 8], [3.0, 1.5, 1.0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
         return (
           <div key={i} style={{
             display: 'block', fontSize, fontWeight: 900, color, lineHeight: 1.15, letterSpacing: 2, opacity, whiteSpace: 'nowrap',
             transform: `translateY(${translateY}px) scale(${scale}) skewX(${skewX}deg)`,
+            WebkitTextStroke: textStroke,
             textShadow: `0 0 ${6 * flicker}px #fff, 0 0 ${18 * flicker}px ${glowColor}, 0 0 ${40 * flicker}px ${glowColor}, 0 0 ${80 * flicker}px ${glowColor}, 0 0 ${120 * flicker}px ${glowColor}`,
             filter: `brightness(${impactBrightness}) drop-shadow(0 4px 8px rgba(0,0,0,0.8))`,
           }}>
@@ -291,7 +300,8 @@ export const MirrorLiver: React.FC<{
   scale?: number;
   zoomProgress?: number;
   enabled?: boolean;
-}> = ({ frame, imageSrc, color, scale = 1, zoomProgress = 0, enabled = true }) => {
+  isCircle?: boolean;
+}> = ({ frame, imageSrc, color, scale = 1, zoomProgress = 0, enabled = true, isCircle = false }) => {
   const { fps } = useVideoConfig();
   const leftOpen = spring({ frame, fps, config: { stiffness: 100, damping: 15 } });
   const rightOpen = spring({ frame: frame - 10, fps, config: { stiffness: 100, damping: 15 } });
@@ -310,13 +320,17 @@ export const MirrorLiver: React.FC<{
 
   return (
     <div style={{ perspective: '1200px', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: 800 * scale, position: 'relative', transform: `scale(${scale * (1 + zoomProgress * 4)}) translateY(${zoomProgress * 200}px)` }}>
-      <div style={{ position: 'absolute', width: 500, height: 700, borderRadius: 40, overflow: 'hidden', border: `8px solid ${color}`, boxShadow: `0 0 50px ${color}`, transformOrigin: 'right center', transform: `translateX(${-240 * leftOpen}px) rotateY(${35 * leftOpen}deg) ${getGlitchStyle(leftGlitch).transform}`, opacity: leftOpen > 0.01 ? (0.6 * leftOpen) : 0, filter: getGlitchStyle(leftGlitch).filter, zIndex: 1 }}>
-        <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} />
-      </div>
-      <div style={{ position: 'absolute', width: 500, height: 700, borderRadius: 40, overflow: 'hidden', border: `8px solid ${color}`, boxShadow: `0 0 50px ${color}`, transformOrigin: 'left center', transform: `translateX(${240 * rightOpen}px) rotateY(${-35 * rightOpen}deg) ${getGlitchStyle(rightGlitch).transform}`, opacity: rightOpen > 0.01 ? (0.6 * rightOpen) : 0, filter: getGlitchStyle(rightGlitch).filter, zIndex: 1 }}>
-        <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} />
-      </div>
-      <div style={{ width: 600, height: 800, borderRadius: 50, overflow: 'hidden', border: `12px solid #fff`, boxShadow: `0 0 100px #fff, 0 0 50px ${color}`, zIndex: 10, transform: `scale(${interpolate(centerOpen, [0, 1], [0.8, 1])}) ${getGlitchStyle(centerGlitch).transform}`, opacity: centerOpen > 0.01 ? 1 : 0, filter: getGlitchStyle(centerGlitch).filter }}>
+      {enabled && (
+        <>
+          <div style={{ position: 'absolute', width: 500, height: 700, borderRadius: 40, overflow: 'hidden', border: `8px solid ${color}`, boxShadow: `0 0 50px ${color}`, transformOrigin: 'right center', transform: `translateX(${-240 * leftOpen}px) rotateY(${35 * leftOpen}deg) ${getGlitchStyle(leftGlitch).transform}`, opacity: leftOpen > 0.01 ? (0.6 * leftOpen) : 0, filter: getGlitchStyle(leftGlitch).filter, zIndex: 1 }}>
+            <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} />
+          </div>
+          <div style={{ position: 'absolute', width: 500, height: 700, borderRadius: 40, overflow: 'hidden', border: `8px solid ${color}`, boxShadow: `0 0 50px ${color}`, transformOrigin: 'left center', transform: `translateX(${240 * rightOpen}px) rotateY(${-35 * rightOpen}deg) ${getGlitchStyle(rightGlitch).transform}`, opacity: rightOpen > 0.01 ? (0.6 * rightOpen) : 0, filter: getGlitchStyle(rightGlitch).filter, zIndex: 1 }}>
+            <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7)' }} />
+          </div>
+        </>
+      )}
+      <div style={{ width: isCircle ? 750 : 600, height: isCircle ? 750 : 800, borderRadius: isCircle ? '50%' : 50, overflow: 'hidden', border: `12px solid #fff`, boxShadow: `0 0 100px #fff, 0 0 50px ${color}`, zIndex: 10, transform: `scale(${interpolate(centerOpen, [0, 1], [0.8, 1])}) ${getGlitchStyle(centerGlitch).transform}`, opacity: centerOpen > 0.01 ? 1 : 0, filter: getGlitchStyle(centerGlitch).filter }}>
         <Img src={imageSrc} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
     </div>
@@ -336,6 +350,14 @@ export const SvgDefs: React.FC<{ frame: number }> = ({ frame }) => {
         <filter id="bloom" x="-30%" y="-30%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="14" result="b" />
           <feComposite in="SourceGraphic" in2="b" operator="over" />
+        </filter>
+        <filter id="green-key">
+          <feColorMatrix type="matrix" values="
+            1 0 0 0 0
+            0 0.1 0 0 0
+            0 0 1 0 0
+            1.5 -2 1.5 1 0
+          " />
         </filter>
       </defs>
     </svg>
@@ -360,6 +382,7 @@ export const SunsetBackground: React.FC<{ frame: number; opacity?: number }> = (
 export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opacity?: number }> = ({ src, frame, opacity = 1 }) => {
   const scale = 1.1 + Math.sin(frame * 0.02) * 0.05;
   const rotate = Math.sin(frame * 0.01) * 2;
+  const isVideo = src.endsWith('.mp4') || src.endsWith('.webm');
 
   return (
     <AbsoluteFill style={{ overflow: 'hidden', opacity }}>
@@ -368,7 +391,11 @@ export const CustomBackgroundImage: React.FC<{ src: string; frame: number; opaci
         transform: `scale(${scale}) rotate(${rotate}deg)`,
         transformOrigin: '50% 50%' 
       }}>
-        <Img src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        {isVideo ? (
+          <OffthreadVideo src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+        ) : (
+          <Img src={staticFile(src)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        )}
       </div>
     </AbsoluteFill>
   );
@@ -966,6 +993,196 @@ export const CyberTunnel2D: React.FC<{ frame: number; color?: string }> = ({ fra
     </AbsoluteFill>
   );
 };
+export const ShockwaveEffect: React.FC<{
+  frame: number;
+  color?: string;
+  glowColor?: string;
+  maxRadius?: number;
+  duration?: number;
+  thickness?: number;
+  zIndex?: number;
+}> = ({
+  frame,
+  color = '#ff6400',
+  glowColor = '#ff3c00',
+  maxRadius = 1600,
+  duration = 20,
+  thickness = 15,
+  zIndex = 6,
+}) => {
+  if (frame >= duration) return null;
+
+  const progress = frame / duration;
+  const opacity = Math.max(0, 1 - progress);
+  const currentThickness = Math.max(0, thickness - frame * (thickness / duration));
+  const currentRadius = interpolate(progress, [0, 1], [0, maxRadius]);
+
+  return (
+    <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', pointerEvents: 'none', zIndex, opacity }}>
+      <div style={{
+        width: currentRadius,
+        height: currentRadius,
+        borderRadius: '50%',
+        border: `${currentThickness}px solid ${color}`,
+        boxShadow: `0 0 60px ${glowColor}`,
+        pointerEvents: 'none',
+      }} />
+    </AbsoluteFill>
+  );
+};
+
+export const SnowEffect: React.FC<{ frame: number; count?: number }> = ({ frame, count = 100 }) => {
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', overflow: 'hidden', zIndex: 10 }}>
+      {new Array(count).fill(0).map((_, i) => {
+        const seed = i;
+        const speed = 2 + random(seed) * 3;
+        const x = random(seed + 1) * 100; // 0 to 100vw
+        const size = 3 + random(seed + 2) * 10;
+        const yOffset = random(seed + 3) * 1920;
+        
+        // Let it fall continuously
+        const y = (yOffset + frame * speed) % 1920;
+        const wobble = Math.sin(frame * 0.05 + seed) * 10;
+        const opacity = 0.3 + random(seed + 4) * 0.7;
+
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: `calc(${x}% + ${wobble}px)`,
+            top: y - 50,
+            width: size,
+            height: size,
+            backgroundColor: 'white',
+            borderRadius: '50%',
+            opacity,
+            filter: `blur(${random(seed + 5) * 3}px)`,
+          }} />
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+export const LightPillarEffect: React.FC<{
+  frame: number;
+  color?: string;
+  glowColor?: string;
+  baseWidth?: number;
+  baseHeight?: number;
+}> = ({
+  frame,
+  color = '#ff6400',
+  glowColor = '#ff3c00',
+  baseWidth = 250,
+  baseHeight = 600,
+}) => {
+  const { fps } = useVideoConfig();
+  const entry = spring({ frame, fps, config: { stiffness: 400, damping: 15 } });
+  const pulse = Math.pow(Math.max(0, 1 - frame / 45), 4) * 1.5 + 0.3;
+
+  return (
+    <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', pointerEvents: 'none', zIndex: 5 }}>
+      <div style={{
+        width: baseWidth + 150 * pulse, 
+        height: baseHeight + 400 * pulse,
+        background: `radial-gradient(ellipse at 50% 60%, white 0%, ${glowColor} 35%, ${color} 65%, transparent 80%)`,
+        filter: `blur(${20 + 20 * pulse}px)`, 
+        borderRadius: '40% 40% 60% 60%',
+        boxShadow: `0 0 ${300 * pulse}px ${100 * pulse}px ${color}`, 
+        transform: `scale(${pulse * entry})`,
+      }} />
+    </AbsoluteFill>
+  );
+};
+
+export const GiantSnowflakeEffect: React.FC<{ frame: number; color?: string; glowColor?: string; count?: number }> = ({ frame, color = '#ffffff', glowColor = '#b3e5fc', count = 15 }) => {
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', perspective: 1000, zIndex: 5, overflow: 'hidden' }}>
+      {new Array(count).fill(0).map((_, i) => {
+        const seed = i * 13;
+        const life = 120 + random(seed) * 60;
+        const localTime = (frame + random(seed + 1) * life) % life;
+        const progress = localTime / life;
+        
+        const startX = random(seed + 2) * 120 - 10;
+        const endX = startX + (Math.sin(frame * 0.02 + seed) * 15);
+        const yPos = interpolate(progress, [0, 1], [-300, 2200]);
+        
+        const baseScale = 0.2 + random(seed + 3) * 0.6;
+        const scale = baseScale * (1 + Math.sin(progress * Math.PI) * 0.2);
+        
+        const rotate = frame * (1 + random(seed + 4) * 2) * (i % 2 === 0 ? 1 : -1);
+        const opacity = interpolate(progress, [0, 0.1, 0.8, 1], [0, 1, 1, 0]);
+
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: `${endX}%`,
+            top: 0,
+            transform: `translateY(${yPos}px) scale(${scale}) rotate(${rotate}deg)`,
+            opacity,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            filter: `drop-shadow(0 0 20px ${glowColor}) drop-shadow(0 0 40px ${color})`,
+          }}>
+            <svg width="300" height="300" viewBox="0 0 100 100">
+              <g stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none">
+                {new Array(6).fill(0).map((_, j) => (
+                  <g key={j} transform={`rotate(${j * 60} 50 50)`}>
+                    <line x1="50" y1="50" x2="50" y2="10" />
+                    <path d="M 50 30 L 40 20 M 50 30 L 60 20 M 50 15 L 43 5 M 50 15 L 57 5" />
+                    <path d="M 50 40 L 45 35 M 50 40 L 55 35" />
+                  </g>
+                ))}
+                <circle cx="50" cy="50" r="5" fill={color} opacity="0.9" />
+                <circle cx="50" cy="50" r="10" strokeDasharray="1 3" strokeWidth="1" opacity="0.7" />
+              </g>
+            </svg>
+          </div>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+export const SparkleEffect: React.FC<{ frame: number; count?: number; color?: string; glowColor?: string }> = ({ frame, count = 20, color = '#ffffff', glowColor = '#b3e5fc' }) => {
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', perspective: 1000, zIndex: 6 }}>
+      {new Array(count).fill(0).map((_, i) => {
+        const seed = i * 27;
+        const x = random(seed) * 100;
+        const y = random(seed + 1) * 100;
+        const baseScale = 0.2 + random(seed + 2) * 1.5;
+        
+        const twinkleSpeed = 0.05 + random(seed + 3) * 0.1;
+        const twinklePhase = random(seed + 4) * Math.PI * 2;
+        const scale = baseScale * (0.5 + 0.5 * Math.sin(frame * twinkleSpeed + twinklePhase));
+        const opacity = 0.2 + 0.8 * Math.pow(Math.sin(frame * twinkleSpeed + twinklePhase), 2);
+        const rotate = frame * (1 + random(seed + 5) * 2) * (i % 2 === 0 ? 1 : -1);
+
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: `${x}%`,
+            top: `${y}%`,
+            transform: `translate(-50%, -50%) scale(${scale}) rotate(${rotate}deg)`,
+            opacity,
+            width: 80, height: 80,
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            filter: `drop-shadow(0 0 15px ${glowColor}) drop-shadow(0 0 30px ${color})`,
+          }}>
+             <svg width="80" height="80" viewBox="0 0 100 100">
+               <path d="M 50 0 C 50 40 60 50 100 50 C 60 50 50 60 50 100 C 50 60 40 50 0 50 C 40 50 50 40 50 0 Z" fill={color} />
+             </svg>
+          </div>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
 export * from './DoublingGridEffect';
 export * from './MirrorLiverEffect';
 export * from './GridConvergenceEffect';

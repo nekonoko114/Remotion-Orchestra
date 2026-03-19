@@ -59,6 +59,10 @@ import {
   JOL_SPEED_ORANGE_DURATION,
 } from './compositions/VideoFactory/JolBattleSpeedOrange';
 import {
+  JolBattleWhiteSnow,
+  JOL_WHITE_DURATION,
+} from './compositions/VideoFactory/JolBattleWhiteSnow';
+import {
   EffectCatalogShowcase,
   EFFECT_SHOWCASE_DURATION,
 } from './compositions/VideoFactory/EffectCatalogShowcase';
@@ -389,6 +393,69 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1920}
         height={1080}
+      />
+      <Composition
+        id="JOL-BATTLE-WHITE-SNOW"
+        component={JolBattleWhiteSnow}
+        durationInFrames={JOL_WHITE_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={BattleSpiritThemeSchema}
+        defaultProps={{
+          themeColor: '#e0f7fa',
+          glowColor: '#0277bd',
+          textStroke: '3px #01579b',
+          textAnimation: 'fade',
+          particleColor1: '#ffffff',
+          particleColor2: '#b3e5fc',
+          music: {
+            src: 'assets/audio/music/その先へ.mp3',
+            startFrom: 48 * 30,
+            volume: 0.6,
+            bpm: 144,
+          },
+          customDurations: {
+            opening: 180,
+            date: 150,
+            liverIntro: 210,
+            msg: 0,
+            opponent: 105,
+            vs: 90,
+            rule: 120,
+            ending: 120,
+            logo: 90,
+          },
+          openingText: ['予約バトル', '決まりました！', 'みんな<br/>応援してね❤️'],
+          dateText: ['2026年<br/>3月28日', 'SATURDAY', '22時30分', 'START!'],
+          rulesText: ['【ルール】','グローブ2', 'アイテム他なし', '一本勝負'],
+          endingText: '初予約バトルー！<br/>いつもの<br/>なるりれらしく',
+          reverseVsOrder: true,
+          opponent: {
+            name: '🐄モゥーミルク🍼🐃',
+            image: 'assets/images-01/user1817765055425.jpeg',
+            borderColor: '#aed581', 
+            glowColor: '#7cb342',
+          },
+          liver: {
+            name: 'なるりれ🦥🍉',
+            image: 'assets/images-01/karaindaisuki.png',
+            borderColor: '#ffffff',
+            glowColor: '#81d4fa',
+          },
+          features: {
+            useGlitch: false,
+            useMirror: false,
+            useDoublingGrid: false,
+            useGridConvergence: false,
+            useSnowEffect: true,
+            useKaleidoscope: false,
+            useSpinIntro: true,
+            useCircleLiver: true,
+          },
+          customBackground: 'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
+          opponentBackground: 'assets/images-01/meadow_animals_bg.png',
+        }}
       />
       <AssetPanel />
     </>

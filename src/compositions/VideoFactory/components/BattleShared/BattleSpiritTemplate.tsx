@@ -6,11 +6,15 @@ import {
   useVideoConfig,
   Audio,
   staticFile,
+  OffthreadVideo,
+  interpolate,
 } from 'remotion';
 import {
   LightLeak,
   GlobalFrameThemed,
   MagicCircle,
+  SnowEffect,
+  GiantSnowflakeEffect,
 } from './BattleSharedComponents';
 import { BattleSpiritTheme } from './types';
 
@@ -32,15 +36,15 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme; children
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
 
-  const OP_DUR = 6 * fps;
-  const DATE_DUR = 4 * fps;
-  const INTRO_LIVER_DUR = theme.liverIntroDuration ?? 6 * fps;
-  const MSG_DUR = 1.5 * fps;
-  const OPPONENT_DUR = 3 * fps;
-  const VS_DUR = 4 * fps;
-  const RULE_DUR = 3 * fps;
-  const ENDING_DUR = 5 * fps;
-  const LOGO_DUR = 3 * fps;
+  const OP_DUR = theme.customDurations?.opening ?? 6 * fps;
+  const DATE_DUR = theme.customDurations?.date ?? 4 * fps;
+  const INTRO_LIVER_DUR = theme.customDurations?.liverIntro ?? theme.liverIntroDuration ?? 6 * fps;
+  const MSG_DUR = theme.customDurations?.msg ?? 1.5 * fps;
+  const OPPONENT_DUR = theme.customDurations?.opponent ?? 3 * fps;
+  const VS_DUR = theme.customDurations?.vs ?? 4 * fps;
+  const RULE_DUR = theme.customDurations?.rule ?? 3 * fps;
+  const ENDING_DUR = theme.customDurations?.ending ?? 5 * fps;
+  const LOGO_DUR = theme.customDurations?.logo ?? 3 * fps;
 
   const s1 = 0;
   const s2 = s1 + OP_DUR;
@@ -71,12 +75,38 @@ export const BattleSpiritTemplate: React.FC<{ theme: BattleSpiritTheme; children
       <Sequence from={s1} durationInFrames={OP_DUR}><SceneOpening theme={theme} /></Sequence>
       <Sequence from={s2} durationInFrames={DATE_DUR}><SceneDate theme={theme} /></Sequence>
       <Sequence from={s3} durationInFrames={INTRO_LIVER_DUR}><SceneLiver theme={theme} duration={INTRO_LIVER_DUR} /></Sequence>
-      <Sequence from={s4} durationInFrames={MSG_DUR}><SceneOpponentAnnounce theme={theme} /></Sequence>
+      {MSG_DUR > 0 && <Sequence from={s4} durationInFrames={MSG_DUR}><SceneOpponentAnnounce theme={theme} /></Sequence>}
       <Sequence from={s5} durationInFrames={OPPONENT_DUR}><SceneOpponent theme={theme} /></Sequence>
       <Sequence from={s6} durationInFrames={VS_DUR}><SceneVs theme={theme} /></Sequence>
+      {theme.themeColor === '#e0f7fa' && (
+        <Sequence from={s7} durationInFrames={RULE_DUR + ENDING_DUR}>
+          <AbsoluteFill style={{ zIndex: 0, overflow: 'hidden' }}>
+            <div style={{
+              position: 'absolute',
+              width: '200%', height: '100%', left: 0, top: 0,
+              transform: `translateX(${interpolate(frame - s7, [0, RULE_DUR + ENDING_DUR], [0, -50])}%)`
+            }}>
+              <OffthreadVideo
+                src={staticFile('assets/pixabay/videos/pixabay_snow_globe_snowman_christmas_texture_snow_particle_98978.mp4')}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                muted
+              />
+            </div>
+          </AbsoluteFill>
+        </Sequence>
+      )}
+
       <Sequence from={s7} durationInFrames={RULE_DUR}><SceneRules theme={theme} /></Sequence>
       <Sequence from={s8} durationInFrames={ENDING_DUR}><SceneEndingList theme={theme} duration={ENDING_DUR} /></Sequence>
       <Sequence from={s9} durationInFrames={LOGO_DUR}><SceneLogo /></Sequence>
+
+      {/* Global Foreground Effects layer */}
+      {theme.features?.useSnowEffect && (
+        <AbsoluteFill style={{ pointerEvents: 'none' }}>
+          <SnowEffect frame={frame} />
+          <GiantSnowflakeEffect frame={frame} color="#ffffff" glowColor={theme.glowColor} />
+        </AbsoluteFill>
+      )}
     </AbsoluteFill>
   );
 };
