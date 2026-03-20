@@ -36,6 +36,7 @@ export const BattleSpiritThemeSchema = z.object({
     glowColor: z.string(),
   }),
   endingText: z.string(),
+  customVsVideo: z.string().optional(),
   features: z.object({
     useGlitch: z.boolean(),
     useMirror: z.boolean(),
@@ -45,6 +46,9 @@ export const BattleSpiritThemeSchema = z.object({
     useKaleidoscope: z.boolean().optional(),
     useSpinIntro: z.boolean().optional(),
     useCircleLiver: z.boolean().optional(),
+    useMetallicVs: z.boolean().optional(),
+    hideVsFocusLines: z.boolean().optional(),
+    colorizeVsVideo: z.boolean().optional(),
     useSakuraEffect: z.boolean().optional(),
     hideDefaultParticles: z.boolean().optional(),
   }),

@@ -20,6 +20,40 @@ import {
 } from '../BattleSharedComponents';
 import { BattleSpiritTheme } from '../types';
 
+export const MetallicVsText: React.FC<{ frame: number; glowColor: string }> = ({ frame, glowColor }) => {
+  const p = spring({ frame, fps: 30, config: { damping: 10 } });
+  const scale = interpolate(p, [0, 1], [0.5, 1]);
+  const rot = Math.sin(frame / 5) * 5; 
+
+  const textStyle: React.CSSProperties = {
+    fontSize: 600, fontWeight: 900, fontStyle: 'italic', margin: 0, padding: 0, 
+    lineHeight: 1, letterSpacing: -10, fontFamily: '"Impact", sans-serif',
+  };
+
+  return (
+    <div style={{ position: 'absolute', left: '50%', top: '50%', transform: `translate(-50%, -50%) scale(${scale}) rotate(${rot}deg)`, zIndex: 100 }}>
+       {/* 3D Extrusion Layer (Back) */}
+       <div style={{ 
+         ...textStyle, position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
+         color: '#111', WebkitTextStroke: '10px black',
+         textShadow: `
+           1px 1px 0 #333, 2px 2px 0 #222, 3px 3px 0 #111, 4px 4px 0 #000, 5px 5px 0 #000, 6px 6px 0 #000, 7px 7px 0 #000, 8px 8px 0 #000, 9px 9px 0 #000, 10px 10px 0 #000,
+           15px 15px 40px rgba(0,0,0,0.8),
+           0 0 100px ${glowColor}
+         `
+       }}>VS</div>
+       {/* Metallic Face Layer (Front) */}
+       <div style={{ 
+         ...textStyle, position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
+         background: 'linear-gradient(to bottom, #ffffff 0%, #e0e0e0 20%, #7a7a7a 45%, #222222 50%, #999999 55%, #e0e0e0 80%, #ffffff 100%)',
+         WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', color: 'transparent',
+         filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.5))'
+       }}>VS</div>
+    </div>
+  );
+};
+
+
 export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -42,9 +76,43 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       <SvgDefs frame={frame} />
       {flashOpacity > 0 && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'white', opacity: flashOpacity, zIndex: 10 }} />}
-      {theme.themeColor !== '#e0f7fa' && theme.themeColor !== '#fce4ec' && <RotatingFocusLines frame={frame} color={theme.themeColor} />}
+      {theme.themeColor !== '#e0f7fa' && theme.themeColor !== '#fce4ec' && !theme.features?.hideVsFocusLines && !theme.customVsVideo && <RotatingFocusLines frame={frame} color={theme.themeColor} />}
       <AbsoluteFill style={{ transform: `scale(${1 + shakeDecay * 0.1}) translate(${shakeX}px, ${shakeY}px)` }}>
-        {theme.themeColor === 'orange' ? (
+        {theme.customVsVideo ? (
+          <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+            <OffthreadVideo 
+              src={staticFile(theme.customVsVideo)}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }}
+              muted
+            />
+            {theme.features?.colorizeVsVideo && (
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: `linear-gradient(to bottom, 
+                  ${topPlayer.glowColor} 0%, 
+                  transparent 70%, 
+                  transparent 30%, 
+                  ${bottomPlayer.glowColor} 100%)`,
+                mixBlendMode: 'color',
+                pointerEvents: 'none'
+              }} />
+            )}
+            {/* Additional contrast layer for deeper colors */}
+            {theme.features?.colorizeVsVideo && (
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: `linear-gradient(to bottom, 
+                  ${topPlayer.glowColor} 0%, 
+                  transparent 25%, 
+                  transparent 75%, 
+                  ${bottomPlayer.glowColor} 100%)`,
+                mixBlendMode: 'multiply',
+                opacity: 0.6,
+                pointerEvents: 'none'
+              }} />
+            )}
+          </AbsoluteFill>
+        ) : theme.themeColor === 'orange' ? (
           <AbsoluteFill style={{ overflow: 'hidden' }}>
             <OffthreadVideo 
               src={staticFile('assets/pixabay/effects/pixabay_vs.mp4')} 
@@ -132,7 +200,11 @@ export const SceneVs: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
                 )}
               </div>
 
-              {theme.themeColor !== '#ff2200' && theme.themeColor !== '#e0f7fa' && theme.themeColor !== '#fce4ec' && (
+              {theme.features?.useMetallicVs ? (
+                <div style={{ position: 'relative', height: 120, zIndex: 10 }}>
+                   <MetallicVsText frame={frame} glowColor={theme.glowColor} />
+                </div>
+              ) : theme.themeColor !== '#ff2200' && theme.themeColor !== '#e0f7fa' && theme.themeColor !== '#fce4ec' && (
                 <div style={{ position: 'relative', height: 120, zIndex: 10 }}>
                    <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
                      <div style={{ position: 'absolute', fontSize: 260, fontWeight: 900, color: theme.themeColor, fontStyle: 'italic', transform: `translate(-20px, 10px) rotate(${Math.sin(frame / 3) * 15}deg)`, opacity: 0.7 }}>VS</div>

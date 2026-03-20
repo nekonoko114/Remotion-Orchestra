@@ -60,6 +60,7 @@ import {
   JolBattleSpringSakura,
   JOL_SAKURA_DURATION,
 } from './compositions/VideoFactory/JolBattleSpringSakura';
+import { JolBattlePattern6 } from './compositions/VideoFactory/JolBattlePattern6';
 import {
   ShowcaseBackgrounds, SHOWCASE_BG_DURATION,
   ShowcaseEffects, SHOWCASE_FX_DURATION,
@@ -464,6 +465,53 @@ export const RemotionRoot: React.FC = () => {
           customBackground: 'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
           opponentBackground: 'assets/images-01/meadow_animals_bg.png',
         }}
+      />
+      <Composition
+        id="JOL-BATTLE-PATTERN6"
+        component={JolBattlePattern6}
+        durationInFrames={915}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={BattleSpiritThemeSchema}
+        defaultProps={{
+          themeColor: '#ff0055',
+          glowColor: '#ffaa00',
+          textStroke: '3px #880000',
+          textAnimation: 'kinetic',
+          particleColor1: '#ffffff',
+          particleColor2: '#ffdd00',
+          music: {
+            src: 'assets/audio/music/Blastwave.mp3',
+            startFrom: 0,
+            volume: 0.6,
+            bpm: 120,
+          },
+          features: {
+            useGlitch: true,
+            useMirror: false,
+            useDoublingGrid: false,
+            useGridConvergence: false,
+            useSpinIntro: false,
+            useMetallicVs: true,
+            hideVsFocusLines: true,
+            colorizeVsVideo: true,
+          },
+          customVsVideo: 'assets/pixabay/videos/pixabay_fire_burning_explosion_big_bang_abstract_backgroun_12910.mp4',
+          liver: {
+            name: "限界突破まみ🎽",
+            image: "assets/images-01/ooo93o.jpeg",
+            borderColor: '#ffaa00',
+            glowColor: '#ff2200',
+          },
+          opponent: {
+            name: "🔆≒ユージン≒🔆",
+            image: "assets/images-01/l5332541.jpeg",
+            borderColor: '#00ccff',
+            glowColor: '#0055ff',
+          },
+          endingText: "Thank you for watching!",
+        } as any}
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-SPRING"
