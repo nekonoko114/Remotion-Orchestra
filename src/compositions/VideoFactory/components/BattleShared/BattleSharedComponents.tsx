@@ -18,6 +18,132 @@ const { fontFamily } = loadFont('normal', {
   ignoreTooManyRequestsWarning: true,
 });
 
+export const SliceSplitText: React.FC<{ text: string; frame: number; fps: number; color: string; glowColor: string; fontSize: number }> = ({ text, frame, fps, color, glowColor, fontSize }) => {
+  const p = spring({ frame, fps, config: { damping: 14, mass: 0.8 } });
+  const topX = interpolate(p, [0, 1], [-300, 0]);
+  const bottomX = interpolate(p, [0, 1], [300, 0]);
+  const textStyle: React.CSSProperties = { fontSize, fontWeight: 900, color, textShadow: `0 0 20px ${glowColor}`, margin: 0, padding: 0, lineHeight: 1.2, WebkitTextStroke: '6px black', whiteSpace: 'pre-wrap', textAlign: 'center' };
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <div style={{ ...textStyle, clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)', transform: `translateX(${topX}px)`, opacity: p }}>{text}</div>
+      <div style={{ ...textStyle, clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)', transform: `translateX(${bottomX}px)`, position: 'absolute', top: 0, left: 0, opacity: p }}>{text}</div>
+      {/* Invisible spacer to maintain layout */}
+      <div style={{ ...textStyle, visibility: 'hidden' }}>{text}</div>
+    </div>
+  );
+};
+
+// ----------------------------------------------------
+// 新規：BurningLightningText (炎マスク＋稲妻テキスト)
+// ----------------------------------------------------
+export const BurningLightningText: React.FC<{
+  text: string;
+  frame: number;
+  fontSize?: number;
+}> = ({ text, frame, fontSize = 200 }) => {
+  const { fps } = useVideoConfig();
+  const introSpring = spring({ frame, fps, config: { damping: 12, stiffness: 200 } });
+  
+  // Lightning strikes aggressively at the beginning, then fades out after 30 frames
+  const lightningOpacity = interpolate(frame, [0, 5, 20, 30], [0, 1, 0.8, 0], { extrapolateRight: 'clamp' });
+
+  // Add random wiggle to the text itself for a more aggressive feel
+  const seed = Math.floor(frame / 3);
+  const wiggleX = interpolate(random(`wxbt-${seed}`), [0, 1], [-5, 5]);
+  const wiggleY = interpolate(random(`wybt-${seed}`), [0, 1], [-5, 5]);
+
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `fire-mask-${text.replace(/[^a-zA-Z0-9]/g, '-')}`;
+
+  return (
+    <div style={{
+      position: 'relative',
+      width,
+      height,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      transform: `scale(${interpolate(introSpring, [0, 1], [3, 1])}) translate(${wiggleX}px, ${wiggleY}px)`,
+      opacity: introSpring,
+    }}>
+      {/* 稲妻エフェクト (Lightning overlay) */}
+      <div style={{
+        position: 'absolute',
+        width: '150%',
+        height: '250%',
+        mixBlendMode: 'screen',
+        opacity: lightningOpacity,
+        transform: 'rotate(-5deg)',
+        zIndex: 5,
+        pointerEvents: 'none'
+      }}>
+        <OffthreadVideo 
+          src={staticFile("assets/pixabay/videos/lightning-holizon.mp4")} 
+          style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(1.5) contrast(1.5)' }} 
+          muted
+        />
+      </div>
+
+      {/* テキスト本体 (Fire masked SVG) */}
+      <svg width={width} height={height} style={{ overflow: 'visible', zIndex: 10 }}>
+        <defs>
+          <mask id={maskId}>
+            <text 
+              x="50%" y="50%" 
+              textAnchor="middle" 
+              dominantBaseline="central" 
+              fill="white" 
+              fontSize={fontSize} 
+              fontWeight={900} 
+              fontStyle="italic"
+              letterSpacing={10}
+            >
+              {text}
+            </text>
+          </mask>
+          {/* Inner Glow/Shadow filter for the fire text to pop out */}
+          <filter id={`glow-${maskId}`}>
+            <feGaussianBlur stdDeviation="15" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        
+        {/* Glow behind the text */}
+        <text 
+          x="50%" y="50%" 
+          textAnchor="middle" 
+          dominantBaseline="central" 
+          fill="none" 
+          stroke="#ff5500" 
+          strokeWidth="15"
+          fontSize={fontSize} 
+          fontWeight={900} 
+          fontStyle="italic"
+          letterSpacing={10}
+          filter={`url(#glow-${maskId})`}
+          opacity={0.6}
+        >
+          {text}
+        </text>
+
+        <foreignObject x={0} y={0} width="100%" height="100%" mask={`url(#${maskId})`}>
+          <div style={{ width: '100%', height: '100%', transform: `scale(${1 + frame * 0.005})` }}>
+            <OffthreadVideo 
+              src={staticFile("assets/pixabay/videos/pixabay_fire_flame_beautiful_wallpaper_hot_particles_wallp_212500.mp4")} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              muted
+            />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
 export const VideoEffectStack: React.FC<{
   config?: {
     src: string;
@@ -258,35 +384,74 @@ export const KineticText: React.FC<{
   fontFamily?: string;
   textStroke?: string;
   animationType?: 'kinetic' | 'fade';
-}> = ({ text, frame, fps, startFrame = 0, fontSize, color, glowColor, stagger = 8, style, fontFamily: customFontFamily, textStroke, animationType = 'kinetic' }) => {
+  splitBy?: 'line' | 'character';
+}> = ({ text, frame, fps, startFrame = 0, fontSize, color, glowColor, stagger = 8, style, fontFamily: customFontFamily, textStroke, animationType = 'kinetic', splitBy = 'line' }) => {
   const t = frame - startFrame;
   const lines = text.replace(/<br\s*\/?>/gi, '\n').split('\n');
+
+  let charIndex = 0;
 
   return (
     <div style={{ fontFamily: customFontFamily || fontFamily, textAlign: 'center', ...style }}>
       {lines.map((line, i) => {
-        const lineStart = i * stagger;
-        const s = spring({ frame: t - lineStart, fps, config: { stiffness: 500, damping: 20, mass: 1 } });
-        const scale = animationType === 'fade' 
-          ? interpolate(t - lineStart, [0, 30], [0.8, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' }) 
-          : interpolate(s, [0, 0.6, 1], [2.5, 0.9, 1]);
-        const translateY = animationType === 'fade' ? interpolate(t - lineStart, [0, 15], [20, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' }) : interpolate(s, [0, 1], [-80, 0]);
-        const skewX = animationType === 'fade' ? 0 : interpolate(s, [0, 0.4, 1], [-12, 4, 0]);
-        const opacity = animationType === 'fade' 
-          ? interpolate(t - lineStart, [0, 20], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })
-          : interpolate(t - lineStart, [0, 4], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-        const flicker = animationType === 'fade' ? 1 : 0.88 + random(frame * 5 + i * 100) * 0.24;
-        const impactBrightness = animationType === 'fade' ? 1.0 : interpolate(t - lineStart, [0, 3, 8], [3.0, 1.5, 1.0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+        if (splitBy === 'line') {
+          const lineStart = i * stagger;
+          const s = spring({ frame: t - lineStart, fps, config: { stiffness: 500, damping: 20, mass: 1 } });
+          const scale = animationType === 'fade' 
+            ? interpolate(t - lineStart, [0, 30], [0.8, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' }) 
+            : interpolate(s, [0, 0.6, 1], [2.5, 0.9, 1]);
+          const translateY = animationType === 'fade' ? interpolate(t - lineStart, [0, 15], [20, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' }) : interpolate(s, [0, 1], [-80, 0]);
+          const skewX = animationType === 'fade' ? 0 : interpolate(s, [0, 0.4, 1], [-12, 4, 0]);
+          const opacity = animationType === 'fade' 
+            ? interpolate(t - lineStart, [0, 20], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })
+            : interpolate(t - lineStart, [0, 4], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+          const flicker = animationType === 'fade' ? 1 : 0.88 + random(frame * 5 + i * 100) * 0.24;
+          const impactBrightness = animationType === 'fade' ? 1.0 : interpolate(t - lineStart, [0, 3, 8], [3.0, 1.5, 1.0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
+          return (
+            <div key={i} style={{
+              display: 'block', fontSize, fontWeight: 900, color, lineHeight: 1.15, letterSpacing: 2, opacity, whiteSpace: 'nowrap',
+              transform: `translateY(${translateY}px) scale(${scale}) skewX(${skewX}deg)`,
+              WebkitTextStroke: textStroke,
+              textShadow: `0 0 ${6 * flicker}px #fff, 0 0 ${18 * flicker}px ${glowColor}, 0 0 ${40 * flicker}px ${glowColor}, 0 0 ${80 * flicker}px ${glowColor}, 0 0 ${120 * flicker}px ${glowColor}`,
+              filter: `brightness(${impactBrightness}) drop-shadow(0 4px 8px rgba(0,0,0,0.8))`,
+            }}>
+              {line}
+            </div>
+          );
+        }
+
+        // character splitting
         return (
-          <div key={i} style={{
-            display: 'block', fontSize, fontWeight: 900, color, lineHeight: 1.15, letterSpacing: 2, opacity, whiteSpace: 'nowrap',
-            transform: `translateY(${translateY}px) scale(${scale}) skewX(${skewX}deg)`,
-            WebkitTextStroke: textStroke,
-            textShadow: `0 0 ${6 * flicker}px #fff, 0 0 ${18 * flicker}px ${glowColor}, 0 0 ${40 * flicker}px ${glowColor}, 0 0 ${80 * flicker}px ${glowColor}, 0 0 ${120 * flicker}px ${glowColor}`,
-            filter: `brightness(${impactBrightness}) drop-shadow(0 4px 8px rgba(0,0,0,0.8))`,
-          }}>
-            {line}
+          <div key={i} style={{ display: 'block', fontSize, fontWeight: 900, color, lineHeight: 1.15, letterSpacing: 2, whiteSpace: 'nowrap' }}>
+            {line.split('').map((char, cIdx) => {
+              const currentIdx = charIndex++;
+              const charStart = currentIdx * stagger;
+              const s = spring({ frame: t - charStart, fps, config: { stiffness: 500, damping: 20, mass: 1 } });
+              
+              const scale = animationType === 'fade' 
+                ? interpolate(t - charStart, [0, 30], [0.8, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' }) 
+                : interpolate(s, [0, 0.6, 1], [2.5, 0.9, 1]);
+              const translateY = animationType === 'fade' ? interpolate(t - charStart, [0, 15], [20, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' }) : interpolate(s, [0, 1], [-80, 0]);
+              const skewX = animationType === 'fade' ? 0 : interpolate(s, [0, 0.4, 1], [-12, 4, 0]);
+              const opacity = animationType === 'fade' 
+                ? interpolate(t - charStart, [0, 20], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })
+                : interpolate(t - charStart, [0, 4], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+              const flicker = animationType === 'fade' ? 1 : 0.88 + random(frame * 5 + currentIdx * 100) * 0.24;
+              const impactBrightness = animationType === 'fade' ? 1.0 : interpolate(t - charStart, [0, 3, 8], [3.0, 1.5, 1.0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+
+              return (
+                <span key={cIdx} style={{
+                  display: 'inline-block', opacity,
+                  transform: `translateY(${translateY}px) scale(${scale}) skewX(${skewX}deg)`,
+                  WebkitTextStroke: textStroke,
+                  textShadow: `0 0 ${6 * flicker}px #fff, 0 0 ${18 * flicker}px ${glowColor}, 0 0 ${40 * flicker}px ${glowColor}, 0 0 ${80 * flicker}px ${glowColor}, 0 0 ${120 * flicker}px ${glowColor}`,
+                  filter: `brightness(${impactBrightness}) drop-shadow(0 4px 8px rgba(0,0,0,0.8))`,
+                }}>
+                  {char === ' ' ? '\u00A0' : char}
+                </span>
+              );
+            })}
           </div>
         );
       })}

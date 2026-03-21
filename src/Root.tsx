@@ -78,6 +78,8 @@ import {
 import { EffectCatalog } from './compositions/VideoFactory/components/EffectCatalog/effect-catalog';
 import { MagicCircleShowcase } from './compositions/VideoFactory/MagicCircleShowcase';
 import { AdvancedMagicCircleShowcase } from './compositions/VideoFactory/AdvancedMagicCircleShowcase';
+import { TextAnimationCatalog } from './compositions/VideoFactory/TextAnimationCatalog';
+import { TextEffectCatalog } from './compositions/VideoFactory/TextEffectCatalog';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import { AssetPanel } from './components/AssetPanel';
 import './index.css';
@@ -402,6 +404,22 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1920}
         height={1080}
+      />
+      <Composition
+        id="Text-Animation-Catalog"
+        component={TextAnimationCatalog}
+        durationInFrames={1710}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="Text-Effect-Catalog"
+        component={TextEffectCatalog}
+        durationInFrames={180}
+        fps={30}
+        width={1080}
+        height={1920}
       />
       <Composition
         id="JOL-BATTLE-WHITE-SNOW"

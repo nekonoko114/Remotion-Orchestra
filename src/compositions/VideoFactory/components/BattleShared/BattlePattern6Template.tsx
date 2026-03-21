@@ -1,5 +1,5 @@
 import { AbsoluteFill, Sequence, Audio, staticFile, useCurrentFrame, useVideoConfig, spring, interpolate, OffthreadVideo, Img, random } from 'remotion';
-import { GlobalFrameThemed, SparkleEffect, Particle, KineticText, MagicCircle } from './BattleSharedComponents';
+import { GlobalFrameThemed, SparkleEffect, Particle, KineticText, MagicCircle, SliceSplitText, BurningLightningText } from './BattleSharedComponents';
 import { BattleSpiritTheme } from './types';
 import { SceneDate } from './scenes/SceneDate';
 import { SceneVs } from './scenes/SceneVs';
@@ -30,21 +30,6 @@ const DiagonalLightningStorm: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
-const SliceSplitText: React.FC<{ text: string; frame: number; fps: number; color: string; glowColor: string; fontSize: number }> = ({ text, frame, fps, color, glowColor, fontSize }) => {
-  const p = spring({ frame, fps, config: { damping: 14, mass: 0.8 } });
-  const topX = interpolate(p, [0, 1], [-300, 0]);
-  const bottomX = interpolate(p, [0, 1], [300, 0]);
-  const textStyle: React.CSSProperties = { fontSize, fontWeight: 900, color, textShadow: `0 0 20px ${glowColor}`, margin: 0, padding: 0, lineHeight: 1.2, WebkitTextStroke: '6px black', whiteSpace: 'pre-wrap', textAlign: 'center' };
-  return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      <div style={{ ...textStyle, clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)', transform: `translateX(${topX}px)`, opacity: p }}>{text}</div>
-      <div style={{ ...textStyle, clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)', transform: `translateX(${bottomX}px)`, position: 'absolute', top: 0, left: 0, opacity: p }}>{text}</div>
-      {/* Invisible spacer to maintain layout */}
-      <div style={{ ...textStyle, visibility: 'hidden' }}>{text}</div>
-    </div>
-  );
-};
-
 // Custom Opening for Pattern 6
 const SceneOpeningPattern6: React.FC<{ theme: BattleSpiritTheme }> = ({ theme }) => {
   const frame = useCurrentFrame();
@@ -60,7 +45,7 @@ const SceneOpeningPattern6: React.FC<{ theme: BattleSpiritTheme }> = ({ theme })
       {frame >= 20 && (
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
            <div style={{ transform: `translateY(-150px) rotate(-8deg)`, zIndex: 10 }}>
-             <SliceSplitText text="ガチバトル" frame={frame - 20} fps={fps} fontSize={200} color="white" glowColor="cyan" />
+             <BurningLightningText text="ガチバトル" frame={frame - 20} fontSize={220} />
            </div>
         </AbsoluteFill>
       )}
@@ -69,7 +54,7 @@ const SceneOpeningPattern6: React.FC<{ theme: BattleSpiritTheme }> = ({ theme })
       {frame >= 60 && (
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
            <div style={{ transform: `translateY(100px) rotate(5deg)`, zIndex: 10 }}>
-             <SliceSplitText text="準備はいいか‼️" frame={frame - 60} fps={fps} fontSize={150} color="white" glowColor="#ff0055" />
+             <BurningLightningText text="準備はいいか‼️" frame={frame - 60} fontSize={160} />
            </div>
         </AbsoluteFill>
       )}
