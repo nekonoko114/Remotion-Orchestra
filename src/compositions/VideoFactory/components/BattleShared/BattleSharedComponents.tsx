@@ -88,7 +88,7 @@ export const BurningLightningText: React.FC<{
       {/* テキスト本体 (Fire masked SVG) */}
       <svg width={width} height={height} style={{ overflow: 'visible', zIndex: 10 }}>
         <defs>
-          <mask id={maskId}>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
             <text 
               x="50%" y="50%" 
               textAnchor="middle" 
@@ -130,7 +130,7 @@ export const BurningLightningText: React.FC<{
           {text}
         </text>
 
-        <foreignObject x={0} y={0} width="100%" height="100%" mask={`url(#${maskId})`}>
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
           <div style={{ width: '100%', height: '100%', transform: `scale(${1 + frame * 0.005})` }}>
             <OffthreadVideo 
               src={staticFile("assets/pixabay/videos/pixabay_fire_flame_beautiful_wallpaper_hot_particles_wallp_212500.mp4")} 
@@ -143,6 +143,734 @@ export const BurningLightningText: React.FC<{
     </div>
   );
 };
+
+// ----------------------------------------------------
+// PIXABAY VIDEO TEXT EFFECTS (5 New Styles)
+// ----------------------------------------------------
+
+// 1. Galaxy Glow Text (宇宙・銀河)
+export const GalaxyGlowText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const { fps } = useVideoConfig();
+  const s = spring({ frame, fps, config: { damping: 15 } });
+  
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `galaxy-mask-${text.replace(/[^a-zA-Z0-9]/g, '-')}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center', transform: `scale(${interpolate(s, [0, 1], [0.8, 1])})`, opacity: s }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={20} fontFamily="serif">
+              {text}
+            </text>
+          </mask>
+          <filter id={`glow-${maskId}`}>
+            <feGaussianBlur stdDeviation="20" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#aa00ff" strokeWidth="10" fontSize={fontSize} fontWeight={900} letterSpacing={20} fontFamily="serif" filter={`url(#glow-${maskId})`} opacity={0.7}>
+          {text}
+        </text>
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <div style={{ width: '100%', height: '100%', transform: `scale(${1.5 - frame * 0.002})` }}>
+            <OffthreadVideo src={staticFile("assets/pixabay/videos/pixabay_burst_light_space_galaxic_fire_glow_infinity_180380.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'hue-rotate(45deg)' }} muted />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 2. Sakura Breeze Text (桜吹雪・春)
+export const SakuraBreezeText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `sakura-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center', opacity: Math.min(1, frame / 15) }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={5}>
+              {text}
+            </text>
+          </mask>
+          <filter id={`shadow-${maskId}`}>
+            <feDropShadow dx="0" dy="10" stdDeviation="10" floodColor="#ff66b2" floodOpacity="0.8"/>
+          </filter>
+        </defs>
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#ffffff" strokeWidth="4" fontSize={fontSize} fontWeight={900} letterSpacing={5} filter={`url(#shadow-${maskId})`}>
+          {text}
+        </text>
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/pixabay_sakura_flowers_spring_nature_sky_pink_live_wallpap_117934.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 3. Cyberpunk Abstract Text (サイバーパンク・グリッチ)
+export const CyberpunkAbstractText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const glitchX = interpolate(random(`cx-${frame}`), [0, 1], [-5, 5]) * (frame % 10 < 2 ? 1 : 0);
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `cyber-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center', transform: `translateX(${glitchX}px)` }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} fontStyle="italic" letterSpacing={-5}>
+              {text}
+            </text>
+          </mask>
+        </defs>
+        {/* Layered strokes for RGB split effect */}
+        <text x="49%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#ff0055" strokeWidth="8" fontSize={fontSize} fontWeight={900} fontStyle="italic" letterSpacing={-5}>{text}</text>
+        <text x="51%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#00ffff" strokeWidth="8" fontSize={fontSize} fontWeight={900} fontStyle="italic" letterSpacing={-5}>{text}</text>
+        
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/absturact-turing.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'contrast(1.5) hue-rotate(90deg)' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 4. Rainbow Liquid Text (カラフル・リキッド)
+export const RainbowLiquidText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `rainbow-mask-${Math.random()}`;
+  const floatY = Math.sin(frame / 10) * 20;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center', transform: `translateY(${floatY}px)` }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={10}>
+              {text}
+            </text>
+          </mask>
+          <filter id={`glow-${maskId}`}>
+            <feGaussianBlur stdDeviation="15" result="blur"/>
+            <feComponentTransfer><feFuncA type="linear" slope="2"/></feComponentTransfer>
+          </filter>
+        </defs>
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/abstruct-rainbow.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 5. Heart Sparkle Text (ハート・スパークル)
+export const HeartSparkleText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const beatScale = 1 + Math.sin(frame / 5) * 0.05;
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `heart-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center', transform: `scale(${beatScale})` }}>
+      {/* Background Sparkles behind text */}
+      <div style={{ position: 'absolute', width: '200%', height: '300%', mixBlendMode: 'screen', opacity: 0.8, pointerEvents: 'none' }}>
+        <OffthreadVideo src={staticFile("assets/pixabay/videos/pixabay_heart_sparkle_overlay_green_screen_4k_love_gold_he_111573.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+      </div>
+
+      <svg width={width} height={height} style={{ overflow: 'visible', zIndex: 10 }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={5}>
+              {text}
+            </text>
+          </mask>
+          <linearGradient id={`grad-${maskId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ff99cc" />
+            <stop offset="100%" stopColor="#ff0066" />
+          </linearGradient>
+        </defs>
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill={`url(#grad-${maskId})`} stroke="white" strokeWidth="5" fontSize={fontSize} fontWeight={900} letterSpacing={5}>
+          {text}
+        </text>
+      </svg>
+    </div>
+  );
+};
+
+// ----------------------------------------------------
+// EXTREME ADVANCED TEXT EFFECTS (SVG Filters & 3D)
+// ----------------------------------------------------
+
+// 9. Gold 3D Extrusion (黄金3D流体)
+export const Gold3DText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `gold-mask-${Math.random()}`;
+  
+  // Create 3D extrusion with multiple drop-shadows
+  const depth = 20;
+  let textShadows = '';
+  for (let i = 1; i <= depth; i++) {
+    textShadows += `${i}px ${i}px 0px #8a6a1c${i === depth ? '' : ', '}`;
+  }
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible', filter: `drop-shadow(10px 20px 10px rgba(0,0,0,0.8))` }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={5} fontStyle="italic">
+              {text}
+            </text>
+          </mask>
+          {/* Bevel inner shadow simulating 3D metallic edge */}
+          <filter id={`bevel-${maskId}`}>
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+            <feOffset dx="4" dy="4" result="offsetBlur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant=".75" specularExponent="20" lightingColor="#ffffff" result="specOut">
+              <fePointLight x="-5000" y="-10000" z="20000"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
+            <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+          </filter>
+        </defs>
+
+        {/* 3D Extrusion Layer (Solid Gold Color underlying the video) */}
+        <text className="gold-depth" x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="#ffd700" fontSize={fontSize} fontWeight={900} letterSpacing={5} fontStyle="italic" style={{ textShadow: textShadows }}>
+          {text}
+        </text>
+
+        {/* Video Masked Front Face */}
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`} filter={`url(#bevel-${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/priticle-absturact-gold.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'contrast(1.2)' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 10. Glitch Displacement (ノイズ空間歪曲)
+export const GlitchDisplacementText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `glitch-mask-${Math.random()}`;
+  
+  // Dynamic turbulence parameters for glitching
+  const isGlitching = frame % 20 < 4; // Glitch for 4 frames every 20 frames
+  const baseFreq = isGlitching ? `${0.1 + Math.random()*0.4} ${0.01 + Math.random()*0.1}` : `0.01 0.01`;
+  const scale = isGlitching ? 40 : 0;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <filter id={`displace-${maskId}`}>
+            <feTurbulence type="fractalNoise" baseFrequency={baseFreq} numOctaves="2" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale={scale} xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={5}>
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        {/* Abstract Video inside Text, with Displacement Filter applied to the entire text element */}
+        <g filter={`url(#displace-${maskId})`}>
+          {/* RGB Split Backgrounds during glitch */}
+          {isGlitching && <text x="49%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="red" strokeWidth="8" fontSize={fontSize} fontWeight={900}>{text}</text>}
+          {isGlitching && <text x="51%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="cyan" strokeWidth="8" fontSize={fontSize} fontWeight={900}>{text}</text>}
+          
+          <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+            <OffthreadVideo src={staticFile("assets/pixabay/videos/absturact-turing.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', transform: `scale(1.2)` }} muted />
+          </foreignObject>
+        </g>
+      </svg>
+    </div>
+  );
+};
+
+// 11. Inferno Outline (業火の輪郭線)
+export const InfernoOutlineText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `inferno-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          {/* Mask is ONLY the outline (stroke), no fill */}
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="black" stroke="white" strokeWidth="10" fontSize={fontSize} fontWeight={900} letterSpacing={10}>
+              {text}
+            </text>
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="black" stroke="rgba(255,255,255,0.4)" strokeWidth="30" fontSize={fontSize} fontWeight={900} letterSpacing={10}>
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        {/* Glow backdrop */}
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#ff2a00" strokeWidth="20" fontSize={fontSize} fontWeight={900} letterSpacing={10} style={{ filter: 'blur(15px)' }}>
+          {text}
+        </text>
+
+        {/* Video masked strictly to the fat outline */}
+        <foreignObject x="-10%" y="-10%" width="120%" height="120%" mask={`url(#${maskId})`}>
+          <div style={{ width: '100%', height: '100%', transform: 'scale(1.1)', transformOrigin: 'center' }}>
+            <OffthreadVideo src={staticFile("assets/pixabay/videos/fire-flower01.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 12. Hologram Scanline (ホログラム投影)
+export const HologramScanText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `holo-mask-${Math.random()}`;
+  
+  // Flickering hologram
+  const opacity = frame % 15 === 0 ? 0.3 : 0.9;
+  // Scrolling scanline block
+  const scanY = (frame * 15) % height;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center', opacity }}>
+      {/* RGB Split shadows for hologram chromatic aberration */}
+      <div style={{ position: 'absolute', fontSize, fontWeight: 900, color: 'transparent', letterSpacing: 5, WebkitTextStroke: '2px cyan', transform: 'translate(-4px, 0)' }}>{text}</div>
+      <div style={{ position: 'absolute', fontSize, fontWeight: 900, color: 'transparent', letterSpacing: 5, WebkitTextStroke: '2px magenta', transform: 'translate(4px, 0)' }}>{text}</div>
+
+      <svg width={width} height={height} style={{ overflow: 'visible', zIndex: 10 }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={5}>
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <div style={{ position: 'relative', width: '100%', height: '100%', mixBlendMode: 'screen' }}>
+            {/* Techy background video */}
+            <OffthreadVideo src={staticFile("assets/pixabay/videos/abstruct01.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'hue-rotate(180deg) brightness(1.5)' }} muted />
+            {/* Global scanlines overlay */}
+            <div style={{ position: 'absolute', inset: 0, background: 'repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0, 255, 255, 0.4) 4px, rgba(0, 255, 255, 0.4) 8px)' }} />
+            {/* Fat moving scan beam */}
+            <div style={{ position: 'absolute', top: scanY, left: 0, right: 0, height: 20, background: 'rgba(255, 255, 255, 0.8)', boxShadow: '0 0 30px cyan' }} />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 13. Glass Refraction (ガラス屈折レンズ)
+export const GlassRefractionText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `glass-mask-${Math.random()}`;
+
+  // The text acts as a magnifying glass. 
+  // Background = blurred video.
+  // Foreground (Text) = Sharp, slightly scaled up video.
+  const videoSrc = staticFile("assets/pixabay/videos/boken-ball.mp4");
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      
+      {/* Background container blurred */}
+      <div style={{ position: 'absolute', width: 1500, height: 500, top: -100, filter: 'blur(15px) brightness(0.6)' }}>
+        <OffthreadVideo src={videoSrc} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+      </div>
+
+      {/* Refracted sharp text layer */}
+      <svg width={width} height={height} style={{ overflow: 'visible', zIndex: 10, filter: 'drop-shadow(0 20px 20px rgba(0,0,0,0.8))' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={5}>
+              {text}
+            </text>
+          </mask>
+          {/* Glass bevel edge */}
+          <filter id={`glass-edge-${maskId}`}>
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+            <feOffset dx="-2" dy="-2" result="offsetBlur"/>
+            <feSpecularLighting in="blur" surfaceScale="2" specularConstant=".9" specularExponent="30" lightingColor="#ffffff" result="specOut">
+              <fePointLight x="-50" y="-50" z="200"/>
+            </feSpecularLighting>
+            <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>
+          </filter>
+        </defs>
+
+        {/* White glass rim */}
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="4" fontSize={fontSize} fontWeight={900} letterSpacing={5} filter={`url(#glass-edge-${maskId})`}>
+          {text}
+        </text>
+
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          {/* Slightly scaled up video to simulate lens magnification */}
+          <div style={{ width: '100%', height: '100%', transform: 'scale(1.1) rotate(2deg)' }}>
+            <OffthreadVideo src={videoSrc} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'contrast(1.2)' }} muted />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// ----------------------------------------------------
+// ADDITIONAL 5 HIGH-END TEXT EFFECTS
+// ----------------------------------------------------
+
+// 14. Liquid AuraText (リキッドオーラ)
+export const LiquidAuraText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `liquid-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={10}>
+              {text}
+            </text>
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="20" fontSize={fontSize} fontWeight={900} letterSpacing={10} style={{ filter: 'blur(10px)' }}>
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#ff00ff" strokeWidth="6" fontSize={fontSize} fontWeight={900} letterSpacing={10} opacity={0.5}>
+          {text}
+        </text>
+
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/particle-reibow-mix.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(2)' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 15. Thunder Strike (蒼雷撃)
+export const ThunderStrikeText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `thunder-mask-${Math.random()}`;
+  
+  // Flash effect synced to frame
+  const flash = frame % 15 < 3 ? 1.5 : 1;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center', filter: `drop-shadow(0 0 20px rgba(0, 150, 255, 0.8))` }}>
+      {/* Background lightning bolts */}
+      <div style={{ position: 'absolute', width: '150%', height: '200%', mixBlendMode: 'screen', opacity: 0.7, transform: 'rotate(5deg)' }}>
+        <OffthreadVideo src={staticFile("assets/pixabay/videos/litinig-blue.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+      </div>
+
+      <svg width={width} height={height} style={{ overflow: 'visible', zIndex: 10 }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={5} fontStyle="italic">
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        {/* Fill color brightens randomly */}
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="#ffffff" fontSize={fontSize} fontWeight={900} letterSpacing={5} fontStyle="italic" opacity={flash}>
+          {text}
+        </text>
+
+        {/* Video masked over the text to give it internal energy */}
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/litinig-blue.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'contrast(1.5) brightness(1.2)' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 16. Explosion Impact (爆炎インパクト)
+export const ExplosionImpactText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `explosion-mask-${Math.random()}`;
+  
+  // Very heavy shake at the start
+  const introShakeX = frame < 20 ? interpolate(random(`ex-x-${frame}`), [0, 1], [-30, 30]) : 0;
+  const introShakeY = frame < 20 ? interpolate(random(`ex-y-${frame}`), [0, 1], [-30, 30]) : 0;
+  const scale = frame < 10 ? interpolate(frame, [0, 10], [0.5, 1.2], { extrapolateRight: 'clamp' }) : 
+                frame < 20 ? interpolate(frame, [10, 20], [1.2, 1], { extrapolateRight: 'clamp' }) : 1;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center', transform: `translate(${introShakeX}px, ${introShakeY}px) scale(${scale})` }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={-5} fontStyle="italic">
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#000000" strokeWidth="30" fontSize={fontSize} fontWeight={900} letterSpacing={-5} fontStyle="italic">
+          {text}
+        </text>
+        
+        {/* Fire explosion inside the text */}
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/fire-explotion.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(1.5)' }} muted />
+        </foreignObject>
+        
+        {/* Burning rim */}
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#ff3300" strokeWidth="5" fontSize={fontSize} fontWeight={900} letterSpacing={-5} fontStyle="italic">
+          {text}
+        </text>
+      </svg>
+    </div>
+  );
+};
+
+// 17. Elegant Bokeh (エレガント・ボケ光)
+export const ElegantBokehText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `bokeh-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={100} letterSpacing={20} fontFamily="serif">
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#ffddaa" strokeWidth="2" fontSize={fontSize} fontWeight={100} letterSpacing={20} fontFamily="serif">
+          {text}
+        </text>
+
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/boken-litflare-horaizon.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'contrast(1.5) brightness(1.2)' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 18. Tech Circuit (サイバーライン・サーキット)
+export const TechCircuitText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `tech-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      {/* HUD Background scanlines */}
+      <div style={{ position: 'absolute', width: '100%', height: '100%', background: 'repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(0,255,100,0.1) 10px, rgba(0,255,100,0.1) 11px)', pointerEvents: 'none' }} />
+
+      <svg width={width} height={height} style={{ overflow: 'visible', zIndex: 10 }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={5}>
+              {text}
+            </text>
+            {/* Outline part as well */}
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="white" strokeWidth="20" fontSize={fontSize} fontWeight={900} letterSpacing={5} style={{ opacity: 0.3 }}>
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#00ffaa" strokeWidth="4" fontSize={fontSize} fontWeight={900} letterSpacing={5} style={{ filter: 'drop-shadow(0 0 10px #00ffaa)' }}>
+          {text}
+        </text>
+
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/outline-storke-rpg.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'hue-rotate(-45deg) saturate(2)' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// ----------------------------------------------------
+// FINAL EXTRAS 5 MORE TEXT EFFECTS
+// ----------------------------------------------------
+
+// 19. Starburst Core (星の煌めき)
+export const StarburstCoreText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `star-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={10}>
+              {text}
+            </text>
+          </mask>
+          <filter id={`star-glow-${maskId}`}>
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#fff8b0" strokeWidth="15" fontSize={fontSize} fontWeight={900} letterSpacing={10} filter={`url(#star-glow-${maskId})`} opacity={0.6}>
+          {text}
+        </text>
+
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <div style={{ width: '100%', height: '100%', transform: `scale(${1 + frame * 0.005})` }}>
+            <OffthreadVideo src={staticFile("assets/pixabay/videos/pixabay_144484.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 20. Deep Abyss Heart (深淵の鼓動)
+export const DeepHeartText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `deep-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={10} fontFamily="serif">
+              {text}
+            </text>
+          </mask>
+        </defs>
+        
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <OffthreadVideo src={staticFile("assets/pixabay/videos/haurt-depth-running.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'hue-rotate(60deg) saturate(2)' }} muted />
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 21. Ring of Fire (炎輪)
+export const FireRingText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `ring-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={-2} fontStyle="italic">
+              {text}
+            </text>
+          </mask>
+        </defs>
+
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#ff4400" strokeWidth="8" fontSize={fontSize} fontWeight={900} letterSpacing={-2} fontStyle="italic" style={{ filter: 'blur(5px)' }}>
+          {text}
+        </text>
+
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <div style={{ width: '100%', height: '100%', transform: 'scale(1.2)' }}>
+            <OffthreadVideo src={staticFile("assets/pixabay/videos/pixabay_fire_flame_burning_circle_ring_particles_smoke_spa_176811.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 22. Matrix DataStream (マトリックス・データストリーム)
+export const MatrixDataText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `matrix-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={900} letterSpacing={15}>
+              {text}
+            </text>
+          </mask>
+        </defs>
+
+        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="none" stroke="#00ff66" strokeWidth="3" fontSize={fontSize} fontWeight={900} letterSpacing={15} style={{ filter: 'drop-shadow(0 0 10px #00ff66)' }}>
+          {text}
+        </text>
+
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <div style={{ width: '100%', height: '100%', transform: `translateY(${frame % 100}px)` }}>
+            <OffthreadVideo src={staticFile("assets/pixabay/videos/pixabay_particles_light_beautiful_wallpaper_green_wallpape_202587.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scale(2)' }} muted />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// 23. Starlight Pulse (星脈の鼓動)
+export const StarlightPulseText: React.FC<{ text: string; frame: number; fontSize?: number }> = ({ text, frame, fontSize = 200 }) => {
+  const width = 1200;
+  const height = fontSize * 2;
+  const maskId = `starlight-mask-${Math.random()}`;
+
+  return (
+    <div style={{ position: 'relative', width, height, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <svg width={width} height={height} style={{ overflow: 'visible' }}>
+        <defs>
+          <mask id={maskId} x="-20%" y="-20%" width="140%" height="140%">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize={fontSize} fontWeight={100} letterSpacing={20} fontFamily="serif">
+              {text}
+            </text>
+          </mask>
+        </defs>
+
+        <foreignObject x="-20%" y="-20%" width="140%" height="140%" mask={`url(#${maskId})`}>
+          <div style={{ width: '100%', height: '100%' }}>
+            <OffthreadVideo src={staticFile("assets/pixabay/videos/pixabay_stars_christmas_loop_glowing_light_background_beau_183279.mp4")} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted />
+          </div>
+        </foreignObject>
+      </svg>
+    </div>
+  );
+};
+
+// ----------------------------------------------------
+// その他のコンポーネント (SliceSplitText など)
+// ----------------------------------------------------
 
 export const VideoEffectStack: React.FC<{
   config?: {

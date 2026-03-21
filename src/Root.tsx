@@ -416,7 +416,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Text-Effect-Catalog"
         component={TextEffectCatalog}
-        durationInFrames={180}
+        durationInFrames={2070}
         fps={30}
         width={1080}
         height={1920}
