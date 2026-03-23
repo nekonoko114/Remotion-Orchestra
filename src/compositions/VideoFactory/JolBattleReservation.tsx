@@ -364,14 +364,15 @@ const Scene3_GlitchText: React.FC<{ dateInfo: Props['dateInfo'] }> = ({ dateInfo
   const stage = Math.floor(frame / fps);
   let text = '';
   switch (stage) {
-    case 0: text = '予約バトル'; break;;
-    case 1: text = dateInfo.year; break;
-    case 2: text = `${dateInfo.date} ${dateInfo.time}`; break;
+    case 0: text = '人気アップバトル'; break;
+    case 1: text = '🍦taka🍦\n🌸さくら🌸\n🌹夢一輪🌹\nvs\nつれトラ🍭💟'; break;
+    case 2: text = dateInfo.year; break;
+    case 3: text = `${dateInfo.date} ${dateInfo.time}`; break;
     default: text = ''; break;
   }
 
-  // 文字数によって枠に収まるようにフォントサイズを動的に変更
-  const dynamicFontSize = text.length > 6 ? '110px' : '150px';
+  // 文字数や改行によって枠に収まるようにフォントサイズを動的に変更
+  const dynamicFontSize = text.length > 20 ? '110px' : text.length > 6 ? '110px' : '150px';
 
   // グリッチ風のCSSアニメーション用インラインスタイル
   const glitchOffset1 = Math.sin(frame * 0.5) * 10;
@@ -380,7 +381,7 @@ const Scene3_GlitchText: React.FC<{ dateInfo: Props['dateInfo'] }> = ({ dateInfo
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
       {text && (
-        <div style={{ position: 'relative', whiteSpace: 'nowrap' }}>
+        <div style={{ position: 'relative', whiteSpace: 'pre-wrap', width: '100%', textAlign: 'center' }}>
           <div style={{
             fontSize: dynamicFontSize,
             fontWeight: 900,
@@ -389,14 +390,17 @@ const Scene3_GlitchText: React.FC<{ dateInfo: Props['dateInfo'] }> = ({ dateInfo
             textAlign: 'center',
             textShadow: '5px 5px 0px #ff0055, -5px -5px 0px #00ccff',
             transform: `skewX(${Math.sin(frame) * 5}deg)`,
-            whiteSpace: 'nowrap',
+            whiteSpace: 'pre-wrap',
+            lineHeight: 1.3,
           }}>
             {text}
           </div>
           {/* グリッチレイヤー1 */}
           <div style={{
             position: 'absolute',
-            top: 0, left: glitchOffset1,
+            top: 0, left: `calc(50% + ${glitchOffset1}px)`,
+            transform: 'translateX(-50%)',
+            width: '100%',
             fontSize: dynamicFontSize,
             fontWeight: 900,
             color: '#ff0055',
@@ -404,14 +408,17 @@ const Scene3_GlitchText: React.FC<{ dateInfo: Props['dateInfo'] }> = ({ dateInfo
             textAlign: 'center',
             opacity: 0.5,
             clipPath: `inset(${Math.random() * 50}% 0 ${Math.random() * 50}% 0)`,
-            whiteSpace: 'nowrap',
+            whiteSpace: 'pre-wrap',
+            lineHeight: 1.3,
           }}>
             {text}
           </div>
           {/* グリッチレイヤー2 */}
           <div style={{
             position: 'absolute',
-            top: 0, left: -glitchOffset2,
+            top: 0, left: `calc(50% - ${glitchOffset2}px)`,
+            transform: 'translateX(-50%)',
+            width: '100%',
             fontSize: dynamicFontSize,
             fontWeight: 900,
             color: '#00ccff',
@@ -419,7 +426,8 @@ const Scene3_GlitchText: React.FC<{ dateInfo: Props['dateInfo'] }> = ({ dateInfo
             textAlign: 'center',
             opacity: 0.5,
             clipPath: `inset(${Math.random() * 40}% 0 ${Math.random() * 40}% 0)`,
-            whiteSpace: 'nowrap',
+            whiteSpace: 'pre-wrap',
+            lineHeight: 1.3,
           }}>
             {text}
           </div>
