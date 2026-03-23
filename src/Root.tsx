@@ -62,6 +62,11 @@ import {
 } from './compositions/VideoFactory/JolBattleSpringSakura';
 import { JolBattlePattern6 } from './compositions/VideoFactory/JolBattlePattern6';
 import { JolBattleReservation, ReservationBattleSchema } from './compositions/VideoFactory/JolBattleReservation';
+
+import {
+  JolPopularityBattle3vs1,
+  PopularityBattle3vs1Schema
+} from './compositions/VideoFactory/JolPopularityBattle3vs1';
 import {
   ShowcaseBackgrounds, SHOWCASE_BG_DURATION,
   ShowcaseEffects, SHOWCASE_FX_DURATION,
@@ -602,7 +607,6 @@ export const RemotionRoot: React.FC = () => {
         }}
       />
       
-      {/* Jol Battle Reservation Composition */}
       <Composition
         id="JOL-RESERVATION-BATTLE"
         component={JolBattleReservation}
@@ -615,10 +619,10 @@ export const RemotionRoot: React.FC = () => {
           themeColor: '#ff2200',
           music: 'assets/audio/music/Velocity-Shift.mp3',
           livers: [
-            { name: '🍦taka🍦', image: 'assets/images-01/taka19427.png', borderColor: '#ffaa00' },
-            { name: '🌸さくら🌸', image: 'assets/images-01/l5332541.jpeg', borderColor: '#00ccff' },
-            { name: '🌹夢一輪🌹', image: 'assets/images-01/zzz5557zzz.png', borderColor: '#ff00ff' },
-            { name: 'つれトラ🍭💟', image: 'assets/images-01/tsuregumi1228.jpg', borderColor: '#00ffaa' },
+            { id: '1', name: '🍦taka🍦', image: 'assets/images-01/taka19427.png', borderColor: '#ffaa00' },
+            { id: '2', name: '🌸さくら🌸', image: 'assets/images-01/l5332541.jpeg', borderColor: '#00ccff' },
+            { id: '3', name: '🌹夢一輪🌹', image: 'assets/images-01/zzz5557zzz.png', borderColor: '#ff00ff' },
+            { id: '4', name: 'つれトラ🍭💟', image: 'assets/images-01/tsuregumi1228.jpg', borderColor: '#00ffaa' },
           ],
           dateInfo: {
             year: '2026年',
@@ -630,6 +634,43 @@ export const RemotionRoot: React.FC = () => {
             'ルール2：1発勝負',
           ],
           finalMessage: '人気No.1の座を勝ち取るぞ✊'
+        }}
+      />
+
+      {/* 人気アップバトル 3 VS 1 */}
+      <Composition
+        id="JOL-POPULARITY-BATTLE-3vs1"
+        component={JolPopularityBattle3vs1}
+        durationInFrames={1670}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={PopularityBattle3vs1Schema}
+        defaultProps={{
+          themeColor: '#00ccff',
+          customBackground: 'assets/pixabay/videos/pixabay_butterfly_crystal_ball_mystery_fantasy_169817.mp4',
+          music: 'assets/audio/music/やさしい愛.mp3',
+          livers: [
+            { id: '1', name: '🍦taka🍦', image: 'assets/images-01/taka19427.png', borderColor: '#00ccff' },
+            { id: '2', name: '🌸さくら🌸', image: 'assets/images-01/l5332541.jpeg', borderColor: '#ffb3c6' },
+            { id: '3', name: '🌹夢一輪🌹', image: 'assets/images-01/zzz5557zzz.png', borderColor: '#00ccff' },
+            { id: '4', name: 'つれトラ🍭💟', image: 'assets/images-01/tsuregumi1228.jpg', borderColor: '#ff0055' },
+          ],
+          sakuraImages: [
+            'assets/images-01/l5332541.jpeg',
+            'assets/images-01/l5332541-02.png',
+            'assets/images-01/l5332541-01.png',
+          ],
+          dateInfo: {
+            year: '2026.04.01',
+            date: '2026.04.01', // 未使用でも一応エラー回避のため入れておく
+            time: '22:00',
+          },
+          rules: [
+            'ルール1：アイテム無し',
+            'ルール2：1発勝負',
+          ],
+          finalMessage: 'さくら組が人気1番の\n実力を見せつけようね',
         }}
       />
 
