@@ -4,6 +4,7 @@ import {
   PixabayVideo, PixabayImage, 
   MediaType, OrientationFilter 
 } from '../lib/pixabay';
+import { getRemotionEnvironment } from 'remotion';
 
 const VIDEO_CATEGORIES = [
   { label: '🔥 Effects', value: 'effects', query: 'fire' },
@@ -34,6 +35,11 @@ const IMAGE_CATEGORIES = [
 type MediaItem = PixabayVideo | PixabayImage;
 
 export const AssetPanel: React.FC = () => {
+  // 動画の書き出しレンダリング中（プレビュー画面以外）はUIパネルを描画しない！
+  if (getRemotionEnvironment().isRendering) {
+    return null;
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const [isWide, setIsWide] = useState(false); // 2-stage width toggle
   const [mediaType, setMediaType] = useState<MediaType>('videos');
@@ -86,16 +92,26 @@ export const AssetPanel: React.FC = () => {
         setItems(prev => {
             const existingIds = new Set(prev.map(v => v.id));
             const newResults = results.filter(v => !existingIds.has(v.id));
+            
+            // 如果追加分が0件だった場合は、以降の自動読み込みを停止する
+            if (newResults.length === 0) {
+              setHasMore(false);
+            } else {
+              setHasMore(results.length >= 24);
+            }
+            
             return [...prev, ...newResults] as MediaItem[];
         });
       } else {
         setItems(results);
+        setHasMore(results.length >= 24);
         if (scrollRef.current) scrollRef.current.scrollTop = 0;
       }
-      
-      setHasMore(results.length >= 24);
     } catch (err: any) {
       console.error("Search failed", err);
+      // エラー発生時は状態をリセットし、無限スクロールによるリトライ連打を防ぐ
+      setHasMore(false);
+      
       if (!append) setItems([]);
       
       setMessage('❌ Search failed. Please try again.');
@@ -413,6 +429,7 @@ export const AssetPanel: React.FC = () => {
                     <img 
                       src={bgImg} 
                       alt={item.tags}
+                      loading="lazy"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: shouldPreview && mediaType === 'images' ? 1 : 0.6, transition: 'opacity 0.2s' }}
                     />
                   )}
@@ -461,6 +478,11 @@ export const AssetPanel: React.FC = () => {
           {loadingMore && (
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#00ccff' }}>
               🌀 Loading more...
+            </div>
+          )}
+          {!hasMore && items.length > 0 && !loading && (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#888', fontSize: 13 }}>
+              ✅ All available items loaded
             </div>
           )}
         </div>

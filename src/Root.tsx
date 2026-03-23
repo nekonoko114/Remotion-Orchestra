@@ -61,6 +61,7 @@ import {
   JOL_SAKURA_DURATION,
 } from './compositions/VideoFactory/JolBattleSpringSakura';
 import { JolBattlePattern6 } from './compositions/VideoFactory/JolBattlePattern6';
+import { JolBattleReservation, ReservationBattleSchema } from './compositions/VideoFactory/JolBattleReservation';
 import {
   ShowcaseBackgrounds, SHOWCASE_BG_DURATION,
   ShowcaseEffects, SHOWCASE_FX_DURATION,
@@ -600,6 +601,38 @@ export const RemotionRoot: React.FC = () => {
           fontFamily: '"Mochiy Pop One", sans-serif',
         }}
       />
+      
+      {/* Jol Battle Reservation Composition */}
+      <Composition
+        id="JOL-RESERVATION-BATTLE"
+        component={JolBattleReservation}
+        durationInFrames={860}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={ReservationBattleSchema}
+        defaultProps={{
+          themeColor: '#ff2200',
+          music: 'assets/audio/music/Velocity-Shift.mp3',
+          livers: [
+            { name: '🍦taka🍦', image: 'assets/images-01/taka19427.png', borderColor: '#ffaa00' },
+            { name: '🌸さくら🌸', image: 'assets/images-01/l5332541.jpeg', borderColor: '#00ccff' },
+            { name: '🌹夢一輪🌹', image: 'assets/images-01/zzz5557zzz.png', borderColor: '#ff00ff' },
+            { name: 'つれトラ🍭💟', image: 'assets/images-01/tsuregumi1228.jpg', borderColor: '#00ffaa' },
+          ],
+          dateInfo: {
+            year: '2026年',
+            date: '4月1日',
+            time: '22:00'
+          },
+          rules: [
+            'ルール1：アイテム無し',
+            'ルール2：1発勝負',
+          ],
+          finalMessage: '人気No.1の座を勝ち取るぞ✊'
+        }}
+      />
+
       <Composition id="Catalog-Backgrounds" component={ShowcaseBackgrounds} durationInFrames={SHOWCASE_BG_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Catalog-Effects-Ultimate-42" component={ShowcaseEffects} durationInFrames={SHOWCASE_FX_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Catalog-Transitions" component={ShowcaseTransitions} durationInFrames={SHOWCASE_TRANS_DURATION} fps={30} width={1080} height={1920} />
