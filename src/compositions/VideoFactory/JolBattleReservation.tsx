@@ -216,6 +216,14 @@ const Scene2_TwoColumn: React.FC<{ livers: Props['livers'] }> = ({ livers }) => 
   // VSテキストはライバーの前（ローカル15fr）くらいで先にドンと出す
   const vsScale = spring({ frame: frame - 15, fps, config: { damping: 15 } });
   
+  // ユーザー指示: 絶対180〜196(ローカル16〜32)まで大きく、絶対207(ローカル43)~は小さく。
+  const vsFontSize = interpolate(
+    frame, 
+    [16, 32, 43], 
+    [1000, 1000, 250], // ドカンと1000サイズで出て、250に小さく縮む
+    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+  );
+  
   return (
     <AbsoluteFill style={{ backgroundColor: '#1a1a1a', flexDirection: 'row', padding: 40, overflow: 'hidden' }}>
       {/* 背景動画 (青系をインラインCSSで赤系にカラーグレーディング) */}
@@ -311,12 +319,16 @@ const Scene2_TwoColumn: React.FC<{ livers: Props['livers'] }> = ({ livers }) => 
       </div>
 
       {/* 中央の「VS」区切り */}
-      <div style={{ width: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      {/* 後ろに隠れないように zIndex を 50 など他の要素(10)より手前に出す */}
+      <div style={{ width: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', zIndex: 50 }}>
         <div style={{
           transform: `scale(${vsScale})`,
           mixBlendMode: 'screen', // 背景を透過させる（黒い動画の枠を消すため）
+          // VSの動画エフェクトの四角い枠（境界線）がうっすらと見えてしまうのを防ぐため、端を完全に溶かす
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 0%, black 60%, transparent 100%)',
+          maskImage: 'radial-gradient(ellipse at center, black 0%, black 60%, transparent 100%)',
         }}>
-          <BurningLightningText text="VS" frame={frame} fontSize={600} />
+          <BurningLightningText text="VS" frame={frame} fontSize={vsFontSize} />
         </div>
       </div>
 
@@ -637,6 +649,47 @@ const Scene6_Logo: React.FC = () => {
 };
 
 
+// 📌 新規 Scene: 人気アップ装飾 (315fr〜434fr用) - 激しいバトルテイスト！
+const DecorationPopuler: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  
+  // 「バンッ！」と勢いよく飛び出すスプリングアニメーション
+  const scaleIn = spring({ frame, fps, config: { damping: 10, mass: 1.5, stiffness: 100 } });
+  
+  // 最後はサッと消える
+  const opacity = interpolate(frame, [110, 120], [1, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
+  
+  // バトル感のある小刻みな揺れ（Wiggle/Glitch風）
+  const wiggleX = Math.sin(frame * 1.5) * 5;
+  const wiggleY = Math.cos(frame * 2.0) * 5;
+
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', justifyContent: 'center', alignItems: 'center', opacity }}>
+      <Img 
+        src={staticFile('assets/images/populer-up.png')}
+        style={{
+          position: 'absolute', top: 200, left: 50, width: 500,
+          // スプリングで勢いよく飛び出し、小刻みに揺れる
+          transform: `scale(${scaleIn}) translate(${wiggleX}px, ${wiggleY}px)`,
+          // サイバー＆アグレッシブな強烈発光（赤系）
+          filter: 'drop-shadow(0 0 40px rgba(255, 0, 85, 0.9))'
+        }}
+      />
+      <Img 
+        src={staticFile('assets/images/popurer-super.png')}
+        style={{
+          position: 'absolute', bottom: 200, right: 50, width: 500,
+          // スプリング（少し遅らせて出すなどの工夫も良いが、今回は同タイミングで力強く！）
+          transform: `scale(${scaleIn}) translate(${wiggleY}px, ${-wiggleX}px)`,
+          // サイバー＆アグレッシブな強烈発光（青/シアン系）
+          filter: 'drop-shadow(0 0 40px rgba(0, 200, 255, 0.9))'
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
 // === Main Composition ===
 export const JolBattleReservation: React.FC<Props> = (props) => {
   const frame = useCurrentFrame();
@@ -702,6 +755,11 @@ export const JolBattleReservation: React.FC<Props> = (props) => {
         <Scene3_GlitchText dateInfo={props.dateInfo} />
       </Sequence>
 
+      {/* 追加: 315〜434フレームの「人気アップ」装飾表示 */}
+      <Sequence from={315} durationInFrames={120}>
+        <DecorationPopuler />
+      </Sequence>
+
       <Sequence from={435} durationInFrames={120}>
         <Scene4_Rules rules={props.rules} />
       </Sequence>
@@ -714,6 +772,31 @@ export const JolBattleReservation: React.FC<Props> = (props) => {
       <Sequence from={800} durationInFrames={60}>
         <Scene6_Logo />
       </Sequence>
+
+      {/* ================================================== */}
+      {/* 画面全体を覆う、4色のライバーカラー（黄、ネオンブルー、紫、緑）グラデーションフレーム */}
+      {/* ================================================== */}
+      <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 1000, justifyContent: 'center', alignItems: 'center' }}>
+        <svg width="1080" height="1920" viewBox="0 0 1080 1920" style={{ position: 'absolute' }}>
+          <defs>
+            {/* 角から角へ流れる4色グラデーション */}
+            <linearGradient id="liverColorFrame" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#ffdd00" />    {/* 黄色 */}
+              <stop offset="33%" stopColor="#00ccff" />   {/* ネオンブルー */}
+              <stop offset="66%" stopColor="#aa00ff" />   {/* パープル */}
+              <stop offset="100%" stopColor="#00ff55" />  {/* グリーン */}
+            </linearGradient>
+          </defs>
+          <rect 
+            x="0" y="0" width="1080" height="1920" 
+            fill="none" 
+            stroke="url(#liverColorFrame)" 
+            strokeWidth="30" 
+            rx="5" 
+            style={{ filter: 'drop-shadow(0 0 30px rgba(255, 255, 255, 0.4))' }} 
+          />
+        </svg>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };

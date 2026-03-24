@@ -356,6 +356,8 @@ const Scene_TakaMain: React.FC<{ liver: Props['livers'][0] }> = ({ liver }) => {
 };
 
 
+// ---------- 装飾削除によるロールバック済み ---------- //
+
 // 📌 新規 Scene: さくらさんメイン 幻想的シーン (450fr)
 // 超絶リッチ＆幻想的エフェクト：後光、回転魔法陣、ボケフェードイン、呼吸のような浮遊感
 const Scene_SakuraMain: React.FC<{ images: string[] }> = ({ images }) => {
