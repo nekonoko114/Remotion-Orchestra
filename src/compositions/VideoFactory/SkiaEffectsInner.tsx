@@ -286,6 +286,156 @@ const PrismFractal: React.FC = () => {
         </Group>
     );
 };
+// --- 11. Fractal Kaleidoscope ---
+const FractalKaleidoscope: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#000" />
+            {[...Array(6)].map((_, i) => {
+                const angle = (i / 6) * Math.PI * 2;
+                return (
+                    <Group key={i} origin={vec(width / 2, height / 2)} transform={[{ rotate: angle + frame * 0.005 }]}>
+                        {[...Array(3)].map((__, j) => {
+                            const scale = 0.5 + j * 0.4 + Math.sin(frame * 0.03 + j) * 0.1;
+                            return (
+                                <Group key={j} transform={[{ scale }]}>
+                                    <Path
+                                        path="M 0,0 L 100,-173 L -100,-173 Z"
+                                        color={`hsla(${(frame * 2 + i * 30) % 360}, 100%, 65%, 0.3)`}
+                                        style="stroke"
+                                        strokeWidth={4}
+                                        transform={[{ translate: [width / 2, height / 2] }]}
+                                    >
+                                        <Paint><Blur blur={12} /></Paint>
+                                    </Path>
+                                </Group>
+                            );
+                        })}
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 12. Audio Reactive Core (Simulated) ---
+const AudioReactiveCore: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const intensity = Math.max(0.2, (Math.sin(frame * 0.2) + Math.cos(frame * 0.31)) * 0.5 + 0.5);
+    return (
+        <Group>
+            <Fill color="#050510" />
+            <Circle cx={width/2} cy={height/2} r={150 * (1 + intensity * 0.5)} color="#ff0088">
+                <Paint><Blur blur={100 * intensity} /></Paint>
+            </Circle>
+            {[...Array(24)].map((_, i) => {
+                const angle = (i / 24) * Math.PI * 2 + frame * 0.04;
+                const d = 250 + intensity * 150;
+                return (
+                    <Rect
+                        key={i}
+                        x={width/2 + Math.cos(angle) * d - 10}
+                        y={height/2 + Math.sin(angle) * d - 5}
+                        width={20 * intensity}
+                        height={5}
+                        color="#00ffff"
+                        transform={[{ rotate: angle }]}
+                    >
+                        <Paint><Blur blur={5} /></Paint>
+                    </Rect>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 13. Gravitational Singularity ---
+const GravitationalSingularity: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#000" />
+            {[...Array(100)].map((_, i) => {
+                const seed = i * 45.1;
+                const distProgress = ( (seed + frame * 5) % 1000 ) / 1000;
+                const angle = seed + frame * 0.01;
+                const r = (1 - distProgress) * 600;
+                const x = width/2 + Math.cos(angle) * r;
+                const y = height/2 + Math.sin(angle) * r;
+                return (
+                    <Circle key={i} cx={x} cy={y} r={2 + (1-distProgress)*8} color={`hsla(${(frame + i) % 360}, 100%, 80%, ${distProgress})`}>
+                        <Paint><Blur blur={4} /></Paint>
+                    </Circle>
+                );
+            })}
+            <Circle cx={width/2} cy={height/2} r={80} color="black" />
+            <Circle cx={width/2} cy={height/2} r={95} style="stroke" strokeWidth={15}>
+                 <Paint><SweepGradient c={vec(width/2, height/2)} colors={['#fff', '#ff00ff', '#00ffff', '#fff']} /><Blur blur={25} /></Paint>
+            </Circle>
+        </Group>
+    );
+};
+
+// --- 14. Glitch Dimension ---
+const GlitchDimension: React.FC = () => {
+    const { width, height } = useVideoConfig();
+    const isGlitch = Math.random() < 0.15;
+    const offsetX = isGlitch ? (Math.random() - 0.5) * 60 : 0;
+    return (
+        <Group>
+            <Fill color="#101010" />
+            <Group transform={[{translateX: offsetX}]}>
+                <Rect x={width/2 - 200} y={height/2 - 300} width={400} height={600} color="#00ff8844" />
+                <Rect x={width/2 - 180 + offsetX} y={height/2 - 280} width={360} height={560} color="#ff00ff44" />
+                <Rect x={width/2 - 190} y={height/2 - 290} width={380} height={580} color="#ffffff66" style="stroke" strokeWidth={2} />
+            </Group>
+            {[...Array(10)].map((_, i) => (
+                <Rect key={i} x={0} y={Math.random()*height} width={width} height={Math.random()*10} color="#ffffff33" />
+            ))}
+        </Group>
+    );
+};
+
+// --- 15. Molecular Network ---
+const MolecularNetwork: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const points = useMemo(() => {
+        return [...Array(20)].map((_, i) => ({
+            x: (Math.sin(i * 123) * 0.5 + 0.5) * width,
+            y: (Math.cos(i * 456) * 0.5 + 0.5) * height,
+            vx: Math.sin(i * 789),
+            vy: Math.cos(i * 321),
+        }));
+    }, [width, height]);
+
+    return (
+        <Group>
+            <Fill color="#000510" />
+            {points.map((p, i) => {
+                const x = (p.x + p.vx * frame * 0.5) % width;
+                const y = (p.y + p.vy * frame * 0.5) % height;
+                return (
+                    <Group key={i}>
+                        {points.slice(i + 1, i + 4).map((p2, j) => {
+                            const x2 = (p2.x + p2.vx * frame * 0.5) % width;
+                            const y2 = (p2.y + p2.vy * frame * 0.5) % height;
+                            return <Path key={j} path={`M ${x} ${y} L ${x2} ${y2}`} color="#00ffff44" style="stroke" strokeWidth={1} />;
+                        })}
+                        <Circle cx={x} cy={y} r={6} color="#00ffff">
+                            <Paint><Blur blur={10} /></Paint>
+                        </Circle>
+                        <Circle cx={x} cy={y} r={2} color="white" />
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
 
 // --- Orchestrator ---
 const EFFECTS = [
@@ -299,6 +449,11 @@ const EFFECTS = [
     { name: 'DIGITAL RAIN', comp: DigitalRain, accent: '#00ff00' },
     { name: 'ENERGY SHIELD', comp: EnergyShield, accent: '#0088ff' },
     { name: 'PRISM FRACTAL', comp: PrismFractal, accent: '#ffffff' },
+    { name: 'FRACTAL KALEIDO', comp: FractalKaleidoscope, accent: '#ff00aa' },
+    { name: 'AUDIO CORE', comp: AudioReactiveCore, accent: '#ff0088' },
+    { name: 'SINGULARITY', comp: GravitationalSingularity, accent: '#00ffff' },
+    { name: 'GLITCH DIMENSION', comp: GlitchDimension, accent: '#00ff88' },
+    { name: 'MOLECULAR NET', comp: MolecularNetwork, accent: '#00ffff' },
 ];
 
 export const SkiaEffectsInner: React.FC = () => {
