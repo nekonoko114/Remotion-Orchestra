@@ -1,4 +1,9 @@
 import React, { useMemo } from 'react';
+import { MORPHING_EFFECTS } from './SkiaCategoryMorphing';
+import { SHADER_EFFECTS } from './SkiaCategoryShader';
+import { PARTICLES_EFFECTS } from './SkiaCategoryParticles';
+import { BLEND_MASK_EFFECTS } from './SkiaCategoryBlendMask';
+import { TYPOGRAPHY_EFFECTS } from './SkiaCategoryTypography';
 import { useCurrentFrame, interpolate, useVideoConfig } from 'remotion';
 import { SkiaCanvas } from '@remotion/skia';
 import {
@@ -773,6 +778,11 @@ const EFFECTS = [
     { name: 'DATA STREAM', comp: DataStreamTunnel, accent: '#00ff00' },
     { name: 'NEON TRANSIT', comp: NeonTransit, accent: '#ff00ff' },
     { name: 'ABSTRACT FLOW', comp: AbstractFlow, accent: '#ffff00' },
+    ...MORPHING_EFFECTS,
+    ...SHADER_EFFECTS,
+    ...PARTICLES_EFFECTS,
+    ...BLEND_MASK_EFFECTS,
+    ...TYPOGRAPHY_EFFECTS,
 ];
 
 export const SkiaEffectsInner: React.FC = () => {
