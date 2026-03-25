@@ -104,7 +104,7 @@ const SoftMaskedGlow: React.FC = () => {
     const MaskShape = (
         <Group>
             <Rect x={width/2 - 300} y={height/2 - 400} width={600} height={800} color="black" />
-            <Circle cx={width/2} cy={height/2} r={250} color="black" /> // Combine
+            <Circle cx={width/2} cy={height/2} r={250} color="black" /> {/* Combine */}
         </Group>
     );
 
