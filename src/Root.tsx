@@ -53,6 +53,7 @@ import { SvgEffectsCatalog } from './compositions/VideoFactory/SvgEffectsCatalog
 import { SvgGraphicsCatalog } from './compositions/VideoFactory/SvgGraphicsCatalog';
 import { GsapEffectsCatalog } from './compositions/VideoFactory/GsapEffectsCatalog';
 import { KineticTypographyCatalog } from './compositions/VideoFactory/KineticTypographyCatalog';
+import { MvLyricTypographyCatalog } from './compositions/VideoFactory/MvLyricTypographyCatalog';
 import {
   JolBattleSpeedOrange,
   speedOrangeTheme,
@@ -869,6 +870,14 @@ export const RemotionRoot: React.FC = () => {
         durationInFrames={300}
         fps={30}
         width={1920}
+        height={1080}
+      />
+      <Composition
+        id="MV-LYRIC-TYPO-CATALOG"
+        component={MvLyricTypographyCatalog}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
         height={1080}
       />
     </>
