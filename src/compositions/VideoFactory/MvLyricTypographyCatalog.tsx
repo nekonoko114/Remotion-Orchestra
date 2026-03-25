@@ -485,7 +485,7 @@ const MvWhirl: React.FC = () => {
 // --- 28. MvHologram ---
 const MvHologram: React.FC = () => {
     const frame = useCurrentFrame();
-    const opacity = 0.5 + Math.random() * 0.5;
+    const opacity = 0.5 + Math.sin(frame * 0.5) * 0.5;
     return (
         <Wrapper>
             <div style={{ ...LYRIC_STYLE, color: '#00ffff', opacity, position: 'relative' }}>

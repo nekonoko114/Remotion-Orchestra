@@ -827,7 +827,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="ADVANCED-EFFECTS-SHOWCASE"
         component={AdvancedEffectsShowcase}
-        durationInFrames={300}
+        durationInFrames={990}
         fps={30}
         width={1080}
         height={1920}
@@ -867,7 +867,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="KINETIC-TYPO-CATALOG"
         component={KineticTypographyCatalog}
-        durationInFrames={300}
+        durationInFrames={900}
         fps={30}
         width={1920}
         height={1080}
@@ -875,7 +875,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="MV-LYRIC-TYPO-CATALOG"
         component={MvLyricTypographyCatalog}
-        durationInFrames={300}
+        durationInFrames={900}
         fps={30}
         width={1080}
         height={1080}
