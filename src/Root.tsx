@@ -884,7 +884,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="SKIA-EFFECTS-SHOWCASE"
         component={SkiaEffectsShowcase}
-        durationInFrames={900}
+        durationInFrames={1800}
         fps={30}
         width={1920}
         height={1080}
