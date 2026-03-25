@@ -437,6 +437,173 @@ const MolecularNetwork: React.FC = () => {
     );
 };
 
+// --- 16. Hyperspace Warp ---
+const HyperspaceWarp: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const count = 150;
+    const stars = useMemo(() => {
+        return [...Array(count)].map((_, i) => ({
+            angle: (i / count) * Math.PI * 2 + Math.random() * 0.1,
+            seed: Math.random() * 1000,
+        }));
+    }, [count]);
+
+    return (
+        <Group>
+            <Fill color="#000" />
+            {stars.map((star, i) => {
+                const speed = 15 + (i % 10);
+                const progress = ((frame * speed + star.seed) % 2000) / 2000;
+                const d = progress * Math.max(width, height);
+                const x1 = width / 2 + Math.cos(star.angle) * d;
+                const y1 = height / 2 + Math.sin(star.angle) * d;
+                const x2 = width / 2 + Math.cos(star.angle) * (d + progress * 200);
+                const y2 = height / 2 + Math.sin(star.angle) * (d + progress * 200);
+                return (
+                    <Path
+                        key={i}
+                        path={`M ${x1} ${y1} L ${x2} ${y2}`}
+                        color={`rgba(255, 255, 255, ${progress})`}
+                        style="stroke"
+                        strokeWidth={2 + progress * 4}
+                    >
+                        <Paint><Blur blur={10 * progress} /></Paint>
+                    </Path>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 17. Kinetic Waveform ---
+const KineticWaveform: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#020510" />
+            {[...Array(5)].map((_, j) => {
+                const path = useMemo(() => {
+                    const p = Skia.Path.Make();
+                    for (let x = 0; x <= width; x += 10) {
+                        const freq = 0.02 + j * 0.005;
+                        const amp = 100 + j * 40;
+                        const y = height / 2 + Math.sin(x * freq + frame * 0.2 + j) * amp;
+                        if (x === 0) p.moveTo(x, y); else p.lineTo(x, y);
+                    }
+                    return p;
+                }, [frame, width, height, j]);
+                return (
+                    <Path
+                        key={j}
+                        path={path}
+                        style="stroke"
+                        strokeWidth={4}
+                        color={`hsla(${(frame * 3 + j * 40) % 360}, 100%, 70%, 0.6)`}
+                    >
+                        <Paint><Blur blur={20} /></Paint>
+                    </Path>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 18. Techno Pulse Grid ---
+const TechnoPulseGrid: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const gridCount = 20;
+    return (
+        <Group>
+            <Fill color="#000" />
+            <Group origin={vec(width/2, height/2)} transform={[{skewX: 0.3}]}>
+                {[...Array(gridCount)].map((_, i) => {
+                    const x = (i / gridCount) * width;
+                    const brightness = Math.sin(frame * 0.3 + i * 0.5) * 0.5 + 0.5;
+                    return <Rect key={i} x={x} y={0} width={2} height={height} color={`rgba(0, 255, 255, ${brightness * 0.3})`} />;
+                })}
+                {[...Array(gridCount)].map((_, i) => {
+                    const y = ( (frame * 15 + i * (height/gridCount)) % (height + 100) ) - 50;
+                    return (
+                        <Rect key={i} x={0} y={y} width={width} height={4} color="#00ffff">
+                            <Paint><Blur blur={15} /></Paint>
+                        </Rect>
+                    );
+                })}
+            </Group>
+        </Group>
+    );
+};
+
+// --- 19. Lightning Burst ---
+const LightningBurst: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const lightning = useMemo(() => {
+        if (Math.random() > 0.1) return null;
+        const p = Skia.Path.Make();
+        let x = Math.random() * width;
+        let y = 0;
+        p.moveTo(x, y);
+        for (let i = 0; i < 15; i++) {
+            x += (Math.random() - 0.5) * 150;
+            y += Math.random() * (height / 10);
+            p.lineTo(x, y);
+        }
+        return p;
+    }, [frame, width, height]);
+
+    return (
+        <Group>
+            <Fill color="#050015" />
+            {lightning && (
+                <Group>
+                    <Path path={lightning} style="stroke" strokeWidth={15} color="#88aaff">
+                        <Paint><Blur blur={50} /></Paint>
+                    </Path>
+                    <Path path={lightning} style="stroke" strokeWidth={3} color="#ffffff" />
+                </Group>
+            )}
+            <Fill color={lightning ? "rgba(255,255,255,0.1)" : "transparent"} />
+        </Group>
+    );
+};
+
+// --- 20. Velocity Trails ---
+const VelocityTrails: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#0a0010" />
+            {[...Array(8)].map((_, i) => {
+                const xStep = width / 8;
+                const x = i * xStep + xStep / 2;
+                const speed = 15 + i * 5;
+                const y = (frame * speed) % (height + 600) - 300;
+                return (
+                    <Group key={i}>
+                        {[...Array(5)].map((__, j) => (
+                            <Rect
+                                key={j}
+                                x={x - 25}
+                                y={y - j * 40}
+                                width={50}
+                                height={20}
+                                color={`hsla(${(frame*5 + i*20) % 360}, 100%, 70%, ${1 - j * 0.2})`}
+                            >
+                                <Paint><Blur blur={j * 5 + 5} /></Paint>
+                            </Rect>
+                        ))}
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
+
 // --- Orchestrator ---
 const EFFECTS = [
     { name: 'NEON PULSE', comp: NeonPulse, accent: '#00ffff' },
@@ -454,6 +621,11 @@ const EFFECTS = [
     { name: 'SINGULARITY', comp: GravitationalSingularity, accent: '#00ffff' },
     { name: 'GLITCH DIMENSION', comp: GlitchDimension, accent: '#00ff88' },
     { name: 'MOLECULAR NET', comp: MolecularNetwork, accent: '#00ffff' },
+    { name: 'HYPERSPACE', comp: HyperspaceWarp, accent: '#ffffff' },
+    { name: 'KINETIC WAVE', comp: KineticWaveform, accent: '#00ffff' },
+    { name: 'TECHNO GRID', comp: TechnoPulseGrid, accent: '#00ffff' },
+    { name: 'LIGHTNING', comp: LightningBurst, accent: '#88aaff' },
+    { name: 'VELOCITY TRAILS', comp: VelocityTrails, accent: '#ff00ff' },
 ];
 
 export const SkiaEffectsInner: React.FC = () => {
