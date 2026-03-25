@@ -518,7 +518,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-PATTERN6"
         component={JolBattlePattern6}
         durationInFrames={915}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
@@ -568,7 +568,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-SPIRIT-SPRING"
         component={JolBattleSpringSakura}
         durationInFrames={JOL_SAKURA_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
@@ -642,7 +642,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-RESERVATION-BATTLE"
         component={JolBattleReservation}
         durationInFrames={860}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={ReservationBattleSchema}
@@ -689,7 +689,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-POPULARITY-BATTLE-3vs1"
         component={JolPopularityBattle3vs1}
         durationInFrames={1370}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={PopularityBattle3vs1Schema}
@@ -739,7 +739,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-POPULARITY-BATTLE-SAKURA-3vs1"
         component={JolPopularityBattleSakura3vs1}
         durationInFrames={975}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={PopularityBattleSakura3vs1Schema}
@@ -788,7 +788,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-Backgrounds"
         component={ShowcaseBackgrounds}
         durationInFrames={SHOWCASE_BG_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -796,7 +796,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-Effects-Ultimate-42"
         component={ShowcaseEffects}
         durationInFrames={SHOWCASE_FX_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -804,7 +804,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-Transitions"
         component={ShowcaseTransitions}
         durationInFrames={SHOWCASE_TRANS_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -812,7 +812,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-TextAndLayouts"
         component={ShowcaseTextLayouts}
         durationInFrames={SHOWCASE_TEXT_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -820,7 +820,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-Transitions-Ultimate-60"
         component={TransitionsCatalogShowcase}
         durationInFrames={TRANSITION_SHOWCASE_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -829,7 +829,7 @@ export const RemotionRoot: React.FC = () => {
         id="ADVANCED-EFFECTS-SHOWCASE"
         component={AdvancedEffectsShowcase}
         durationInFrames={990}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -837,7 +837,7 @@ export const RemotionRoot: React.FC = () => {
         id="SVG-EFFECTS-CATALOG"
         component={SvgEffectsCatalog}
         durationInFrames={300}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -845,7 +845,7 @@ export const RemotionRoot: React.FC = () => {
         id="CANVAS-EFFECTS-CATALOG"
         component={CanvasEffectsCatalog}
         durationInFrames={300}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -853,7 +853,7 @@ export const RemotionRoot: React.FC = () => {
         id="SVG-GRAPHICS-CATALOG"
         component={SvgGraphicsCatalog}
         durationInFrames={300}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -861,7 +861,7 @@ export const RemotionRoot: React.FC = () => {
         id="GSAP-EFFECTS-CATALOG"
         component={GsapEffectsCatalog}
         durationInFrames={300}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -869,7 +869,7 @@ export const RemotionRoot: React.FC = () => {
         id="KINETIC-TYPO-CATALOG"
         component={KineticTypographyCatalog}
         durationInFrames={900}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -877,15 +877,15 @@ export const RemotionRoot: React.FC = () => {
         id="MV-LYRIC-TYPO-CATALOG"
         component={MvLyricTypographyCatalog}
         durationInFrames={900}
-        fps={30}
+        fps={60}
         width={1080}
         height={1080}
       />
       <Composition
         id="SKIA-EFFECTS-SHOWCASE"
         component={SkiaEffectsShowcase}
-        durationInFrames={3600}
-        fps={30}
+        durationInFrames={4500}
+        fps={60}
         width={1080}
         height={1920}
       />

@@ -604,6 +604,148 @@ const VelocityTrails: React.FC = () => {
     );
 };
 
+// --- 21. Vortex Tunnel ---
+const VortexTunnel: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#000" />
+            {[...Array(20)].map((_, i) => {
+                const depth = ((i * 100 - frame * 5) % 2000 + 2000) % 2000;
+                const scale = (2000 - depth) / 2000;
+                const rotate = frame * 0.02 + i * 0.4;
+                const hue = (frame + i * 15) % 360;
+                return (
+                    <Group key={i} origin={vec(width/2, height/2)} transform={[{scale}, {rotate}]}>
+                        <Rect
+                            x={width/2 - 400} y={height/2 - 400} width={800} height={800}
+                            style="stroke" strokeWidth={10 / scale}
+                            color={`hsla(${hue}, 100%, 60%, ${scale})`}
+                        >
+                            <Paint><Blur blur={20} /></Paint>
+                        </Rect>
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 22. Hexagonal Corridor ---
+const HexagonalCorridor: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const path = useMemo(() => {
+        const p = Skia.Path.Make();
+        for (let i = 0; i < 6; i++) {
+            const angle = (i / 6) * Math.PI * 2 - Math.PI/2;
+            const x = Math.cos(angle) * 300;
+            const y = Math.sin(angle) * 300;
+            if (i === 0) p.moveTo(x, y); else p.lineTo(x, y);
+        }
+        p.close();
+        return p;
+    }, []);
+
+    return (
+        <Group>
+            <Fill color="#020010" />
+            {[...Array(15)].map((_, i) => {
+                const z = ((i * 150 - frame * 8) % 2250 + 2250) % 2250;
+                const scale = (2250 - z) / 2250;
+                const opacity = scale;
+                return (
+                    <Group key={i} transform={[{translate: [width/2, height/2]}, {scale}]}>
+                        <Path path={path} style="stroke" strokeWidth={5 / scale} color="#00ffff" opacity={opacity}>
+                            <Paint><Blur blur={10} /></Paint>
+                        </Path>
+                        <Path path={path} style="stroke" strokeWidth={1 / scale} color="#ffffff" opacity={opacity} />
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 23. Data Stream Tunnel ---
+const DataStreamTunnel: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#000" />
+            {[...Array(40)].map((_, i) => {
+                const seed = i * 73.1;
+                const angle = seed;
+                const d = 300;
+                const xBase = Math.cos(angle) * d;
+                const yBase = Math.sin(angle) * d;
+                const z = ((seed + frame * 15) % 3000) / 3000;
+                const scale = z * 2;
+                const opacity = z;
+                return (
+                    <Group key={i} transform={[{translate: [width/2 + xBase * z, height/2 + yBase * z]}, {scale}]}>
+                        <Rect x={-5} y={-20} width={10} height={40} color="#00ff00" opacity={opacity}>
+                            <Paint><Blur blur={5} /></Paint>
+                        </Rect>
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 24. Neon Transit ---
+const NeonTransit: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#050015" />
+            {[...Array(12)].map((_, i) => {
+                const progress = ((i * 150 - frame * 10) % 1800 + 1800) % 1800;
+                const scale = (1800 - progress) / 1800;
+                const r = 400;
+                return (
+                    <Group key={i} transform={[{translate: [width/2, height/2]}, {scale}]}>
+                        <Circle cx={0} cy={0} r={r} style="stroke" strokeWidth={8 / scale} color="#ff00ff">
+                            <Paint><Blur blur={25} /></Paint>
+                        </Circle>
+                        <Circle cx={0} cy={0} r={r} style="stroke" strokeWidth={2 / scale} color="#ffffff" />
+                    </Group>
+                );
+            })}
+            <Fill color="rgba(255,0,255,0.05)" />
+        </Group>
+    );
+};
+
+// --- 25. Abstract Flow ---
+const AbstractFlow: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#000" />
+            {[...Array(30)].map((_, i) => {
+                const seed = i * 19.3;
+                const z = ((seed + frame * 4) % 1000) / 1000;
+                const scale = z * 4;
+                const x = (Math.sin(seed) * 0.8) * width/2;
+                const y = (Math.cos(seed * 0.7) * 0.8) * height/2;
+                return (
+                    <Group key={i} transform={[{translate: [width/2 + x * z, height/2 + y * z]}, {scale}, {rotate: frame * 0.05 + i}]}>
+                        <Rect x={-25} y={-25} width={50} height={50} color={`hsla(${(frame + i * 20) % 360}, 100%, 70%, ${z})`}>
+                            <Paint><Blur blur={10} /></Paint>
+                        </Rect>
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
+
 // --- Orchestrator ---
 const EFFECTS = [
     { name: 'NEON PULSE', comp: NeonPulse, accent: '#00ffff' },
@@ -626,6 +768,11 @@ const EFFECTS = [
     { name: 'TECHNO GRID', comp: TechnoPulseGrid, accent: '#00ffff' },
     { name: 'LIGHTNING', comp: LightningBurst, accent: '#88aaff' },
     { name: 'VELOCITY TRAILS', comp: VelocityTrails, accent: '#ff00ff' },
+    { name: 'VORTEX TUNNEL', comp: VortexTunnel, accent: '#00ffff' },
+    { name: 'HEX CORRIDOR', comp: HexagonalCorridor, accent: '#ffffff' },
+    { name: 'DATA STREAM', comp: DataStreamTunnel, accent: '#00ff00' },
+    { name: 'NEON TRANSIT', comp: NeonTransit, accent: '#ff00ff' },
+    { name: 'ABSTRACT FLOW', comp: AbstractFlow, accent: '#ffff00' },
 ];
 
 export const SkiaEffectsInner: React.FC = () => {
