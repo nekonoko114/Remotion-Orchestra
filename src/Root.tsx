@@ -47,6 +47,10 @@ import {
   magicTheme,
   JOL_MAGIC_DURATION,
 } from './compositions/VideoFactory/JolBattleSpiritMagic';
+import { AdvancedEffectsShowcase } from './compositions/VideoFactory/AdvancedEffectsShowcase';
+import { SvgEffectsCatalog } from './compositions/VideoFactory/SvgEffectsCatalog';
+import { SvgGraphicsCatalog } from './compositions/VideoFactory/SvgGraphicsCatalog';
+import { CanvasEffectsCatalog } from './compositions/VideoFactory/CanvasEffectsCatalog';
 import {
   JolBattleSpeedOrange,
   speedOrangeTheme,
@@ -817,6 +821,48 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
       />
       <AssetPanel />
+      <Composition
+        id="ADVANCED-EFFECTS-SHOWCASE"
+        component={AdvancedEffectsShowcase}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="SVG-EFFECTS-CATALOG"
+        component={SvgEffectsCatalog}
+        durationInFrames={300}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="CANVAS-EFFECTS-CATALOG"
+        component={CanvasEffectsCatalog}
+        durationInFrames={300}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="SVG-GRAPHICS-CATALOG"
+        component={SvgGraphicsCatalog}
+        durationInFrames={300}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="GSAP-EFFECTS-CATALOG"
+        component={GsapEffectsCatalog}
+        durationInFrames={300}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
     </>
   );
 };
+
+import { GsapEffectsCatalog } from './compositions/VideoFactory/GsapEffectsCatalog';

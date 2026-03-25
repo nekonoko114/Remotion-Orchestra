@@ -337,8 +337,8 @@ const Scene_BattleSplit: React.FC<{ livers: Props['livers'] }> = ({ livers }) =>
       </div>
 
       {/* 中央にVS */}
-      <div style={{ position: 'absolute', top: '55%', left: '50%', transform: `translate(-50%, -50%)`, width: '100%', textAlign: 'center', zIndex: 100 }}>
-        <PinkNeonText text="V S" frame={frame - 60} fontSize={220} />
+      <div style={{ position: 'absolute', top: '46%', left: '50%', transform: `translate(-50%, -50%)`, width: '100%', textAlign: 'center', zIndex: 100 }}>
+        <PinkNeonText text="V S" frame={frame - 60} fontSize={190} />
       </div>
     </AbsoluteFill>
   );
