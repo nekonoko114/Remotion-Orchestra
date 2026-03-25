@@ -448,7 +448,6 @@ const BouncingList: React.FC = () => {
 
 // --- Pattern 25: Rough Flicker ---
 const RoughFlicker: React.FC = () => {
-    const frame = useCurrentFrame();
     const opacity = Math.random() > 0.7 ? 1 : 0.2;
     return (
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#111', borderRadius: 20, margin: 5 }}>
@@ -802,7 +801,7 @@ export const KineticTypographyCatalog: React.FC = () => {
             <TextParticles />
             <VibrateText />
             <LiquidText />
-            <Staircase Stagger={true} />
+            <StaircaseStagger />
             <Orbit3D />
             <CharacterSwap />
             <NeonPulse />
