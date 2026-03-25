@@ -362,7 +362,7 @@ const Scene_Logo: React.FC = () => {
     <AbsoluteFill style={{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
       <AbsoluteFill style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
       <Img 
-        src={staticFile('assets/images-01/jol-logo.png')} 
+        src={staticFile('jol-logo-800.png')} 
         style={{ width: 800, opacity, transform: `scale(${scale})` }} 
       />
     </AbsoluteFill>
