@@ -5,13 +5,59 @@ import {
   useCurrentFrame,
   useVideoConfig,
   interpolate,
+  spring,
   Img,
   staticFile,
   Video,
   Audio,
 } from 'remotion';
 import { z } from 'zod';
-import { ElegantBokehText } from './components/BattleShared/BattleSharedComponents';
+
+// ピンク色のネオン輝きテキストコンポーネント (金色から変更)
+const PinkNeonText: React.FC<{ text: string; frame: number; fontSize: number; }> = ({ text, fontSize }) => {
+  return (
+    <h2 style={{
+      color: '#fff',
+      margin: 0,
+      fontSize,
+      fontFamily: '"Mochiy Pop One", sans-serif',
+      // ピンク〜マゼンタ系の強力なネオン発光シャドウ
+      textShadow: `
+        0 0 10px #ffb3d9,
+        0 0 20px #ff66b2,
+        0 0 40px #ff1493,
+        0 0 80px #ff007f,
+        0 0 120px #ff007f
+      `,
+      textAlign: 'center'
+    }}>
+      {text}
+    </h2>
+  );
+};
+
+// 青色のネオン輝きテキストコンポーネント (takaさん等のブルー系シーン用)
+const BlueNeonText: React.FC<{ text: string; frame: number; fontSize: number; }> = ({ text, fontSize }) => {
+  return (
+    <h2 style={{
+      color: '#fff',
+      margin: 0,
+      fontSize,
+      fontFamily: '"Mochiy Pop One", sans-serif',
+      // シアン〜ブルー系の強力なネオン発光シャドウ
+      textShadow: `
+        0 0 10px #b3e6ff,
+        0 0 20px #66ccff,
+        0 0 40px #0099ff,
+        0 0 80px #0055ff,
+        0 0 120px #0055ff
+      `,
+      textAlign: 'center'
+    }}>
+      {text}
+    </h2>
+  );
+};
 
 export const PopularityBattle3vs1Schema = z.object({
   themeColor: z.string(),
@@ -57,24 +103,39 @@ const Scene_Opening: React.FC<{ dateInfo: Props['dateInfo'] }> = ({ dateInfo }) 
   const timeOpacity = interpolate(frame - 60, [0, 30], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
   return (
-    <AbsoluteFill style={{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', opacity: globalOpacity }}>
-      {/* 少し暗めの幕をかけて文字を見やすくする */}
-      <AbsoluteFill style={{ backgroundColor: 'rgba(0, 5, 20, 0.4)' }} />
+    <AbsoluteFill style={{ backgroundColor: 'transparent', justifyContent: 'start', alignItems: 'center', opacity: globalOpacity }}>
+      {/* ユーザーご提案のラインモーションハート背景動画：黒を抜いてメイン背景（星空等）にスクリーン合成 */}
+      <Video 
+        src={staticFile('assets/pixabay/videos/pixabay_hearts_line_motion_heart_motion_love_motion_love_h_151653.mp4')} 
+        style={{ 
+          position: 'absolute', 
+          width: '100%', height: '100%', 
+          objectFit: 'cover', 
+          objectPosition: '20% center', // 左側のハートが描画される部分を画面の中央に持ってくる
+          transform: 'scale(1.5)',      // 見やすく迫力を出すためにスケールアップ
+          mixBlendMode: 'screen', 
+          // CSSフィルターマジック：元の白や黄色の光を「強力なネオンピンク」に強制変換する
+          filter: 'sepia(100%) hue-rotate(290deg) saturate(300%) brightness(1.5)', 
+          opacity: 0.3 
+        }} 
+      />
+      {/* 文字を際立たせるための少し紫・ピンクがかったロマンチックな暗幕 */}
+      <AbsoluteFill style={{ backgroundColor: 'rgba(30, 0, 20, 0.4)' }} />
       
       {/* 豪華で優しいオープニングテキスト */}
-      <div style={{ position: 'absolute', top: '20%', transform: `scale(${titleScale})`, opacity: titleOpacity, filter: `blur(${titleBlur}px)` }}>
-        <ElegantBokehText text="人気アップバトル" frame={frame} fontSize={120} />
+      <div style={{ position: 'absolute', top: '30%', transform: `scale(${titleScale})`, opacity: titleOpacity, filter: `blur(${titleBlur}px)`, width: '100%', height: '40%', textAlign: 'center' }}>
+        <PinkNeonText text="人気アップバトル" frame={frame} fontSize={100} />
       </div>
 
       <div style={{ position: 'absolute', top: '45%', transform: `scale(${dateScale})`, opacity: dateOpacity, width: '100%', textAlign: 'center' }}>
-        <ElegantBokehText text={dateInfo.year} frame={frame - 30} fontSize={160} />
+        <PinkNeonText text={dateInfo.year} frame={frame - 30} fontSize={160} />
       </div>
 
       <div style={{ position: 'absolute', top: '70%', width: '100%', textAlign: 'center', opacity: timeOpacity }}>
-        <h2 style={{ color: '#fff', fontSize: 130, margin: 0, textShadow: '0 0 30px rgba(255,255,255,0.8), 0 0 50px rgba(255,200,200,0.5)', fontFamily: '"Mochiy Pop One", sans-serif' }}>
+        <h2 style={{ color: '#fff', fontSize: 150, margin: 0, textShadow: '0 0 30px rgba(255,255,255,0.8), 0 0 50px rgba(255,200,200,0.5)', fontFamily: '"Mochiy Pop One", sans-serif' }}>
           {dateInfo.time || dateInfo.date}
         </h2>
-        <h3 style={{ color: '#ffb3c6', fontSize: 80, margin: 0, marginTop: 20, textShadow: '0 0 20px #ffb3c6', fontFamily: '"Mochiy Pop One", sans-serif' }}>START</h3>
+        <h3 style={{ color: '#ffb3c6', fontSize: 130, margin: 0, marginTop: 20, textShadow: '0 0 20px #ffb3c6', fontFamily: '"Mochiy Pop One", sans-serif' }}>START</h3>
       </div>
     </AbsoluteFill>
   );
@@ -95,7 +156,7 @@ const Scene_ThreeLivers: React.FC<{ livers: Props['livers'] }> = ({ livers }) =>
       
       {/* 中央: 優しいテキスト */}
       <div style={{ position: 'absolute', top: '15%', width: '100%', textAlign: 'center' }}>
-        <ElegantBokehText text="J.O.L LIVER" frame={frame} fontSize={120} />
+        <PinkNeonText text="J.O.L LIVER" frame={frame} fontSize={120} />
       </div>
 
       {/* 3名の画像と直下の名前 */}
@@ -158,21 +219,21 @@ const Scene_SingleLiver: React.FC<{ liver: Props['livers'][0] }> = ({ liver }) =
         filter: `blur(${itemBlur}px)`,
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 60 
       }}>
-        {/* つれトラさん等、相手の枠も優しく */}
+        {/* takaさん等、相手の枠をネオンブルーで表示 */}
         <div style={{ position: 'relative' }}>
           <div style={{
             position: 'absolute', top: -20, left: -20, right: -20, bottom: -20,
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(200, 100, 255, 0.4) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, transparent 70%)',
             animation: 'spin 10s linear infinite',
           }} />
           <Img src={staticFile(liver.image)} style={{ 
             width: 600, height: 600, borderRadius: '50%', objectFit: 'cover', 
-            border: '12px solid rgba(255, 200, 255, 0.8)', 
-            boxShadow: '0 0 100px rgba(200, 100, 255, 0.6)' 
+            border: '12px solid rgba(150, 230, 255, 0.8)', 
+            boxShadow: '0 0 100px rgba(0, 200, 255, 0.6)' 
           }} />
         </div>
-        <h1 style={{ color: '#fff', fontSize: 100, margin: 0, textShadow: '0 0 30px rgba(200,100,255,0.8), 0 5px 15px rgba(0,0,0,0.5)', fontFamily: '"Mochiy Pop One", sans-serif' }}>
+        <h1 style={{ color: '#fff', fontSize: 100, margin: 0, textShadow: '0 0 30px rgba(0,200,255,0.8), 0 5px 15px rgba(0,0,0,0.5)', fontFamily: '"Mochiy Pop One", sans-serif' }}>
           {liver.name}
         </h1>
       </div>
@@ -220,7 +281,7 @@ const Scene_BattleSplit: React.FC<{ livers: Props['livers'] }> = ({ livers }) =>
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%)', filter: 'blur(20px)' }} />
         </AbsoluteFill>
-        <ElegantBokehText text="V S" frame={frame - 60} fontSize={180} />
+        <PinkNeonText text="V S" frame={frame - 60} fontSize={180} />
       </div>
     </AbsoluteFill>
   );
@@ -238,7 +299,7 @@ const Scene_Rules: React.FC<{ rules: string[] }> = ({ rules }) => {
     <AbsoluteFill style={{ backgroundColor: 'rgba(0,0,0,0.2)', padding: '50px', justifyContent: 'center', alignItems: 'center', opacity: sceneOpacity }}>
       <div style={{ transform: `scale(${scale})`, display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
         <div style={{ marginBottom: 60 }}>
-          <ElegantBokehText text="R U L E" frame={frame} fontSize={120} />
+          <PinkNeonText text="R U L E" frame={frame} fontSize={120} />
         </div>
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: 50, width: '80%' }}>
@@ -270,7 +331,10 @@ const Scene_Rules: React.FC<{ rules: string[] }> = ({ rules }) => {
 // 📌 Scene 5: エンディングメッセージ (150fr)
 const Scene_Ending: React.FC<{ message: string }> = ({ message }) => {
   const frame = useCurrentFrame();
-  const [line1, line2] = message.split('\n');
+  
+  // ユーザーが \n で意図した改行をすべて取得
+  // （エスケープミス「\見」などはRoot.tsx側で直すか、このまま1行として扱う）
+  const lines = message.split('\n');
 
   const sceneOpacity = interpolate(frame, [0, 30, 120, 150], [0, 1, 1, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
   const scale = interpolate(frame, [0, 150], [0.95, 1.05], { extrapolateRight: 'clamp' });
@@ -278,13 +342,11 @@ const Scene_Ending: React.FC<{ message: string }> = ({ message }) => {
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', opacity: sceneOpacity }}>
       <AbsoluteFill style={{ backgroundColor: 'rgba(0, 10, 30, 0.4)' }} />
-      <div style={{ transform: `scale(${scale})`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <ElegantBokehText text={line1 || ''} frame={frame} fontSize={80} />
-        {line2 && (
-          <div style={{ marginTop: 40 }}>
-            <ElegantBokehText text={line2} frame={frame - 20} fontSize={110} />
-          </div>
-        )}
+      <div style={{ transform: `scale(${scale})`, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 40, width: '90%' }}>
+        {lines.map((lineText, i) => (
+          // 画面に収まるよう fontSize を 65 に統一。少しずつ遅れてアニメーションさせる
+          <PinkNeonText key={i} text={lineText} frame={frame - i * 15} fontSize={70} />
+        ))}
       </div>
     </AbsoluteFill>
   );
@@ -346,9 +408,9 @@ const Scene_TakaMain: React.FC<{ liver: Props['livers'][0] }> = ({ liver }) => {
           }} />
         </div>
         
-        {/* 名前 */}
+        {/* 名前 (ネオンブルー) */}
         <div style={{ transform: `translateY(${interpolate(frame, [0, 40], [50, 0], { extrapolateRight: 'clamp'})}px)` }}>
-          <ElegantBokehText text={liver.name} frame={frame} fontSize={130} />
+          <BlueNeonText text={liver.name} frame={frame} fontSize={130} />
         </div>
       </div>
     </AbsoluteFill>
@@ -448,18 +510,25 @@ const Scene_SakuraMain: React.FC<{ images: string[] }> = ({ images }) => {
               }}
             />
 
-            {/* 下から浮き上がってくる名前の演出 */}
-            <div style={{ 
-              position: 'absolute', 
-              bottom: '12%',
-              transform: `translateY(${interpolate(relativeFrame, [0, 40], [50, 0], { extrapolateRight: 'clamp'})}px)`,
-              zIndex: 20
-            }}>
-              <ElegantBokehText text="🌸さくら🌸" frame={relativeFrame} fontSize={130} />
-            </div>
+            {/* （名前の演出はここから削除して外側へ） */}
           </AbsoluteFill>
         );
       })}
+
+      {/* 下から浮き上がってくる名前の演出（画像が切り替わってもリセットされず、ずっと表示し続ける） */}
+      <div style={{ 
+        position: 'absolute', 
+        bottom: '12%',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        // シーン(450fr)開始時に40frかけて浮き上がり、そのまま固定
+        transform: `translateY(${interpolate(frame, [0, 40], [50, 0], { extrapolateRight: 'clamp'})}px)`,
+        zIndex: 20
+      }}>
+        <PinkNeonText text="🌸さくら🌸" frame={frame} fontSize={130} />
+      </div>
+
     </AbsoluteFill>
   );
 };
@@ -519,7 +588,7 @@ export const JolPopularityBattle3vs1: React.FC<Props> = (props) => {
       )}
 
       <Sequence from={0} durationInFrames={300}>
-        <Scene_Opening dateInfo={props.dateInfo} />
+        <Scene_Opening dateInfo={props.dateInfo} mainImage={props.sakuraImages?.[0]} />
       </Sequence>
 
       {/* さくらさんシーンを 450フレームに延長 (約15秒) */}

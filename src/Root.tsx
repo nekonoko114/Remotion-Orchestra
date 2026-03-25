@@ -61,17 +61,24 @@ import {
   JOL_SAKURA_DURATION,
 } from './compositions/VideoFactory/JolBattleSpringSakura';
 import { JolBattlePattern6 } from './compositions/VideoFactory/JolBattlePattern6';
-import { JolBattleReservation, ReservationBattleSchema } from './compositions/VideoFactory/JolBattleReservation';
+import {
+  JolBattleReservation,
+  ReservationBattleSchema,
+} from './compositions/VideoFactory/JolBattleReservation';
 
 import {
   JolPopularityBattle3vs1,
-  PopularityBattle3vs1Schema
+  PopularityBattle3vs1Schema,
 } from './compositions/VideoFactory/JolPopularityBattle3vs1';
 import {
-  ShowcaseBackgrounds, SHOWCASE_BG_DURATION,
-  ShowcaseEffects, SHOWCASE_FX_DURATION,
-  ShowcaseTransitions, SHOWCASE_TRANS_DURATION,
-  ShowcaseTextLayouts, SHOWCASE_TEXT_DURATION,
+  ShowcaseBackgrounds,
+  SHOWCASE_BG_DURATION,
+  ShowcaseEffects,
+  SHOWCASE_FX_DURATION,
+  ShowcaseTransitions,
+  SHOWCASE_TRANS_DURATION,
+  ShowcaseTextLayouts,
+  SHOWCASE_TEXT_DURATION,
 } from './compositions/VideoFactory/ReusableComponentsShowcase';
 import {
   TransitionsCatalogShowcase,
@@ -459,15 +466,19 @@ export const RemotionRoot: React.FC = () => {
             ending: 120,
             logo: 90,
           },
-          openingText: ['予約バトル', '決まりました！', 'みんな<br/>応援してね❤️'],
+          openingText: [
+            '予約バトル',
+            '決まりました！',
+            'みんな<br/>応援してね❤️',
+          ],
           dateText: ['2026年<br/>3月28日', 'SATURDAY', '22時30分', 'START!'],
-          rulesText: ['【ルール】','グローブ2', 'アイテム他なし', '一本勝負'],
+          rulesText: ['【ルール】', 'グローブ2', 'アイテム他なし', '一本勝負'],
           endingText: '初予約バトルー！<br/>いつもの<br/>なるりれらしく',
           reverseVsOrder: true,
           opponent: {
             name: '🐄モゥーミルク🍼🐃',
             image: 'assets/images-01/user1817765055425.jpeg',
-            borderColor: '#aed581', 
+            borderColor: '#aed581',
             glowColor: '#7cb342',
           },
           liver: {
@@ -486,7 +497,8 @@ export const RemotionRoot: React.FC = () => {
             useSpinIntro: true,
             useCircleLiver: true,
           },
-          customBackground: 'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
+          customBackground:
+            'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
           opponentBackground: 'assets/images-01/meadow_animals_bg.png',
         }}
       />
@@ -498,44 +510,47 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
-        defaultProps={{
-          themeColor: '#ff0055',
-          glowColor: '#ffaa00',
-          textStroke: '3px #880000',
-          textAnimation: 'kinetic',
-          particleColor1: '#ffffff',
-          particleColor2: '#ffdd00',
-          music: {
-            src: 'assets/audio/music/Blastwave.mp3',
-            startFrom: 0,
-            volume: 0.6,
-            bpm: 120,
-          },
-          features: {
-            useGlitch: true,
-            useMirror: false,
-            useDoublingGrid: false,
-            useGridConvergence: false,
-            useSpinIntro: false,
-            useMetallicVs: true,
-            hideVsFocusLines: true,
-            colorizeVsVideo: true,
-          },
-          customVsVideo: 'assets/pixabay/videos/pixabay_fire_burning_explosion_big_bang_abstract_backgroun_12910.mp4',
-          liver: {
-            name: "限界突破まみ🎽",
-            image: "assets/images-01/ooo93o.jpeg",
-            borderColor: '#ffaa00',
-            glowColor: '#ff2200',
-          },
-          opponent: {
-            name: "🔆≒ユージン≒🔆",
-            image: "assets/images-01/l5332541.jpeg",
-            borderColor: '#00ccff',
-            glowColor: '#0055ff',
-          },
-          endingText: "Thank you for watching!",
-        } as any}
+        defaultProps={
+          {
+            themeColor: '#ff0055',
+            glowColor: '#ffaa00',
+            textStroke: '3px #880000',
+            textAnimation: 'kinetic',
+            particleColor1: '#ffffff',
+            particleColor2: '#ffdd00',
+            music: {
+              src: 'assets/audio/music/Blastwave.mp3',
+              startFrom: 0,
+              volume: 0.6,
+              bpm: 120,
+            },
+            features: {
+              useGlitch: true,
+              useMirror: false,
+              useDoublingGrid: false,
+              useGridConvergence: false,
+              useSpinIntro: false,
+              useMetallicVs: true,
+              hideVsFocusLines: true,
+              colorizeVsVideo: true,
+            },
+            customVsVideo:
+              'assets/pixabay/videos/pixabay_fire_burning_explosion_big_bang_abstract_backgroun_12910.mp4',
+            liver: {
+              name: '限界突破まみ🎽',
+              image: 'assets/images-01/ooo93o.jpeg',
+              borderColor: '#ffaa00',
+              glowColor: '#ff2200',
+            },
+            opponent: {
+              name: '🔆≒ユージン≒🔆',
+              image: 'assets/images-01/l5332541.jpeg',
+              borderColor: '#00ccff',
+              glowColor: '#0055ff',
+            },
+            endingText: 'Thank you for watching!',
+          } as any
+        }
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-SPRING"
@@ -569,15 +584,19 @@ export const RemotionRoot: React.FC = () => {
             ending: 120,
             logo: 90,
           },
-          openingText: ['予約バトル', '決まりました！', 'みんな<br/>応援してね❤️'],
+          openingText: [
+            '予約バトル',
+            '決まりました！',
+            'みんな<br/>応援してね❤️',
+          ],
           dateText: ['2026年<br/>3月28日', 'SATURDAY', '22時30分', 'START!'],
-          rulesText: ['【ルール】','グローブ2', 'アイテム他なし', '一本勝負'],
+          rulesText: ['【ルール】', 'グローブ2', 'アイテム他なし', '一本勝負'],
           endingText: '初予約バトルー！<br/>いつもの<br/>なるりれらしく',
           reverseVsOrder: true,
           opponent: {
             name: '🐄モゥーミルク🍼🐃',
             image: 'assets/images-01/user1817765055425.jpeg',
-            borderColor: '#aed581', 
+            borderColor: '#aed581',
             glowColor: '#7cb342',
           },
           liver: {
@@ -601,12 +620,12 @@ export const RemotionRoot: React.FC = () => {
             useCircleLiver: true,
             hideDefaultParticles: true,
           },
-          customBackground: 'assets/pixabay/videos/pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769.mp4',
+          customBackground:
+            'assets/pixabay/videos/pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769.mp4',
           opponentBackground: 'assets/images-01/meadow_animals_bg.png',
           fontFamily: '"Mochiy Pop One", sans-serif',
         }}
       />
-      
       <Composition
         id="JOL-RESERVATION-BATTLE"
         component={JolBattleReservation}
@@ -619,24 +638,40 @@ export const RemotionRoot: React.FC = () => {
           themeColor: '#ff2200',
           music: 'assets/audio/music/Velocity-Shift.mp3',
           livers: [
-            { id: '1', name: '🍦taka🍦', image: 'assets/images-01/taka19427.png', borderColor: '#ffaa00' },
-            { id: '2', name: '🌸さくら🌸', image: 'assets/images-01/l5332541.jpeg', borderColor: '#00ccff' },
-            { id: '3', name: '🌹夢一輪🌹', image: 'assets/images-01/zzz5557zzz.png', borderColor: '#ff00ff' },
-            { id: '4', name: 'つれトラ🍭💟', image: 'assets/images-01/tsuregumi1228.jpg', borderColor: '#00ffaa' },
+            {
+              id: '1',
+              name: '🍦taka🍦',
+              image: 'assets/images-01/taka19427.png',
+              borderColor: '#ffaa00',
+            },
+            {
+              id: '2',
+              name: '🌸さくら🌸',
+              image: 'assets/images-01/l5332541.jpeg',
+              borderColor: '#00ccff',
+            },
+            {
+              id: '3',
+              name: '🌹夢一輪🌹',
+              image: 'assets/images-01/zzz5557zzz.png',
+              borderColor: '#ff00ff',
+            },
+            {
+              id: '4',
+              name: 'つれトラ🍭💟',
+              image: 'assets/images-01/tsuregumi1228.jpg',
+              borderColor: '#00ffaa',
+            },
           ],
           dateInfo: {
             year: '2026年',
             date: '4月1日',
-            time: '22:00'
+            time: '22:00',
           },
-          rules: [
-            'ルール1：アイテム無し',
-            'ルール2：1発勝負',
-          ],
-          finalMessage: '人気No.1の座を勝ち取るぞ✊'
+          rules: ['ルール1：アイテム無し', 'ルール2：1発勝負'],
+          finalMessage: '人気No.1の座を勝ち取るぞ✊',
         }}
       />
-
       {/* 人気アップバトル 3 VS 1 */}
       <Composition
         id="JOL-POPULARITY-BATTLE-3vs1"
@@ -648,37 +683,85 @@ export const RemotionRoot: React.FC = () => {
         schema={PopularityBattle3vs1Schema}
         defaultProps={{
           themeColor: '#00ccff',
-          customBackground: 'assets/pixabay/videos/pixabay_butterfly_crystal_ball_mystery_fantasy_169817.mp4',
+          customBackground:
+            'assets/pixabay/videos/pixabay_butterfly_crystal_ball_mystery_fantasy_169817.mp4',
           music: 'assets/audio/music/やさしい愛.mp3',
           livers: [
-            { id: '1', name: '🍦taka🍦', image: 'assets/images-01/taka19427.png', borderColor: '#00ccff' },
-            { id: '2', name: '🌸さくら🌸', image: 'assets/images-01/l5332541.jpeg', borderColor: '#ffb3c6' },
-            { id: '3', name: '🌹夢一輪🌹', image: 'assets/images-01/zzz5557zzz.png', borderColor: '#00ccff' },
-            { id: '4', name: 'つれトラ🍭💟', image: 'assets/images-01/tsuregumi1228.jpg', borderColor: '#ff0055' },
+            {
+              id: '1',
+              name: '🍦taka🍦',
+              image: 'assets/images-01/taka19427.png',
+              borderColor: '#00ccff',
+            },
+            {
+              id: '2',
+              name: '🌸さくら🌸',
+              image: 'assets/images-01/l5332541.jpeg',
+              borderColor: '#ffb3c6',
+            },
+            {
+              id: '3',
+              name: '🌹夢一輪🌹',
+              image: 'assets/images-01/zzz5557zzz.png',
+              borderColor: '#00ccff',
+            },
+            {
+              id: '4',
+              name: 'つれトラ🍭💟',
+              image: 'assets/images-01/tsuregumi1228.jpg',
+              borderColor: '#ff00ff',
+            },
           ],
           sakuraImages: [
             'assets/images-01/l5332541.jpeg',
             'assets/images-01/l5332541-02.png',
             'assets/images-01/l5332541-01.png',
           ],
-          dateInfo: {
-            year: '2026.04.01',
-            date: '2026.04.01', // 未使用でも一応エラー回避のため入れておく
-            time: '22:00',
-          },
-          rules: [
-            'ルール1：アイテム無し',
-            'ルール2：1発勝負',
-          ],
+          dateInfo: { year: '2026.04.01', date: '2026.04.01', time: '22:00' },
+          rules: ['ルール1：アイテム無し', 'ルール2：1発勝負'],
           finalMessage: 'さくら組が人気1番の\n実力を見せつけようね',
         }}
       />
-
-      <Composition id="Catalog-Backgrounds" component={ShowcaseBackgrounds} durationInFrames={SHOWCASE_BG_DURATION} fps={30} width={1080} height={1920} />
-      <Composition id="Catalog-Effects-Ultimate-42" component={ShowcaseEffects} durationInFrames={SHOWCASE_FX_DURATION} fps={30} width={1080} height={1920} />
-      <Composition id="Catalog-Transitions" component={ShowcaseTransitions} durationInFrames={SHOWCASE_TRANS_DURATION} fps={30} width={1080} height={1920} />
-      <Composition id="Catalog-TextAndLayouts" component={ShowcaseTextLayouts} durationInFrames={SHOWCASE_TEXT_DURATION} fps={30} width={1080} height={1920} />
-      <Composition id="Catalog-Transitions-Ultimate-60" component={TransitionsCatalogShowcase} durationInFrames={TRANSITION_SHOWCASE_DURATION} fps={30} width={1080} height={1920} />
+      <Composition
+        id="Catalog-Backgrounds"
+        component={ShowcaseBackgrounds}
+        durationInFrames={SHOWCASE_BG_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="Catalog-Effects-Ultimate-42"
+        component={ShowcaseEffects}
+        durationInFrames={SHOWCASE_FX_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="Catalog-Transitions"
+        component={ShowcaseTransitions}
+        durationInFrames={SHOWCASE_TRANS_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="Catalog-TextAndLayouts"
+        component={ShowcaseTextLayouts}
+        durationInFrames={SHOWCASE_TEXT_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="Catalog-Transitions-Ultimate-60"
+        component={TransitionsCatalogShowcase}
+        durationInFrames={TRANSITION_SHOWCASE_DURATION}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
       <AssetPanel />
     </>
   );
