@@ -677,7 +677,7 @@ const DecorationPopuler: React.FC = () => {
         }}
       />
       <Img 
-        src={staticFile('assets/images/popurer-super.png')}
+        src={staticFile('assets/images/pupuler-up-super.png')}
         style={{
           position: 'absolute', bottom: 200, right: 50, width: 500,
           // スプリング（少し遅らせて出すなどの工夫も良いが、今回は同タイミングで力強く！）

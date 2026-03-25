@@ -662,7 +662,7 @@ export const RemotionRoot: React.FC = () => {
             },
             {
               id: '4',
-              name: 'つれトラ🍭💟',
+              name: 'つれぐみ🍭💟',
               image: 'assets/images-01/tsuregumi1228.jpg',
               borderColor: '#00ffaa',
             },
@@ -680,7 +680,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-POPULARITY-BATTLE-3vs1"
         component={JolPopularityBattle3vs1}
-        durationInFrames={1670}
+        durationInFrames={1370}
         fps={30}
         width={1080}
         height={1920}
@@ -711,7 +711,7 @@ export const RemotionRoot: React.FC = () => {
             },
             {
               id: '4',
-              name: 'つれトラ🍭💟',
+              name: 'つれぐみ🍭💟',
               image: 'assets/images-01/tsuregumi1228.jpg',
               borderColor: '#ff00ff',
             },
@@ -761,7 +761,7 @@ export const RemotionRoot: React.FC = () => {
             },
             {
               id: '4',
-              name: 'つれトラ🍭💟',
+              name: 'つれぐみ🍭💟',
               image: 'assets/images-01/tsuregumi1228.jpg',
               borderColor: '#ff00ff',
             },

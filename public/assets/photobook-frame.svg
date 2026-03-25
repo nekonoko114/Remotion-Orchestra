@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="100%" height="100%">
+  <defs>
+    <!-- Leathery texture pattern or gradient -->
+    <radialGradient id="cover-grad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#3a2318"/>
+      <stop offset="100%" stop-color="#1c110b"/>
+    </radialGradient>
+    
+    <!-- Page gradient for 3D curve -->
+    <linearGradient id="page-left" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fdfdfd"/>
+      <stop offset="85%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#c0c0c0"/> <!-- Spine crease shadow -->
+    </linearGradient>
+
+    <linearGradient id="page-right" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c0c0c0"/> <!-- Spine crease shadow -->
+      <stop offset="15%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#fdfdfd"/>
+    </linearGradient>
+
+    <!-- Spine shadow deep crease -->
+    <linearGradient id="spine-shadow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(0,0,0,0)"/>
+      <stop offset="45%" stop-color="rgba(0,0,0,0.6)"/>
+      <stop offset="50%" stop-color="rgba(0,0,0,0.9)"/>
+      <stop offset="55%" stop-color="rgba(0,0,0,0.6)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </linearGradient>
+    
+    <!-- Drop shadow for the whole book -->
+    <filter id="drop-shadow" x="-5%" y="-5%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="25" stdDeviation="20" flood-color="#000" flood-opacity="0.8"/>
+    </filter>
+    
+    <!-- Page stack shadow -->
+    <filter id="page-shadow" x="-2%" y="-2%" width="104%" height="104%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Cover -->
+  <rect x="40" y="40" width="920" height="620" rx="15" ry="15" fill="url(#cover-grad)" filter="url(#drop-shadow)"/>
+  
+  <!-- Spine outer stitching / groove -->
+  <rect x="475" y="40" width="50" height="620" fill="rgba(0,0,0,0.4)"/>
+  <line x1="475" y1="40" x2="475" y2="660" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
+  <line x1="525" y1="40" x2="525" y2="660" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
+
+  <!-- Left Page Stack (simulating thickness of earlier pages) -->
+  <path d="M 60 75 L 495 75 L 495 625 L 60 625 Z" fill="#d0d0d0" />
+  <path d="M 65 70 L 495 70 L 495 630 L 65 630 Z" fill="#e5e5e5" />
+  
+  <!-- Right Page Stack (simulating thickness of later pages) -->
+  <path d="M 505 75 L 940 75 L 940 625 L 505 625 Z" fill="#d0d0d0" />
+  <path d="M 505 70 L 935 70 L 935 630 L 505 630 Z" fill="#e5e5e5" />
+
+  <!-- Left Page Main -->
+  <path d="M 75 60 L 495 60 L 495 640 L 75 640 C 65 640, 65 60, 75 60 Z" fill="url(#page-left)" filter="url(#page-shadow)"/>
+
+  <!-- Right Page Main -->
+  <path d="M 505 60 L 925 60 C 935 60, 935 640, 925 640 L 505 640 Z" fill="url(#page-right)" filter="url(#page-shadow)"/>
+
+  <!-- Center Crease (Spine inner shadow) -->
+  <rect x="470" y="60" width="60" height="580" fill="url(#spine-shadow)"/>
+
+  <!-- Subtle highlights to simulate glossy or curved paper -->
+  <linearGradient id="highlight-left" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+    <stop offset="30%" stop-color="rgba(255,255,255,0.6)"/>
+    <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+  </linearGradient>
+  <rect x="75" y="60" width="150" height="580" fill="url(#highlight-left)"/>
+
+  <!-- Right highlight -->
+  <linearGradient id="highlight-right" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+    <stop offset="70%" stop-color="rgba(255,255,255,0.6)"/>
+    <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+  </linearGradient>
+  <rect x="775" y="60" width="150" height="580" fill="url(#highlight-right)"/>
+
+</svg>

@@ -28,6 +28,7 @@ import {
   ScreenTearTransition, HyperspaceGridTransition, LiquidMorphTransition,
   CRTTubeCollapseTransition, VHSFastForwardTransition, ShapeBurstTransition
 } from './components/BattleShared/TransitionsMV15';
+import { PageTurnTransition } from './components/Transitions/PageTurnTransition';
 
 const SCENE_A = <AbsoluteFill style={{ backgroundColor: '#0277bd', justifyContent: 'center', alignItems: 'center' }}><h1 style={{ fontSize: 400, color: '#ffdd00', textShadow: '0 0 30px black' }}>A</h1></AbsoluteFill>;
 const SCENE_B = <AbsoluteFill style={{ backgroundColor: '#c62828', justifyContent: 'center', alignItems: 'center' }}><h1 style={{ fontSize: 400, color: '#ffffff', textShadow: '0 0 30px black' }}>B</h1></AbsoluteFill>;
@@ -93,6 +94,7 @@ const transitions = [
   { name: 'CRT Tube Collapse Space', comp: CRTTubeCollapseTransition },
   { name: 'VHS Fast Forward Scroll', comp: VHSFastForwardTransition },
   { name: 'Shape Burst Circles', comp: ShapeBurstTransition },
+  { name: '3D Page Turn (Book Flip)', comp: PageTurnTransition },
 ];
 
 export const TRANSITION_SHOWCASE_DURATION = transitions.length * 90; // 3 seconds each
