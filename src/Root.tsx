@@ -48,9 +48,11 @@ import {
   JOL_MAGIC_DURATION,
 } from './compositions/VideoFactory/JolBattleSpiritMagic';
 import { AdvancedEffectsShowcase } from './compositions/VideoFactory/AdvancedEffectsShowcase';
+import { CanvasEffectsCatalog } from './compositions/VideoFactory/CanvasEffectsCatalog';
 import { SvgEffectsCatalog } from './compositions/VideoFactory/SvgEffectsCatalog';
 import { SvgGraphicsCatalog } from './compositions/VideoFactory/SvgGraphicsCatalog';
-import { CanvasEffectsCatalog } from './compositions/VideoFactory/CanvasEffectsCatalog';
+import { GsapEffectsCatalog } from './compositions/VideoFactory/GsapEffectsCatalog';
+import { KineticTypographyCatalog } from './compositions/VideoFactory/KineticTypographyCatalog';
 import {
   JolBattleSpeedOrange,
   speedOrangeTheme,
@@ -861,8 +863,14 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
       />
+      <Composition
+        id="KINETIC-TYPO-CATALOG"
+        component={KineticTypographyCatalog}
+        durationInFrames={300}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
     </>
   );
 };
-
-import { GsapEffectsCatalog } from './compositions/VideoFactory/GsapEffectsCatalog';
