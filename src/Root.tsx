@@ -71,6 +71,10 @@ import {
   PopularityBattle3vs1Schema,
 } from './compositions/VideoFactory/JolPopularityBattle3vs1';
 import {
+  JolPopularityBattleSakura3vs1,
+  PopularityBattleSakura3vs1Schema,
+} from './compositions/VideoFactory/JolPopularityBattleSakura3vs1';
+import {
   ShowcaseBackgrounds,
   SHOWCASE_BG_DURATION,
   ShowcaseEffects,
@@ -686,6 +690,56 @@ export const RemotionRoot: React.FC = () => {
           customBackground:
             'assets/pixabay/videos/pixabay_butterfly_crystal_ball_mystery_fantasy_169817.mp4',
           music: 'assets/audio/music/やさしい愛.mp3',
+          livers: [
+            {
+              id: '1',
+              name: '🍦taka🍦',
+              image: 'assets/images-01/taka19427.png',
+              borderColor: '#00ccff',
+            },
+            {
+              id: '2',
+              name: '🌸さくら🌸',
+              image: 'assets/images-01/l5332541.jpeg',
+              borderColor: '#ffb3c6',
+            },
+            {
+              id: '3',
+              name: '🌹夢一輪🌹',
+              image: 'assets/images-01/zzz5557zzz.png',
+              borderColor: '#00ccff',
+            },
+            {
+              id: '4',
+              name: 'つれトラ🍭💟',
+              image: 'assets/images-01/tsuregumi1228.jpg',
+              borderColor: '#ff00ff',
+            },
+          ],
+          sakuraImages: [
+            'assets/images-01/l5332541.jpeg',
+            'assets/images-01/l5332541-02.png',
+            'assets/images-01/l5332541-01.png',
+          ],
+          dateInfo: { year: '2026.04.01', date: '2026.04.01', time: '22:00' },
+          rules: ['ルール1：アイテム無し', 'ルール2：1発勝負'],
+          finalMessage: 'さくら組が人気1番の\n実力を見せつけようね',
+        }}
+      />
+      {/* タイムラインを再編成した新コンポジション */}
+      <Composition
+        id="JOL-POPULARITY-BATTLE-SAKURA-3vs1"
+        component={JolPopularityBattleSakura3vs1}
+        durationInFrames={975}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={PopularityBattleSakura3vs1Schema}
+        defaultProps={{
+          themeColor: '#00ccff',
+          customBackground:
+            'assets/pixabay/videos/pixabay_butterfly_crystal_ball_mystery_fantasy_169817.mp4',
+          music: 'assets/audio/music/Super_Star.mp3',
           livers: [
             {
               id: '1',
