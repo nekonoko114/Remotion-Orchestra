@@ -157,6 +157,136 @@ const AuraBlossom: React.FC = () => {
     );
 };
 
+// --- 6. Holographic Scan ---
+const HolographicScan: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const scanY = (frame * 8) % (height + 200) - 100;
+    return (
+        <Group>
+            <Fill color="#000" />
+            <Rect x={0} y={scanY} width={width} height={100} color="#00ffff33">
+                <Paint><Blur blur={30} /></Paint>
+            </Rect>
+            <Rect x={0} y={scanY + 45} width={width} height={2} color="#00ffff" />
+            {[...Array(15)].map((_, i) => {
+                const x = (i / 15) * width + Math.sin(frame * 0.1 + i) * 20;
+                return (
+                    <Rect key={i} x={x} y={0} width={1.5} height={height} color="#00ffff22">
+                        <Paint><Blur blur={4} /></Paint>
+                    </Rect>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 7. Cosmic Vortex ---
+const CosmicVortex: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#020010" />
+            {[...Array(40)].map((_, i) => {
+                const angle = (i / 40) * Math.PI * 2 + frame * 0.02;
+                const d = 50 + i * 15;
+                const x = width / 2 + Math.cos(angle) * d;
+                const y = height / 2 + Math.sin(angle) * d;
+                const r = 5 + i * 0.8;
+                return (
+                    <Circle key={i} cx={x} cy={y} r={r}>
+                        <Paint color={`hsla(${(frame + i * 10) % 360}, 100%, 70%, 0.4)`}>
+                            <Blur blur={r * 0.5} />
+                        </Paint>
+                    </Circle>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 8. Digital Rain ---
+const DigitalRain: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const columns = 30;
+    return (
+        <Group>
+            <Fill color="#000500" />
+            {[...Array(columns)].map((_, i) => {
+                const x = (i / columns) * width;
+                const speed = 5 + (Math.sin(i * 13) * 0.5 + 0.5) * 10;
+                const y = (frame * speed) % (height + 400) - 200;
+                return (
+                    <Group key={i}>
+                        <Rect x={x} y={y - 150} width={2} height={150} color="#00ff00aa">
+                            <Paint><Blur blur={8} /></Paint>
+                        </Rect>
+                        <Rect x={x} y={y} width={3} height={3} color="#ffffff" />
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
+
+// --- 9. Energy Shield ---
+const EnergyShield: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    const path = useMemo(() => {
+        const p = Skia.Path.Make();
+        const sides = 6;
+        const radius = 300 + Math.sin(frame * 0.05) * 20;
+        for (let i = 0; i < sides; i++) {
+            const angle = (i / sides) * Math.PI * 2 - Math.PI / 2;
+            const x = width / 2 + Math.cos(angle) * radius;
+            const y = height / 2 + Math.sin(angle) * radius;
+            if (i === 0) p.moveTo(x, y); else p.lineTo(x, y);
+        }
+        p.close();
+        return p;
+    }, [frame, width, height]);
+    return (
+        <Group>
+            <Fill color="#000" />
+            <Path path={path} style="stroke" strokeWidth={15} color="#0088ff">
+                <Paint><Blur blur={40} /></Paint>
+            </Path>
+            <Path path={path} style="stroke" strokeWidth={3} color="#00ffff" />
+            <Circle cx={width/2} cy={height/2} r={150 + Math.sin(frame*0.1)*30} color="#00ffff22">
+                <Paint><Blur blur={50} /></Paint>
+            </Circle>
+        </Group>
+    );
+};
+
+// --- 10. Prism Fractal ---
+const PrismFractal: React.FC = () => {
+    const frame = useCurrentFrame();
+    const { width, height } = useVideoConfig();
+    return (
+        <Group>
+            <Fill color="#0a0a0a" />
+            {[...Array(8)].map((_, i) => {
+                const rotate = frame * 0.01 + (i * Math.PI) / 4;
+                const scale = 1 + Math.sin(frame * 0.02 + i) * 0.5;
+                const size = 150 * scale;
+                return (
+                    <Group key={i} origin={vec(width / 2, height / 2)} transform={[{ rotate }]}>
+                        <Rect x={width / 2 - size / 2} y={height / 2 - size / 2} width={size} height={size} style="stroke" strokeWidth={3}>
+                            <Paint color={`hsla(${(frame + i * 45) % 360}, 100%, 70%, 0.8)`}>
+                                <Blur blur={10} />
+                            </Paint>
+                        </Rect>
+                    </Group>
+                );
+            })}
+        </Group>
+    );
+};
+
 // --- Orchestrator ---
 const EFFECTS = [
     { name: 'NEON PULSE', comp: NeonPulse, accent: '#00ffff' },
@@ -164,6 +294,11 @@ const EFFECTS = [
     { name: 'CYBER GRID', comp: CyberGrid, accent: '#00ff88' },
     { name: 'STAR DUST', comp: StarDust, accent: '#aaaaff' },
     { name: 'AURA BLOSSOM', comp: AuraBlossom, accent: '#ffaa00' },
+    { name: 'HOLOGRAPHIC SCAN', comp: HolographicScan, accent: '#00ffff' },
+    { name: 'COSMIC VORTEX', comp: CosmicVortex, accent: '#ff77ff' },
+    { name: 'DIGITAL RAIN', comp: DigitalRain, accent: '#00ff00' },
+    { name: 'ENERGY SHIELD', comp: EnergyShield, accent: '#0088ff' },
+    { name: 'PRISM FRACTAL', comp: PrismFractal, accent: '#ffffff' },
 ];
 
 export const SkiaEffectsInner: React.FC = () => {
