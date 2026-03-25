@@ -47,3 +47,4 @@ Read individual rule files for detailed explanations and code examples:
 - [rules/parameters.md](rules/parameters.md) - Make a video parametrizable by adding a Zod schema
 - [rules/maps.md](rules/maps.md) - Add a map using Mapbox and animate it
 - [rules/kaleidoscope.md](rules/kaleidoscope.md) - Best practices for implementing kaleidoscope backgrounds
+- [rules/skia.md](rules/skia.md) - **Skia (react-native-skia) を Remotion で使う正しい方法** - React.lazy + LoadSkiaWeb パターン、バージョン互換性、禁止パターン

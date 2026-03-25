@@ -210,7 +210,7 @@ const VortexTunnel: React.FC = () => {
 
 const EchoTunnel: React.FC = () => {
     const frame = useCurrentFrame();
-    const { width, height } = useVideoConfig();
+    const { width, height } = useVideoConfig(); // width was unused, now used in clearRect
     const canvasRef = useRef<HTMLCanvasElement>(null);
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d');
@@ -262,7 +262,6 @@ const TUNNEL_COMPONENTS = [
 
 export const AdvancedEffectsShowcase: React.FC = () => {
     const frame = useCurrentFrame();
-    const { width } = useVideoConfig();
     const cycleDuration = 90;
     const tunnelIndex = Math.floor(frame / cycleDuration) % TUNNEL_COMPONENTS.length;
     const currentTunnel = TUNNEL_COMPONENTS[tunnelIndex];

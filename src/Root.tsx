@@ -48,6 +48,7 @@ import {
   JOL_MAGIC_DURATION,
 } from './compositions/VideoFactory/JolBattleSpiritMagic';
 import { AdvancedEffectsShowcase } from './compositions/VideoFactory/AdvancedEffectsShowcase';
+import { SkiaEffectsShowcase } from './compositions/VideoFactory/SkiaEffectsShowcase';
 import { CanvasEffectsCatalog } from './compositions/VideoFactory/CanvasEffectsCatalog';
 import { SvgEffectsCatalog } from './compositions/VideoFactory/SvgEffectsCatalog';
 import { SvgGraphicsCatalog } from './compositions/VideoFactory/SvgGraphicsCatalog';
@@ -878,6 +879,14 @@ export const RemotionRoot: React.FC = () => {
         durationInFrames={900}
         fps={30}
         width={1080}
+        height={1080}
+      />
+      <Composition
+        id="SKIA-EFFECTS-SHOWCASE"
+        component={SkiaEffectsShowcase}
+        durationInFrames={900}
+        fps={30}
+        width={1920}
         height={1080}
       />
     </>

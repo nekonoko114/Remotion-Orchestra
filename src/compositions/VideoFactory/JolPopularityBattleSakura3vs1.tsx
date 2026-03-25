@@ -105,12 +105,10 @@ const Scene_Opening: React.FC<{ dateInfo: Props['dateInfo'], mainImage?: string 
   // 優しいフェードイン＆ズーム
   const titleOpacity = interpolate(frame, [0, 30], [0, 1], { extrapolateRight: 'clamp' });
   const titleBlur = interpolate(frame, [0, 30], [20, 0], { extrapolateRight: 'clamp' });
-  const titleScale = interpolate(frame, [0, 120], [0.9, 1.1], { extrapolateRight: 'clamp' });
-
   const dateOpacity = interpolate(frame - 30, [0, 30], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   const dateScale = interpolate(frame - 30, [0, 90], [0.9, 1.05], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
-  const timeOpacity = interpolate(frame - 60, [0, 30], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+// dateScale is used in div below
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent', justifyContent: 'start', alignItems: 'center', opacity: globalOpacity }}>
@@ -223,43 +221,7 @@ const Scene_ThreeLivers: React.FC<{ livers: Props['livers'] }> = ({ livers }) =>
 };
 
 // 📌 Scene 2: 1名のライバー (90fr) - つれトラさんなど
-const Scene_SingleLiver: React.FC<{ liver: Props['livers'][0] }> = ({ liver }) => {
-  const frame = useCurrentFrame();
-
-  const sceneOpacity = interpolate(frame, [0, 20, 70, 90], [0, 1, 1, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
-  const itemBlur = interpolate(frame, [0, 40], [20, 0], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
-  const itemScale = interpolate(frame, [0, 90], [0.9, 1.05], { extrapolateRight: 'clamp' });
-  const floatY = Math.sin(frame * 0.03) * 15;
-
-  return (
-    <AbsoluteFill style={{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', opacity: sceneOpacity }}>
-      <AbsoluteFill style={{ backgroundColor: 'rgba(0, 5, 20, 0.2)' }} />
-      <div style={{ 
-        transform: `scale(${itemScale}) translateY(${floatY}px)`, 
-        filter: `blur(${itemBlur}px)`,
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 60 
-      }}>
-        {/* takaさん等、相手の枠をネオンブルーで表示 */}
-        <div style={{ position: 'relative' }}>
-          <div style={{
-            position: 'absolute', top: -20, left: -20, right: -20, bottom: -20,
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(0, 200, 255, 0.4) 0%, transparent 70%)',
-            animation: 'spin 10s linear infinite',
-          }} />
-          <Img src={staticFile(liver.image)} style={{ 
-            width: 600, height: 600, borderRadius: '50%', objectFit: 'cover', 
-            border: '12px solid rgba(150, 230, 255, 0.8)', 
-            boxShadow: '0 0 100px rgba(0, 200, 255, 0.6)' 
-          }} />
-        </div>
-        <h1 style={{ color: '#fff', fontSize: 100, margin: 0, textShadow: '0 0 30px rgba(0,200,255,0.8), 0 5px 15px rgba(0,0,0,0.5)', fontFamily: '"Mochiy Pop One", sans-serif', transform: `scale(${spring({ frame: Math.max(0, frame - 15), fps: 30, config: { stiffness: 450, damping: 12 } })})` }}>
-          {liver.name}
-        </h1>
-      </div>
-    </AbsoluteFill>
-  );
-};
+// Scene_SingleLiver is not used in this composition
 
 // 📌 Scene 5: 4人全員 2x2分割 (4s = 120fr)
 // バキッとした線ではなく、丸形にくり抜いて柔らかな光でつなぐ
@@ -373,21 +335,7 @@ const Scene_Ending: React.FC<{ message: string }> = ({ message }) => {
 };
 
 // 📌 Scene 6: ロゴ (60fr)
-const Scene_Logo: React.FC = () => {
-  const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 30], [0, 1], { extrapolateRight: 'clamp' });
-  const scale = interpolate(frame, [0, 30], [0.8, 1], { extrapolateRight: 'clamp' });
-
-  return (
-    <AbsoluteFill style={{ backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
-      <AbsoluteFill style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
-      <Img 
-        src={staticFile('jol-logo-800.png')} 
-        style={{ width: 800, opacity, transform: `scale(${scale})` }} 
-      />
-    </AbsoluteFill>
-  );
-};
+// Scene_Logo is not used in this composition
 
 
 // 📌 Scene 2: takaさんメイン 爽やかで優雅なシーン (9s = 270fr)
