@@ -24,14 +24,7 @@ const GlassmorphismCard: React.FC = () => {
                 
                 {/* Reflected Highlight */}
                 <Rect x={width/2 - 300} y={height/2 - 450} width={600} height={900}>
-                   <Paint>
-                       <LinearGradient 
-                           start={vec(width/2 - 300, height/2 - 450)} 
-                           end={vec(width/2 + 300, height/2 + 450)} 
-                           colors={['rgba(255,255,255,0.4)', 'transparent', 'rgba(255,255,255,0.1)']} 
-                           positions={[0, 0.5, 1]}
-                       />
-                   </Paint>
+                   <Paint><LinearGradient start={vec(width/2 - 300, height/2 - 450)} end={vec(width/2 + 300, height/2 + 450)} colors={['rgba(255,255,255,0.4)', 'transparent', 'rgba(255,255,255,0.1)']} positions={[0, 0.5, 1]}/></Paint>
                 </Rect>
             </Group>
         </Group>
@@ -79,30 +72,10 @@ const HolographicFoil: React.FC = () => {
     return (
         <Group>
             <Rect x={0} y={0} width={width} height={height}>
-                <Paint>
-                    <SweepGradient 
-                        c={vec(width/2, height/2)}
-                        transform={[{rotate: frame * 0.05}]}
-                        colors={[
-                            '#ff0000', '#ff8800', '#ffff00', '#00ff00', 
-                            '#00ffff', '#0000ff', '#ff00ff', '#ff0000'
-                        ]}
-                    />
-                </Paint>
+                <Paint><SweepGradient c={vec(width/2, height/2)} transform={[{rotate: frame * 0.05}]} colors={['#ff0000', '#ff8800', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#ff0000']}/></Paint>
             </Rect>
-            {/* Shading/Wrinkle overlay */}
             <Group opacity={0.6} blendMode="multiply">
-                {[...Array(5)].map((_, i) => (
-                    <Rect key={i} x={0} y={0} width={width} height={height}>
-                         <Paint>
-                             <LinearGradient 
-                                 start={vec(Math.sin(frame*0.01 + i)*width, 0)} 
-                                 end={vec(Math.cos(frame*0.015 + i)*width, height)}
-                                 colors={['#000', '#fff', '#000']}
-                             />
-                         </Paint>
-                    </Rect>
-                ))}
+                {[...Array(5)].map((_, i) => (<Rect key={i} x={0} y={0} width={width} height={height}><Paint><LinearGradient start={vec(Math.sin(frame*0.01 + i)*width, 0)} end={vec(Math.cos(frame*0.015 + i)*width, height)} colors={['#000', '#fff', '#000']}/></Paint></Rect>))}
             </Group>
         </Group>
     );
@@ -124,9 +97,7 @@ const NeonPlasma: React.FC = () => {
                     const r = 300 + Math.sin(frame*0.05 + i)*200;
                     const hue = (frame + i * 60) % 360;
                     return (
-                        <Circle key={i} cx={cx} cy={cy} r={r} color={`hsl(${hue}, 100%, 60%)`}>
-                            <Paint><Blur blur={150} /></Paint>
-                        </Circle>
+                        <Circle key={i} cx={cx} cy={cy} r={r} color={`hsl(${hue}, 100%, 60%)`}><Paint><Blur blur={150} /></Paint></Circle>
                     );
                 })}
             </Group>
@@ -144,15 +115,9 @@ const ThermalVision: React.FC = () => {
             <Fill color="#000033" /> {/* Cold background */}
             <Group>
                 {/* Heat sources */}
-                <Circle cx={width/2 + Math.sin(frame*0.05)*200} cy={height/2} r={250} color="white">
-                     <Paint><Blur blur={100} /></Paint>
-                </Circle>
-                <Circle cx={width*0.3} cy={height*0.7 + Math.cos(frame*0.03)*150} r={200} color="rgba(255,255,255,0.8)">
-                     <Paint><Blur blur={80} /></Paint>
-                </Circle>
-                <Circle cx={width*0.8} cy={height*0.2 - Math.sin(frame*0.04)*100} r={150} color="rgba(255,255,255,0.6)">
-                     <Paint><Blur blur={60} /></Paint>
-                </Circle>
+                <Circle cx={width/2 + Math.sin(frame*0.05)*200} cy={height/2} r={250} color="white"><Paint><Blur blur={100} /></Paint></Circle>
+                <Circle cx={width*0.3} cy={height*0.7 + Math.cos(frame*0.03)*150} r={200} color="rgba(255,255,255,0.8)"><Paint><Blur blur={80} /></Paint></Circle>
+                <Circle cx={width*0.8} cy={height*0.2 - Math.sin(frame*0.04)*100} r={150} color="rgba(255,255,255,0.6)"><Paint><Blur blur={60} /></Paint></Circle>
                 
                 {/* ColorMatrix to map Alpha (heat intensity) to Thermal Colors (Black -> Blue -> Green -> Red -> White) */}
                 <Paint>

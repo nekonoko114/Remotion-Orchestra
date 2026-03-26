@@ -4,19 +4,12 @@ import { Group, Fill, Circle, Paint, Blur, Rect, SweepGradient, Mask, LinearGrad
 
 // --- 1. Luma Brush Reveal ---
 const LumaBrushReveal: React.FC = () => {
-    const frame = useCurrentFrame();
+    const frame = useCurrentFrame() % 180;
     const { width, height } = useVideoConfig();
     
     // Mask: A glowing circle that grows and moves to reveal the background
     const MaskComponent = (
-        <Group>
-            <Circle cx={width/2 + Math.sin(frame*0.05)*300} cy={height/2 + Math.cos(frame*0.03)*400} r={100 + frame*5} color="black">
-                <Paint><Blur blur={50} /></Paint>
-            </Circle>
-            <Circle cx={width/2 - Math.sin(frame*0.04)*200} cy={height/2 - Math.cos(frame*0.06)*300} r={50 + frame*8} color="black">
-                <Paint><Blur blur={30} /></Paint>
-            </Circle>
-        </Group>
+        <Group><Circle cx={width/2 + Math.sin(frame*0.05)*300} cy={height/2 + Math.cos(frame*0.03)*400} r={100 + frame*5} color="black"><Paint><Blur blur={50} /></Paint></Circle><Circle cx={width/2 - Math.sin(frame*0.04)*200} cy={height/2 - Math.cos(frame*0.06)*300} r={50 + frame*8} color="black"><Paint><Blur blur={30} /></Paint></Circle></Group>
     );
 
     return (
@@ -25,15 +18,8 @@ const LumaBrushReveal: React.FC = () => {
             <Fill color="#000" />
             
             <Mask mode="luminance" mask={MaskComponent}>
-                <Rect x={0} y={0} width={width} height={height}>
-                    <Paint>
-                        <SweepGradient c={vec(width/2, height/2)} colors={['#ff0055', '#aaff00', '#00ffff', '#ff0055']} transform={[{rotate: frame*0.02}]} />
-                    </Paint>
-                </Rect>
-                {/* Scratches/Patterns on revealed area */}
-                {[...Array(20)].map((_, i) => (
-                    <Rect key={i} x={0} y={(i*100 + frame*5) % height} width={width} height={5} color="rgba(255,255,255,0.5)" />
-                ))}
+                <Rect x={0} y={0} width={width} height={height}><Paint><SweepGradient c={vec(width/2, height/2)} colors={['#ff0055', '#aaff00', '#00ffff', '#ff0055']} transform={[{rotate: frame*0.02}]} /></Paint></Rect>
+                {[...Array(20)].map((_, i) => (<Rect key={i} x={0} y={(i*100 + frame*5) % height} width={width} height={5} color="rgba(255,255,255,0.5)" />))}
             </Mask>
             
             {/* Overlay on top of mask */}
@@ -104,7 +90,7 @@ const SoftMaskedGlow: React.FC = () => {
     const MaskShape = (
         <Group>
             <Rect x={width/2 - 300} y={height/2 - 400} width={600} height={800} color="black" />
-            <Circle cx={width/2} cy={height/2} r={250} color="black" /> {/* Combine */}
+            <Circle cx={width/2} cy={height/2} r={250} color="black" />
         </Group>
     );
 
@@ -116,12 +102,8 @@ const SoftMaskedGlow: React.FC = () => {
             
             {/* Glow restricted inside the mask */}
             <Mask mode="luminance" mask={MaskShape}>
-                <Circle cx={width/2 + Math.sin(frame*0.05)*300} cy={height/2 + Math.cos(frame*0.06)*400} r={200} color="#00ffff">
-                    <Paint><Blur blur={50} /></Paint>
-                </Circle>
-                <Circle cx={width/2 - Math.cos(frame*0.04)*300} cy={height/2 - Math.sin(frame*0.03)*400} r={250} color="#ff00ff">
-                    <Paint><Blur blur={80} /></Paint>
-                </Circle>
+                <Circle cx={width/2 + Math.sin(frame*0.05)*300} cy={height/2 + Math.cos(frame*0.06)*400} r={200} color="#00ffff"><Paint><Blur blur={50} /></Paint></Circle>
+                <Circle cx={width/2 - Math.cos(frame*0.04)*300} cy={height/2 - Math.sin(frame*0.03)*400} r={250} color="#ff00ff"><Paint><Blur blur={80} /></Paint></Circle>
             </Mask>
         </Group>
     );
@@ -144,20 +126,9 @@ const DoubleExposure: React.FC = () => {
             <Fill color="#ffffff" />
             
             <Mask mode="luminance" mask={Silhouette}>
-                {/* Moving Cosmic Background inside the silhouette */}
                 <Fill color="#000" />
-                {[...Array(100)].map((_, i) => (
-                    <Circle 
-                        key={i} 
-                        cx={(i * 123 + frame * 2) % width} 
-                        cy={(i * 321 + frame * 3) % height} 
-                        r={Math.random()*4+1} 
-                        color="white" 
-                    />
-                ))}
-                <Circle cx={width/2} cy={height/2 + Math.sin(frame*0.02)*100} r={200} color="#ff0055">
-                     <Paint><Blur blur={100} /></Paint>
-                </Circle>
+                {[...Array(100)].map((_, i) => (<Circle key={i} cx={(i * 123 + frame * 2) % width} cy={(i * 321 + frame * 3) % height} r={Math.random()*4+1} color="white" />))}
+                <Circle cx={width/2} cy={height/2 + Math.sin(frame*0.02)*100} r={200} color="#ff0055"><Paint><Blur blur={100} /></Paint></Circle>
             </Mask>
             
             {/* Soft blend over everything */}

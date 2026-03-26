@@ -4,6 +4,7 @@ import { SHADER_EFFECTS } from './SkiaCategoryShader';
 import { PARTICLES_EFFECTS } from './SkiaCategoryParticles';
 import { BLEND_MASK_EFFECTS } from './SkiaCategoryBlendMask';
 import { TYPOGRAPHY_EFFECTS } from './SkiaCategoryTypography';
+import { ADVANCED_TEXT_EFFECTS } from './SkiaCategoryTextFx';
 import { useCurrentFrame, interpolate, useVideoConfig } from 'remotion';
 import { SkiaCanvas } from '@remotion/skia';
 import {
@@ -753,6 +754,7 @@ const AbstractFlow: React.FC = () => {
 
 // --- Orchestrator ---
 const EFFECTS = [
+    ...ADVANCED_TEXT_EFFECTS,
     { name: 'NEON PULSE', comp: NeonPulse, accent: '#00ffff' },
     { name: 'LIQUID MORPH', comp: LiquidMorph, accent: '#ff00ff' },
     { name: 'CYBER GRID', comp: CyberGrid, accent: '#00ff88' },
@@ -799,11 +801,7 @@ export const SkiaEffectsInner: React.FC = () => {
     );
     return (
         <>
-            <SkiaCanvas style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} width={width} height={height}>
-                <Group opacity={opacity}>
-                    <current.comp />
-                </Group>
-            </SkiaCanvas>
+            <SkiaCanvas style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} width={width} height={height}><Group opacity={opacity}><current.comp /></Group></SkiaCanvas>
             <div style={{
                 position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
                 display: 'flex', justifyContent: 'center', alignItems: 'center',

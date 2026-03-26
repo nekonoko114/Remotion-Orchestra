@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useCurrentFrame, useVideoConfig, interpolate } from 'remotion';
+import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { Group, Fill, Circle, Path, Paint, Blur, ColorMatrix, Skia, vec } from '@shopify/react-native-skia';
 
 // --- 1. Liquid Blob Morph (Meta-balls) ---
@@ -18,12 +18,7 @@ const LiquidBlobMorph: React.FC = () => {
     return (
         <Group>
             <Fill color="#05001a" />
-            <Group layer={
-                <Paint>
-                    <Blur blur={25} />
-                    <ColorMatrix matrix={thresholdMatrix} />
-                </Paint>
-            }>
+            <Group layer={<Paint><Blur blur={25} /><ColorMatrix matrix={thresholdMatrix} /></Paint>}>
                 <Circle cx={width/2} cy={height/2} r={120} color="#ff0088" />
                 {[...Array(5)].map((_, i) => {
                     const angle = (frame * 0.05) + (i * Math.PI * 2 / 5);
@@ -108,9 +103,7 @@ const AudioWaveform: React.FC = () => {
     return (
         <Group>
             <Fill color="#100520" />
-            <Path path={path} style="stroke" strokeWidth={20} color="#ff00ff">
-                <Paint><Blur blur={30} /></Paint>
-            </Path>
+            <Path path={path} style="stroke" strokeWidth={20} color="#ff00ff"><Paint><Blur blur={30} /></Paint></Path>
             <Path path={path} style="stroke" strokeWidth={4} color="#00ffff" />
             <Path path={path} style="stroke" strokeWidth={1} color="#ffffff" />
         </Group>
@@ -137,12 +130,7 @@ const OrganicTentacles: React.FC = () => {
                     p.lineTo(currentX, currentY);
                 }
                 return (
-                    <Group key={i}>
-                        <Path path={p} style="stroke" strokeWidth={25 - i*2} color={`hsla(${(120 + i*15 + frame)%360}, 100%, 50%, 0.6)`}>
-                            <Paint><Blur blur={15} /></Paint>
-                        </Path>
-                        <Path path={p} style="stroke" strokeWidth={4} color="#ffffff" opacity={0.8} />
-                    </Group>
+                    <Group key={i}><Path path={p} style="stroke" strokeWidth={25 - i*2} color={`hsla(${(120 + i*15 + frame)%360}, 100%, 50%, 0.6)`}><Paint><Blur blur={15} /></Paint></Path><Path path={p} style="stroke" strokeWidth={4} color="#ffffff" opacity={0.8} /></Group>
                 );
             })}
         </Group>
@@ -159,17 +147,12 @@ const ElasticBands: React.FC = () => {
             {[...Array(12)].map((_, i) => {
                 const y = (height/12) * i + height/24;
                 const progress = (Math.sin(frame*0.05 + i*0.2) + 1) / 2;
-                // Elastic easing simulation
                 const pullX = width/2 + Math.sin(progress * Math.PI * 4) * 300 * Math.exp(-progress * 3);
-                
                 const p = Skia.Path.Make();
                 p.moveTo(0, y);
                 p.quadTo(pullX, y + Math.sin(frame*0.1)*50, width, y);
-                
                 return (
-                    <Path key={i} path={p} style="stroke" strokeWidth={8} color="#ff5500">
-                        <Paint><Blur blur={progress * 10} /></Paint>
-                    </Path>
+                    <Path key={i} path={p} style="stroke" strokeWidth={8} color="#ff5500"><Paint><Blur blur={progress * 10} /></Paint></Path>
                 );
             })}
         </Group>

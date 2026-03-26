@@ -99,7 +99,7 @@ const GlowingOutlineText: React.FC = () => {
 
 // --- 4. Shattered Text (Mask Clipping) ---
 const ShatteredText: React.FC = () => {
-    const frame = useCurrentFrame();
+    const frame = useCurrentFrame() % 180;
     const { width, height } = useVideoConfig();
     const font = useSkiaFont('/fonts/ZenMaruGothic-Black.ttf', 300);
 
@@ -111,22 +111,12 @@ const ShatteredText: React.FC = () => {
         <Group>
             <Fill color="#1a1a1a" />
             {[...Array(5)].map((_, i) => {
-                // Slicing the text using rect masks
                 const sliceH = 60;
-                const progress = Math.max(0, frame*2 - i*10); // cascading animation
+                const progress = Math.max(0, frame*2 - i*10);
                 const offsetX = (i % 2 === 0 ? 1 : -1) * progress;
-                const maskRect = (
-                   <Group>
-                       <Rect x={0} y={height/2 - 150 + i*sliceH} width={width} height={sliceH} color="black" />
-                   </Group>
-                );
-
+                const maskRect = (<Group><Rect x={0} y={height/2 - 150 + i*sliceH} width={width} height={sliceH} color="black" /></Group>);
                 return (
-                    <Mask key={i} mode="luminance" mask={maskRect}>
-                        <Group transform={[{translateX: offsetX}]}>
-                            <Text font={font} text={text} x={width/2 - textWidth/2} y={height/2 + 100} color="#00ffff" />
-                        </Group>
-                    </Mask>
+                    <Mask key={i} mode="luminance" mask={maskRect}><Group transform={[{translateX: offsetX}]}><Text font={font} text={text} x={width/2 - textWidth/2} y={height/2 + 100} color="#00ffff" /></Group></Mask>
                 );
             })}
         </Group>
@@ -146,17 +136,10 @@ const LiquidText: React.FC = () => {
     return (
         <Group>
             <Fill color="#000" />
-            {/* Simulate water waving using multiple offset texts with blend modes */}
             <Group blendMode="screen">
-                <Text font={font} text={text} x={width/2 - textWidth/2 + Math.sin(frame*0.1)*15} y={height/2 + 70 + Math.cos(frame*0.12)*10} color="#0000ff">
-                     <Paint><Blur blur={8} /></Paint>
-                </Text>
-                <Text font={font} text={text} x={width/2 - textWidth/2 + Math.sin(frame*0.15 + 1)*10} y={height/2 + 70 + Math.cos(frame*0.08 + 1)*15} color="#00ffff">
-                     <Paint><Blur blur={10} /></Paint>
-                </Text>
-                <Text font={font} text={text} x={width/2 - textWidth/2} y={height/2 + 70} color="#ffffff">
-                     <Paint><Blur blur={2} /></Paint>
-                </Text>
+                <Text font={font} text={text} x={width/2 - textWidth/2 + Math.sin(frame*0.1)*15} y={height/2 + 70 + Math.cos(frame*0.12)*10} color="#0000ff"><Paint><Blur blur={8} /></Paint></Text>
+                <Text font={font} text={text} x={width/2 - textWidth/2 + Math.sin(frame*0.15 + 1)*10} y={height/2 + 70 + Math.cos(frame*0.08 + 1)*15} color="#00ffff"><Paint><Blur blur={10} /></Paint></Text>
+                <Text font={font} text={text} x={width/2 - textWidth/2} y={height/2 + 70} color="#ffffff"><Paint><Blur blur={2} /></Paint></Text>
             </Group>
         </Group>
     );

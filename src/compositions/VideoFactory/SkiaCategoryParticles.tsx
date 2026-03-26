@@ -31,9 +31,7 @@ const GalaxySwirl: React.FC = () => {
                     const y = Math.sin(currentAngle) * currentR;
                     const alpha = Math.min(1, currentR / 200);
                     return (
-                        <Circle key={i} cx={x} cy={y} r={dot.size} color={`rgba(0, 255, 255, ${alpha})`}>
-                            {i % 20 === 0 && <Paint><Blur blur={3} /></Paint>}
-                        </Circle>
+                        <Circle key={i} cx={x} cy={y} r={dot.size} color={`rgba(0, 255, 255, ${alpha})`}>{i % 20 === 0 && <Paint><Blur blur={3} /></Paint>}</Circle>
                     );
                 })}
             </Group>
@@ -61,9 +59,7 @@ const MatrixRain: React.FC = () => {
                             const y = ((frame * speed + offset + j * 100) % (height + 200)) - 100;
                             const alpha = 1 - (j / dropsPerColumn);
                             return (
-                                <Rect key={j} x={x} y={y} width={3} height={15} color={`rgba(0, 255, 100, ${alpha})`}>
-                                    {j === 0 && <Paint><Blur blur={4} /></Paint>}
-                                </Rect>
+                                <Rect key={j} x={x} y={y} width={3} height={15} color={`rgba(0, 255, 100, ${alpha})`}>{j === 0 && <Paint><Blur blur={4} /></Paint>}</Rect>
                             );
                         })}
                     </Group>
@@ -75,7 +71,7 @@ const MatrixRain: React.FC = () => {
 
 // --- 3. Confetti Explosion ---
 const ConfettiExplosion: React.FC = () => {
-    const frame = useCurrentFrame();
+    const frame = useCurrentFrame() % 180;
     const { width, height } = useVideoConfig();
     const confettiCount = 500;
     
@@ -168,9 +164,7 @@ const SnowBlizzard: React.FC = () => {
                 // Strong wind blowing right
                 const x = (f.startX + frame * 15 * f.windFactor + Math.sin(frame * f.wobbleSpeed) * 50) % width;
                 return (
-                    <Circle key={i} cx={x} cy={y} r={f.size} color="rgba(255,255,255,0.7)">
-                        {f.size > 2.5 && <Paint><Blur blur={2} /></Paint>}
-                    </Circle>
+                    <Circle key={i} cx={x} cy={y} r={f.size} color="rgba(255,255,255,0.7)">{f.size > 2.5 && <Paint><Blur blur={2} /></Paint>}</Circle>
                 );
             })}
         </Group>
