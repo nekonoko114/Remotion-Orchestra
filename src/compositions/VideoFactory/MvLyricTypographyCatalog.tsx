@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
 }
 
 // --- Utility for safe GSAP ease ---
-const getEase = (name: string) => gsap.parseEase(name) || ((v: number) => v);
+export const getEase = (name: string) => gsap.parseEase(name) || ((v: number) => v);
 
 const LYRIC_STYLE: React.CSSProperties = {
     color: '#fff',
@@ -18,6 +18,19 @@ const LYRIC_STYLE: React.CSSProperties = {
     textAlign: 'center',
     textShadow: '0 0 20px rgba(255,255,255,0.8)',
 };
+
+const CharSplitter: React.FC<{
+    text: string;
+    renderChar: (char: string, index: number) => React.ReactNode;
+}> = ({ text, renderChar }) => (
+    <div style={{ display: 'flex', whiteSpace: 'nowrap', justifyContent: 'center', alignItems: 'center' }}>
+        {text.split('').map((char, i) => (
+            <div key={i} style={{ display: 'inline-block' }}>
+                {char === ' ' ? '\u00A0' : renderChar(char, i)}
+            </div>
+        ))}
+    </div>
+);
 
 const Wrapper: React.FC<{ children: React.ReactNode; bg?: string }> = ({ children, bg = '#000' }) => (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: bg, border: '1px solid #333', position: 'relative', overflow: 'hidden' }}>
@@ -521,11 +534,196 @@ const MvDepth: React.FC = () => {
     );
 };
 
+// --- 31. Explosive Scatter ---
+const MvExplosiveScatter: React.FC = () => {
+    const frame = useCurrentFrame();
+    const t = (frame % 60) / 60;
+    const v = getEase("elastic.out(1, 0.3)")(t);
+    return (
+        <Wrapper>
+            <CharSplitter text="爆" renderChar={(char, i) => {
+                const angle = i * 0.5;
+                const dist = (1 - v) * 300;
+                return (
+                    <div style={{ 
+                        ...LYRIC_STYLE, 
+                        transform: `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px) scale(${v})`,
+                        opacity: v 
+                    }}>{char}</div>
+                );
+            }} />
+        </Wrapper>
+    );
+};
+
+// --- 32. 3D Cylinder Roll ---
+const MvCylinderRoll: React.FC = () => {
+    const frame = useCurrentFrame();
+    const t = (frame % 60) / 60;
+    const v = getEase("power3.inOut")(t);
+    return (
+        <Wrapper>
+            <div style={{ perspective: 1000 }}>
+                <div style={{ 
+                    ...LYRIC_STYLE, 
+                    transform: `rotateX(${v * 360}deg) translateZ(50px)`,
+                    transformStyle: 'preserve-3d'
+                }}>輪</div>
+            </div>
+        </Wrapper>
+    );
+};
+
+// --- 33. Advanced Glitch Disp ---
+const MvGlitchDisp: React.FC = () => {
+    const frame = useCurrentFrame();
+    const f = frame % 60;
+    const isGlitch = f < 10 || (f > 30 && f < 35);
+    return (
+        <Wrapper>
+            <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+                <filter id="adv-glitch">
+                    <feTurbulence type="fractalNoise" baseFrequency={isGlitch ? "0.5 0.01" : "0.001"} numOctaves="1" seed={frame}>
+                        <animate attributeName="baseFrequency" dur="0.1s" values="0.5 0.01; 0.01 0.5; 0.5 0.01" repeatCount="indefinite" />
+                    </feTurbulence>
+                    <feDisplacementMap in="SourceGraphic" scale={isGlitch ? "50" : "0"} />
+                </filter>
+            </svg>
+            <div style={{ 
+                ...LYRIC_STYLE, 
+                filter: 'url(#adv-glitch)',
+                color: isGlitch ? '#ff00ff' : '#00ffff'
+            }}>乱</div>
+        </Wrapper>
+    );
+};
+
+// --- 34. Neon Path Draw ---
+const MvNeonPath: React.FC = () => {
+    const frame = useCurrentFrame();
+    const t = (frame % 60) / 60;
+    const v = getEase("power2.inOut")(t);
+    return (
+        <Wrapper>
+            <div style={{ 
+                ...LYRIC_STYLE, 
+                color: 'transparent',
+                WebkitTextStroke: `4px #fff`,
+                filter: `drop-shadow(0 0 ${v * 20}px #fff)`,
+                clipPath: `inset(0 ${100 - v * 100}% 0 0)`
+            }}>軌</div>
+        </Wrapper>
+    );
+};
+
+// --- 35. Magnetic Converge ---
+const MvMagneticText: React.FC = () => {
+    const frame = useCurrentFrame();
+    const t = (frame % 60) / 60;
+    const v = getEase("power4.out")(t);
+    const scatter = (1 - v) * 400;
+    return (
+        <Wrapper>
+            <div style={{ ...LYRIC_STYLE, transform: `translate(${(Math.random() - 0.5) * scatter}px, ${(Math.random() - 0.5) * scatter}px)`, opacity: v }}>集</div>
+        </Wrapper>
+    );
+};
+
+// --- 36. Shatter Gravity Fall ---
+const MvShatterFall: React.FC = () => {
+    const frame = useCurrentFrame();
+    const t = (frame % 60) / 60;
+    const v = getEase("power4.in")(t);
+    const count = 4;
+    return (
+        <Wrapper>
+            <div style={{ position: 'relative', width: 160, height: 160 }}>
+                {[...Array(count * count)].map((_, i) => {
+                    const row = Math.floor(i / count);
+                    const col = i % count;
+                    const rotate = v * (Math.random() * 360);
+                    return (
+                        <div key={i} style={{ 
+                            position: 'absolute', left: col * 40, top: row * 40, width: 40, height: 40,
+                            overflow: 'hidden',
+                            transform: `translate(${(col-1.5)*50*v}px, ${v * 500}px) rotate(${rotate}deg)`,
+                            opacity: 1 - v
+                        }}>
+                            <div style={{ ...LYRIC_STYLE, position: 'absolute', left: -col * 40, top: -row * 40, width: 160 }}>落</div>
+                        </div>
+                    );
+                })}
+            </div>
+        </Wrapper>
+    );
+};
+
+// --- 37. Echo Blur Trail ---
+const MvEchoBlur: React.FC = () => {
+    const frame = useCurrentFrame();
+    const t = (frame % 45) / 45;
+    const v = getEase("power2.out")(t);
+    return (
+        <Wrapper>
+            {[0, 1, 2, 3].map(i => (
+                <div key={i} style={{ 
+                    ...LYRIC_STYLE, position: 'absolute',
+                    transform: `translate(${ (t - i * 0.1) * 200 }px, 0)`,
+                    filter: `blur(${i * 10}px)`,
+                    opacity: 1 - i * 0.25 - (1-v)
+                }}>影</div>
+            ))}
+        </Wrapper>
+    );
+};
+
+// --- 38. Scale Wave Ripple ---
+const MvScaleWave: React.FC = () => {
+    const frame = useCurrentFrame();
+    return (
+        <Wrapper>
+            <CharSplitter text="波動" renderChar={(char, i) => {
+                const localT = Math.max(0, Math.min(1, ((frame % 60) - i * 10) / 30));
+                const localV = getEase("elastic.out(1, 0.5)")(localT);
+                return <span style={{ ...LYRIC_STYLE, fontSize: 100, transform: `scale(${localV})`, opacity: localV }}>{char}</span>;
+            }} />
+        </Wrapper>
+    );
+};
+
+// --- 39. Skew Velocity Motion ---
+const MvSkewVelocity: React.FC = () => {
+    const frame = useCurrentFrame();
+    const t = (frame % 45) / 45;
+    const vel = Math.sin(t * Math.PI) * 45;
+    return (
+        <Wrapper>
+            <div style={{ ...LYRIC_STYLE, transform: `skewX(${vel}deg) translateX(${Math.sin(t * Math.PI) * 200}px)` }}>疾</div>
+        </Wrapper>
+    );
+};
+
+// --- 40. 3D Flippy Snap ---
+const Mv3DFlippy: React.FC = () => {
+    const frame = useCurrentFrame();
+    const t = (frame % 60) / 60;
+    const v = getEase("back.out(2)")(t);
+    return (
+        <Wrapper>
+            <div style={{ 
+                ...LYRIC_STYLE, 
+                transform: `perspective(800px) rotateX(${(1-v)*720}deg) rotateY(${(1-v)*360}deg) scale(${v})`,
+                opacity: v
+            }}>極</div>
+        </Wrapper>
+    );
+};
+
 export const MvLyricTypographyCatalog: React.FC = () => {
     return (
         <AbsoluteFill style={{ 
             backgroundColor: '#000', padding: 20, 
-            display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(6, 1fr)', 
+            display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(8, 1fr)', 
             gap: 10 
         }}>
             <MvPopIn3D />
@@ -559,6 +757,17 @@ export const MvLyricTypographyCatalog: React.FC = () => {
             <MvHologram />
             <MvBezier />
             <MvDepth />
+
+            <MvExplosiveScatter />
+            <MvCylinderRoll />
+            <MvGlitchDisp />
+            <MvNeonPath />
+            <MvMagneticText />
+            <MvShatterFall />
+            <MvEchoBlur />
+            <MvScaleWave />
+            <MvSkewVelocity />
+            <Mv3DFlippy />
         </AbsoluteFill>
     );
 };

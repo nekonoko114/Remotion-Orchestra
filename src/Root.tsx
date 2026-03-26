@@ -105,12 +105,13 @@ import { MagicCircleShowcase } from './compositions/VideoFactory/MagicCircleShow
 import { AdvancedMagicCircleShowcase } from './compositions/VideoFactory/AdvancedMagicCircleShowcase';
 import { TextAnimationCatalog } from './compositions/VideoFactory/TextAnimationCatalog';
 import { TextEffectCatalog } from './compositions/VideoFactory/TextEffectCatalog';
+import { TripleImageEffectsCatalog } from './compositions/VideoFactory/TripleImageEffectsCatalog';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import { AssetPanel } from './components/AssetPanel';
 import './index.css';
 import React from 'react';
 
-const JOL_RANKING_FPS = 30;
+const JOL_RANKING_FPS = 60;
 
 // Calculate Vertical Duration
 // Updated to 3 groups (10-8, 7-6, 5-4)
@@ -158,7 +159,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-Battle-Kawaii"
         component={BattleKawaii}
         durationInFrames={780}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -166,7 +167,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-PastelDream"
         component={PastelDreamShowcase}
         durationInFrames={840} // 31秒から3秒減らして28秒 (840フレーム)
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={pastelDreamSchema}
@@ -198,7 +199,7 @@ export const RemotionRoot: React.FC = () => {
         id="NarandaMamadeMV"
         component={NarandaMamadeMV}
         durationInFrames={Math.ceil(narandaMamadeMusicAnalysis.duration * 30)}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -206,7 +207,7 @@ export const RemotionRoot: React.FC = () => {
         id="soregayasashisa"
         component={SoregayasashisaMV}
         durationInFrames={6800} // ~226 seconds
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -214,7 +215,7 @@ export const RemotionRoot: React.FC = () => {
         id="NOVA-SHOW-MV"
         component={NovaShowMV}
         durationInFrames={15 * 8} // 歌詞8セット分
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -222,7 +223,7 @@ export const RemotionRoot: React.FC = () => {
         id="Kimitonara"
         component={KimitonaraComposition}
         durationInFrames={30 * 222} // 3分42秒
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -231,7 +232,7 @@ export const RemotionRoot: React.FC = () => {
         id="EffectCatalogShowcase"
         component={EffectCatalogShowcase}
         durationInFrames={EffectCatalog.length * EFFECT_SHOWCASE_DURATION}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -239,7 +240,7 @@ export const RemotionRoot: React.FC = () => {
         id="Stitch-Gaming-Overlay"
         component={StitchOverlay}
         durationInFrames={300} // 10 seconds
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -247,7 +248,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-Rookie-Ranking"
         component={RookieRanking}
         durationInFrames={1260} // 42 seconds total
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -255,7 +256,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-SPIRIT-RED"
         component={JolBattleSpiritRed}
         durationInFrames={1005} // 1065 - 60 (SceneLiver shortened)
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
@@ -310,7 +311,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-SPIRIT-GREEN"
         component={JolBattleSpiritGreen}
         durationInFrames={JOL_GREEN_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         defaultProps={greenTheme}
@@ -319,7 +320,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-SPIRIT-MAGIC"
         component={JolBattleSpiritMagic}
         durationInFrames={JOL_MAGIC_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         defaultProps={magicTheme}
@@ -328,7 +329,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-SPEED-ORANGE"
         component={JolBattleSpeedOrange}
         durationInFrames={JOL_SPEED_ORANGE_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         defaultProps={speedOrangeTheme}
@@ -337,7 +338,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-SPIRIT-BLUE"
         component={JolBattleSpiritBlue}
         durationInFrames={1065}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
@@ -375,7 +376,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-SPIRIT-ORENGE"
         component={JolBattleSpiritOrange}
         durationInFrames={JOL_ORANGE_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
@@ -418,7 +419,7 @@ export const RemotionRoot: React.FC = () => {
         id="Magic-Circle-Showcase"
         component={MagicCircleShowcase}
         durationInFrames={180 * 2} // 180 frames per sequence * 2 standard modes (+1 tracing mode if needed)
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -426,7 +427,7 @@ export const RemotionRoot: React.FC = () => {
         id="AdvancedMagicCircleShowcase"
         component={AdvancedMagicCircleShowcase}
         durationInFrames={450} // 150 frames * 3 colors
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -434,7 +435,7 @@ export const RemotionRoot: React.FC = () => {
         id="Text-Animation-Catalog"
         component={TextAnimationCatalog}
         durationInFrames={900}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -442,7 +443,7 @@ export const RemotionRoot: React.FC = () => {
         id="Text-Effect-Catalog"
         component={TextEffectCatalog}
         durationInFrames={2070}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -450,7 +451,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-WHITE-SNOW"
         component={JolBattleWhiteSnow}
         durationInFrames={JOL_WHITE_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
@@ -518,7 +519,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-PATTERN6"
         component={JolBattlePattern6}
         durationInFrames={915}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
@@ -568,7 +569,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-BATTLE-SPIRIT-SPRING"
         component={JolBattleSpringSakura}
         durationInFrames={JOL_SAKURA_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
@@ -642,7 +643,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-RESERVATION-BATTLE"
         component={JolBattleReservation}
         durationInFrames={860}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={ReservationBattleSchema}
@@ -689,7 +690,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-POPULARITY-BATTLE-3vs1"
         component={JolPopularityBattle3vs1}
         durationInFrames={1370}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={PopularityBattle3vs1Schema}
@@ -739,7 +740,7 @@ export const RemotionRoot: React.FC = () => {
         id="JOL-POPULARITY-BATTLE-SAKURA-3vs1"
         component={JolPopularityBattleSakura3vs1}
         durationInFrames={975}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
         schema={PopularityBattleSakura3vs1Schema}
@@ -788,7 +789,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-Backgrounds"
         component={ShowcaseBackgrounds}
         durationInFrames={SHOWCASE_BG_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -796,7 +797,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-Effects-Ultimate-42"
         component={ShowcaseEffects}
         durationInFrames={SHOWCASE_FX_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -804,7 +805,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-Transitions"
         component={ShowcaseTransitions}
         durationInFrames={SHOWCASE_TRANS_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -812,7 +813,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-TextAndLayouts"
         component={ShowcaseTextLayouts}
         durationInFrames={SHOWCASE_TEXT_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -820,7 +821,7 @@ export const RemotionRoot: React.FC = () => {
         id="Catalog-Transitions-Ultimate-60"
         component={TransitionsCatalogShowcase}
         durationInFrames={TRANSITION_SHOWCASE_DURATION}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -829,7 +830,7 @@ export const RemotionRoot: React.FC = () => {
         id="ADVANCED-EFFECTS-SHOWCASE"
         component={AdvancedEffectsShowcase}
         durationInFrames={990}
-        fps={30}
+        fps={60}
         width={1080}
         height={1920}
       />
@@ -837,7 +838,7 @@ export const RemotionRoot: React.FC = () => {
         id="SVG-EFFECTS-CATALOG"
         component={SvgEffectsCatalog}
         durationInFrames={300}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -845,7 +846,7 @@ export const RemotionRoot: React.FC = () => {
         id="CANVAS-EFFECTS-CATALOG"
         component={CanvasEffectsCatalog}
         durationInFrames={300}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -853,7 +854,7 @@ export const RemotionRoot: React.FC = () => {
         id="SVG-GRAPHICS-CATALOG"
         component={SvgGraphicsCatalog}
         durationInFrames={300}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -861,7 +862,7 @@ export const RemotionRoot: React.FC = () => {
         id="GSAP-EFFECTS-CATALOG"
         component={GsapEffectsCatalog}
         durationInFrames={300}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -869,7 +870,7 @@ export const RemotionRoot: React.FC = () => {
         id="KINETIC-TYPO-CATALOG"
         component={KineticTypographyCatalog}
         durationInFrames={900}
-        fps={30}
+        fps={60}
         width={1920}
         height={1080}
       />
@@ -877,7 +878,7 @@ export const RemotionRoot: React.FC = () => {
         id="MV-LYRIC-TYPO-CATALOG"
         component={MvLyricTypographyCatalog}
         durationInFrames={900}
-        fps={30}
+        fps={60}
         width={1080}
         height={1080}
       />
@@ -885,7 +886,15 @@ export const RemotionRoot: React.FC = () => {
         id="SKIA-EFFECTS-SHOWCASE"
         component={SkiaEffectsShowcase}
         durationInFrames={9900}
-        fps={30}
+        fps={60}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="TRIPLE-IMAGE-EFFECTS-CATALOG"
+        component={TripleImageEffectsCatalog}
+        durationInFrames={900}
+        fps={60}
         width={1080}
         height={1920}
       />
