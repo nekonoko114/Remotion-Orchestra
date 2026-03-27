@@ -429,3 +429,91 @@ export const flareTransition = (
     props: {} as any,
   };
 };
+// 9. ULTIMATE TRANSITION (Hyperspace Warp Speed)
+export const ultimateTransition = (): TransitionPresentation<any> => {
+  return {
+    component: (props: TransitionProps) => {
+      const { children, presentationProgress } = props;
+      const arr = React.Children.toArray(children);
+      const exiting = arr[0];
+      const entering = arr[1];
+
+      const p = presentationProgress;
+      const z = interpolate(p, [0, 1], [0, 3000], {
+        easing: Easing.bezier(0.7, 0, 0.3, 1),
+      });
+
+      const exitOpacity = interpolate(p, [0, 0.4], [1, 0]);
+      const enterOpacity = interpolate(p, [0.6, 1], [0, 1]);
+
+      // Motion Blur and Chromatic Aberration Power
+      const power = interpolate(p, [0, 0.5, 1], [0, 1, 0]);
+
+      if (!entering) return exiting as React.ReactElement;
+      if (!exiting) return entering as React.ReactElement;
+
+      return (
+        <AbsoluteFill style={{ perspective: 1000, backgroundColor: '#000', overflow: 'hidden' }}>
+          {/* Exiting Scene with Depth Fly-away */}
+          <AbsoluteFill
+            style={{
+              transform: `translateZ(${z}px)`,
+              opacity: exitOpacity,
+              filter: `blur(${power * 40}px) brightness(${1 + power})`,
+            }}
+          >
+            {exiting}
+          </AbsoluteFill>
+
+          {/* Entering Scene Flying into view */}
+          <AbsoluteFill
+            style={{
+              transform: `translateZ(${z - 3000}px)`,
+              opacity: enterOpacity,
+              filter: `blur(${power * 40}px) brightness(${1 + power})`,
+            }}
+          >
+            {entering}
+          </AbsoluteFill>
+
+          {/* Hyperactive Energy Lines */}
+          {power > 0.1 && new Array(40).fill(0).map((_, i) => {
+            const seed = i * 1.5;
+            const x = random(seed) * 100;
+            const y = random(seed + 1) * 100;
+            const length = 200 + random(seed + 2) * 800;
+            const speed = 1500 + random(seed + 3) * 2000;
+            const lineZ = (p * speed + random(seed + 4) * 2000) % 4000;
+            const color = i % 2 === 0 ? '#0ff' : '#d000ff';
+
+            return (
+              <div
+                key={i}
+                style={{
+                  position: 'absolute',
+                  left: `${x}%`,
+                  top: `${y}%`,
+                  width: 2,
+                  height: length,
+                  backgroundColor: color,
+                  boxShadow: `0 0 15px ${color}`,
+                  transform: `translateZ(${lineZ - 2000}px) rotateX(90deg)`,
+                  opacity: power * 0.8,
+                }}
+              />
+            );
+          })}
+
+          {/* RGB Split Flash Overlay */}
+          {power > 0.5 && (
+            <>
+              <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.4, transform: `translateX(${power * 20}px)`, backgroundColor: '#ff0000' }} />
+              <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.4, transform: `translateX(${-power * 20}px)`, backgroundColor: '#00ffff' }} />
+            </>
+          )}
+        </AbsoluteFill>
+      );
+    },
+    props: {} as any,
+  };
+};

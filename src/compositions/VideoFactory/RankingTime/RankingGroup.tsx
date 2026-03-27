@@ -103,11 +103,12 @@ export const RankingGroup: React.FC<Props> = ({
           const liverEntrance = spring({
             frame: frame - index * staggerFrames - 20,
             fps,
-            config: { damping: 12, stiffness: 180 },
+            config: { damping: 14, stiffness: 200 },
           });
 
-          const slideX = interpolate(liverEntrance, [0, 1], [-1000, 0]);
-          const rowOpacity = interpolate(liverEntrance, [0, 0.2], [0, 1]);
+          const scaleIn = interpolate(liverEntrance, [0, 1], [0.6, 1]);
+          const blurIn = interpolate(liverEntrance, [0, 1], [40, 0]);
+          const rowOpacity = interpolate(liverEntrance, [0, 0.4], [0, 1]);
 
           return (
             <div
@@ -118,7 +119,8 @@ export const RankingGroup: React.FC<Props> = ({
                 backgroundColor: 'rgba(5, 0, 15, 0.7)',
                 padding: `${is2Group ? 50 : 30}px ${40}px`,
                 borderRadius: 15 * scale,
-                transform: `translateX(${slideX}px)`,
+                transform: `scale(${scaleIn})`,
+                filter: `blur(${blurIn}px)`,
                 opacity: rowOpacity,
                 border: `2px solid ${THEME_COLOR}`,
                 boxShadow: `0 0 15px ${GLOW_COLOR}`,
@@ -209,7 +211,7 @@ export const RankingGroup: React.FC<Props> = ({
                   }} />
                 </div>
                 <div style={{
-                  fontSize: 40 * scale,
+                  fontSize: 60 * scale,
                   color: THEME_COLOR,
                   marginTop: 5,
                   fontFamily: 'monospace',
