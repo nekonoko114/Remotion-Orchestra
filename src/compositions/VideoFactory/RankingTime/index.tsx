@@ -1,4 +1,5 @@
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
+import { Easing } from 'remotion';
 import { wipe } from '@remotion/transitions/wipe';
 import { Ending } from './Ending';
 import { Opening } from './Opening';
@@ -18,8 +19,8 @@ export const OPENING_SEC = 5;
 export const GRID_BRIDGE_SEC = 8.0;
 export const GROUP_SEC = 160 / 30;
 export const TOP_RANK_SEC = 160 / 30;
-export const ENDING_SEC = 2.5;
-export const TRANSITION_FRAMES = 60;
+export const ENDING_SEC = 3;
+export const TRANSITION_FRAMES = 40;
 
 export const RankingTime = (props: { data?: Liver[] }) => {
   const { fps } = useVideoConfig();
@@ -32,7 +33,10 @@ export const RankingTime = (props: { data?: Liver[] }) => {
   const ENDING_DURATION = ENDING_SEC * fps;
   const TRANSITION_DURATION = TRANSITION_FRAMES;
 
-  const timing = linearTiming({ durationInFrames: TRANSITION_DURATION });
+  const timing = linearTiming({
+    durationInFrames: TRANSITION_DURATION,
+    easing: Easing.out(Easing.quad),
+  });
 
   return (
     <AbsoluteFill>
