@@ -10,7 +10,19 @@ import {
 } from 'remotion';
 import { wipe } from '@remotion/transitions/wipe';
 import { slide } from '@remotion/transitions/slide';
+import { clockWipe } from '@remotion/transitions/clock-wipe';
+import { flip } from '@remotion/transitions/flip';
 import { GradientWipeTransition } from './components/BattleShared/Transitions15';
+
+// 12. FLIP TRANSITION (Official)
+export const flipTransition = (options?: { direction?: 'from-left' | 'from-right' | 'from-top' | 'from-bottom' }): TransitionPresentation<any> => {
+  return flip({ direction: options?.direction || 'from-right' });
+};
+
+// 11. CLOCK WIPE TRANSITION (Official)
+export const clockWipeTransition = (): TransitionPresentation<any> => {
+  return clockWipe({ width: 1080, height: 1920 }); 
+};
 import type {
   TransitionPresentation,
   TransitionPresentationComponentProps,
