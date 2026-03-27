@@ -26,3 +26,5 @@ temp_kimitonara.wav
 # Assets - Audio and Generated
 public/assets/audio/music/*.mp3
 public/assets/generated/
+
+build

@@ -134,7 +134,7 @@ export const Opening: React.FC = () => {
 
       <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 50 }}>
         <DigitalTypewriter text="J.O.L" fontSize={260 * scale} delay={0} duration={30} yOffset={-380 * scale} />
-        <DigitalTypewriter text="2026年2月度" fontSize={130 * scale} delay={30} duration={30} yOffset={-120 * scale} />
+        <DigitalTypewriter text="2026年3月度" fontSize={130 * scale} delay={30} duration={30} yOffset={-120 * scale} />
         <DigitalTypewriter text="月間配信時間" fontSize={130 * scale} delay={60} duration={30} yOffset={60 * scale} />
         <DigitalTypewriter text="ランキング" fontSize={160 * scale} delay={90} duration={30} yOffset={250 * scale} />
         <DigitalTypewriter text="結果発表!" fontSize={160 * scale} delay={120} duration={30} yOffset={440 * scale} />

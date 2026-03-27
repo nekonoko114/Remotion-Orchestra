@@ -23,7 +23,7 @@ export const GlitchEffect: React.FC<GlitchEffectProps> = ({
   const opacity = random(`op-${frame}`) > 0.1 ? 1 : 0.8;
 
   return (
-    <AbsoluteFill style={{ backgroundColor: 'black' }}>
+    <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
       {/* Red Channel */}
       <AbsoluteFill
         style={{

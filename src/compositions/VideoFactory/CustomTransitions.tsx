@@ -465,12 +465,7 @@ export const glitchTransition = (): TransitionPresentation<any> => {
       if (!exiting) return entering as React.ReactElement;
 
       return (
-        <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden', zIndex: 9999 }}>
-          {/* Debug Log */}
-          {(() => {
-            if (p > 0 && p < 0.1) console.log('DEBUG: GLITCH TRANSITION RENDERING', { p });
-            return null;
-          })()}
+        <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
           {/* Base Layer */}
           <AbsoluteFill style={{ transform: `translateX(${jitterX}px)` }}>
             {isSecondHalf ? entering : exiting}
@@ -746,5 +741,137 @@ export const wipeWithGlitchTransition = (options: { direction?: any } = {}): Tra
         </AbsoluteFill>
       );
     },
+  };
+};
+
+// 16. HYPER ZOOM BLAST (Explosive depth transition)
+export const hyperZoomBlastTransition = (): TransitionPresentation<any> => {
+  return {
+    component: (props: TransitionProps) => {
+      const { children, presentationProgress } = props;
+      const arr = React.Children.toArray(children);
+      const exiting = arr[0];
+      const entering = arr[1];
+      const p = presentationProgress;
+
+      // Exponential curves for "Explosive" feel
+      const exitScale = interpolate(p, [0, 1], [1, 10], { easing: Easing.bezier(0.7, 0, 0.3, 1) });
+      const enterScale = interpolate(p, [0, 1], [0.1, 1], { easing: Easing.bezier(0.2, 0, 0.1, 1) });
+      const exitOpacity = interpolate(p, [0, 0.4], [1, 0], { extrapolateRight: 'clamp' });
+      const enterOpacity = interpolate(p, [0.4, 1], [0, 1], { extrapolateLeft: 'clamp' });
+      const power = Math.sin(p * Math.PI);
+
+      return (
+        <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+          {p < 0.5 && (
+            <AbsoluteFill style={{ transform: `scale(${exitScale})`, opacity: exitOpacity, filter: `blur(${power * 40}px) brightness(${1 + power * 2})` }}>
+              {exiting}
+            </AbsoluteFill>
+          )}
+          {p > 0.3 && (
+            <AbsoluteFill style={{ transform: `scale(${enterScale})`, opacity: enterOpacity, filter: `blur(${power * 40}px) brightness(${1 + power * 2})` }}>
+              {entering}
+            </AbsoluteFill>
+          )}
+          {/* Central Blast Flash */}
+          <AbsoluteFill style={{ pointerEvents: 'none', background: `radial-gradient(circle, white 0%, transparent 70%)`, opacity: power, transform: `scale(${1 + power * 3})` }} />
+        </AbsoluteFill>
+      );
+    },
+    props: {} as any,
+  };
+};
+
+// 17. CYBER SLICE 3D (Fragmented reconstruction)
+export const cyberSlice3DTransition = (): TransitionPresentation<any> => {
+  return {
+    component: (props: TransitionProps) => {
+      const { children, presentationProgress } = props;
+      const arr = React.Children.toArray(children);
+      const exiting = arr[0];
+      const entering = arr[1];
+      const p = presentationProgress;
+      const power = Math.sin(p * Math.PI);
+      const slices = 8;
+
+      return (
+        <AbsoluteFill style={{ backgroundColor: '#000', perspective: 1000, overflow: 'hidden' }}>
+          {new Array(slices).fill(0).map((_, i) => {
+            const top = (i * 100) / slices;
+            const height = 100 / slices;
+            const offset = (i % 2 === 0 ? 1 : -1) * power * 300;
+            const rotateY = (i % 2 === 0 ? 1 : -1) * power * 45;
+            const isSecondHalf = p > 0.5;
+
+            return (
+              <AbsoluteFill
+                key={i}
+                style={{
+                  clipPath: `polygon(0 ${top}%, 100% ${top}%, 100% ${top + height}%, 0 ${top + height}%)`,
+                  transform: `translateX(${offset}px) rotateY(${rotateY}deg) translateZ(${power * 200}px)`,
+                  filter: `brightness(${1 + power}) contrast(${1 + power})`,
+                }}
+              >
+                {isSecondHalf ? entering : exiting}
+              </AbsoluteFill>
+            );
+          })}
+          {/* Neon Scanklines during slice */}
+          {power > 0.2 && (
+            <AbsoluteFill style={{ pointerEvents: 'none', background: `linear-gradient(rgba(0,255,255,0), rgba(0,255,255,0.5), rgba(0,255,255,0))`, height: '2px', top: `${p * 100}%`, boxShadow: '0 0 20px #0ff' }} />
+          )}
+        </AbsoluteFill>
+      );
+    },
+    props: {} as any,
+  };
+};
+
+// 18. NEURAL WARP (Blackhole / Dimension jump)
+export const neuralWarpTransition = (): TransitionPresentation<any> => {
+  return {
+    component: (props: TransitionProps) => {
+      const { children, presentationProgress } = props;
+      const arr = React.Children.toArray(children);
+      const exiting = arr[0];
+      const entering = arr[1];
+      const p = presentationProgress;
+      const power = Math.sin(p * Math.PI);
+      
+      const angle = interpolate(p, [0, 1], [0, 180], { easing: Easing.bezier(0.4, 0, 0.2, 1) });
+      const scale = interpolate(p, [0, 0.5, 1], [1, 0, 1]);
+
+      return (
+        <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+          <AbsoluteFill style={{ transform: `rotate(${angle}deg) scale(${scale})`, filter: `blur(${power * 50}px) hue-rotate(${p * 360}deg)` }}>
+            {p < 0.5 ? exiting : entering}
+          </AbsoluteFill>
+          {/* Warp Particles */}
+          {power > 0.1 && new Array(30).fill(0).map((_, i) => {
+            const seed = i * 1.5;
+            const x = random(seed) * 100;
+            const y = random(seed + 1) * 100;
+            return (
+              <div
+                key={i}
+                style={{
+                  position: 'absolute',
+                  left: `${x}%`,
+                  top: `${y}%`,
+                  width: 4,
+                  height: 4,
+                  backgroundColor: '#fff',
+                  borderRadius: '50%',
+                  boxShadow: '0 0 10px white',
+                  transform: `translate(${(random(seed + 2) - 0.5) * power * 1000}px, ${(random(seed + 3) - 0.5) * power * 1000}px) scale(${power * 2})`,
+                  opacity: power,
+                }}
+              />
+            );
+          })}
+        </AbsoluteFill>
+      );
+    },
+    props: {} as any,
   };
 };

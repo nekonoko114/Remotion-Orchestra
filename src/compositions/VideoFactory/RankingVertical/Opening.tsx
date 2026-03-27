@@ -74,7 +74,7 @@ export const Opening: React.FC = () => {
           </div>
           <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ transform: 'scale(0.8)' }}>
-              <NeonGlowText text="2026年2月" fontSize={120} color="#FFFFFF" glowColor="rgba(255,255,255,0.5)" delay={50} />
+              <NeonGlowText text="2026年3月" fontSize={120} color="#FFFFFF" glowColor="rgba(255,255,255,0.5)" delay={50} />
             </div>
             <NeonGlowText text="結果発表" fontSize={180} color="#FFD700" glowColor="#FF8C00" delay={65} />
           </div>
