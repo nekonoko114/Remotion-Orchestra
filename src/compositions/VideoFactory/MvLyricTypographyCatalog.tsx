@@ -12,11 +12,11 @@ export const getEase = (name: string) => gsap.parseEase(name) || ((v: number) =>
 
 const LYRIC_STYLE: React.CSSProperties = {
     color: '#fff',
-    fontSize: 160,
+    fontSize: 500,
     fontWeight: 900,
     fontFamily: 'Mochiy Pop One, sans-serif',
     textAlign: 'center',
-    textShadow: '0 0 20px rgba(255,255,255,0.8)',
+    textShadow: '0 0 40px rgba(255,255,255,0.8)',
 };
 
 const CharSplitter: React.FC<{
@@ -186,7 +186,7 @@ const MvVerticalSlat: React.FC = () => {
     const count = 5;
     return (
         <Wrapper>
-            <div style={{ display: 'flex', width: 200, height: 200, position: 'relative' }}>
+            <div style={{ display: 'flex', width: 800, height: 800, position: 'relative' }}>
                 {[...Array(count)].map((_, i) => {
                     const t = Math.max(0, Math.min(1, ((frame % 60) - i * 5) / 30));
                     const v = getEase("power3.inOut")(t);
@@ -197,11 +197,11 @@ const MvVerticalSlat: React.FC = () => {
                         }}>
                             <div style={{ 
                                 ...LYRIC_STYLE, 
-                                fontSize: 160,
+                                fontSize: 500,
                                 position: 'absolute',
-                                left: `-${i * (200/count)}px`,
+                                left: `-${i * (800/count)}px`,
                                 transform: `translateY(${(1-v) * 100}%)`,
-                                width: 200
+                                width: 800
                             }}>裂</div>
                         </div>
                     );
@@ -315,18 +315,18 @@ const MvShatter: React.FC = () => {
     const count = 16;
     return (
         <Wrapper>
-            <div style={{ position: 'relative', width: 160, height: 160 }}>
+            <div style={{ position: 'relative', width: 800, height: 800 }}>
                 {[...Array(count)].map((_, i) => {
                     const row = Math.floor(i / 4);
                     const col = i % 4;
                     const v = getEase("power4.out")(t);
                     return (
                         <div key={i} style={{ 
-                            position: 'absolute', left: col * 40, top: row * 40, width: 40, height: 40,
+                            position: 'absolute', left: col * 200, top: row * 200, width: 200, height: 200,
                             overflow: 'hidden', opacity: v,
-                            transform: `translate(${(col-1.5)*100*(1-v)}px, ${(row-1.5)*100*(1-v)}px)`
+                            transform: `translate(${(col-1.5)*200*(1-v)}px, ${(row-1.5)*200*(1-v)}px)`
                         }}>
-                            <div style={{ ...LYRIC_STYLE, position: 'absolute', left: -col * 40, top: -row * 40, width: 160 }}>砕</div>
+                            <div style={{ ...LYRIC_STYLE, position: 'absolute', left: -col * 200, top: -row * 200, width: 800 }}>砕</div>
                         </div>
                     );
                 })}
@@ -637,19 +637,19 @@ const MvShatterFall: React.FC = () => {
     const count = 4;
     return (
         <Wrapper>
-            <div style={{ position: 'relative', width: 160, height: 160 }}>
+            <div style={{ position: 'relative', width: 800, height: 800 }}>
                 {[...Array(count * count)].map((_, i) => {
                     const row = Math.floor(i / count);
                     const col = i % count;
                     const rotate = v * (Math.random() * 360);
                     return (
                         <div key={i} style={{ 
-                            position: 'absolute', left: col * 40, top: row * 40, width: 40, height: 40,
+                            position: 'absolute', left: col * 200, top: row * 200, width: 200, height: 200,
                             overflow: 'hidden',
-                            transform: `translate(${(col-1.5)*50*v}px, ${v * 500}px) rotate(${rotate}deg)`,
+                            transform: `translate(${(col-1.5)*100*v}px, ${v * 1000}px) rotate(${rotate}deg)`,
                             opacity: 1 - v
                         }}>
-                            <div style={{ ...LYRIC_STYLE, position: 'absolute', left: -col * 40, top: -row * 40, width: 160 }}>落</div>
+                            <div style={{ ...LYRIC_STYLE, position: 'absolute', left: -col * 200, top: -row * 200, width: 800 }}>落</div>
                         </div>
                     );
                 })}
@@ -720,54 +720,30 @@ const Mv3DFlippy: React.FC = () => {
 };
 
 export const MvLyricTypographyCatalog: React.FC = () => {
+    const effects = [
+        MvPopIn3D, MvSlideSkew, MvHingeDrop, MvGlitchFlash, MvSoftExp,
+        MvDoubleVision, MvClockFlip, MvRainbowPulse, MvVibrateSettle, MvMagneticPull,
+        MvVerticalSlat, MvFocusPulse, MvElasticSqueeze, MvNeonStrike, MvDotForm,
+        MvMorphShape, MvShatter, MvMotionBlurFlip, MvElasticGrid, MvLiquid,
+        MvSwiftSwap, MvGravityDrop, MvTunnel, MvStrobe, MvOutlineDraw,
+        MvSlice, MvWhirl, MvHologram, MvBezier, MvDepth,
+        MvExplosiveScatter, MvCylinderRoll, MvGlitchDisp, MvNeonPath, MvMagneticText,
+        MvShatterFall, MvEchoBlur, MvScaleWave, MvSkewVelocity, Mv3DFlippy
+    ];
+
+    const DURATION_PER_EFFECT = 60;
+    const frame = useCurrentFrame();
+    const effectIndex = Math.floor(frame / DURATION_PER_EFFECT) % effects.length;
+    const CurrentEffect = effects[effectIndex];
+
     return (
         <AbsoluteFill style={{ 
-            backgroundColor: '#000', padding: 20, 
-            display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(8, 1fr)', 
-            gap: 10 
+            backgroundColor: '#000', padding: 0, 
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
         }}>
-            <MvPopIn3D />
-            <MvSlideSkew />
-            <MvHingeDrop />
-            <MvGlitchFlash />
-            <MvSoftExp />
-            <MvDoubleVision />
-            <MvClockFlip />
-            <MvRainbowPulse />
-            <MvVibrateSettle />
-            <MvMagneticPull />
-            <MvVerticalSlat />
-            <MvFocusPulse />
-            <MvElasticSqueeze />
-            <MvNeonStrike />
-            <MvDotForm />
-
-            <MvMorphShape />
-            <MvShatter />
-            <MvMotionBlurFlip />
-            <MvElasticGrid />
-            <MvLiquid />
-            <MvSwiftSwap />
-            <MvGravityDrop />
-            <MvTunnel />
-            <MvStrobe />
-            <MvOutlineDraw />
-            <MvSlice />
-            <MvWhirl />
-            <MvHologram />
-            <MvBezier />
-            <MvDepth />
-
-            <MvExplosiveScatter />
-            <MvCylinderRoll />
-            <MvGlitchDisp />
-            <MvNeonPath />
-            <MvMagneticText />
-            <MvShatterFall />
-            <MvEchoBlur />
-            <MvScaleWave />
-            <MvSkewVelocity />
-            <Mv3DFlippy />
+            <div style={{ width: 1080, height: 1080 }}>
+                <CurrentEffect />
+            </div>
         </AbsoluteFill>
     );
 };

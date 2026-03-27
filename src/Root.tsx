@@ -106,6 +106,7 @@ import { AdvancedMagicCircleShowcase } from './compositions/VideoFactory/Advance
 import { TextAnimationCatalog } from './compositions/VideoFactory/TextAnimationCatalog';
 import { TextEffectCatalog } from './compositions/VideoFactory/TextEffectCatalog';
 import { TripleImageEffectsCatalog } from './compositions/VideoFactory/TripleImageEffectsCatalog';
+import { QuadImageEffectsCatalog } from './compositions/VideoFactory/QuadImageEffectsCatalog';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import { AssetPanel } from './components/AssetPanel';
 import './index.css';
@@ -894,6 +895,14 @@ export const RemotionRoot: React.FC = () => {
         id="TRIPLE-IMAGE-EFFECTS-CATALOG"
         component={TripleImageEffectsCatalog}
         durationInFrames={900}
+        fps={60}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="QUAD-IMAGE-EFFECTS-CATALOG"
+        component={QuadImageEffectsCatalog}
+        durationInFrames={600}
         fps={60}
         width={1080}
         height={1920}

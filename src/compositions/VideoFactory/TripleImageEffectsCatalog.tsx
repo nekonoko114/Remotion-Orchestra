@@ -166,10 +166,10 @@ export const MvSpinCarousel: React.FC<TripleImageProps> = ({ imgA, imgB, imgC })
     return (
         <Wrapper label="Spin Carousel">
             <div style={{ perspective: 1200, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: 140, height: 180, transformStyle: 'preserve-3d', transform: `rotateY(${angle}deg) rotateX(10deg)` }}>
-                    <Img src={imgA} style={{ position: 'absolute', width: '100%', height: '100%', transform: `translateZ(120px)`, objectFit: 'cover', border: '1px solid #fff' }} />
-                    <Img src={imgB} style={{ position: 'absolute', width: '100%', height: '100%', transform: `rotateY(120deg) translateZ(120px)`, objectFit: 'cover', border: '1px solid #fff' }} />
-                    <Img src={imgC} style={{ position: 'absolute', width: '100%', height: '100%', transform: `rotateY(240deg) translateZ(120px)`, objectFit: 'cover', border: '1px solid #fff' }} />
+                <div style={{ width: 600, height: 800, transformStyle: 'preserve-3d', transform: `rotateY(${angle}deg) rotateX(10deg)` }}>
+                    <Img src={imgA} style={{ position: 'absolute', width: '100%', height: '100%', transform: `translateZ(500px)`, objectFit: 'cover', border: '1px solid #fff' }} />
+                    <Img src={imgB} style={{ position: 'absolute', width: '100%', height: '100%', transform: `rotateY(120deg) translateZ(500px)`, objectFit: 'cover', border: '1px solid #fff' }} />
+                    <Img src={imgC} style={{ position: 'absolute', width: '100%', height: '100%', transform: `rotateY(240deg) translateZ(500px)`, objectFit: 'cover', border: '1px solid #fff' }} />
                 </div>
             </div>
         </Wrapper>
@@ -381,15 +381,15 @@ export const MvFloatingCubes: React.FC<TripleImageProps> = ({ imgA, imgB, imgC }
             <Img src={imgA} style={{ ...EFFECT_STYLE, filter: 'blur(5px) brightness(0.5)' }} />
             <div style={{ perspective: 1000, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ 
-                    width: 150, height: 150, transformStyle: 'preserve-3d', 
-                    transform: `rotateX(${t * 360}deg) rotateY(${t * 720}deg) translateZ(${Math.sin(t * Math.PI * 2) * 30}px)`
+                    width: 600, height: 600, transformStyle: 'preserve-3d', 
+                    transform: `rotateX(${t * 360}deg) rotateY(${t * 720}deg) translateZ(${Math.sin(t * Math.PI * 2) * 100}px)`
                 }}>
-                    <div style={{ position: 'absolute', width: 150, height: 150, transform: 'translateZ(75px)', border: '1px solid #fff' }}><Img src={imgA} style={EFFECT_STYLE} /></div>
-                    <div style={{ position: 'absolute', width: 150, height: 150, transform: 'rotateY(90deg) translateZ(75px)', border: '1px solid #fff' }}><Img src={imgB} style={EFFECT_STYLE} /></div>
-                    <div style={{ position: 'absolute', width: 150, height: 150, transform: 'rotateY(180deg) translateZ(75px)', border: '1px solid #fff' }}><Img src={imgC} style={EFFECT_STYLE} /></div>
-                    <div style={{ position: 'absolute', width: 150, height: 150, transform: 'rotateY(-90deg) translateZ(75px)', border: '1px solid #fff' }}><Img src={imgA} style={EFFECT_STYLE} /></div>
-                    <div style={{ position: 'absolute', width: 150, height: 150, transform: 'rotateX(90deg) translateZ(75px)', border: '1px solid #fff' }}><Img src={imgB} style={EFFECT_STYLE} /></div>
-                    <div style={{ position: 'absolute', width: 150, height: 150, transform: 'rotateX(-90deg) translateZ(75px)', border: '1px solid #fff' }}><Img src={imgC} style={EFFECT_STYLE} /></div>
+                    <div style={{ position: 'absolute', width: 600, height: 600, transform: 'translateZ(300px)', border: '1px solid #fff' }}><Img src={imgA} style={EFFECT_STYLE} /></div>
+                    <div style={{ position: 'absolute', width: 600, height: 600, transform: 'rotateY(90deg) translateZ(300px)', border: '1px solid #fff' }}><Img src={imgB} style={EFFECT_STYLE} /></div>
+                    <div style={{ position: 'absolute', width: 600, height: 600, transform: 'rotateY(180deg) translateZ(300px)', border: '1px solid #fff' }}><Img src={imgC} style={EFFECT_STYLE} /></div>
+                    <div style={{ position: 'absolute', width: 600, height: 600, transform: 'rotateY(-90deg) translateZ(300px)', border: '1px solid #fff' }}><Img src={imgA} style={EFFECT_STYLE} /></div>
+                    <div style={{ position: 'absolute', width: 600, height: 600, transform: 'rotateX(90deg) translateZ(300px)', border: '1px solid #fff' }}><Img src={imgB} style={EFFECT_STYLE} /></div>
+                    <div style={{ position: 'absolute', width: 600, height: 600, transform: 'rotateX(-90deg) translateZ(300px)', border: '1px solid #fff' }}><Img src={imgC} style={EFFECT_STYLE} /></div>
                 </div>
             </div>
         </Wrapper>
@@ -468,7 +468,7 @@ export const MvKaleidoscopeInfinity: React.FC<TripleImageProps> = ({ imgB }) => 
 
     return (
         <Wrapper label="Kaleidoscope Infinity">
-            <canvas ref={canvasRef} width={400} height={400} style={EFFECT_STYLE} />
+            <canvas ref={canvasRef} width={1080} height={1080} style={EFFECT_STYLE} />
         </Wrapper>
     );
 };
@@ -533,7 +533,7 @@ export const MvPixelCascade: React.FC<TripleImageProps> = ({ imgA, imgB }) => {
 
     return (
         <Wrapper label="Pixel Cascade">
-            <canvas ref={canvasRef} width={400} height={400} style={EFFECT_STYLE} />
+            <canvas ref={canvasRef} width={1080} height={1080} style={EFFECT_STYLE} />
         </Wrapper>
     );
 };
@@ -660,7 +660,7 @@ export const MvGraphicGlitchTrio: React.FC<TripleImageProps> = ({ imgA, imgB, im
 
     return (
         <Wrapper label="Graphic Glitch Trio">
-            <canvas ref={canvasRef} width={400} height={400} style={EFFECT_STYLE} />
+            <canvas ref={canvasRef} width={1080} height={1080} style={EFFECT_STYLE} />
         </Wrapper>
     );
 };
@@ -689,42 +689,52 @@ export const TripleImageEffectsCatalog: React.FC = () => {
         imgC: DEFAULT_IMG_C,
     };
 
+    const effects = [
+        { component: MvTripleFlash, name: "MvTripleFlash" },
+        { component: MvSlideOrchestra, name: "MvSlideOrchestra" },
+        { component: MvCrossfadeDream, name: "MvCrossfadeDream" },
+        { component: MvTileParallax, name: "MvTileParallax" },
+        { component: MvParticleAssembly, name: "MvParticleAssembly" },
+        { component: MvBounceReaction, name: "MvBounceReaction" },
+        { component: MvSpinCarousel, name: "MvSpinCarousel" },
+        { component: MvZoomFuture, name: "MvZoomFuture" },
+        { component: MvMirrorDimension, name: "MvMirrorDimension" },
+        { component: MvMaskingReveal, name: "MvMaskingReveal" },
+        { component: MvPrismSlice, name: "MvPrismSlice" },
+        { component: MvPulseScanner, name: "MvPulseScanner" },
+        { component: MvTornadoSwirl, name: "MvTornadoSwirl" },
+        { component: MvCardFlip3D, name: "MvCardFlip3D" },
+        { component: MvStripeReveal, name: "MvStripeReveal" },
+        { component: MvRadialExpansion, name: "MvRadialExpansion" },
+        { component: MvGlitchTransition, name: "MvGlitchTransition" },
+        { component: MvLiquidDistortion, name: "MvLiquidDistortion" },
+        { component: MvFloatingCubes, name: "MvFloatingCubes" },
+        { component: MvHexagonExpanding, name: "MvHexagonExpanding" },
+        { component: MvSonicBoom, name: "MvSonicBoom" },
+        { component: MvKaleidoscopeInfinity, name: "MvKaleidoscopeInfinity" },
+        { component: MvSpiralDive, name: "MvSpiralDive" },
+        { component: MvPixelCascade, name: "MvPixelCascade" },
+        { component: MvTripleMirrorReflection, name: "MvTripleMirrorReflection" },
+        { component: MvRhythmicShakedown, name: "MvRhythmicShakedown" },
+        { component: MvTimeSlipWarp, name: "MvTimeSlipWarp" },
+        { component: MvFractalUnfold, name: "MvFractalUnfold" },
+        { component: MvGraphicGlitchTrio, name: "MvGraphicGlitchTrio" },
+        { component: MvHeartbeatSync, name: "MvHeartbeatSync" },
+    ];
+
+    const DURATION_PER_EFFECT = 60;
+    const frame = useCurrentFrame();
+    const effectIndex = Math.floor(frame / DURATION_PER_EFFECT) % effects.length;
+    const currentEffect = effects[effectIndex];
+
     return (
         <AbsoluteFill style={{ 
-            backgroundColor: '#000', padding: 20, 
-            display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(6, 1fr)', 
-            gap: 20 
+            backgroundColor: '#000', padding: 0, 
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
         }}>
-            <MvTripleFlash {...props} />
-            <MvSlideOrchestra {...props} />
-            <MvCrossfadeDream {...props} />
-            <MvTileParallax {...props} />
-            <MvParticleAssembly {...props} />
-            <MvBounceReaction {...props} />
-            <MvSpinCarousel {...props} />
-            <MvZoomFuture {...props} />
-            <MvMirrorDimension {...props} />
-            <MvMaskingReveal {...props} />
-            <MvPrismSlice {...props} />
-            <MvPulseScanner {...props} />
-            <MvTornadoSwirl {...props} />
-            <MvCardFlip3D {...props} />
-            <MvStripeReveal {...props} />
-            <MvRadialExpansion {...props} />
-            <MvGlitchTransition {...props} />
-            <MvLiquidDistortion {...props} />
-            <MvFloatingCubes {...props} />
-            <MvHexagonExpanding {...props} />
-            <MvSonicBoom {...props} />
-            <MvKaleidoscopeInfinity {...props} />
-            <MvSpiralDive {...props} />
-            <MvPixelCascade {...props} />
-            <MvTripleMirrorReflection {...props} />
-            <MvRhythmicShakedown {...props} />
-            <MvTimeSlipWarp {...props} />
-            <MvFractalUnfold {...props} />
-            <MvGraphicGlitchTrio {...props} />
-            <MvHeartbeatSync {...props} />
+            <div style={{ width: 1080, height: 1080 }}>
+                <currentEffect.component {...props} />
+            </div>
         </AbsoluteFill>
     );
 };
