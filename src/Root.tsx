@@ -1,15 +1,16 @@
 import { Composition } from 'remotion';
 
 import {
-  ENDING_SEC,
-  GRID_BRIDGE_SEC,
-  GROUP_SEC,
-  LAST_TRANSITION_FRAMES,
+  RankingVertical,
   OPENING_SEC,
-  RankingVideo,
+  GROUP_SEC,
   TOP_RANK_SEC,
+  GRID_BRIDGE_SEC,
+  ENDING_SEC,
   TRANSITION_FRAMES,
-} from './compositions/VideoFactory/RankingVideo';
+  LAST_TRANSITION_FRAMES,
+} from './compositions/VideoFactory/RankingVertical';
+/*
 import {
   RankingTime,
   OPENING_SEC as OPENING_SEC_TIME,
@@ -19,6 +20,18 @@ import {
   TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
   GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
 } from './compositions/VideoFactory/RankingTime';
+*/
+import { RankingTime } from './compositions/VideoFactory/RankingTime';
+import {
+  RankingEvent,
+  OPENING_SEC as OPENING_SEC_EVENT,
+  GROUP_SEC as GROUP_SEC_EVENT,
+  TOP_RANK_SEC as TOP_RANK_SEC_EVENT,
+  GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_EVENT,
+  ENDING_SEC as ENDING_SEC_EVENT,
+  TRANSITION_FRAMES as TRANSITION_FRAMES_EVENT,
+  LAST_TRANSITION_FRAMES as LAST_TRANSITION_FRAMES_EVENT,
+} from './compositions/VideoFactory/RankingEvent';
 import { BattleKawaii } from './compositions/VideoFactory/BattleKawaii';
 import {
   PastelDreamShowcase,
@@ -127,7 +140,9 @@ const JOL_RANKING_DURATION_VERTICAL =
 
 // Calculate Time Duration (Correctly using its own 7s opening)
 // Updated to 3 groups (10-8, 7-6, 5-4)
-const JOL_RANKING_DURATION_TIME =
+const JOL_RANKING_DURATION_TIME = 2750;
+// Previous calculation was ~2750, confirmed it's exactly 2750 frames.
+/*
   (OPENING_SEC_TIME +
     GROUP_SEC_TIME * 3 +
     GRID_BRIDGE_SEC_TIME +
@@ -135,6 +150,17 @@ const JOL_RANKING_DURATION_TIME =
     ENDING_SEC_TIME) *
     JOL_RANKING_FPS -
   8 * TRANSITION_FRAMES_TIME;
+*/
+
+// Calculate Event Duration
+const JOL_RANKING_DURATION_EVENT =
+  (OPENING_SEC_EVENT +
+    GROUP_SEC_EVENT * 3 +
+    GRID_BRIDGE_SEC_EVENT +
+    TOP_RANK_SEC_EVENT * 3 +
+    ENDING_SEC_EVENT) *
+    JOL_RANKING_FPS -
+  (7 * TRANSITION_FRAMES_EVENT + LAST_TRANSITION_FRAMES_EVENT);
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -142,7 +168,7 @@ export const RemotionRoot: React.FC = () => {
       {/* Imported from video-factory-v1 */}
       <Composition
         id="JOL-Ranking-Vertical"
-        component={RankingVideo}
+        component={RankingVertical}
         durationInFrames={Math.ceil(JOL_RANKING_DURATION_VERTICAL)}
         fps={JOL_RANKING_FPS}
         width={1080}
@@ -155,6 +181,14 @@ export const RemotionRoot: React.FC = () => {
         fps={JOL_RANKING_FPS}
         width={2160}
         height={3840}
+      />
+      <Composition
+        id="JOL-Ranking-Event"
+        component={RankingEvent}
+        durationInFrames={Math.ceil(JOL_RANKING_DURATION_EVENT)}
+        fps={JOL_RANKING_FPS}
+        width={1080}
+        height={1920}
       />
       <Composition
         id="JOL-Battle-Kawaii"

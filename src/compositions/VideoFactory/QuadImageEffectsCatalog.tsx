@@ -74,6 +74,7 @@ export const MvQuadCubeRotate: React.FC<QuadImageProps> = ({ imgA, imgB, imgC, i
     const frame = useCurrentFrame();
     const t = (frame % 120) / 120;
     const angle = t * 360;
+    
     return (
         <Wrapper label="Quad Cube 3D">
             <div style={{ perspective: 1000, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

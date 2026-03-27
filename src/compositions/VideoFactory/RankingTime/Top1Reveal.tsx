@@ -9,17 +9,16 @@ import {
   staticFile,
   useVideoConfig,
 } from 'remotion';
-import { ImpactEffectTime as ImpactEffect } from './ImpactEffectTime';
-import { TimeBackground } from './TimeBackground';
-import { CinematicBorder } from './CinematicBorder';
-import { MorphingTitle } from './MorphingTitle';
-import { Confetti } from './Confetti';
-import { useBeatValue } from './utils/beat-sync';
-import type { Liver } from './types';
+import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
+import { TimeBackground } from '../TimeBackground';
+import { CinematicBorder } from '../CinematicBorder';
+import { MorphingTitle } from '../MorphingTitle';
+import { Confetti } from '../Confetti';
+import { useBeatValue } from '../utils/beat-sync';
+import type { Liver } from '../types';
 
 const BPM = 160;
 
-// 魔法陣アセットのリスト
 const MAGIC_CIRCLES = [
   'magic-circle-blue.png',
   'magic-circle-green.png',
@@ -34,7 +33,7 @@ type Props = {
   title: string;
 };
 
-export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
+export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
 
@@ -49,7 +48,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
     config: { damping: 14, stiffness: 120 },
   });
 
-  // タイプライター演出
   const nameLength = liver.nickname.length;
   const charsVisible = Math.floor(
     interpolate(localFrame - 25, [0, 20], [0, nameLength], {
@@ -59,7 +57,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
   );
   const displayedName = liver.nickname.slice(0, charsVisible);
 
-  // Dynamics based on music
   const imageScale =
     interpolate(frame, [0, 20], [0.7, 1.05], {
       extrapolateRight: 'clamp',
@@ -76,13 +73,11 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
   const pulseScale = 1 + pulse * 0.002;
 
-  // 魔法陣のランダム配置データを作成
   const magicCirclesData = useMemo(() => {
     const count = rank === 1 ? 5 : 3;
     return [...new Array(count)].map((_, i) => {
       const seed = `magic-${rank}-${i}`;
-      const size = 1200 + random(seed + 'size') * 800; // さらに大きく (Previously 600 + 400)
-      // 配置範囲を分散させる
+      const size = 1200 + random(seed + 'size') * 800;
       const angle = (i / count) * Math.PI * 2 + random(seed + 'ang') * 0.5;
       const baseRadius = rank === 1 ? 500 : 450;
       const radiusVariance = rank === 1 ? 400 : 350;
@@ -91,8 +86,7 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
       const y = Math.sin(angle) * radius;
 
       const rotationDir = random(seed + 'dir') > 0.5 ? 1 : -1;
-      const rotationSpeed = 0.2 + random(seed + 'speed') * 2.5; // 0.3+0.7 -> 0.2+2.5 に拡大
-      // 1位(count=5)の場合は全色を被りなく使用する
+      const rotationSpeed = 0.2 + random(seed + 'speed') * 2.5;
       const asset =
         count === 5
           ? MAGIC_CIRCLES[i % MAGIC_CIRCLES.length]
@@ -115,11 +109,10 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
   const { primary, glow } = getRankColors(rank);
 
-  // Breathing zoom effect for background
   const bgScale = interpolate(
-    Math.sin(frame * 0.04), // Slightly faster breathing
+    Math.sin(frame * 0.04),
     [-1, 1],
-    [1, 1.08], // Slightly more zoom
+    [1, 1.08],
   );
 
   if (!liver) return null;
@@ -136,7 +129,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
         hideBackground
         hideBaseVideo
       />
-      {/* Magical Background for TOP 3 */}
       {magicalBg && (
         <AbsoluteFill style={{ zIndex: 5 }}>
           <Img
@@ -146,10 +138,9 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
               height: '100%',
               objectFit: 'cover',
               transform: `scale(${bgScale})`,
-              opacity: 0.85, // Richer appearance
+              opacity: 0.85,
             }}
           />
-          {/* Gradient overlay to blend with the scene - adjusted for 4K and better contrast */}
           <AbsoluteFill
             style={{
               background: `radial-gradient(circle at center, transparent 20%, #000 100%)`,
@@ -161,10 +152,8 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
       <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
         <ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
       </AbsoluteFill>
-      {/* 魔法陣演出エリア (背景) */}
       <AbsoluteFill style={{ zIndex: 10, overflow: 'hidden' }}>
         {magicCirclesData.map((m, i) => {
-          // 0.3秒ずつのスタッガーディレイを計算
           const delayFrames = i * 0.3 * fps;
           const circleEntrance = spring({
             frame: localFrame - delayFrames,
@@ -174,7 +163,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
 
           return (
             <React.Fragment key={i}>
-              {/* 魔法陣本体 */}
               <div
                 style={{
                   position: 'absolute',
@@ -203,7 +191,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
                 />
               </div>
 
-              {/* 魔法陣から放たれる輝光 (Light Burst/Rays) */}
               <div
                 style={{
                   position: 'absolute',
@@ -227,7 +214,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
                 }}
               />
 
-              {/* 放射状の光の筋 (Rays) */}
               {[...new Array(12)].map((_, j) => (
                 <div
                   key={`ray-${i}-${j}`}
@@ -252,7 +238,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
           );
         })}
       </AbsoluteFill>
-      {/* 紙吹雪演出 */}
       <AbsoluteFill style={{ zIndex: 110 }}>
         <Confetti
           count={150}
@@ -269,7 +254,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
           zIndex: 120,
         }}
       >
-        {/* カウントアップ数字 (タイトル) - 画面上部に配置 */}
         <div
           style={{
             marginTop: 80 * (width / 1080),
@@ -285,7 +269,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
           />
         </div>
 
-        {/* ライバー画像 - もっと大きく、フレームを豪華に */}
         <div
           style={{
             position: 'relative',
@@ -299,7 +282,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
             opacity: imageOpacity,
           }}
         >
-          {/* 外側の装飾フレーム (回転する豪華な枠) */}
           {[...new Array(4)].map((_, i) => (
             <div
               key={i}
@@ -316,7 +298,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
             />
           ))}
 
-          {/* 強い後光レイヤー */}
           <div
             style={{
               position: 'absolute',
@@ -360,7 +341,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
           </div>
         </div>
 
-        {/* ニックネーム - タイプライター */}
         <h2
           style={{
             fontSize: (rank === 1 ? 100 : 80) * (width / 1080),
@@ -377,7 +357,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
           {displayedName}
         </h2>
       </AbsoluteFill>
-      {/* 全体のフラッシュ演出 */}
       <AbsoluteFill
         style={{
           backgroundColor: 'white',

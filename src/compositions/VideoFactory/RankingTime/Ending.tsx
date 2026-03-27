@@ -8,12 +8,10 @@ import {
   OffthreadVideo,
 } from 'remotion';
 
-export const EndingLogoTime: React.FC = () => {
+export const Ending: React.FC = () => {
   const frame = useCurrentFrame();
   const { durationInFrames, width } = useVideoConfig();
   const scaleFactor = width / 1080;
-
-  // Removed unused opacity interpolate
 
   const scale = interpolate(frame, [0, durationInFrames], [1.0, 1.1], {
     extrapolateRight: 'clamp',
@@ -23,14 +21,11 @@ export const EndingLogoTime: React.FC = () => {
     extrapolateRight: 'clamp',
   });
 
-  // Rotation for God Rays
   const rayRotate = frame * 0.2;
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', zIndex: 5000 }}>
-      {/* 1. BACKGROUND LAYER (No opacity fade) */}
       <AbsoluteFill style={{ zIndex: 1 }}>
-        {/* Component Bottom: rank_3_bg.webp */}
         <AbsoluteFill>
           <Img
             src={staticFile('assets/backgrounds/rank_3_bg.webp')}
@@ -44,7 +39,6 @@ export const EndingLogoTime: React.FC = () => {
           />
         </AbsoluteFill>
 
-        {/* Middle: purple_loop.mp4 (Luminance Key via Screen Blend) */}
         <AbsoluteFill>
           <OffthreadVideo
             src={staticFile('assets/backgrounds/purple_loop.mp4')}
@@ -58,7 +52,6 @@ export const EndingLogoTime: React.FC = () => {
           />
         </AbsoluteFill>
 
-        {/* Brightening Gradient Overlay (Blue/Cyan) */}
         <AbsoluteFill
           style={{
             background:
@@ -68,7 +61,6 @@ export const EndingLogoTime: React.FC = () => {
         />
       </AbsoluteFill>
 
-      {/* 2. GOD RAYS LAYER */}
       <div
         style={{
           position: 'absolute',
@@ -95,16 +87,14 @@ export const EndingLogoTime: React.FC = () => {
         }}
       />
 
-      {/* 3. CONTENT LAYER (Logo & Glow - Absolute Vanguard) */}
       <AbsoluteFill
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          opacity: 1, // Visible immediately for transition
+          opacity: 1,
           zIndex: 9000,
         }}
       >
-        {/* CENTRAL NEON GLOW */}
         <div
           style={{
             position: 'absolute',
@@ -120,7 +110,6 @@ export const EndingLogoTime: React.FC = () => {
           }}
         />
 
-        {/* PREMIUM LOGO CONTAINER */}
         <div
           style={{
             position: 'relative',

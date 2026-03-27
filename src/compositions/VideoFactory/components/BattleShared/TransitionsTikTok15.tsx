@@ -96,17 +96,46 @@ export const LumaQuakeTransition: React.FC<TransitionProps> = ({ frame, duration
 // 5. Object Mask Wipe Transition
 // ===============================
 export const ObjectWipeTransition: React.FC<TransitionProps> = ({ frame, duration, SceneA, SceneB }) => {
-  const p = getProgress(frame, duration);
-  const x = interpolate(p, [0, 1], [-50, 150]); // object sweeps across
+  const safeFrame = Number.isNaN(frame) ? 0 : frame;
+  const safeDuration = Number.isNaN(duration) || duration <= 0 ? 30 : duration;
+  const p = getProgress(safeFrame, safeDuration);
+  
+  // Sweep from -60% to 160% to ensure full clearance with slant
+  const x = interpolate(p, [0, 1], [-60, 160]); 
+  const slantOffset = 35; // Better slant for 15deg rotation
+  
+  if (!SceneA && !SceneB) return <AbsoluteFill style={{ backgroundColor: 'red' }} />; // Debug red
+  if (!SceneA) return <AbsoluteFill>{SceneB}</AbsoluteFill>;
+  if (!SceneB) return <AbsoluteFill>{SceneA}</AbsoluteFill>;
+
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ backgroundColor: '#000' }}>
       <AbsoluteFill>{SceneB}</AbsoluteFill>
-      <AbsoluteFill style={{ clipPath: `polygon(${x}% 0, 100% 0, 100% 100%, ${x-20}% 100%)` }}>{SceneA}</AbsoluteFill>
-      {/* A giant slanted black bar sweeping across, revealing B behind it */}
-      <AbsoluteFill style={{ 
-        left: `${x-30}%`, width: '40%', height: '120%', top: '-10%',
-        backgroundColor: '#111', transform: 'skewX(-20deg)', boxShadow: '0 0 50px rgba(0,0,0,0.8)'
-      }} />
+      <AbsoluteFill 
+        style={{ 
+          clipPath: `polygon(${x}% 0, 100% 0, 100% 100%, ${x - slantOffset}% 100%)`,
+          zIndex: 1 
+        }}
+      >
+        {SceneA}
+      </AbsoluteFill>
+      
+      {/* Neon Candy-Sky Sweep Bar */}
+      <div 
+        style={{ 
+          position: 'absolute',
+          left: `${x - slantOffset - 10}%`, 
+          width: '20%', 
+          height: '140%', 
+          top: '-20%',
+          backgroundColor: '#00FF7F',
+          transform: 'rotate(15deg)', 
+          boxShadow: '0 0 60px 20px rgba(0, 255, 127, 0.9), 0 0 100px 40px rgba(0, 255, 127, 0.4)',
+          zIndex: 2,
+          borderLeft: '10px solid #fff',
+          borderRight: '10px solid #fff',
+        }} 
+      />
     </AbsoluteFill>
   );
 };

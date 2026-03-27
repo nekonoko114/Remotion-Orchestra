@@ -4,11 +4,11 @@ import {
   Img,
   interpolate,
   spring,
-  staticFile, // Added
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import type { Liver } from './types';
+import type { Liver } from '../types';
 
 type Props = {
   title: string;
@@ -16,23 +16,22 @@ type Props = {
 };
 
 const getAvatarPosition = (rank: number) => {
-  // Diamond Ranking specific adjustments
-  if (rank === 10) return 'center 20%'; // だぁ～み (より上に)
-  if (rank === 8) return 'center 25%'; // やらかしタロー
-  if (rank === 7) return 'center 20%'; // yukiんこ
-  if (rank === 6) return 'center 50%'; // ユージン (より上に)
-  if (rank === 5) return 'center 50%'; // 一条美月 (アイコンとの重なりを避ける)
-  if (rank === 4) return 'center 15%'; // 限界突破まみ
+  if (rank === 10) return 'center 20%';
+  if (rank === 8) return 'center 25%';
+  if (rank === 7) return 'center 20%';
+  if (rank === 6) return 'center 50%';
+  if (rank === 5) return 'center 50%';
+  if (rank === 4) return 'center 15%';
   return 'center';
 };
 
 const getBackgroundPosition = (rank: number) => {
-  if (rank === 5) return '0% 50%'; // 背景画像の左端を合わせることで、被写体を右へ押し出す
+  if (rank === 5) return '0% 50%';
   return getAvatarPosition(rank);
 };
 
 const getBackgroundTransform = (rank: number) => {
-  if (rank === 5) return 'scale(1.2) translateX(10%)'; // さらに右へ押し出す
+  if (rank === 5) return 'scale(1.2) translateX(10%)';
   return 'none';
 };
 
@@ -59,7 +58,6 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
 
   return (
     <AbsoluteFill>
-      {/* Replaced per user request: "Temple/Shrine of Dark Knights for 10-4" */}
       <AbsoluteFill style={{ backgroundColor: '#000' }}>
         <Img
           src={staticFile(
@@ -71,14 +69,12 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            opacity: 0.8, // 文字を目立たせつつ明るさを維持
+            opacity: 0.8,
           }}
         />
-        {/* 漆黒感を維持しつつ暗すぎないグラデーション */}
         <AbsoluteFill
           style={{
-            background:
-              'radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%)',
+            background: 'radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%)',
             pointerEvents: 'none',
           }}
         />
@@ -92,31 +88,28 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
           transform: `scale(${scale})`,
         }}
       >
-        {/* Title */}
         <h1
           className="metallic-gold"
           style={{
             position: 'absolute',
             top: 120,
-            fontSize: 120, // Adjusted from 140 to 120
-            // Dark knight style for typography
+            fontSize: 120,
             fontFamily: "'Segoe UI', Roboto, sans-serif",
             fontWeight: '900',
             textAlign: 'center',
             margin: 0,
-            textShadow: '0 5px 15px rgba(255,0,0,0.8)', // 赤のオーラ
+            textShadow: '0 5px 15px rgba(255,0,0,0.8)',
           }}
         >
           {title}
         </h1>
 
-        {/* List Area */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             gap,
-            width: '90%', // Increased width
+            width: '90%',
             marginTop: 250,
           }}
         >
@@ -134,57 +127,38 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
                   display: 'flex',
                   alignItems: 'end',
                   gap: is2Group ? 60 : 40,
-                  borderRadius: 40, // More rounded for larger icons
+                  borderRadius: 40,
                   border: '4px solid #8B0000',
-                  boxShadow:
-                    '0 0 20px 10px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.8)',
+                  boxShadow: '0 0 20px 10px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.8)',
                   backgroundColor: 'rgba(0,0,0,0.4)',
                   transform: `translateY(${interpolate(liverEntrance, [0, 1], [-1000, 0])}px)`,
                   opacity: interpolate(liverEntrance, [0, 0.4], [0, 1]),
                   position: 'relative',
                   overflow: 'hidden',
-                  padding: is2Group
-                    ? '60px 40px'
-                    : is3Group
-                      ? '40px 30px'
-                      : '20px 30px',
+                  padding: is2Group ? '60px 40px' : is3Group ? '40px 30px' : '20px 30px',
                 }}
               >
-                {/* Blurred Background */}
                 <AbsoluteFill style={{ opacity: 0.9 }}>
-                  {liver.saved_to ? (
-                    <Img
-                      src={staticFile(liver.saved_to)}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: getBackgroundPosition(liver.rank),
-                        transform: getBackgroundTransform(liver.rank),
-                      }}
-                    />
-                  ) : (
-                    <Img
-                      src={
-                        liver.image_url.startsWith('http')
+                  <Img
+                    src={
+                      liver.saved_to
+                        ? staticFile(liver.saved_to)
+                        : liver.image_url.startsWith('http')
                           ? liver.image_url
                           : staticFile(liver.image_url)
-                      }
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: getBackgroundPosition(liver.rank),
-                        transform: getBackgroundTransform(liver.rank),
-                      }}
-                    />
-                  )}
+                    }
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: getBackgroundPosition(liver.rank),
+                      transform: getBackgroundTransform(liver.rank),
+                    }}
+                  />
                 </AbsoluteFill>
 
-                {/* Dark overlay for readability */}
                 <AbsoluteFill style={{ backgroundColor: 'rgba(0,0,0,0.2)' }} />
 
-                {/* Left Unit: Rank (Top) + Icon (Bottom) */}
                 <div
                   style={{
                     display: 'flex',
@@ -196,21 +170,19 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
                     zIndex: 1,
                   }}
                 >
-                  {/* Rank Number */}
                   <div
                     style={{
                       fontSize: rankFontSize,
                       fontWeight: 900,
-                      color: '#FFD700', // Gold
+                      color: '#FFD700',
                       textAlign: 'center',
                       lineHeight: 1,
-                      textShadow: '0 2px 10px rgba(255,0,0,0.8)', // Red shadow to pop out
+                      textShadow: '0 2px 10px rgba(255,0,0,0.8)',
                     }}
                   >
                     {liver.rank}th
                   </div>
 
-                  {/* Icon */}
                   <div
                     style={{
                       width: iconSize,
@@ -240,18 +212,14 @@ export const RankingGroup: React.FC<Props> = ({ title, livers }) => {
                   </div>
                 </div>
 
-                {/* Name Area - Adaptive font size to prevent cut-off */}
                 <div
                   style={{
-                    fontSize:
-                      liver.nickname.length > 8
-                        ? nameFontSize * 0.8
-                        : nameFontSize,
+                    fontSize: liver.nickname.length > 8 ? nameFontSize * 0.8 : nameFontSize,
                     color: 'white',
                     fontWeight: 'bold',
                     flex: 1,
                     marginLeft: 20,
-                    marginRight: 60, // Stronger margin to prevent border clipping
+                    marginRight: 60,
                     position: 'relative',
                     zIndex: 1,
                     lineHeight: 1.1,

@@ -8,30 +8,31 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import { ImpactEffectTime as ImpactEffect } from './ImpactEffectTime';
-import { Typewriter } from '../../components/effects/Typewriter';
-import { useBeatValue } from './utils/beat-sync';
-import type { Liver } from './types';
+import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
+import { Typewriter } from '../../../components/effects/Typewriter';
+import { useBeatValue } from '../utils/beat-sync';
+import type { Liver } from '../types';
 
 type Props = {
   title: string;
   livers: Liver[];
-  isHighlight?: boolean; // 上位3名の特別演出用
-  hideRank?: boolean; // ランクバッジを非表示にする（TopRankReveal用）
+  isHighlight?: boolean;
+  hideRank?: boolean;
 };
 
-const BPM = 160;
+const BPM = 194;
+
+const JIGSAW_PATH = "M10 20 H30 Q40 10 50 20 H90 V40 Q100 50 90 60 V80 H50 Q40 90 30 80 H10 V60 Q0 50 10 40 Z";
 
 const getAvatarPosition = (rank: number) => {
-  // Stream Time Ranking specific adjustments
-  if (rank === 9) return 'center 10%'; // 限界突破まみ (より上に)
-  if (rank === 8) return 'center 10%'; // yukiんこ (より上に)
-  if (rank === 7) return 'center 10%'; // 小悪魔 (より上に)
-  if (rank === 5) return 'center 20%'; // ジンヤ (顔を縦に調整)
+  if (rank === 9) return 'center 10%';
+  if (rank === 8) return 'center 10%';
+  if (rank === 7) return 'center 10%';
+  if (rank === 5) return 'center 20%';
   return 'center';
 };
 
-export const RankingGroupTime: React.FC<Props> = ({
+export const RankingGroup: React.FC<Props> = ({
   title,
   livers,
   isHighlight,
@@ -42,18 +43,15 @@ export const RankingGroupTime: React.FC<Props> = ({
   const scale = width / 1080;
   const { pulse } = useBeatValue(BPM);
 
-  // Impact Shake: Just at the moment of landing (around frame 5-15)
   const shakePower = interpolate(frame, [5, 15], [30 * scale, 0], {
     extrapolateRight: 'clamp',
   });
   const shakeX = (random(`shake-${frame}`) - 0.5) * shakePower;
 
-  // Glow Burst intensity
   const glowOpacity = interpolate(frame, [5, 20], [0.8, 0], {
     extrapolateRight: 'clamp',
   });
 
-  // Calculate per-liver staggered animation: 1.5 beats = 30 frames (based on user adjustment)
   const STAGGER_DELAY = 30; 
 
   return (
@@ -64,7 +62,6 @@ export const RankingGroupTime: React.FC<Props> = ({
         transform: `translateX(${shakeX}px) scale(${1 + pulse * 0.005})`,
       }}
     >
-      {/* Impact Glow Burst Overlay */}
       {glowOpacity > 0 && (
         <AbsoluteFill
           style={{
@@ -75,19 +72,12 @@ export const RankingGroupTime: React.FC<Props> = ({
           }}
         />
       )}
-      {/* タイトル (タイピング演出・魔法ネオン) */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 150 * scale,
-          zIndex: 20,
-        }}
-      >
+      <div style={{ position: 'absolute', top: 150 * scale, zIndex: 20 }}>
         <Typewriter
           text={title}
           speed={3}
           style={{
-            fontSize: (isHighlight ? 120 : 120) * scale,
+            fontSize: 120 * scale,
             fontWeight: 'bold',
             color: '#e0e0ff',
             textShadow: `0 0 ${10 * scale}px #b82bff, 0 0 ${20 * scale}px #e066ff, 0 0 ${40 * scale}px #b82bff`,
@@ -96,31 +86,26 @@ export const RankingGroupTime: React.FC<Props> = ({
         />
       </div>
 
-      {/* ライバーリストを表示するエリア */}
       <div
         style={{
           display: 'flex',
-          flexDirection: isHighlight ? 'column' : 'column', // Highlight is basically single item anyway
-          gap: (isHighlight ? 40 : 60) * scale, // Increase gap for highlight
+          flexDirection: 'column',
+          gap: (isHighlight ? 40 : 60) * scale,
           width: isHighlight ? '100%' : '90%',
           top: '50%',
-          left: '50%', // Correctly center horizontally
+          left: '50%',
           position: 'absolute',
-          transform: 'translate(-50%, -35%)', // Shift back by 50% of width and 35% of height
+          transform: 'translate(-50%, -35%)',
         }}
       >
         {livers.map((liver, index) => {
-          // Staggered Spring Logic: Reverse order (10 -> 7)
-          // Delay is based on reverse index
-          // Staggered Spring Logic: Reverse order (10 -> 7)
           const reverseIndex = livers.length - 1 - index;
           const liverSpr = spring({
-            frame: frame - STAGGER_DELAY * reverseIndex - 10, // Start after title slam
+            frame: frame - STAGGER_DELAY * reverseIndex - 10,
             fps,
-            config: { damping: 12, stiffness: 200 }, // Snappier and slightly less bouncy for a "slam" feel
+            config: { damping: 12, stiffness: 200 },
           });
 
-          // Deep drop from top (-800px), faster fade-in, slamming down from 2x scale
           const liverY = interpolate(liverSpr, [0, 1], [-800 * scale, 0]);
           const liverOpacity = interpolate(liverSpr, [0, 0.3], [0, 1], {
             extrapolateRight: 'clamp',
@@ -128,12 +113,9 @@ export const RankingGroupTime: React.FC<Props> = ({
           const liverScale = interpolate(liverSpr, [0, 1], [1.8, 1]);
 
           const is2Group = livers.length === 2;
-          // Highlight Sizing
           const iconSize = (isHighlight ? 450 : is2Group ? 250 : 200) * scale;
           const fontSize = (isHighlight ? 100 : is2Group ? 80 : 60) * scale;
           const rankWidth = (is2Group ? 250 : 220) * scale;
-
-          // ゆらゆら揺れるアニメーション (Y軸回転)
           const wobble = Math.sin((frame + index * 10) / 15) * 15;
 
           return (
@@ -151,7 +133,6 @@ export const RankingGroupTime: React.FC<Props> = ({
                     ? `${100 * scale}px ${30 * scale}px`
                     : `${40 * scale}px ${30 * scale}px`,
                 borderRadius: 20 * scale,
-                // Entrance (Dropdown) + Wobble Animation
                 transform: `translateY(${liverY}px) scale(${liverScale}) ${liver.rank <= 3 ? '' : `rotateY(${Math.sin(frame / 60) * 5}deg)`}`,
                 opacity: liverOpacity,
                 boxShadow: isHighlight
@@ -160,12 +141,11 @@ export const RankingGroupTime: React.FC<Props> = ({
                 border: isHighlight
                   ? `${3 * scale}px solid rgba(208, 0, 255, 0.5)`
                   : `${1 * scale}px solid rgba(255,255,255,0.1)`,
-                position: 'relative', // Needed for absolute background
-                overflow: 'hidden', // Clip the blur
+                position: 'relative',
+                overflow: 'hidden',
               }}
             >
-              {/* Blurred Background */}
-              <AbsoluteFill style={{ zIndex: -1, opacity: 0.9 }}>
+              <AbsoluteFill style={{ zIndex: -1, opacity: 0.9, clipPath: `path("${JIGSAW_PATH}")` }}>
                 <Img
                   src={
                     liver.saved_to
@@ -184,16 +164,31 @@ export const RankingGroupTime: React.FC<Props> = ({
                 />
               </AbsoluteFill>
 
-              {/* Dark overlay for readability */}
               <AbsoluteFill
                 style={{
                   zIndex: -1,
                   backgroundColor: 'rgba(0,0,0,0.15)',
                   border: `${10 * scale}px solid rgba(208, 0, 255, 0.5)`,
                   filter: `blur(${4 * scale}px)`,
+                  clipPath: `path("${JIGSAW_PATH}")`,
                 }}
               />
-              {/* Row content */}
+              
+              {/* Puzzle Tabs */}
+              <div style={{
+                position: 'absolute',
+                top: -15 * scale, left: '30%',
+                width: 30 * scale, height: 30 * scale, borderRadius: '50%',
+                backgroundColor: 'rgba(208, 0, 255, 0.8)', border: `${2 * scale}px solid white`,
+                boxShadow: `0 0 ${10 * scale}px rgba(208, 0, 255, 0.5)`, zIndex: 10
+              }} />
+              <div style={{
+                position: 'absolute',
+                bottom: -15 * scale, left: '30%',
+                width: 30 * scale, height: 30 * scale, borderRadius: '50%',
+                backgroundColor: '#000', border: `${2 * scale}px solid rgba(208, 0, 255, 0.5)`,
+                boxShadow: `0 0 ${10 * scale}px rgba(208, 0, 255, 0.5)`, zIndex: 10
+              }} />
               <div
                 style={{
                   display: 'flex',
@@ -205,7 +200,6 @@ export const RankingGroupTime: React.FC<Props> = ({
                   zIndex: 1,
                 }}
               >
-                {/* Vertical Stack for Rank and Icon */}
                 {!isHighlight && (
                   <div
                     style={{
@@ -217,9 +211,8 @@ export const RankingGroupTime: React.FC<Props> = ({
                       marginRight: 30 * scale,
                     }}
                   >
-                    {/* Rank Number */}
                     <div
-                      className="metallic-silver" // Always silver for 10-4
+                      className="metallic-silver"
                       style={{
                         fontSize: 70 * scale,
                         fontWeight: 'bold',
@@ -233,7 +226,6 @@ export const RankingGroupTime: React.FC<Props> = ({
                       {liver.rank}th
                     </div>
 
-                    {/* Icon image */}
                     <div
                       style={{
                         width: iconSize,
@@ -268,10 +260,8 @@ export const RankingGroupTime: React.FC<Props> = ({
                   </div>
                 )}
 
-                {/* Original Highlight Logic (Special Handling for top 3) */}
                 {isHighlight && (
                   <>
-                    {/* 順位バッジ */}
                     {!hideRank && (
                       <div
                         className="metallic-purple"
@@ -289,7 +279,6 @@ export const RankingGroupTime: React.FC<Props> = ({
                       </div>
                     )}
 
-                    {/* アイコン画像 */}
                     <div
                       style={{
                         width: iconSize,
@@ -324,7 +313,6 @@ export const RankingGroupTime: React.FC<Props> = ({
                   </>
                 )}
 
-                {/* Name Area */}
                 {!isHighlight && (
                   <div
                     className="metallic-silver"
@@ -344,7 +332,6 @@ export const RankingGroupTime: React.FC<Props> = ({
                 )}
               </div>
 
-              {/* Highlight Name is BELOW icon */}
               {isHighlight && (
                 <div
                   className="metallic-gold"
@@ -365,19 +352,6 @@ export const RankingGroupTime: React.FC<Props> = ({
                   {liver.nickname}
                 </div>
               )}
-
-              {/* ポイント (Optionally hidden) */}
-              {/* 
-            <div style={{
-              fontSize: 40,
-              fontWeight: 'bold',
-              color: '#FFD700',
-              textShadow: '0 2px 4px rgba(0,0,0,0.8)',
-              fontFamily: 'Roboto Mono, monospace' // 数字等幅
-            }}>
-              {liver.points.toLocaleString()} pt
-            </div>
-             */}
             </div>
           );
         })}

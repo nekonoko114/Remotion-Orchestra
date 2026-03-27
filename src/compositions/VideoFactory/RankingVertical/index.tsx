@@ -2,34 +2,31 @@ import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import { flip } from '@remotion/transitions/flip';
 import { slide } from '@remotion/transitions/slide';
 import { AbsoluteFill, useVideoConfig, Audio, staticFile } from 'remotion';
-import RANKING_DATA_JSON from './data.json';
-import type { Liver } from './types';
+import RANKING_DATA_JSON from '../data.json';
+import type { Liver } from '../types';
+import { Ending } from './Ending';
+import { Opening } from './Opening';
+import { RankingGroup } from './RankingGroup';
+import { Top1Reveal } from './Top1Reveal';
+import { GridBridge } from './GridBridge';
+import { useBeatValue } from '../utils/beat-sync';
 
 const RANKING_DATA = RANKING_DATA_JSON as unknown as Liver[];
-import { EndingLogo } from './EndingLogo';
-import { OpeningTitle } from './OpeningTitle';
-import { RankingGroup } from './RankingGroup';
-import { TopRankReveal } from './TopRankReveal';
-import { GridBridge } from './GridBridge';
-import { useBeatValue } from './utils/beat-sync';
 
 const BPM = 152;
+const BGM_START_FROM = 0;
 
-// Export duration constants for Root.tsx
 export const OPENING_SEC = 5.5;
 export const GROUP_SEC = 5;
-export const TOP_RANK_SEC = 5.6; // ~12 beats exactly
-export const GRID_BRIDGE_SEC = 8.0; // 480 frames at 60fps
+export const TOP_RANK_SEC = 5.6;
+export const GRID_BRIDGE_SEC = 8.0;
 export const ENDING_SEC = 2.5;
-export const TRANSITION_FRAMES = 28; // Exactly half a beat at 60fps
+export const TRANSITION_FRAMES = 28;
 export const LAST_TRANSITION_FRAMES = 20;
 
-const BGM_START_FROM = 0; // 秒単位で指定。
-
-export const RankingVideo = () => {
+export const RankingVertical = () => {
   const { fps } = useVideoConfig();
 
-  // Duration Logic (Frames)
   const OPENING_DURATION = OPENING_SEC * fps;
   const GROUP_DURATION = GROUP_SEC * fps;
   const TOP_RANK_DURATION = TOP_RANK_SEC * fps;
@@ -38,17 +35,15 @@ export const RankingVideo = () => {
   const TRANSITION_DURATION = TRANSITION_FRAMES;
   const LAST_TRANSITION_DURATION = LAST_TRANSITION_FRAMES;
 
-  // Define the transition (3D Flip)
   const transition = flip({
-    direction: 'from-bottom', // Flips up like a fresh card
+    direction: 'from-bottom',
     perspective: 1000,
   });
 
-  // Define the timing
   const timing = linearTiming({ durationInFrames: TRANSITION_DURATION });
 
   const { pulse } = useBeatValue(BPM);
-  const beatScale = 1 + pulse * 0.015; // わずかな振動
+  const beatScale = 1 + pulse * 0.015;
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#1a1a1a' }}>
@@ -59,20 +54,13 @@ export const RankingVideo = () => {
       />
 
       <AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
-        {/* Sequenced Content: Opening -> Ranking with TRANSITIONS */}
         <TransitionSeries>
-          {/* 1. Opening Title */}
           <TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
-            <OpeningTitle />
+            <Opening />
           </TransitionSeries.Sequence>
 
-          {/* Transition 1: Opening -> Top 10-7 */}
-          <TransitionSeries.Transition
-            presentation={transition}
-            timing={timing}
-          />
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          {/* 2. Group: 10位〜8位 */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
               title={'TOP\n10~8'}
@@ -80,13 +68,8 @@ export const RankingVideo = () => {
             />
           </TransitionSeries.Sequence>
 
-          {/* Transition 2: Group 1 -> Group 2 */}
-          <TransitionSeries.Transition
-            presentation={transition}
-            timing={timing}
-          />
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          {/* 3. Group: 7位〜6位 */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
               title={'TOP\n7~6'}
@@ -94,13 +77,8 @@ export const RankingVideo = () => {
             />
           </TransitionSeries.Sequence>
 
-          {/* Transition 3: Group 2 -> Group 3 */}
-          <TransitionSeries.Transition
-            presentation={transition}
-            timing={timing}
-          />
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          {/* 4. Group: 5位〜4位 */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
               title={'TOP\n5~4'}
@@ -108,84 +86,59 @@ export const RankingVideo = () => {
             />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition
-            presentation={transition}
-            timing={timing}
-          />
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          {/* NEW: Grid Bridge (3x3 Grid Reveal) */}
           <TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
             <GridBridge />
           </TransitionSeries.Sequence>
 
-          {/* Transition from Bridge to 3rd Place */}
-          <TransitionSeries.Transition
-            presentation={transition}
-            timing={timing}
-          />
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          {/* 4. Top 3 (Reveal) */}
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
-            <TopRankReveal
+            <Top1Reveal
               rank={3}
               title="3位"
               liver={RANKING_DATA.find((d) => d.rank === 3)!}
             />
           </TransitionSeries.Sequence>
 
-          {/* Transition 4: 3rd -> 2nd */}
-          <TransitionSeries.Transition
-            presentation={transition}
-            timing={timing}
-          />
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          {/* 5. Top 2 (Reveal) */}
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
-            <TopRankReveal
+            <Top1Reveal
               rank={2}
               title="2位"
               liver={RANKING_DATA.find((d) => d.rank === 2)!}
             />
           </TransitionSeries.Sequence>
 
-          {/* Transition 5: 2nd -> Champion */}
-          <TransitionSeries.Transition
-            presentation={transition}
-            timing={timing}
-          />
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          {/* 6. Top 1 (Reveal) */}
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
-            <TopRankReveal
+            <Top1Reveal
               rank={1}
               title="1位"
               liver={RANKING_DATA.find((d) => d.rank === 1)!}
             />
           </TransitionSeries.Sequence>
 
-          {/* Transition 6: Champion -> Logo (SHARP TRANSITION) */}
           <TransitionSeries.Transition
             presentation={slide({ direction: 'from-right' })}
-            timing={linearTiming({
-              durationInFrames: LAST_TRANSITION_DURATION,
-            })} // Fast frames
+            timing={linearTiming({ durationInFrames: LAST_TRANSITION_DURATION })}
           />
 
-          {/* 7. Ending Logo */}
           <TransitionSeries.Sequence durationInFrames={ENDING_DURATION}>
-            <EndingLogo />
+            <Ending />
           </TransitionSeries.Sequence>
         </TransitionSeries>
       </AbsoluteFill>
 
-      {/* RED GLOWING BORDER (Dark Knight Theme) */}
       <AbsoluteFill
         style={{
           pointerEvents: 'none',
           border: '15px solid #FF0000',
-          boxShadow:
-            'inset 0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.8)',
-          zIndex: 9999, // Ensure it sits on top of everything
+          boxShadow: 'inset 0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.8)',
+          zIndex: 9999,
         }}
       />
     </AbsoluteFill>

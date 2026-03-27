@@ -1,5 +1,5 @@
 import type React from 'react';
-import { interpolate, useCurrentFrame, useVideoConfig, spring } from 'remotion';
+import { interpolate, useCurrentFrame, useVideoConfig, spring, random } from 'remotion';
 
 interface NeonGlowTextProps {
   text: string;
@@ -63,25 +63,25 @@ export const NeonGlowText: React.FC<NeonGlowTextProps> = ({
           },
         );
 
-        // ネオンの点滅
+        // ネオンの点滅 (決定論的な random を使用)
         const flickerOpacity = flicker
           ? interpolate(
-              Math.sin(frame * 0.5 + i) * Math.random(),
+              Math.sin(frame * 0.5 + i) * random(`flicker-${i}-${frame}`),
               [-1, 0.8, 1],
               [0.9, 0.95, 1],
               { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' },
             )
           : 1;
 
-        const bigFlicker = flicker && Math.random() > 0.98 ? 0.3 : 1;
+        const bigFlicker = flicker && random(`big-flicker-${i}-${frame}`) > 0.98 ? 0.3 : 1;
 
-        // 重厚なネオン感を出すための多層シャドウ
+        // Tightened neon glow for better clarity
         const baseShadow = `
+					0 0 2px #fff,
 					0 0 5px #fff,
-					0 0 10px #fff,
+					0 0 10px ${finalGlowColor},
 					0 0 20px ${finalGlowColor},
-					0 0 40px ${finalGlowColor},
-					0 0 80px ${finalGlowColor}
+					0 0 40px ${finalGlowColor}
 				`;
 
         return (
@@ -108,7 +108,7 @@ export const NeonGlowText: React.FC<NeonGlowTextProps> = ({
                     zIndex: -1,
                     fontSize,
                     fontWeight: 900,
-                    fontFamily: 'Arial, sans-serif',
+                    fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
                   }}
                 >
                   {char}
@@ -123,7 +123,7 @@ export const NeonGlowText: React.FC<NeonGlowTextProps> = ({
                     zIndex: -1,
                     fontSize,
                     fontWeight: 900,
-                    fontFamily: 'Arial, sans-serif',
+                    fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
                   }}
                 >
                   {char}
@@ -135,7 +135,7 @@ export const NeonGlowText: React.FC<NeonGlowTextProps> = ({
               style={{
                 color: color,
                 fontSize,
-                fontFamily: 'Arial, sans-serif',
+                fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
                 fontWeight: 900,
                 textAlign: 'center',
                 textTransform: 'uppercase',

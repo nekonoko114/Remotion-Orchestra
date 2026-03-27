@@ -8,13 +8,12 @@ import {
   useVideoConfig,
   Easing,
 } from 'remotion';
-import RANKING_DATA_JSON from './data.json';
-import FETCHED_USERS_JSON from '../../../jol-liver.json';
-import type { Liver } from './types';
+import RANKING_DATA_JSON from '../data.json';
+import FETCHED_USERS_JSON from '../../../../jol-liver.json';
+import type { Liver } from '../types';
 
 const RANKING_DATA = RANKING_DATA_JSON as unknown as Liver[];
 
-// Define type for fetched users
 type FetchedUser = {
   id: string;
   nickname: string;
@@ -30,16 +29,12 @@ export const GridBridge: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // 1. Timing setup based on BPM 152
   const beatFrames = (60 / BPM) * fps;
 
-  // Ensure TOP 10 data is prioritized and formatted
   const top10Items = RANKING_DATA.map((liver) => {
-    // Try to find the downloaded avatar
     const liverId = liver.id || liver.username;
     const fetchedMatch = FETCHED_USERS.find((fu) => fu.id === liverId);
 
-    // Priority: localAvatar (if valid) -> saved_to (from data.json) -> image_url
     let avatarPath = liver.saved_to;
     if (fetchedMatch && fetchedMatch.localAvatar) {
       avatarPath = fetchedMatch.localAvatar;
@@ -57,39 +52,30 @@ export const GridBridge: React.FC = () => {
     };
   });
 
-  // Get successfully downloaded other users, excluding top 10 to avoid duplicates
   const top10Usernames = top10Items.map((item) => item.id);
-  const otherUsers = FETCHED_USERS.filter(
-    (u) => u.localAvatar && u.localAvatar !== '',
-  ) // Only users with images
-    .filter((u) => !top10Usernames.includes(u.id)) // Exclude top 10
+  const otherUsers = FETCHED_USERS.filter((u) => u.localAvatar && u.localAvatar !== '')
+    .filter((u) => !top10Usernames.includes(u.id))
     .map((u) => ({
       id: u.id,
       avatarPath: u.localAvatar,
       liver: null,
-      rank: 99, // Lower rank priority
+      rank: 99,
       isTop10: false,
       nickname: u.nickname === 'Not Found' ? u.id : u.nickname,
     }));
 
-  // Combine them. To make the grid look mixed, we can interleave them or just append.
-  // Let's just append and rely on the grid wrapping.
-  // 均一にするため、3の倍数に切り捨てます
   const combinedItemsRaw = [...top10Items, ...otherUsers];
   const uniformCount = Math.floor(combinedItemsRaw.length / 3) * 3;
   const combinedItems = combinedItemsRaw.slice(0, uniformCount);
 
-  // Split into 3 rows
   const rows: any[][] = [[], [], []];
   combinedItems.forEach((item, index) => {
     const rowIndex = index % 3;
     rows[rowIndex].push(item);
   });
 
-  // Overall tilt
   const rotation = -6;
 
-  // "Gathering" logic for Top 3 (Ranks 1, 2, 3)
   const getGatherOffset = (rowIndex: number, rank: number) => {
     if (rank > 3) return { x: 0, y: 0 };
 
@@ -104,7 +90,6 @@ export const GridBridge: React.FC = () => {
       },
     );
 
-    // Move towards middle row (rowIndex 1)
     let offsetY = 0;
     if (rowIndex === 0) offsetY = gatherProgress * 200;
     if (rowIndex === 2) offsetY = -gatherProgress * 200;
@@ -120,7 +105,7 @@ export const GridBridge: React.FC = () => {
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       <AbsoluteFill
         style={{
-          transform: `rotate(${rotation}deg) scale(1.4)`, // 元のスケールに戻す
+          transform: `rotate(${rotation}deg) scale(1.4)`,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -128,15 +113,12 @@ export const GridBridge: React.FC = () => {
         }}
       >
         {rows.map((rowItems, rowIndex) => {
-          // 画像をループさせるため配列を繰り返す (約20枚/行を2周させる)
           const rowLong = [...rowItems, ...rowItems];
-          const totalRowWidth = rowItems.length * (itemWidth + gap); // 1セットの長さを全体の幅とする
+          const totalRowWidth = rowItems.length * (itemWidth + gap);
 
-          // 行ごとのスピードと方向
           const speed = rowIndex % 2 === 0 ? 30 : 35;
           const direction = rowIndex % 2 === 0 ? -1 : 1;
 
-          // 継続的な移動
           const baseOffset = (frame * speed * direction) % totalRowWidth;
 
           return (
@@ -157,24 +139,16 @@ export const GridBridge: React.FC = () => {
 
                 const opacity = isTop3
                   ? 1
-                  : interpolate(
-                      frame,
-                      [beatFrames * 15, beatFrames * 18],
-                      [1, 0.75],
-                      {
-                        extrapolateLeft: 'clamp',
-                        extrapolateRight: 'clamp',
-                      },
-                    );
+                  : interpolate(frame, [beatFrames * 15, beatFrames * 18], [1, 0.75], {
+                      extrapolateLeft: 'clamp',
+                      extrapolateRight: 'clamp',
+                    });
 
-                // Remove leading slash if present to make staticFile path relative to public/
-                // localAvatar is usually "/assets/avatars/..." so we make it "assets/avatars/..."
                 let imageSourcePath = item.avatarPath;
                 if (imageSourcePath && imageSourcePath.startsWith('/')) {
                   imageSourcePath = imageSourcePath.substring(1);
                 }
 
-                // For HTTP urls (fallback), just pass as string.
                 let imageSource = imageSourcePath;
                 if (imageSourcePath && !imageSourcePath.startsWith('http')) {
                   imageSource = staticFile(imageSourcePath);
@@ -193,10 +167,8 @@ export const GridBridge: React.FC = () => {
                       flexShrink: 0,
                       overflow: 'hidden',
                       border: isTop3 ? '12px solid #FFD700' : '4px solid #444',
-                      boxShadow: isTop3
-                        ? '0 0 50px rgba(255, 215, 0, 0.8)'
-                        : 'none',
-                      backgroundColor: '#111', // Placeholder for when image takes time to load
+                      boxShadow: isTop3 ? '0 0 50px rgba(255, 215, 0, 0.8)' : 'none',
+                      backgroundColor: '#111',
                     }}
                   >
                     {imageSource && (
@@ -209,12 +181,10 @@ export const GridBridge: React.FC = () => {
                         }}
                       />
                     )}
-                    {/* Add nickname overlay for non-top 3 to make it look active */}
                     {!isTop3 && (
                       <AbsoluteFill
                         style={{
-                          background:
-                            'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 40%)',
+                          background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 40%)',
                           pointerEvents: 'none',
                         }}
                       />
@@ -267,12 +237,9 @@ export const GridBridge: React.FC = () => {
       <AbsoluteFill
         style={{
           backgroundColor: '#fff',
-          opacity: interpolate(
-            frame,
-            [beatFrames * 18, beatFrames * 20],
-            [0, 1],
-            { extrapolateLeft: 'clamp' },
-          ),
+          opacity: interpolate(frame, [beatFrames * 18, beatFrames * 20], [0, 1], {
+            extrapolateLeft: 'clamp',
+          }),
           pointerEvents: 'none',
         }}
       />

@@ -8,14 +8,13 @@ import {
   useVideoConfig,
   Easing,
 } from 'remotion';
-import RANKING_DATA_JSON_RAW from './data-time.json';
+import RANKING_DATA_JSON_RAW from '../data-time.json';
 const RANKING_DATA_JSON = Array.isArray(RANKING_DATA_JSON_RAW) ? RANKING_DATA_JSON_RAW : [];
-import FETCHED_USERS_JSON from '../../../jol-liver.json';
-import type { Liver } from './types';
+import FETCHED_USERS_JSON from '../../../../jol-liver.json';
+import type { Liver } from '../types';
 
 const RANKING_DATA = RANKING_DATA_JSON as unknown as Liver[];
 
-// Define type for fetched users
 type FetchedUser = {
   id: string;
   nickname: string;
@@ -27,21 +26,16 @@ const FETCHED_USERS = FETCHED_USERS_JSON as FetchedUser[];
 
 const BPM = 160;
 
-export const GridBridgeTime: React.FC = () => {
+export const GridBridge: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
-  console.log(`[GridBridgeTime] Rendering frame: ${frame}, total items raw: ${RANKING_DATA_JSON.length}`);
 
-  // 1. Timing setup based on BPM 160
-  const beatFrames = (60 / BPM) * fps; // 22.5 frames per beat at 60fps
+  const beatFrames = (60 / BPM) * fps; 
 
-  // Ensure TOP 10 data is prioritized and formatted
   const top10Items = RANKING_DATA.map((liver) => {
-    // Try to find the downloaded avatar
     const liverId = liver.id || liver.username;
     const fetchedMatch = FETCHED_USERS.find((fu) => fu.id === liverId);
 
-    // Priority: localAvatar (if valid) -> saved_to (from data.json) -> image_url
     let avatarPath = liver.saved_to;
     if (fetchedMatch && fetchedMatch.localAvatar) {
       avatarPath = fetchedMatch.localAvatar;
@@ -59,44 +53,35 @@ export const GridBridgeTime: React.FC = () => {
     };
   });
 
-  console.log(`[GridBridgeTime] top10Items count: ${top10Items.length}`);
-  // Get successfully downloaded other users, excluding top 10 to avoid duplicates
   const top10Usernames = top10Items.map((item) => item.id);
   const otherUsers = FETCHED_USERS.filter(
     (u) => u.localAvatar && u.localAvatar !== '',
-  ) // Only users with images
-    .filter((u) => !top10Usernames.includes(u.id)) // Exclude top 10
+  )
+    .filter((u) => !top10Usernames.includes(u.id))
     .map((u) => ({
       id: u.id,
       avatarPath: u.localAvatar,
       liver: null,
-      rank: 99, // Lower rank priority
+      rank: 99,
       isTop10: false,
       nickname: u.nickname === 'Not Found' ? u.id : u.nickname,
     }));
 
-  // Combine them. To make the grid look mixed, we can interleave them or just append.
-  // 均一にするため、3の倍数に切り捨てます
   const combinedItemsRaw = [...top10Items, ...otherUsers];
   const uniformCount = Math.floor(combinedItemsRaw.length / 3) * 3;
   const combinedItems = combinedItemsRaw.slice(0, uniformCount);
 
-  // Split into 3 columns instead of rows
   const columns: any[][] = [[], [], []];
   combinedItems.forEach((item, index) => {
     const colIndex = index % 3;
     columns[colIndex].push(item);
   });
 
-  // Overall tilt
   const rotation = -6;
 
-  // "Gathering" logic for Top 3 (Ranks 1, 2, 3)
   const getGatherOffset = (colIndex: number, rank: number) => {
     if (rank > 3) return { x: 0, y: 0 };
 
-    // Grid animation total duration is about 5.5 seconds (166 frames)
-    // Gathering starts around beat 8 (90 frames) and ends at beat 12 (135 frames)
     const gatherProgress = interpolate(
       frame,
       [beatFrames * 8, beatFrames * 12],
@@ -108,7 +93,6 @@ export const GridBridgeTime: React.FC = () => {
       },
     );
 
-    // Move towards middle column (colIndex 1)
     let offsetX = 0;
     if (colIndex === 0) offsetX = gatherProgress * 300 * (width / 1080);
     if (colIndex === 2) offsetX = -gatherProgress * 300 * (width / 1080);
@@ -121,43 +105,33 @@ export const GridBridgeTime: React.FC = () => {
   const gap = 20 * (width / 1080);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#ff0000', overflow: 'hidden' }}>
-      {/* Fallback text if nothing else renders */}
-      <div style={{ position: 'absolute', top: 50, left: 50, color: 'white', fontSize: 40, zIndex: 100 }}>
-        [DEBUG] GridBridgeTime Active (Items: {combinedItems.length})
-      </div>
-      <AbsoluteFill style={{ backgroundColor: '#000' }}>
+    <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
       <AbsoluteFill
         style={{
-          transform: `rotate(${rotation}deg) scale(1.4)`, // 元のスケールに戻す
+          transform: `rotate(${rotation}deg) scale(1.4)`,
           display: 'flex',
-          flexDirection: 'row', // Horizontal layout for the columns
+          flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
         }}
       >
         {columns.map((columnItems, colIndex) => {
-          // 画像をループさせるため配列を繰り返す (1920px を埋めるため 4セット程度用意)
           const columnLong = [...columnItems, ...columnItems, ...columnItems, ...columnItems];
           const itemFullHeight = itemHeight + gap;
           const totalColumnHeight = columnItems.length * itemFullHeight;
 
-          // 列ごとのスピードと方向
-          // スピードを数値（現在は16と20）で調整できます。数値を大きくすると速くなります。
           const speed = colIndex % 2 === 0 ? 20 : 24;
           const direction = colIndex % 2 === 0 ? -1 : 1;
 
-          // 継続的な移動
-          // 継続的な移動。初期位置を画面中央(-960)付近に持っていくため調整
           const baseOffset = (frame * speed * direction) % totalColumnHeight;
-          const centeredOffset = baseOffset - totalColumnHeight; // 複数セットあるうちの中央付近を使う
+          const centeredOffset = baseOffset - totalColumnHeight;
 
           return (
             <div
               key={colIndex}
               style={{
                 display: 'flex',
-                flexDirection: 'column', // Vertical layout for items in a column
+                flexDirection: 'column',
                 width: columnWidth,
                 transform: `translateY(${centeredOffset}px)`,
                 gap: gap,
@@ -169,7 +143,6 @@ export const GridBridgeTime: React.FC = () => {
                 const { x: ox } = getGatherOffset(colIndex, item.rank);
                 const isTop3 = item.rank <= 3;
 
-                // Dim non-top-3 images after gathering
                 const opacity = isTop3
                   ? 1
                   : interpolate(
@@ -182,14 +155,11 @@ export const GridBridgeTime: React.FC = () => {
                       },
                     );
 
-                // Remove leading slash if present to make staticFile path relative to public/
-                // localAvatar is usually "/assets/avatars/..." so we make it "assets/avatars/..."
                 let imageSourcePath = item.avatarPath;
                 if (imageSourcePath && imageSourcePath.startsWith('/')) {
                   imageSourcePath = imageSourcePath.substring(1);
                 }
 
-                // For HTTP urls (fallback), just pass as string.
                 let imageSource = imageSourcePath;
                 if (imageSourcePath && !imageSourcePath.startsWith('http')) {
                   imageSource = staticFile(imageSourcePath);
@@ -213,7 +183,7 @@ export const GridBridgeTime: React.FC = () => {
                       boxShadow: isTop3
                         ? `0 0 ${50 * (width / 1080)}px rgba(255, 215, 0, 0.8)`
                         : 'none',
-                      backgroundColor: '#111', // Placeholder for when image takes time to load
+                      backgroundColor: '#111',
                     }}
                   >
                     {imageSource && (
@@ -226,7 +196,6 @@ export const GridBridgeTime: React.FC = () => {
                         }}
                       />
                     )}
-                    {/* Add nickname overlay for non-top 3 to make it look active */}
                     {!isTop3 && (
                       <AbsoluteFill
                         style={{
@@ -293,7 +262,6 @@ export const GridBridgeTime: React.FC = () => {
           pointerEvents: 'none',
         }}
       />
-      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
