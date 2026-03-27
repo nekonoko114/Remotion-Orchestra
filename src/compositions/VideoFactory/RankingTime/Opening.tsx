@@ -8,6 +8,7 @@ import {
   interpolate,
   useVideoConfig,
 } from 'remotion';
+import { TimeTunnel } from './TimeTunnel';
 import { LensFlare } from '../../../components/effects/LensFlare';
 import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { useBeatValue } from '../utils/beat-sync';
@@ -98,10 +99,17 @@ export const Opening: React.FC = () => {
 
   return (
     <AbsoluteFill style={{ background: '#000', overflow: 'hidden' }}>
+      {/* 1. Time Tunnel Core */}
+      <AbsoluteFill style={{ zIndex: 0 }}>
+        <TimeTunnel />
+      </AbsoluteFill>
+
+      {/* 2. Flare Video Layered with Mix Mode */}
       <AbsoluteFill
         style={{
-          zIndex: 0,
+          zIndex: 5,
           transform: `scale(${videoScale}) translate(${wiggleX}px, ${wiggleY}px)`,
+          mixBlendMode: 'screen',
         }}
       >
         <OffthreadVideo
@@ -110,15 +118,8 @@ export const Opening: React.FC = () => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            filter: 'brightness(1.2) contrast(1.1) saturate(1.1)',
           }}
           muted
-        />
-        <AbsoluteFill
-          style={{
-            background: 'rgba(0,0,0,0.15)',
-            mixBlendMode: 'multiply',
-          }}
         />
       </AbsoluteFill>
 

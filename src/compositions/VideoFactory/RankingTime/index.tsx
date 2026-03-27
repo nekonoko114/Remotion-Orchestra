@@ -13,7 +13,7 @@ import RANKING_DATA_TIME_JSON from '../data.json';
 import type { Liver } from '../types';
 import { CinematicBorder } from '../CinematicBorder';
 
-const BGM_SOURCE = staticFile('assets/audio/music/Ours-to-Hold.mp3');
+const BGM_SOURCE = staticFile('assets/audio/music/Velocity-Shift.mp3');
 const BGM_START_FROM = 0.0; // Seconds
 
 export const OPENING_SEC = 5;
