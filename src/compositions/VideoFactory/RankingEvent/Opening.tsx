@@ -3,13 +3,11 @@ import {
   interpolate,
   useCurrentFrame,
   useVideoConfig,
-  Video,
-  staticFile,
   spring,
   random,
 } from 'remotion';
 import { NeonGlowText } from '../../../components/effects/NeonGlowText';
-import { UnityBackground } from './UnityBackground';
+import { CyberTunnel } from './CyberTunnel';
 import { useBeatValue } from '../utils/beat-sync';
 
 const BPM = 194;
@@ -69,25 +67,10 @@ export const Opening: React.FC = () => {
       }}
     >
       <AbsoluteFill style={{ zIndex: -1 }}>
-        <UnityBackground />
-        <Video
-          src={staticFile('assets/pixabay/particles/particle-squere.mp4')}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            filter: 'hue-rotate(100deg) brightness(1.2) contrast(1.1) saturate(1.2)',
-            transform: 'scale(1.1)',
-            mixBlendMode: 'screen',
-          }}
-          startFrom={0}
-          playbackRate={1}
-          // speed={0.7}
-          muted
-        />
+        <CyberTunnel />
         <AbsoluteFill
           style={{
-            background: 'radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.2) 100%)', 
+            background: 'radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.4) 100%)', 
           }}
         />
       </AbsoluteFill>
