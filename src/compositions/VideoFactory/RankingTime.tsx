@@ -111,9 +111,9 @@ export const RankingTime = (props: { data?: Liver[] }) => {
             />
           </TransitionSeries.Sequence>
 
-          {/* Transition 3: Group 2 -> Grid (GLITCH!) */}
+          {/* Transition 3: Group 2 -> Grid (WIPE for test) */}
           <TransitionSeries.Transition
-            presentation={glitchTransition()}
+            presentation={wipeTransition({ direction: 'from-top' })}
             timing={timing}
           />
 

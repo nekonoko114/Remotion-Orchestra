@@ -259,7 +259,6 @@ export const TopRankRevealTime: React.FC<Props> = ({ rank, liver, title }) => {
           colors={[primary, '#ffffff', '#ffd700', '#ff0080']}
         />
       </AbsoluteFill>
-      return (
       <AbsoluteFill
         style={{
           display: 'flex',
