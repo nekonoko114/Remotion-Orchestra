@@ -15,13 +15,13 @@ export const TunnelCanvas: React.FC<Props> = ({ pulse, opacity }) => {
   const { width, height } = useVideoConfig();
 
   const shards = useMemo(() => {
-    return Array.from({ length: 40 }).map((_, i) => {
+    return Array.from({ length: 25 }).map((_, i) => { // Reduced count
       const seed = i * 45.3;
       return {
         angle: (seed % (Math.PI * 2)),
         distanceFactor: 0.1 + (seed % 0.9),
-        speed: 15 + (seed % 20),
-        size: 3 + (seed % 8),
+        speed: 12 + (seed % 15), // Slightly slower
+        size: 2 + (seed % 6),
         color: i % 2 === 0 ? UNITY_GREEN : '#FFFFFF',
       };
     });
@@ -88,9 +88,9 @@ export const TunnelCanvas: React.FC<Props> = ({ pulse, opacity }) => {
 
       ctx.save();
       ctx.strokeStyle = i % 4 === 0 ? UNITY_LIME : UNITY_GREEN;
-      ctx.lineWidth = (2 + pulse * 25) * ringProgress * 3.5; // High substance
+      ctx.lineWidth = (2 + pulse * 10) * ringProgress * 3; // Dampened pulse (25 -> 10)
       ctx.globalAlpha = ringOpacity;
-      ctx.shadowBlur = 25 * pulse;
+      ctx.shadowBlur = 15 * pulse; // Dampened glow (25 -> 15)
       ctx.shadowColor = ctx.strokeStyle as string;
 
       drawHexagon(centerX, centerY, radius, rotation);
