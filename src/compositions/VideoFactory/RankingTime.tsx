@@ -4,8 +4,9 @@ import RANKING_DATA_TIME_JSON from './data-time.json';
 import type { Liver } from './types';
 import {
   wipeTransition,
+  glitchTransition,
+  flareTransition,
   spinTransition,
-  zoomTransition,
 } from './CustomTransitions';
 import { EndingLogoTime as EndingLogo } from './EndingLogoTime';
 import { OpeningTitleTime as OpeningTitle } from './OpeningTitleTime';
@@ -110,9 +111,9 @@ export const RankingTime = (props: { data?: Liver[] }) => {
             />
           </TransitionSeries.Sequence>
 
-          {/* Transition 3: Group 2 -> Grid (WIPE from Top) */}
+          {/* Transition 3: Group 2 -> Grid (GLITCH!) */}
           <TransitionSeries.Transition
-            presentation={wipeTransition({ direction: 'from-top' })}
+            presentation={glitchTransition()}
             timing={timing}
           />
 
@@ -151,9 +152,9 @@ export const RankingTime = (props: { data?: Liver[] }) => {
             />
           </TransitionSeries.Sequence>
 
-          {/* Transition 5: 2nd -> Champion (ZOOM) */}
+          {/* Transition 5: 2nd -> Champion (FLARE / LIGHT SWEEP) */}
           <TransitionSeries.Transition
-            presentation={zoomTransition({ direction: 'in' })}
+            presentation={flareTransition({ color: '#d000ff' })}
             timing={timing}
           />
 
@@ -166,9 +167,9 @@ export const RankingTime = (props: { data?: Liver[] }) => {
             />
           </TransitionSeries.Sequence>
 
-          {/* 7. Ending Logo (Glitch Transition for high energy end) */}
+          {/* 7. Ending Logo (GLITCH for high energy end) */}
           <TransitionSeries.Transition
-            presentation={wipeTransition({ direction: 'from-right' })}
+            presentation={glitchTransition()}
             timing={timing}
           />
 

@@ -53,8 +53,8 @@ export const RankingGroupTime: React.FC<Props> = ({
     extrapolateRight: 'clamp',
   });
 
-  // Calculate per-liver staggered animation
-  const STAGGER_DELAY = 18; // 0.3s at 60fps
+  // Calculate per-liver staggered animation: BPM 160, 60fps -> 22.5 frames per beat
+  const STAGGER_DELAY = 22.5; 
 
   return (
     <AbsoluteFill
@@ -87,7 +87,7 @@ export const RankingGroupTime: React.FC<Props> = ({
           text={title}
           speed={3}
           style={{
-            fontSize: (isHighlight ? 120 : 180) * scale,
+            fontSize: (isHighlight ? 120 : 120) * scale,
             fontWeight: 'bold',
             color: '#e0e0ff',
             textShadow: `0 0 ${10 * scale}px #b82bff, 0 0 ${20 * scale}px #e066ff, 0 0 ${40 * scale}px #b82bff`,
@@ -117,7 +117,7 @@ export const RankingGroupTime: React.FC<Props> = ({
           const liverSpr = spring({
             frame: frame - STAGGER_DELAY * reverseIndex - 10, // Start after title slam
             fps,
-            config: { damping: 10, stiffness: 150 }, // Bouncier and faster
+            config: { damping: 12, stiffness: 200 }, // Snappier and slightly less bouncy for a "slam" feel
           });
 
           // Deep drop from top (-800px), faster fade-in, slamming down from 2x scale
