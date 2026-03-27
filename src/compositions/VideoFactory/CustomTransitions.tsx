@@ -333,8 +333,8 @@ export const ColorFadeTransitionComponent: React.FC<
     />
   );
 };
-// 7. GLITCH TRANSITION
-export const glitchTransition = (): TransitionPresentation<any> => {
+// 7. JITTER TRANSITION
+export const jitterTransition = (): TransitionPresentation<any> => {
   return {
     component: (props: TransitionProps) => {
       const { children, presentationProgress } = props;
@@ -431,11 +431,89 @@ export const flareTransition = (
           <AbsoluteFill
             style={{
               zIndex: 9,
-              pointerEvents: 'none',
+      pointerEvents: 'none',
               background: `radial-gradient(circle at center, ${flareColor}66 0%, transparent 70%)`,
               opacity: flareOpacity,
             }}
           />
+        </AbsoluteFill>
+      );
+    },
+    props: {} as any,
+  };
+};
+
+// 13. ULTIMATE GLITCH TRANSITION (Native Implementation)
+export const glitchTransition = (): TransitionPresentation<any> => {
+  return {
+    component: (props: TransitionProps) => {
+      const { children, presentationProgress } = props;
+      const arr = React.Children.toArray(children);
+      const exiting = arr[0];
+      const entering = arr[1];
+
+      const p = presentationProgress;
+      const isSecondHalf = p > 0.5;
+      
+      // Noise/Jitter intensity peaks at the middle
+      const power = Math.sin(p * Math.PI);
+      
+      const jitterX = (random(p) - 0.5) * 100 * power;
+      const banding = 12;
+
+      if (!entering) return exiting as React.ReactElement;
+      if (!exiting) return entering as React.ReactElement;
+
+      return (
+        <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden', zIndex: 9999 }}>
+          {/* Debug Log */}
+          {(() => {
+            if (p > 0 && p < 0.1) console.log('DEBUG: GLITCH TRANSITION RENDERING', { p });
+            return null;
+          })()}
+          {/* Base Layer */}
+          <AbsoluteFill style={{ transform: `translateX(${jitterX}px)` }}>
+            {isSecondHalf ? entering : exiting}
+          </AbsoluteFill>
+
+          {/* Sliced Layers for glitchy feel */}
+          {power > 0.2 && new Array(banding).fill(0).map((_, i) => {
+            const top = (i * 100) / banding;
+            const height = 100 / banding;
+            const sliceOffset = (random(p + i) - 0.5) * 300 * power;
+            const src = (random(p + i + 10) > 0.5) ? exiting : entering;
+
+            return (
+              <AbsoluteFill
+                key={i}
+                style={{
+                  clipPath: `polygon(0 ${top}%, 100% ${top}%, 100% ${top + height}%, 0 ${top + height}%)`,
+                  transform: `translateX(${sliceOffset}px)`,
+                  filter: random(p + i + 20) > 0.8 ? 'hue-rotate(90deg) brightness(2)' : 'none',
+                  opacity: 0.8 * power,
+                }}
+              >
+                {src}
+              </AbsoluteFill>
+            );
+          })}
+
+          {/* RGB Split Overlay */}
+          {power > 0.3 && (
+            <>
+              <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.4 * power, transform: `translateX(${power * 40}px)`, backgroundColor: '#ff0000', pointerEvents: 'none' }} />
+              <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.4 * power, transform: `translateX(${-power * 40}px)`, backgroundColor: '#00ffff', pointerEvents: 'none' }} />
+            </>
+          )}
+
+          {/* Vertical Scanlines / Noise */}
+          {power > 0.1 && (
+            <AbsoluteFill style={{ 
+              background: `repeating-linear-gradient(rgba(255,255,255,0.1) 0, rgba(255,255,255,0.1) 2px, transparent 2px, transparent 4px)`,
+              opacity: power * 0.5,
+              pointerEvents: 'none' 
+            }} />
+          )}
         </AbsoluteFill>
       );
     },
@@ -588,5 +666,85 @@ export const ultimateTransition = (): TransitionPresentation<any> => {
       );
     },
     props: {} as any,
+  };
+};
+
+// 14. WIPE + FLARE HYBRID (Official Stability + Custom Flare)
+export const wipeWithFlareTransition = (options: { direction?: any } = {}): TransitionPresentation<any> => {
+  const baseWipe = wipe({ direction: options.direction || 'from-left' });
+  return {
+    ...baseWipe,
+    component: (props: TransitionProps) => {
+      const p = props.presentationProgress;
+      const flareOpacity = Math.sin(p * Math.PI);
+      const flareColor = '#00f2ff'; // Cyan theme
+
+      return (
+        <AbsoluteFill>
+          <baseWipe.component {...props} />
+          {/* Overlaid Flare Effect */}
+          <AbsoluteFill
+            style={{
+              pointerEvents: 'none',
+              background: `radial-gradient(circle at center, ${flareColor}88 0%, transparent 70%)`,
+              opacity: flareOpacity * 0.6,
+              zIndex: 10,
+            }}
+          />
+          <AbsoluteFill
+            style={{
+              pointerEvents: 'none',
+              backgroundColor: 'white',
+              opacity: flareOpacity * 0.3,
+              zIndex: 11,
+            }}
+          />
+        </AbsoluteFill>
+      );
+    },
+  };
+};
+
+// 15. WIPE + GLITCH HYBRID (Official Stability + Custom Glitch)
+export const wipeWithGlitchTransition = (options: { direction?: any } = {}): TransitionPresentation<any> => {
+  const baseWipe = wipe({ direction: options.direction || 'from-left' });
+  return {
+    ...baseWipe,
+    component: (props: TransitionProps) => {
+      const p = props.presentationProgress;
+      const power = Math.sin(p * Math.PI);
+      const jitterX = (random(p) - 0.5) * 50 * power;
+
+      return (
+        <AbsoluteFill style={{ overflow: 'hidden' }}>
+          <AbsoluteFill style={{ transform: `translateX(${jitterX}px)` }}>
+            <baseWipe.component {...props} />
+          </AbsoluteFill>
+          {/* Subtle Glitch Pop while wiping */}
+          {power > 0.4 && (
+            <>
+              <AbsoluteFill
+                style={{
+                  mixBlendMode: 'screen',
+                  opacity: 0.3 * power,
+                  transform: `translateX(${power * 20}px)`,
+                  backgroundColor: '#ff0000',
+                  pointerEvents: 'none',
+                }}
+              />
+              <AbsoluteFill
+                style={{
+                  mixBlendMode: 'screen',
+                  opacity: 0.3 * power,
+                  transform: `translateX(${-power * 20}px)`,
+                  backgroundColor: '#00ffff',
+                  pointerEvents: 'none',
+                }}
+              />
+            </>
+          )}
+        </AbsoluteFill>
+      );
+    },
   };
 };
