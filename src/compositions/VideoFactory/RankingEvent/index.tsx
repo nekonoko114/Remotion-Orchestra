@@ -64,7 +64,6 @@ export const RankingEvent = () => {
             <RankingGroup
               title={'TOP\n10~8'}
               livers={RANKING_DATA.filter((d) => d.rank >= 8 && d.rank <= 10)}
-              showMusicShapes={frame >= 1123 && frame <= 1470}
               absoluteFrame={frame}
             />
           </TransitionSeries.Sequence>
@@ -75,7 +74,6 @@ export const RankingEvent = () => {
             <RankingGroup
               title={'TOP\n7~6'}
               livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 7)}
-              showMusicShapes={frame >= 1123 && frame <= 1470}
               absoluteFrame={frame}
             />
           </TransitionSeries.Sequence>
@@ -86,7 +84,6 @@ export const RankingEvent = () => {
             <RankingGroup
               title={'TOP\n5~4'}
               livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 5)}
-              showMusicShapes={frame >= 1123 && frame <= 1470}
               absoluteFrame={frame}
             />
           </TransitionSeries.Sequence>

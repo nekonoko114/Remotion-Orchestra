@@ -9,8 +9,9 @@ import {
   useVideoConfig,
 } from 'remotion';
 import { useBeatValue } from '../utils/beat-sync';
-import { MusicShapes } from './MusicShapes';
 import { EnergySVG } from './EnergySVG';
+import { CircuitSVG } from './CircuitSVG';
+import { FlowSVG } from './FlowSVG';
 import type { Liver } from '../types';
 
 const getBackgroundTransform = (rank: number) => {
@@ -72,13 +73,20 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
   const rankFontSize = is2Group ? 120 : is3Group ? 90 : 70;
   const nameFontSize = is2Group ? 70 : is3Group ? 40 : 32;
 
-  // Energy Zone (426-555)
+  // Multiple Energy Zones for different segments
   const energyOpacity = interpolate(
     absoluteFrame || 0,
-    [420, 426, 555, 565],
-    [0, 1, 1, 0],
+    [180, 192, 400, 426, 555, 565, 744, 756, 1026, 1050],
+    [0, 0, 0, 1, 1, 0, 0, 1, 1, 0],
     { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
   );
+
+  const renderBackgroundSVG = () => {
+    if (absoluteFrame === undefined) return null;
+    if (absoluteFrame < 555) return <EnergySVG pulse={pulse} opacity={energyOpacity} />;
+    if (absoluteFrame < 756) return <CircuitSVG pulse={pulse} opacity={energyOpacity} />;
+    return <FlowSVG pulse={pulse} opacity={energyOpacity} />;
+  };
 
 
   return (
@@ -104,14 +112,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
             pointerEvents: 'none',
           }}
         />
-        {energyOpacity > 0 && (
-          <EnergySVG pulse={pulse} opacity={energyOpacity} />
-        )}
+        {energyOpacity > 0 && renderBackgroundSVG()}
       </AbsoluteFill>
-
-      {showMusicShapes && absoluteFrame !== undefined && (
-        <MusicShapes absoluteFrame={absoluteFrame} />
-      )}
 
       <AbsoluteFill
         style={{
