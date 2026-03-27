@@ -8,7 +8,8 @@ import {
   useVideoConfig,
   Easing,
 } from 'remotion';
-import RANKING_DATA_JSON from './data-time.json';
+import RANKING_DATA_JSON_RAW from './data-time.json';
+const RANKING_DATA_JSON = Array.isArray(RANKING_DATA_JSON_RAW) ? RANKING_DATA_JSON_RAW : [];
 import FETCHED_USERS_JSON from '../../../jol-liver.json';
 import type { Liver } from './types';
 
@@ -29,6 +30,7 @@ const BPM = 160;
 export const GridBridgeTime: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
+  console.log(`[GridBridgeTime] Rendering frame: ${frame}, total items raw: ${RANKING_DATA_JSON.length}`);
 
   // 1. Timing setup based on BPM 160
   const beatFrames = (60 / BPM) * fps; // 22.5 frames per beat at 60fps
@@ -57,6 +59,7 @@ export const GridBridgeTime: React.FC = () => {
     };
   });
 
+  console.log(`[GridBridgeTime] top10Items count: ${top10Items.length}`);
   // Get successfully downloaded other users, excluding top 10 to avoid duplicates
   const top10Usernames = top10Items.map((item) => item.id);
   const otherUsers = FETCHED_USERS.filter(
@@ -118,7 +121,12 @@ export const GridBridgeTime: React.FC = () => {
   const gap = 20 * (width / 1080);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+    <AbsoluteFill style={{ backgroundColor: '#ff0000', overflow: 'hidden' }}>
+      {/* Fallback text if nothing else renders */}
+      <div style={{ position: 'absolute', top: 50, left: 50, color: 'white', fontSize: 40, zIndex: 100 }}>
+        [DEBUG] GridBridgeTime Active (Items: {combinedItems.length})
+      </div>
+      <AbsoluteFill style={{ backgroundColor: '#000' }}>
       <AbsoluteFill
         style={{
           transform: `rotate(${rotation}deg) scale(1.4)`, // 元のスケールに戻す
@@ -129,9 +137,10 @@ export const GridBridgeTime: React.FC = () => {
         }}
       >
         {columns.map((columnItems, colIndex) => {
-          // 画像をループさせるため配列を繰り返す (約20枚/列を2周させる)
-          const columnLong = [...columnItems, ...columnItems];
-          const totalColumnHeight = columnItems.length * (itemHeight + gap); // 1セットの長さを全体の高さとする
+          // 画像をループさせるため配列を繰り返す (1920px を埋めるため 4セット程度用意)
+          const columnLong = [...columnItems, ...columnItems, ...columnItems, ...columnItems];
+          const itemFullHeight = itemHeight + gap;
+          const totalColumnHeight = columnItems.length * itemFullHeight;
 
           // 列ごとのスピードと方向
           // スピードを数値（現在は16と20）で調整できます。数値を大きくすると速くなります。
@@ -139,7 +148,9 @@ export const GridBridgeTime: React.FC = () => {
           const direction = colIndex % 2 === 0 ? -1 : 1;
 
           // 継続的な移動
+          // 継続的な移動。初期位置を画面中央(-960)付近に持っていくため調整
           const baseOffset = (frame * speed * direction) % totalColumnHeight;
+          const centeredOffset = baseOffset - totalColumnHeight; // 複数セットあるうちの中央付近を使う
 
           return (
             <div
@@ -148,7 +159,7 @@ export const GridBridgeTime: React.FC = () => {
                 display: 'flex',
                 flexDirection: 'column', // Vertical layout for items in a column
                 width: columnWidth,
-                transform: `translateY(${baseOffset - totalColumnHeight / 2}px)`,
+                transform: `translateY(${centeredOffset}px)`,
                 gap: gap,
                 marginRight: 20,
                 whiteSpace: 'nowrap',
@@ -282,6 +293,7 @@ export const GridBridgeTime: React.FC = () => {
           pointerEvents: 'none',
         }}
       />
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
