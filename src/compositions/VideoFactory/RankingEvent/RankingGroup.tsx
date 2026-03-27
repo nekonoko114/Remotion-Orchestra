@@ -10,6 +10,7 @@ import {
 } from 'remotion';
 import { useBeatValue } from '../utils/beat-sync';
 import { MusicShapes } from './MusicShapes';
+import { EnergySVG } from './EnergySVG';
 import type { Liver } from '../types';
 
 const getBackgroundTransform = (rank: number) => {
@@ -71,6 +72,15 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
   const rankFontSize = is2Group ? 120 : is3Group ? 90 : 70;
   const nameFontSize = is2Group ? 70 : is3Group ? 40 : 32;
 
+  // Energy Zone (426-555)
+  const energyOpacity = interpolate(
+    absoluteFrame || 0,
+    [420, 426, 555, 565],
+    [0, 1, 1, 0],
+    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+  );
+
+
   return (
     <AbsoluteFill>
       <AbsoluteFill style={{ backgroundColor: '#001a00' }}>
@@ -94,6 +104,9 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
             pointerEvents: 'none',
           }}
         />
+        {energyOpacity > 0 && (
+          <EnergySVG pulse={pulse} opacity={energyOpacity} />
+        )}
       </AbsoluteFill>
 
       {showMusicShapes && absoluteFrame !== undefined && (
