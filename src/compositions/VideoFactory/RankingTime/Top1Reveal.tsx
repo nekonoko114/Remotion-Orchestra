@@ -8,6 +8,7 @@ import {
   useCurrentFrame,
   staticFile,
   useVideoConfig,
+  OffthreadVideo,
 } from 'remotion';
 import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { TimeBackground } from '../TimeBackground';
@@ -26,6 +27,8 @@ const MAGIC_CIRCLES = [
   'magic-circle-red.png',
   'magic-circle-yellow.png',
 ];
+
+const ANTIQUE_GOLD_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_minutes_old_gold_retro_antique_spiral_l_207864.mp4');
 
 type Props = {
   rank: number;
@@ -117,10 +120,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
 
   if (!liver) return null;
 
-  const magicalBg =
-    rank <= 3
-      ? staticFile(`assets/backgrounds/rank_${rank}_magical_bg.png`)
-      : null;
+  const magicalBg = rank <= 3;
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
@@ -131,20 +131,22 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
       />
       {magicalBg && (
         <AbsoluteFill style={{ zIndex: 5 }}>
-          <Img
-            src={magicalBg}
+          <OffthreadVideo
+            src={ANTIQUE_GOLD_VIDEO}
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
               transform: `scale(${bgScale})`,
-              opacity: 0.85,
+              opacity: 0.65,
+              filter: 'sepia(0.3) brightness(1.2) contrast(1.1)',
             }}
+            muted
           />
           <AbsoluteFill
             style={{
               background: `radial-gradient(circle at center, transparent 20%, #000 100%)`,
-              opacity: 0.5,
+              opacity: 0.4,
             }}
           />
         </AbsoluteFill>
@@ -356,6 +358,76 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
         >
           {displayedName}
         </h2>
+
+        {/* --- NEW: Progress Bar & Streaming Time --- */}
+        <div
+          style={{
+            width: 600 * (width / 1080),
+            marginTop: 10 * (width / 1080),
+            opacity: nameOpacity,
+            transform: `translateY(${nameY * (width / 1080)}px)`,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {/* Progress Bar Label */}
+          <div style={{
+            alignSelf: 'flex-start',
+            fontSize: 24 * (width / 1080),
+            color: primary,
+            marginBottom: 5 * (width / 1080),
+            fontWeight: 'bold',
+            letterSpacing: 2,
+            textShadow: `0 0 10px ${primary}`,
+          }}>
+            STREAMING POWER
+          </div>
+          
+          {/* Progress Bar Container */}
+          <div style={{
+            height: 16 * (width / 1080),
+            width: '100%',
+            backgroundColor: 'rgba(255,255,255,0.1)',
+            borderRadius: 8 * (width / 1080),
+            overflow: 'hidden',
+            border: `1px solid ${primary}44`,
+            boxShadow: `0 0 20px ${primary}33`,
+            position: 'relative',
+          }}>
+            <div style={{
+              height: '100%',
+              width: `${interpolate(
+                spring({
+                  frame: localFrame - 45,
+                  fps,
+                  config: { damping: 20, stiffness: 100 },
+                }),
+                [0, 1],
+                [0, interpolate(random(liver.rank), [0, 1], [60, 98])]
+              )}%`,
+              backgroundColor: primary,
+              boxShadow: `0 0 15px ${primary}, 0 0 5px white`,
+              borderRadius: 8 * (width / 1080),
+            }} />
+          </div>
+
+          {/* Streaming Time Notation */}
+          <div style={{
+            marginTop: 15 * (width / 1080),
+            fontSize: 48 * (width / 1080),
+            color: '#fff',
+            fontFamily: 'monospace',
+            textShadow: `0 0 10px ${primary}, 0 0 20px ${primary}`,
+            letterSpacing: 4 * (width / 1080),
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            padding: `5px 20px`,
+            borderRadius: 10,
+            border: `1px solid ${primary}88`,
+          }}>
+            配信時間: {Math.floor(random(liver.rank) * 99999).toString(16).toUpperCase()}
+          </div>
+        </div>
       </AbsoluteFill>
       <AbsoluteFill
         style={{

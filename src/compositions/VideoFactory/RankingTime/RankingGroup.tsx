@@ -8,6 +8,7 @@ import {
   staticFile,
   useCurrentFrame,
   useVideoConfig,
+  OffthreadVideo,
 } from 'remotion';
 import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { useBeatValue } from '../utils/beat-sync';
@@ -21,10 +22,12 @@ type Props = {
 
 const BPM = 180; // Velocity-Shift BPM
 
-// Cyber Magenta Theme
+// Burning Fire Theme (Orange & Gold)
 const THEME_COLOR = '#d000ff';
 const SECONDARY_COLOR = '#00f2ff';
 const GLOW_COLOR = 'rgba(208, 0, 255, 0.6)';
+
+const BACKGROUND_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_fire_flame_ritual_149142.mp4');
 
 const getAvatarPosition = (rank: number) => {
   if (rank === 10) return 'center 20%';
@@ -42,7 +45,7 @@ export const RankingGroup: React.FC<Props> = ({
   isHighlight,
 }) => {
   const frame = useCurrentFrame();
-  const { fps, width, height } = useVideoConfig();
+  const { fps, width } = useVideoConfig();
   const scale = width / 1080;
   const { pulse } = useBeatValue(BPM);
 
@@ -69,8 +72,27 @@ export const RankingGroup: React.FC<Props> = ({
         alignItems: 'center',
         opacity,
         transform: `scale(${beamScale * beatScale})`,
+        backgroundColor: '#000',
       }}
     >
+      {/* 0. Background Video Layer */}
+      <AbsoluteFill style={{ zIndex: 0, opacity: 0.8 }}>
+        <OffthreadVideo
+          src={BACKGROUND_VIDEO}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            filter: 'hue-rotate(280deg) contrast(1.4) brightness(1.2)',
+          }}
+          muted
+        />
+        {/* Subtle dark overlay to keep text legible */}
+        <AbsoluteFill style={{
+          background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%)',
+        }} />
+      </AbsoluteFill>
+
       {/* 1. Header Title */}
       <div style={{ position: 'absolute', top: 120 * scale, zIndex: 100 }}>
         <h1

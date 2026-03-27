@@ -14,7 +14,7 @@ import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { useBeatValue } from '../utils/beat-sync';
 import { CinematicBorder } from '../CinematicBorder';
 
-const OPENING_VIDEO = staticFile('assets/backgrounds/nobvflare.mp4');
+const OPENING_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_countdown_red_black_6066.mp4');
 
 const DigitalTypewriter: React.FC<{
   text: string;
@@ -80,7 +80,7 @@ export const Opening: React.FC = () => {
   const { pulse, beatIndex } = useBeatValue(180);
 
   const transitionFrame = 180;
-  const videoScale = 1.5;
+  const videoScale = 1.1;
 
   const baseWiggle = 5 * scale;
   const explosionWiggle = interpolate(
