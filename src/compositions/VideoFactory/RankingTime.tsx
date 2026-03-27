@@ -24,7 +24,7 @@ const BGM_START_FROM = 0.0; // Seconds
 // 180 BPM, 30fps -> 1 beat = 10 frames.
 // 8.0s = 240 frames = 24 beats (6 measures)
 export const OPENING_SEC = 6.0;
-export const GRID_BRIDGE_SEC = 166 / 30; // Changed from 8.0 to sync Top 3 reveal at frame 776
+export const GRID_BRIDGE_SEC = 8.0; // 480 frames at 60fps
 // 5.333...s = 160 frames = 16 beats (4 measures)
 export const GROUP_SEC = 160 / 30;
 export const TOP_RANK_SEC = 160 / 30;
@@ -37,7 +37,7 @@ export const RankingTime = (props: { data?: Liver[] }) => {
   const { fps } = useVideoConfig();
 
   // Use data from props if available, otherwise fallback to local JSON
-  const RANKING_DATA = props.data || (RANKING_DATA_TIME_JSON as Liver[]);
+  const RANKING_DATA = props.data || (RANKING_DATA_TIME_JSON as unknown as Liver[]);
 
   // Duration Logic (Frames)
   const OPENING_DURATION = OPENING_SEC * fps;

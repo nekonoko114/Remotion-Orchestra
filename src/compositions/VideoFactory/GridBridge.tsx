@@ -12,7 +12,7 @@ import RANKING_DATA_JSON from './data.json';
 import FETCHED_USERS_JSON from '../../../jol-liver.json';
 import type { Liver } from './types';
 
-const RANKING_DATA = RANKING_DATA_JSON as Liver[];
+const RANKING_DATA = RANKING_DATA_JSON as unknown as Liver[];
 
 // Define type for fetched users
 type FetchedUser = {
@@ -36,7 +36,8 @@ export const GridBridge: React.FC = () => {
   // Ensure TOP 10 data is prioritized and formatted
   const top10Items = RANKING_DATA.map((liver) => {
     // Try to find the downloaded avatar
-    const fetchedMatch = FETCHED_USERS.find((fu) => fu.id === liver.username);
+    const liverId = liver.id || liver.username;
+    const fetchedMatch = FETCHED_USERS.find((fu) => fu.id === liverId);
 
     // Priority: localAvatar (if valid) -> saved_to (from data.json) -> image_url
     let avatarPath = liver.saved_to;
@@ -47,7 +48,7 @@ export const GridBridge: React.FC = () => {
     }
 
     return {
-      id: liver.username,
+      id: liver.id || liver.username,
       avatarPath,
       liver,
       rank: liver.rank,

@@ -1,5 +1,6 @@
 export interface Liver {
   rank: number;
+  id?: string;
   username: string;
   image_url: string;
   saved_to: string;

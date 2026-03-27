@@ -5,7 +5,7 @@ import { AbsoluteFill, useVideoConfig, Audio, staticFile } from 'remotion';
 import RANKING_DATA_JSON from './data.json';
 import type { Liver } from './types';
 
-const RANKING_DATA = RANKING_DATA_JSON as Liver[];
+const RANKING_DATA = RANKING_DATA_JSON as unknown as Liver[];
 import { EndingLogo } from './EndingLogo';
 import { OpeningTitle } from './OpeningTitle';
 import { RankingGroup } from './RankingGroup';
@@ -19,7 +19,7 @@ const BPM = 152;
 export const OPENING_SEC = 5.5;
 export const GROUP_SEC = 5;
 export const TOP_RANK_SEC = 5.6; // ~12 beats exactly
-export const GRID_BRIDGE_SEC = 4; // 4 seconds bridge
+export const GRID_BRIDGE_SEC = 8.0; // 480 frames at 60fps
 export const ENDING_SEC = 2.5;
 export const TRANSITION_FRAMES = 28; // Exactly half a beat at 60fps
 export const LAST_TRANSITION_FRAMES = 20;
