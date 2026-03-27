@@ -53,7 +53,7 @@ export const RankingGroupTime: React.FC<Props> = ({
     extrapolateRight: 'clamp',
   });
 
-  // Calculate per-liver staggered animation: BPM 160, 60fps -> 22.5 frames per beat. 2 beats = 45 frames.
+  // Calculate per-liver staggered animation: 1.5 beats = 30 frames (based on user adjustment)
   const STAGGER_DELAY = 30; 
 
   return (
