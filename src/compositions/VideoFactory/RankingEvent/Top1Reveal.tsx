@@ -18,7 +18,6 @@ import { CinematicBorder } from '../CinematicBorder';
 import { TextShine } from '../TextShine';
 import { AdjustmentLayer } from '../AdjustmentLayer';
 import { useBeatValue } from '../utils/beat-sync';
-import { TunnelCanvas } from './TunnelCanvas';
 import type { Liver } from '../types';
 
 const BPM = 194;
@@ -115,11 +114,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const { pulse } = useBeatValue(BPM);
   const pulseScale = (1 + Math.sin(frame / 6) * 0.04) * (1 + pulse * 0.06);
 
-  // Camera Shake on the beat for "Substantial" feel - Dampened (20 -> 5)
-  const shakeX = (Math.random() - 0.5) * 5 * pulse;
-  const shakeY = (Math.random() - 0.5) * 5 * pulse;
-  const contrastBoost = 1 + pulse * 0.1; // Dampened contrast (0.3 -> 0.1)
-
   const getRankColors = (r: number) => {
     // Brighter Theme Colors for Bouncy POP
     if (r === 1) return { primary: '#00FF7F', secondary: '#FFFFFF', glow: 'rgba(0,255,127,0.8)' };
@@ -133,12 +127,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   if (!liver) return null;
 
   return (
-    <AbsoluteFill
-      style={{
-        filter: `contrast(${contrastBoost})`,
-        transform: `translate(${shakeX}px, ${shakeY}px)`,
-      }}
-    >
+    <AbsoluteFill>
       <AbsoluteFill>
         <Img
           src={staticFile(`assets/backgrounds/rank_${rank}_bg_new.png`)}
@@ -152,7 +141,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
           }}
         />
         <AbsoluteFill style={{ backgroundColor: rank === 1 ? 'rgba(0,50,0,0.3)' : 'rgba(0,0,0,0.1)' }} />
-        <TunnelCanvas pulse={pulse} opacity={0.6} />
       </AbsoluteFill>
 
       {/* Floating Background Decos */}
