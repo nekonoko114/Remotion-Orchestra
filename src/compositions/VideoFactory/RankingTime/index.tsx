@@ -1,6 +1,6 @@
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import {
-  ultimateTransition,
+  gradientWipeTransition,
 } from '../CustomTransitions';
 import { Ending } from './Ending';
 import { Opening } from './Opening';
@@ -51,49 +51,49 @@ export const RankingTime = (props: { data?: Liver[] }) => {
             <Opening />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={ultimateTransition()} timing={timing} />
+          <TransitionSeries.Transition presentation={gradientWipeTransition()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup title={'TOP10~8'} livers={RANKING_DATA.filter((d) => d.rank >= 8 && d.rank <= 10)} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={ultimateTransition()} timing={timing} />
+          <TransitionSeries.Transition presentation={gradientWipeTransition()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup title={'TOP7~6'} livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 7)} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={ultimateTransition()} timing={timing} />
+          <TransitionSeries.Transition presentation={gradientWipeTransition()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup title={'TOP5~4'} livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 5)} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={ultimateTransition()} timing={timing} />
+          <TransitionSeries.Transition presentation={gradientWipeTransition()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
             <GridBridge />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={ultimateTransition()} timing={timing} />
+          <TransitionSeries.Transition presentation={gradientWipeTransition()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal rank={3} title="3位" liver={RANKING_DATA.find((d) => d.rank === 3) || RANKING_DATA[0]} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={ultimateTransition()} timing={timing} />
+          <TransitionSeries.Transition presentation={gradientWipeTransition()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal rank={2} title="2位" liver={RANKING_DATA.find((d) => d.rank === 2) || RANKING_DATA[1]} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={ultimateTransition()} timing={timing} />
+          <TransitionSeries.Transition presentation={gradientWipeTransition()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal rank={1} title="1位" liver={RANKING_DATA.find((d) => d.rank === 1) || RANKING_DATA[2]} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={ultimateTransition()} timing={timing} />
+          <TransitionSeries.Transition presentation={gradientWipeTransition()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={ENDING_DURATION}>
             <Ending />

@@ -10,6 +10,7 @@ import {
 } from 'remotion';
 import { wipe } from '@remotion/transitions/wipe';
 import { slide } from '@remotion/transitions/slide';
+import { GradientWipeTransition } from './components/BattleShared/Transitions15';
 import type {
   TransitionPresentation,
   TransitionPresentationComponentProps,
@@ -429,7 +430,34 @@ export const flareTransition = (
     props: {} as any,
   };
 };
-// 9. ULTIMATE TRANSITION (Hyperspace Warp Speed Refined)
+
+
+// 10. GRADIENT WIPE TRANSITION (from Catalog-Transitions-Ultimate-60 No.7)
+export const gradientWipeTransition = (): TransitionPresentation<any> => {
+  return {
+    component: (props: TransitionProps) => {
+      const { children, presentationProgress, presentationDurationInFrames } = props;
+      const arr = React.Children.toArray(children);
+      const exiting = arr[0];
+      const entering = arr[1];
+      const frame = Math.round(presentationProgress * (presentationDurationInFrames - 1));
+
+      if (!entering) return exiting as React.ReactElement;
+      if (!exiting) return entering as React.ReactElement;
+
+      return (
+        <GradientWipeTransition
+          frame={frame}
+          duration={presentationDurationInFrames}
+          SceneA={exiting}
+          SceneB={entering}
+        />
+      );
+    },
+    props: {} as any,
+  };
+};
+
 export const ultimateTransition = (): TransitionPresentation<any> => {
   return {
     component: (props: TransitionProps) => {
