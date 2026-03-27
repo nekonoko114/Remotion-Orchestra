@@ -7,13 +7,15 @@ import { RankingGroup } from './RankingGroup';
 import { Top1Reveal } from './Top1Reveal';
 import { GridBridge } from './GridBridge';
 import { TimeBackground } from '../TimeBackground';
-import { AbsoluteFill, useVideoConfig, Audio, staticFile } from 'remotion';
+import { AbsoluteFill, useVideoConfig, Audio, staticFile, useCurrentFrame, OffthreadVideo } from 'remotion';
 import RANKING_DATA_TIME_JSON from '../data.json';
 import type { Liver } from '../types';
 import { CinematicBorder } from '../CinematicBorder';
 
 const BGM_SOURCE = staticFile('assets/audio/music/Velocity-Shift.mp3');
 const BGM_START_FROM = 0.0; // Seconds
+
+const BACKGROUND_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_fire_flame_ritual_149142.mp4');
 
 export const OPENING_SEC = 5;
 export const GRID_BRIDGE_SEC = 8.0;
@@ -38,6 +40,14 @@ export const RankingTime = (props: { data?: Liver[] }) => {
     easing: Easing.out(Easing.quad),
   });
 
+  const frame = useCurrentFrame();
+
+  // Calculate range for 10-4 rank groups
+  const groupScenesStart = OPENING_DURATION;
+  const groupScenesEnd = OPENING_DURATION + (GROUP_DURATION * 3) + (TRANSITION_DURATION * 2);
+  const isGroupScene = frame >= groupScenesStart && frame < groupScenesEnd;
+
+
   return (
     <AbsoluteFill>
       <TimeBackground />
@@ -47,7 +57,27 @@ export const RankingTime = (props: { data?: Liver[] }) => {
 
       <CinematicBorder color="#d000ff" glowColor="rgba(208, 0, 255, 0.6)" />
 
+      {/* Persistent Background for 10-4 Ranks */}
+      {isGroupScene && (
+        <AbsoluteFill style={{ zIndex: 0, opacity: 0.8 }}>
+          <OffthreadVideo
+            src={BACKGROUND_VIDEO}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              filter: 'hue-rotate(280deg) contrast(1.4) brightness(1.2)',
+            }}
+            muted
+          />
+          <AbsoluteFill style={{
+            background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%)',
+          }} />
+        </AbsoluteFill>
+      )}
+
       <AbsoluteFill>
+
         <TransitionSeries>
           <TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
             <Opening />
