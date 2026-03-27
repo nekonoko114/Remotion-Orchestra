@@ -199,7 +199,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="NarandaMamadeMV"
         component={NarandaMamadeMV}
-        durationInFrames={Math.ceil(narandaMamadeMusicAnalysis.duration * 30)}
+        durationInFrames={Math.ceil(narandaMamadeMusicAnalysis.duration * 60)}
         fps={60}
         width={1920}
         height={1080}
@@ -223,7 +223,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Kimitonara"
         component={KimitonaraComposition}
-        durationInFrames={30 * 222} // 3分42秒
+        durationInFrames={60 * 222} // 3分42秒
         fps={60}
         width={1920}
         height={1080}
@@ -240,7 +240,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="Stitch-Gaming-Overlay"
         component={StitchOverlay}
-        durationInFrames={300} // 10 seconds
+        durationInFrames={600} // 10 seconds
         fps={60}
         width={1080}
         height={1920}
@@ -350,7 +350,7 @@ export const RemotionRoot: React.FC = () => {
           particleColor2: '#0088ff',
           music: {
             src: 'assets/audio/music/Breathing-Lighter.mp3',
-            startFrom: 126 * 30,
+            startFrom: 126 * 60,
             volume: 0.6,
           },
           opponent: {
@@ -465,7 +465,7 @@ export const RemotionRoot: React.FC = () => {
           particleColor2: '#b3e5fc',
           music: {
             src: 'assets/audio/music/その先へ.mp3',
-            startFrom: 48 * 30,
+            startFrom: 48 * 60,
             volume: 0.6,
             bpm: 144,
           },
@@ -583,7 +583,7 @@ export const RemotionRoot: React.FC = () => {
           particleColor2: '#f8bbd0',
           music: {
             src: 'assets/audio/music/その先へ.mp3',
-            startFrom: 48 * 30,
+            startFrom: 48 * 60,
             volume: 0.6,
             bpm: 144,
           },
@@ -838,7 +838,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="SVG-EFFECTS-CATALOG"
         component={SvgEffectsCatalog}
-        durationInFrames={300}
+        durationInFrames={600}
         fps={60}
         width={1920}
         height={1080}
@@ -846,7 +846,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="CANVAS-EFFECTS-CATALOG"
         component={CanvasEffectsCatalog}
-        durationInFrames={300}
+        durationInFrames={600}
         fps={60}
         width={1920}
         height={1080}
@@ -854,7 +854,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="SVG-GRAPHICS-CATALOG"
         component={SvgGraphicsCatalog}
-        durationInFrames={300}
+        durationInFrames={600}
         fps={60}
         width={1920}
         height={1080}
@@ -862,7 +862,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="GSAP-EFFECTS-CATALOG"
         component={GsapEffectsCatalog}
-        durationInFrames={300}
+        durationInFrames={600}
         fps={60}
         width={1920}
         height={1080}
@@ -878,7 +878,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="MV-LYRIC-TYPO-CATALOG"
         component={MvLyricTypographyCatalog}
-        durationInFrames={900}
+        durationInFrames={2400} // 40 effects * 60 frames
         fps={60}
         width={1080}
         height={1080}
@@ -894,7 +894,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="TRIPLE-IMAGE-EFFECTS-CATALOG"
         component={TripleImageEffectsCatalog}
-        durationInFrames={900}
+        durationInFrames={1800} // 30 effects * 60 frames
         fps={60}
         width={1080}
         height={1920}

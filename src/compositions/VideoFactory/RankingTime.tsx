@@ -28,7 +28,7 @@ export const GRID_BRIDGE_SEC = 166 / 30; // Changed from 8.0 to sync Top 3 revea
 export const GROUP_SEC = 160 / 30;
 export const TOP_RANK_SEC = 160 / 30;
 export const ENDING_SEC = 2.5;
-export const TRANSITION_FRAMES = 10; // Exactly 1 beat
+export const TRANSITION_FRAMES = 20; // Exactly 1 beat at 60fps
 
 import { CinematicBorder } from './CinematicBorder';
 
