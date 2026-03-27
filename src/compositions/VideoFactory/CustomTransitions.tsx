@@ -429,7 +429,7 @@ export const flareTransition = (
     props: {} as any,
   };
 };
-// 9. ULTIMATE TRANSITION (Hyperspace Warp Speed)
+// 9. ULTIMATE TRANSITION (Hyperspace Warp Speed Refined)
 export const ultimateTransition = (): TransitionPresentation<any> => {
   return {
     component: (props: TransitionProps) => {
@@ -439,51 +439,64 @@ export const ultimateTransition = (): TransitionPresentation<any> => {
       const entering = arr[1];
 
       const p = presentationProgress;
-      const z = interpolate(p, [0, 1], [0, 3000], {
+      
+      // Sharper exponential curve for more "explosive" movement
+      const zExit = interpolate(p, [0, 0.5, 1], [0, 5000, 10000], {
+        easing: Easing.bezier(0.7, 0, 0.3, 1),
+      });
+      const zEnter = interpolate(p, [0, 0.5, 1], [-10000, -5000, 0], {
         easing: Easing.bezier(0.7, 0, 0.3, 1),
       });
 
-      const exitOpacity = interpolate(p, [0, 0.4], [1, 0]);
-      const enterOpacity = interpolate(p, [0.6, 1], [0, 1]);
+      // Quick separation: Exit finishes fast, Enter starts late
+      const exitOpacity = interpolate(p, [0, 0.45], [1, 0], { extrapolateRight: 'clamp' });
+      const enterOpacity = interpolate(p, [0.55, 1], [0, 1], { extrapolateLeft: 'clamp' });
 
-      // Motion Blur and Chromatic Aberration Power
+      // Peak power for FX
       const power = interpolate(p, [0, 0.5, 1], [0, 1, 0]);
+      
+      // Central Flash to cover the "Cut-over" point
+      const flashOpacity = interpolate(p, [0.3, 0.5, 0.7], [0, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
       if (!entering) return exiting as React.ReactElement;
       if (!exiting) return entering as React.ReactElement;
 
       return (
         <AbsoluteFill style={{ perspective: 1000, backgroundColor: '#000', overflow: 'hidden' }}>
-          {/* Exiting Scene with Depth Fly-away */}
-          <AbsoluteFill
-            style={{
-              transform: `translateZ(${z}px)`,
-              opacity: exitOpacity,
-              filter: `blur(${power * 40}px) brightness(${1 + power})`,
-            }}
-          >
-            {exiting}
-          </AbsoluteFill>
+          {/* Exiting Scene */}
+          {p < 0.6 && (
+            <AbsoluteFill
+              style={{
+                transform: `translateZ(${zExit}px)`,
+                opacity: exitOpacity,
+                filter: `blur(${power * 60}px) contrast(${1 + power * 2})`,
+              }}
+            >
+              {exiting}
+            </AbsoluteFill>
+          )}
 
-          {/* Entering Scene Flying into view */}
-          <AbsoluteFill
-            style={{
-              transform: `translateZ(${z - 3000}px)`,
-              opacity: enterOpacity,
-              filter: `blur(${power * 40}px) brightness(${1 + power})`,
-            }}
-          >
-            {entering}
-          </AbsoluteFill>
+          {/* Entering Scene */}
+          {p > 0.4 && (
+            <AbsoluteFill
+              style={{
+                transform: `translateZ(${zEnter}px)`,
+                opacity: enterOpacity,
+                filter: `blur(${power * 60}px) contrast(${1 + power * 2})`,
+              }}
+            >
+              {entering}
+            </AbsoluteFill>
+          )}
 
-          {/* Hyperactive Energy Lines */}
-          {power > 0.1 && new Array(40).fill(0).map((_, i) => {
-            const seed = i * 1.5;
+          {/* Warp Lines */}
+          {power > 0.05 && new Array(50).fill(0).map((_, i) => {
+            const seed = i * 2.1;
             const x = random(seed) * 100;
             const y = random(seed + 1) * 100;
-            const length = 200 + random(seed + 2) * 800;
-            const speed = 1500 + random(seed + 3) * 2000;
-            const lineZ = (p * speed + random(seed + 4) * 2000) % 4000;
+            const length = 500 + random(seed + 2) * 1000;
+            const speed = 2500 + random(seed + 3) * 3000;
+            const lineZ = (p * speed + random(seed + 4) * 2000) % 6000;
             const color = i % 2 === 0 ? '#0ff' : '#d000ff';
 
             return (
@@ -493,22 +506,42 @@ export const ultimateTransition = (): TransitionPresentation<any> => {
                   position: 'absolute',
                   left: `${x}%`,
                   top: `${y}%`,
-                  width: 2,
+                  width: 3,
                   height: length,
                   backgroundColor: color,
-                  boxShadow: `0 0 15px ${color}`,
-                  transform: `translateZ(${lineZ - 2000}px) rotateX(90deg)`,
-                  opacity: power * 0.8,
+                  boxShadow: `0 0 20px ${color}`,
+                  transform: `translateZ(${lineZ - 3000}px) rotateX(90deg)`,
+                  opacity: power * 0.9,
                 }}
               />
             );
           })}
 
-          {/* RGB Split Flash Overlay */}
-          {power > 0.5 && (
+          {/* Central Flash Overlay (The "Cut-over" wall) */}
+          <AbsoluteFill
+            style={{
+              zIndex: 100,
+              pointerEvents: 'none',
+              backgroundColor: '#fff',
+              opacity: flashOpacity * 0.8,
+              boxShadow: `inset 0 0 100px #d000ff`,
+            }}
+          />
+          <AbsoluteFill
+            style={{
+              zIndex: 101,
+              pointerEvents: 'none',
+              background: `radial-gradient(circle, white 0%, transparent 70%)`,
+              opacity: flashOpacity,
+              transform: `scale(${1 + power * 2})`,
+            }}
+          />
+
+          {/* RGB Distortion during transition peak */}
+          {power > 0.4 && (
             <>
-              <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.4, transform: `translateX(${power * 20}px)`, backgroundColor: '#ff0000' }} />
-              <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.4, transform: `translateX(${-power * 20}px)`, backgroundColor: '#00ffff' }} />
+              <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.5, transform: `translateX(${power * 30}px) skewX(${power * 5}deg)`, backgroundColor: '#ff0000', pointerEvents: 'none' }} />
+              <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.5, transform: `translateX(${-power * 30}px) skewX(${-power * 5}deg)`, backgroundColor: '#00ffff', pointerEvents: 'none' }} />
             </>
           )}
         </AbsoluteFill>
