@@ -10,7 +10,7 @@ import { Top1Reveal } from './Top1Reveal';
 import { GridBridge } from './GridBridge';
 import { useBeatValue } from '../utils/beat-sync';
 import { slashTransition } from '../transitions/SlashTransition';
-import React from 'react';
+
 import { useCurrentFrame } from 'remotion';
 
 const RANKING_DATA = RANKING_DATA_JSON as unknown as Liver[];

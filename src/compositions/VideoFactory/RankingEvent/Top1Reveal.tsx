@@ -6,7 +6,6 @@ import {
   staticFile,
   useCurrentFrame,
   useVideoConfig,
-  random,
 } from 'remotion';
 import { Confetti } from '../../../components/effects/Confetti';
 import { ParticleBurst } from '../../../components/effects/ParticleBurst';
@@ -28,30 +27,7 @@ type Props = {
   title: string;
 };
 
-const FloatingDeco: React.FC<{ seed: number; emoji: string }> = ({ seed, emoji }) => {
-  const frame = useCurrentFrame();
-  const x = random(`${seed}-x`) * 100;
-  const duration = 200 + random(seed) * 100;
-  const y = interpolate((frame + random(seed) * 200) % duration, [0, duration], [110, -10], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const rotate = (frame * 1.2 + random(seed) * 360) % 360;
-  const opacity = interpolate(y, [0, 10, 90, 100], [0, 0.4, 0.4, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: `${x}%`,
-        top: `${y}%`,
-        fontSize: 100,
-        opacity,
-        transform: `rotate(${rotate}deg) scale(${0.8 + Math.sin(frame / 12) * 0.2})`,
-        filter: 'drop-shadow(0 0 15px rgba(0, 255, 127, 0.6))',
-      }}
-    >
-      {emoji}
-    </div>
-  );
-};
 
 export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const frame = useCurrentFrame();
@@ -115,10 +91,10 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const pulseScale = (1 + Math.sin(frame / 6) * 0.04) * (1 + pulse * 0.06);
 
   const getRankColors = (r: number) => {
-    // Brighter Theme Colors for Bouncy POP
-    if (r === 1) return { primary: '#00FF7F', secondary: '#FFFFFF', glow: 'rgba(0,255,127,0.8)' };
-    if (r === 2) return { primary: '#00FA9A', secondary: '#E0FFE0', glow: 'rgba(0,250,154,0.7)' };
-    if (r === 3) return { primary: '#3CB371', secondary: '#D0FFD0', glow: 'rgba(60,179,113,0.6)' };
+    // Metal Theme Colors for Top 3
+    if (r === 1) return { primary: '#FFD700', secondary: '#FFFFFF', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
+    if (r === 2) return { primary: '#C0C0C0', secondary: '#FFFFFF', glow: 'rgba(192, 192, 192, 0.7)' }; // Silver
+    if (r === 3) return { primary: '#CD7F32', secondary: '#FFFFFF', glow: 'rgba(205, 127, 50, 0.6)' }; // Copper (Bronze)
     return { primary: '#00FF7F', secondary: '#FFFFFF', glow: 'transparent' };
   };
 
@@ -143,14 +119,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
         <AbsoluteFill style={{ backgroundColor: rank === 1 ? 'rgba(0,50,0,0.3)' : 'rgba(0,0,0,0.1)' }} />
       </AbsoluteFill>
 
-      {/* Floating Background Decos */}
-      <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 10 }}>
-        <FloatingDeco seed={201} emoji="✨" />
-        <FloatingDeco seed={202} emoji="🍬" />
-        <FloatingDeco seed={203} emoji="🍭" />
-        <FloatingDeco seed={204} emoji="✨" />
-      </AbsoluteFill>
-
       <AdjustmentLayer rank={rank} beatPulse={pulse} />
 
       <AbsoluteFill style={{ opacity: 0.5, pointerEvents: 'none', zIndex: 110 }}>
@@ -171,68 +139,81 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
           <ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
         </AbsoluteFill>
 
-        <div style={{ zIndex: 120, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ transform: `scale(${rankScale * pulseScale})`, opacity: rankOpacity, marginBottom: 30, position: 'relative' }}>
-            <div
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 600,
-                height: 600,
-                background: `radial-gradient(circle, ${glow} 0%, transparent 60%)`,
-                opacity: 0.9,
-                zIndex: -1,
-              }}
-            />
-            <TextShine color="rgba(255, 255, 255, 1.0)" delay={15} duration={45}>
-              <h1
-                style={{
-                  fontSize: rank === 1 ? 400 : 320,
-                  margin: 0,
-                  color: '#FFFFFF',
-                  textShadow: `0 0 40px ${primary}, 0 0 80px ${primary}, 0 15px 30px rgba(0,0,0,0.9)`,
-                  fontWeight: 900,
-                  fontStyle: 'italic',
-                  lineHeight: 0.8,
-                  position: 'relative',
-                  zIndex: 2,
-                }}
-              >
-                {title}
-              </h1>
-            </TextShine>
-            {rank === 1 && (
+        <AbsoluteFill style={{ zIndex: 120 }}>
+          {/* Rank Title */}
+          <div 
+            style={{ 
+              position: 'absolute',
+              top: 80,
+              left: 0,
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              transform: `scale(${rankScale * pulseScale})`, 
+              opacity: rankOpacity
+            }}
+          >
+            <div style={{ position: 'relative' }}>
               <div
                 style={{
                   position: 'absolute',
-                  top: -250,
+                  top: '50%',
                   left: '50%',
-                  transform: `translateX(-50%) rotate(${Math.sin(frame / 5) * 10}deg)`,
-                  fontSize: 220,
-                  textShadow: `0 0 40px ${primary}, 0 10px 30px rgba(0,0,0,0.9)`,
-                  zIndex: 10,
+                  transform: 'translate(-50%, -50%)',
+                  width: 600,
+                  height: 600,
+                  background: `radial-gradient(circle, ${glow} 0%, transparent 60%)`,
+                  opacity: 0.9,
+                  zIndex: -1,
                 }}
-              >
-                🏆
-              </div>
-            )}
+              />
+              <TextShine color="rgba(255, 255, 255, 1.0)" delay={15} duration={45}>
+                <h1
+                  style={{
+                    fontSize: rank === 1 ? 400 : 320,
+                    margin: 0,
+                    color: '#FFFFFF',
+                    textShadow: `0 0 40px ${primary}, 0 0 80px ${primary}, 0 15px 30px rgba(0,0,0,0.9)`,
+                    fontWeight: 900,
+                    fontStyle: 'italic',
+                    lineHeight: 1.0,
+                  }}
+                >
+                  {title}
+                </h1>
+              </TextShine>
+              {rank === 1 && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: -250,
+                    left: '50%',
+                    transform: `translateX(-50%) rotate(${Math.sin(frame / 5) * 10}deg)`,
+                    fontSize: 220,
+                    textShadow: `0 0 40px ${primary}, 0 10px 30px rgba(0,0,0,0.9)`,
+                    zIndex: 10,
+                  }}
+                >
+                  
+                </div>
+              )}
+            </div>
           </div>
 
+          {/* Avatar Circle */}
           <div
             style={{
-              width: rank === 1 ? 1050 : 920,
-              height: rank === 1 ? 1050 : 920,
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: `translate(-50%, -50%) scale(${imageScale}) rotate(${imageRotate}deg) translateY(${imageY}px)`,
+              width: rank === 1 ? 720 : 720,
+              height: rank === 1 ? 720 : 720,
               borderRadius: '50%',
               overflow: 'hidden',
-              border: '12px solid #00FF7F', // Brighter Event border
               boxShadow: rank === 1 ? `0 0 0 20px ${primary}, 0 0 100px ${glow}, 0 30px 80px rgba(0,0,0,0.9)` : `0 0 0 10px ${primary}, 0 0 50px ${glow}, 0 20px 50px rgba(0,0,0,0.8)`,
-              position: 'relative',
               backgroundColor: '#000',
               zIndex: 5,
-              marginTop: 10,
-              transform: `scale(${imageScale}) rotate(${imageRotate}deg) translateY(${imageY}px)`,
               opacity: imageOpacity,
             }}
           >
@@ -248,21 +229,67 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
             />
           </div>
 
-          <h2
-            style={{
-              fontSize: 110,
-              marginTop: 60,
-              textShadow: `0 0 30px ${glow}, 0 6px 15px black`,
-              fontWeight: 900,
-              fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
-              color: '#fff',
-              transform: `translateY(${nameY}px) scale(${1 + pulse * 0.1})`,
+          {/* Laurel Wreath */}
+          {(rank === 1 || rank === 2 || rank === 3) && (
+            <div
+              style={{
+                position: 'absolute',
+                top: rank === 1 ? '52%' : '50%',
+                left: '50%',
+                transform: `translate(-50%, -50%) scale(${imageScale * (rank === 1 ? 1.6 : 1.4)})`,
+                opacity: imageOpacity * 1,
+                width: 820,
+                height: 820,
+                zIndex: 4,
+                pointerEvents: 'none',
+              }}
+            >
+              <Img
+                src={staticFile(
+                  rank === 1 
+                    ? 'assets/images/laurel-wreath-gold.svg' 
+                    : rank === 2 
+                      ? 'assets/images/laurel-wreath-silver.svg' 
+                      : 'assets/images/laurel-wreath-copper.svg'
+                )}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  filter: `drop-shadow(0 0 30px ${rank === 1 ? '#FFD700' : rank === 2 ? '#C0C0C0' : '#CD7F32'})`,
+                }}
+              />
+            </div>
+          )}
+
+          {/* Nickname Title */}
+          <div 
+            style={{ 
+              position: 'absolute',
+              bottom: 300,
+              left: 0,
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              transform: `scale(${1 + pulse * 0.1})`,
               opacity: nameOpacity,
             }}
           >
-            {liver.nickname}
-          </h2>
-        </div>
+            <h2
+              style={{
+                fontSize: 110,
+                margin: 0,
+                textShadow: `0 0 30px ${glow}, 2px 2px 20px black`,
+                fontWeight: 900,
+                fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
+                color: '#fff',
+                transform: `translateY(${nameY}px)`,
+              }}
+            >
+              {liver.nickname}
+            </h2>
+          </div>
+        </AbsoluteFill>
       </AbsoluteFill>
 
       <CinematicBorder color={primary} glowColor={glow} />
@@ -283,8 +310,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
                 transform: `translate(-50%, -50%) rotate(${frame * 2}deg)`,
                 width: 1600,
                 height: 1600,
-                background: 'radial-gradient(circle, rgba(0,255,127,0) 40%, rgba(0,255,127,0.2) 50%, rgba(0,255,127,0) 60%)',
-                border: '200px dashed rgba(255, 220, 47, 0.4)',
+                background: `radial-gradient(circle, ${primary}00 40%, ${primary}33 50%, ${primary}00 60%)`,
+                border: `200px dashed ${primary}66`,
                 borderRadius: '50%',
                 
               }}

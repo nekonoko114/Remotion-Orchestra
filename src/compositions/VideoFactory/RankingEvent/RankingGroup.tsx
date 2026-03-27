@@ -69,16 +69,17 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
 
   const is3Group = livers.length === 3;
   const is2Group = livers.length === 2;
-  const gap = is2Group ? 120 : is3Group ? 80 : 60;
-  const rankFontSize = is2Group ? 120 : is3Group ? 90 : 70;
-  const nameFontSize = is2Group ? 70 : is3Group ? 40 : 32;
+  const gap = is2Group ? 100 : is3Group ? 60 : 50;
+  const rankFontSize = is2Group ? 160 : is3Group ? 120 : 100;
+  const nameFontSize = is2Group ? 60 : is3Group ? 60 : 50;
+  const avatarSize = is2Group ? 180 : is3Group ? 140 : 120;
 
 
   // Re-thinking energyOpacity for better multi-segment control
   const getEnergyOpacity = (frame: number) => {
     // 10-8: 426-555
     if (frame >= 420 && frame <= 565) return interpolate(frame, [420, 426, 555, 565], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-    // 7-6: 744-756? No, starts at 474. Let's use 474-744
+    // 7-6: 474-744
     if (frame >= 474 && frame <= 744) return 1;
     // 5-4: 756-1026
     if (frame >= 756 && frame <= 1026) return 1;
@@ -132,8 +133,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
         <h1
           style={{
             position: 'absolute',
-            top: 120,
-            fontSize: 120,
+            top: 60,
+            fontSize: 100,
             fontFamily: "'Segoe UI', Roboto, sans-serif",
             fontWeight: '900',
             textAlign: 'center',
@@ -150,8 +151,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
             display: 'flex',
             flexDirection: 'column',
             gap,
-            width: '90%',
-            marginTop: 250,
+            width: '95%',
+            marginTop: 180,
           }}
         >
           {livers.map((liver: Liver, index: number) => {
@@ -180,10 +181,10 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
                   opacity: interpolate(liverEntrance, [0, 0.2], [0, 1]),
                   position: 'relative',
                   overflow: 'hidden',
-                  padding: is2Group ? '40px 60px' : is3Group ? '30px 50px' : '20px 40px',
+                  padding: is2Group ? '60px 100px' : is3Group ? '40px 80px' : '30px 60px',
                 }}
               >
-                <AbsoluteFill style={{ opacity: 0.9, clipPath: SLASH_CLIP }}>
+                <AbsoluteFill style={{ opacity: 0.7, clipPath: SLASH_CLIP }}>
                   <Img
                     src={
                       liver.saved_to
@@ -198,11 +199,12 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
                       objectFit: 'cover',
                       objectPosition: getBackgroundPosition(liver.rank),
                       transform: getBackgroundTransform(liver.rank),
+                      filter: 'grayscale(0.5) blur(2px)',
                     }}
                   />
                 </AbsoluteFill>
 
-                <AbsoluteFill style={{ backgroundColor: 'rgba(0,60,30,0.2)', clipPath: SLASH_CLIP }} />
+                <AbsoluteFill style={{ backgroundColor: 'rgba(0,60,30,0.3)', clipPath: SLASH_CLIP }} />
 
                 <div
                   style={{
@@ -212,13 +214,14 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
                     flexDirection: 'row',
                     alignItems: 'center',
                     width: '100%',
-                    gap: 30,
+                    gap: 50,
                   }}
                 >
+
                   {/* Unity Slash Decor */}
                   <div style={{
                     position: 'absolute',
-                    top: 0, left: 10,
+                    top: 0, left: avatarSize + 25,
                     width: 10, height: '100%',
                     backgroundColor: UNITY_LIME,
                     boxShadow: `0 0 15px ${UNITY_LIME}`,
@@ -231,8 +234,9 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
                       position: 'relative',
                       display: 'flex',
                       flexDirection: 'row',
-                      alignItems: 'center',
+                      alignItems: 'end',
                       gap: is2Group ? 40 : 20,
+                      marginLeft: 20,
                     }}
                   >
                     <span
@@ -242,7 +246,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
                         color: UNITY_LIME,
                         fontStyle: 'italic',
                         textShadow: `0 0 15px ${UNITY_LIME}`,
-                        minWidth: is2Group ? 160 : 120,
+                        minWidth: is2Group ? 200 : 150,
                       }}
                     >
                       {liver.rank}
@@ -252,7 +256,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
                         fontSize: nameFontSize,
                         fontWeight: '800',
                         color: '#FFF',
-                        textShadow: '2px 2px 10px rgba(0,0,0,0.8)',
+                        textShadow: '4px 4px 15px rgba(0,0,0,1)',
                       }}
                     >
                       {liver.nickname}
