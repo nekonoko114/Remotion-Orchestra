@@ -18,9 +18,10 @@ import { CinematicBorder } from '../CinematicBorder';
 import { TextShine } from '../TextShine';
 import { AdjustmentLayer } from '../AdjustmentLayer';
 import { useBeatValue } from '../utils/beat-sync';
+import { TunnelCanvas } from './TunnelCanvas';
 import type { Liver } from '../types';
 
-const BPM = 95;
+const BPM = 194;
 
 type Props = {
   rank: number;
@@ -141,6 +142,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
           }}
         />
         <AbsoluteFill style={{ backgroundColor: rank === 1 ? 'rgba(0,50,0,0.3)' : 'rgba(0,0,0,0.1)' }} />
+        <TunnelCanvas pulse={pulse} opacity={0.6} />
       </AbsoluteFill>
 
       {/* Floating Background Decos */}

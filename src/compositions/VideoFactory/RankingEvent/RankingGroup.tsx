@@ -12,7 +12,6 @@ import { useBeatValue } from '../utils/beat-sync';
 import { EnergySVG } from './EnergySVG';
 import { CircuitSVG } from './CircuitSVG';
 import { FlowSVG } from './FlowSVG';
-import { TunnelCanvas } from './TunnelCanvas';
 import type { Liver } from '../types';
 
 const getBackgroundTransform = (rank: number) => {
@@ -83,8 +82,6 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
     if (frame >= 474 && frame <= 744) return 1;
     // 5-4: 756-1026
     if (frame >= 756 && frame <= 1026) return 1;
-    // 3-1: 1038-1308
-    if (frame >= 1038 && frame <= 1308) return 1;
     return 0;
   };
 
@@ -94,8 +91,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, showMusicShapes, 
     if (absoluteFrame === undefined) return null;
     if (absoluteFrame < 555) return <EnergySVG pulse={pulse} opacity={finalOpacity} />;
     if (absoluteFrame < 756) return <CircuitSVG pulse={pulse} opacity={finalOpacity} />;
-    if (absoluteFrame < 1026) return <FlowSVG pulse={pulse} opacity={finalOpacity} />;
-    return <TunnelCanvas pulse={pulse} opacity={finalOpacity} />;
+    return <FlowSVG pulse={pulse} opacity={finalOpacity} />;
   };
 
 
