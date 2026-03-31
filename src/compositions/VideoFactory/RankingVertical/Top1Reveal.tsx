@@ -7,6 +7,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
   Easing,
+  OffthreadVideo,
 } from 'remotion';
 import { Confetti } from '../../../components/effects/Confetti';
 import { ParticleBurst } from '../../../components/effects/ParticleBurst';
@@ -26,9 +27,10 @@ type Props = {
   rank: number;
   liver: Liver;
   title: string;
+  top3Video: string;
 };
 
-export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
+export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
 
@@ -104,19 +106,37 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
 
   const { primary, secondary, glow } = getRankColors(rank);
 
+  // Fire Tunnel Filter based on rank
+  const getTunnelFilter = (r: number) => {
+    // Psychedelic video is colorful. We want to push it towards fire colors (Red/Orange/Gold)
+    if (r === 1) return 'brightness(1.5) contrast(1.2) saturate(2) hue-rotate(-20deg)'; // Golden/Red intense
+    if (r === 2) return 'brightness(1.2) contrast(1.3) saturate(1.5) hue-rotate(-40deg)'; // Deep Red
+    if (r === 3) return 'brightness(1.1) contrast(1.1) saturate(1.8) hue-rotate(0deg)'; // Orange/Fire
+    return 'none';
+  };
+
   if (!liver) return null;
 
   return (
     <AbsoluteFill>
       <AbsoluteFill>
-        <Img
-          src={staticFile(`assets/backgrounds/rank_${rank}_bg_new.png`)}
+        <OffthreadVideo
+          src={staticFile(top3Video)}
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            objectPosition: 'center',
+            filter: getTunnelFilter(rank),
             transform: `scale(${bgScale})`,
+          }}
+          muted
+        />
+        {/* Fire Tint Overlay */}
+        <AbsoluteFill
+          style={{
+            background: `radial-gradient(circle, transparent 20%, ${primary}44 100%)`,
+            mixBlendMode: 'screen',
+            pointerEvents: 'none',
           }}
         />
         <AbsoluteFill style={{ backgroundColor: rank === 1 ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.0)' }} />

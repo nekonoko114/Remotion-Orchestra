@@ -10,6 +10,9 @@ import {
   TRANSITION_FRAMES,
   LAST_TRANSITION_FRAMES,
 } from './compositions/VideoFactory/RankingVertical';
+import { RankingVerticalSchema } from './compositions/VideoFactory/RankingVertical/schema';
+import RANKING_DATA_JSON from './compositions/VideoFactory/data.json';
+import type { Liver } from './compositions/VideoFactory/types';
 /*
 import {
   RankingTime,
@@ -173,6 +176,25 @@ export const RemotionRoot: React.FC = () => {
         fps={JOL_RANKING_FPS}
         width={1080}
         height={1920}
+        schema={RankingVerticalSchema}
+        defaultProps={{
+          bpm: 124,
+          bgmFile: 'assets/audio/music/Breathing-Lighter.mp3',
+          bgmStartFrom: 29,
+          openingVideo:
+            'assets/pixabay/videos/pixabay_sword_diamond_nice_hd_background_of_screen_minecra_99299.mp4',
+          rankingVideo:
+            'assets/pixabay/videos/pixabay_fire_flame_beautiful_wallpaper_burn_hot_smoke_feve_200715.mp4',
+          openingTitle1: 'J.O.L',
+          openingTitle2: 'ダイヤモンド',
+          openingTitle3: 'RANKING',
+          openingDate: '2026年3月',
+          openingSubtitle: '結果発表',
+          useGlitch: true,
+          glitchIntensity: 10,
+          top3Video: 'assets/pixabay/videos/pixabay_dimension_space_psychedelic_abstract_portal_time_w_31183.mp4',
+          livers: RANKING_DATA_JSON as unknown as Liver[],
+        }}
       />
       <Composition
         id="JOL-Ranking-time"
