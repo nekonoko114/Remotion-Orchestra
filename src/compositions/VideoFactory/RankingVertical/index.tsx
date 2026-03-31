@@ -59,6 +59,27 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
     perspective: 1000,
   });
 
+  // Recalculate offsets based on the TransitionSeries logic:
+  // Seq(Opening) + Trans + Seq(G1) + Trans + Seq(G2) + Trans + Seq(G3) + Trans + Seq(GB) + Trans + Seq(Rank3)
+  const offset3 =
+    OPENING_DURATION +
+    TRANSITION_DURATION +
+    3 * GROUP_DURATION +
+    4 * TRANSITION_DURATION +
+    GRID_BRIDGE_DURATION +
+    TRANSITION_DURATION;
+  const offset2 = offset3 + TOP_RANK_DURATION + TRANSITION_DURATION;
+  const offset1 = offset2 + TOP_RANK_DURATION + TRANSITION_DURATION;
+
+  const getBorderColor = (f: number) => {
+    if (f >= offset1) return { color: '#FFD700', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
+    if (f >= offset2) return { color: '#C0C0C0', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
+    if (f >= offset3) return { color: '#B87333', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
+    return { color: '#FF0000', glow: 'rgba(255, 0, 0, 0.8)' }; // Default Red
+  };
+
+  const { color: frameColor, glow: frameGlow } = getBorderColor(frame);
+
   const timing = linearTiming({ durationInFrames: TRANSITION_DURATION });
 
   const { pulse } = useBeatValue(bpm);
@@ -211,9 +232,10 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
       <AbsoluteFill
         style={{
           pointerEvents: 'none',
-          border: '15px solid #FF0000',
-          boxShadow: 'inset 0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.8)',
+          border: `15px solid ${frameColor}`,
+          boxShadow: `inset 0 0 50px ${frameGlow}, 0 0 50px ${frameGlow}`,
           zIndex: 9999,
+          transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
         }}
       />
     </AbsoluteFill>

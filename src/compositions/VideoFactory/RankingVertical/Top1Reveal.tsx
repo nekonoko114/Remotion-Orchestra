@@ -98,9 +98,9 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) =
   const pulseScale = (1 + Math.sin(frame / 8) * 0.05) * (1 + pulse * 0.05);
 
   const getRankColors = (r: number) => {
-    if (r === 1) return { primary: '#FF0000', secondary: '#FFD700', glow: 'rgba(255,0,0,0.8)' };
-    if (r === 2) return { primary: '#8B0000', secondary: '#C0C0C0', glow: 'rgba(139,0,0,0.8)' };
-    if (r === 3) return { primary: '#A52A2A', secondary: '#CD7F32', glow: 'rgba(165,42,42,0.8)' };
+    if (r === 1) return { primary: '#FFD700', secondary: '#FFFACD', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
+    if (r === 2) return { primary: '#C0C0C0', secondary: '#F5F5F5', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
+    if (r === 3) return { primary: '#B87333', secondary: '#E3963E', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
     return { primary: '#8B0000', secondary: '#ccc', glow: 'transparent' };
   };
 
@@ -108,10 +108,10 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) =
 
   // Fire Tunnel Filter based on rank
   const getTunnelFilter = (r: number) => {
-    // Psychedelic video is colorful. We want to push it towards fire colors (Red/Orange/Gold)
-    if (r === 1) return 'brightness(1.5) contrast(1.2) saturate(2) hue-rotate(-20deg)'; // Golden/Red intense
-    if (r === 2) return 'brightness(1.2) contrast(1.3) saturate(1.5) hue-rotate(-40deg)'; // Deep Red
-    if (r === 3) return 'brightness(1.1) contrast(1.1) saturate(1.8) hue-rotate(0deg)'; // Orange/Fire
+    // gold: hue-rotate(-20deg) (Red/Gold), silver: saturate(0) (Grey), copper: hue-rotate(0) (Orange)
+    if (r === 1) return 'brightness(1.5) contrast(1.2) saturate(2) hue-rotate(-15deg)'; // Golden
+    if (r === 2) return 'brightness(1.2) contrast(1.3) grayscale(1) brightness(1.2)'; // Silver/White
+    if (r === 3) return 'brightness(1.1) contrast(1.1) saturate(1.8) hue-rotate(10deg)'; // Copper/Bronze
     return 'none';
   };
 
