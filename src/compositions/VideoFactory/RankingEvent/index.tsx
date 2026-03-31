@@ -44,6 +44,33 @@ export const RankingEvent = () => {
 
   const frame = useCurrentFrame();
 
+  // Correct Timing Calculation for Event Border (based on TransitionSeries overlapping logic)
+  const T = TRANSITION_FRAMES;
+  const D_opening = OPENING_DURATION;
+  const D_group = GROUP_DURATION;
+  const D_grid = GRID_BRIDGE_DURATION;
+  const D_rank = TOP_RANK_DURATION;
+
+  // Each Sequence starts T frames before the previous one ends (overlapping)
+  const offsetG1 = D_opening - T;
+  const offsetG2 = offsetG1 + D_group - T;
+  const offsetG3 = offsetG2 + D_group - T;
+  const offsetGrid = offsetG3 + D_group - T;
+  const offset3 = offsetGrid + D_grid - T; // 3位
+  const offset2 = offset3 + D_rank - T;   // 2位
+  const offset1 = offset2 + D_rank - T;   // 1位
+
+  // Adjusted offsets to change color mid-transition (T/2 frames before the new sequence fully takes over)
+  const MID = T / 2;
+  const getBorderColor = (f: number) => {
+    if (f >= offset1 + MID) return { color: '#FFD700', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
+    if (f >= offset2 + MID) return { color: '#C0C0C0', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
+    if (f >= offset3 + MID) return { color: '#B87333', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
+    return { color: '#00FF7F', glow: 'rgba(0, 255, 127, 0.8)' }; // Default Green
+  };
+
+  const { color: frameColor, glow: frameGlow } = getBorderColor(frame);
+
   return (
     <AbsoluteFill style={{ backgroundColor: '#000000' }}>
       <Audio
@@ -135,13 +162,14 @@ export const RankingEvent = () => {
         </TransitionSeries>
       </AbsoluteFill>
 
-      {/* GREEN GLOWING BORDER */}
+      {/* DYNAMIC GLOWING BORDER */}
       <AbsoluteFill
         style={{
           pointerEvents: 'none',
-          border: '15px solid #00FF7F',
-          boxShadow: 'inset 0 0 50px rgba(0, 255, 127, 0.8), 0 0 50px rgba(0, 255, 127, 0.8)',
+          border: `15px solid ${frameColor}`,
+          boxShadow: `inset 0 0 50px ${frameGlow}, 0 0 50px ${frameGlow}`,
           zIndex: 9999,
+          transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
         }}
       />
     </AbsoluteFill>

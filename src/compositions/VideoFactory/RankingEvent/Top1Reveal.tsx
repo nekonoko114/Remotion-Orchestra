@@ -91,10 +91,10 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const pulseScale = (1 + Math.sin(frame / 6) * 0.04) * (1 + pulse * 0.06);
 
   const getRankColors = (r: number) => {
-    // Metal Theme Colors for Top 3
+    // Strictly match the metallic frame colors
     if (r === 1) return { primary: '#FFD700', secondary: '#FFFFFF', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
-    if (r === 2) return { primary: '#C0C0C0', secondary: '#FFFFFF', glow: 'rgba(192, 192, 192, 0.7)' }; // Silver
-    if (r === 3) return { primary: '#CD7F32', secondary: '#FFFFFF', glow: 'rgba(205, 127, 50, 0.6)' }; // Copper (Bronze)
+    if (r === 2) return { primary: '#C0C0C0', secondary: '#FFFFFF', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
+    if (r === 3) return { primary: '#B87333', secondary: '#FFFFFF', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
     return { primary: '#00FF7F', secondary: '#FFFFFF', glow: 'transparent' };
   };
 
@@ -113,10 +113,11 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
             objectFit: 'cover',
             objectPosition: 'center',
             transform: `scale(${bgScale})`,
-            filter: 'hue-rotate(100deg) contrast(1.3) brightness(1.1)', // Brighter POP BG
+            // Remove hue-rotate(100deg) to prevent green tint on Gold/Silver/Copper screens
+            filter: 'contrast(1.3) brightness(1.1)', 
           }}
         />
-        <AbsoluteFill style={{ backgroundColor: rank === 1 ? 'rgba(0,50,0,0.3)' : 'rgba(0,0,0,0.1)' }} />
+        <AbsoluteFill style={{ backgroundColor: rank === 1 ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.1)' }} />
       </AbsoluteFill>
 
       <AdjustmentLayer rank={rank} beatPulse={pulse} />
@@ -207,11 +208,11 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
               top: '50%',
               left: '50%',
               transform: `translate(-50%, -50%) scale(${imageScale}) rotate(${imageRotate}deg) translateY(${imageY}px)`,
-              width: rank === 1 ? 720 : 720,
-              height: rank === 1 ? 720 : 720,
+              width: 550,
+              height: 550,
               borderRadius: '50%',
               overflow: 'hidden',
-              boxShadow: rank === 1 ? `0 0 0 20px ${primary}, 0 0 100px ${glow}, 0 30px 80px rgba(0,0,0,0.9)` : `0 0 0 10px ${primary}, 0 0 50px ${glow}, 0 20px 50px rgba(0,0,0,0.8)`,
+              boxShadow: rank === 1 ? `0 0 0 15px ${primary}, 0 0 100px ${glow}, 0 30px 80px rgba(0,0,0,0.9)` : `0 0 0 10px ${primary}, 0 0 50px ${glow}, 0 20px 50px rgba(0,0,0,0.8)`,
               backgroundColor: '#000',
               zIndex: 5,
               opacity: imageOpacity,
@@ -234,12 +235,12 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
             <div
               style={{
                 position: 'absolute',
-                top: rank === 1 ? '52%' : '50%',
+                top: rank === 1 ? '51%' : '50%',
                 left: '50%',
-                transform: `translate(-50%, -50%) scale(${imageScale * (rank === 1 ? 1.6 : 1.4)})`,
+                transform: `translate(-50%, -50%) scale(${imageScale * (rank === 1 ? 1.5 : 1.3)})`,
                 opacity: imageOpacity * 1,
-                width: 820,
-                height: 820,
+                width: 700,
+                height: 700,
                 zIndex: 4,
                 pointerEvents: 'none',
               }}
