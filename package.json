@@ -65,7 +65,8 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "biome check src && tsc",
-    "transcribe": "npx tsx transcribe-local.ts"
+    "transcribe": "npx tsx transcribe-local.ts",
+    "fetch-ranking": "npx tsx fetch-tiktok-ranking.ts"
   },
   "pnpm": {
     "trustedDependencies": [

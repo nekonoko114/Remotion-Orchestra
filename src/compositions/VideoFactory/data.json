@@ -1,57 +1,57 @@
 [
   {
-    "id": "ritu_1115",
-    "nickname": "ジンヤ",
-    "score": 1000000,
-    "image_url": "assets/avatars/ritu_1115.jpg",
-    "rank": 1,
-    "saved_to": ""
-  },
-  {
-    "id": "koakumachiyan",
-    "nickname": "小悪魔",
-    "score": 900000,
-    "image_url": "assets/avatars/koakumachiyan_new.png",
-    "rank": 2,
-    "saved_to": ""
-  },
-  {
     "id": "l5332541",
     "nickname": "🌸さくら🌸",
-    "score": 850000,
+    "score": 1000000,
     "image_url": "assets/avatars/l5332541.jpg",
-    "rank": 3,
-    "saved_to": ""
-  },
-  {
-    "id": "mrm0115",
-    "nickname": "限界突破まみ🎽",
-    "score": 800000,
-    "image_url": "assets/avatars/mrm0115.jpg",
-    "rank": 4,
+    "rank": 1,
     "saved_to": ""
   },
   {
     "id": "mizuki2525214",
     "nickname": "💋一条美月-Mizuki-💋",
-    "score": 750000,
+    "score": 900000,
     "image_url": "assets/avatars/mizuki2525214.jpg",
-    "rank": 5,
+    "rank": 2,
     "saved_to": ""
   },
   {
     "id": "t.o.p_u_jin_",
     "nickname": "🔆≒ユージン≒🔆",
-    "score": 700000,
-    "image_url": "assets/images-01/t.o.p_u_jin_.jpeg",
-    "rank": 6,
-    "saved_to": "assets/images-01/t.o.p_u_jin_.jpeg"
+    "score": 850000,
+    "image_url": "assets/avatars/t.o.p_u_jin_.jpg",
+    "rank": 3,
+    "saved_to": ""
   },
   {
-    "id": "yyuukkii0402",
-    "nickname": "yukiんこ😈",
+    "id": "koakumachiyan",
+    "nickname": "小悪魔",
+    "score": 800000,
+    "image_url": "assets/avatars/koakumachiyan_new.png",
+    "rank": 4,
+    "saved_to": ""
+  },
+  {
+    "id": "ooo93o",
+    "nickname": "あむら🧋",
+    "score": 750000,
+    "image_url": "assets/avatars/ooo93o.jpg",
+    "rank": 5,
+    "saved_to": ""
+  },
+  {
+    "id": "mrm0115",
+    "nickname": "限界突破まみ🎽",
+    "score": 700000,
+    "image_url": "assets/avatars/mrm0115.jpg",
+    "rank": 6,
+    "saved_to": ""
+  },
+  {
+    "id": "ria.kangoshi",
+    "nickname": "りあ🐰🍀",
     "score": 650000,
-    "image_url": "assets/avatars/yyuukkii0402.jpg",
+    "image_url": "assets/avatars/ria.kangoshi.jpg",
     "rank": 7,
     "saved_to": ""
   },
@@ -64,18 +64,18 @@
     "saved_to": ""
   },
   {
-    "id": "ooo93o",
-    "nickname": "あむら🧋",
+    "id": "user58402831659341",
+    "nickname": "🐭ぼく天然ミッキー🐭",
     "score": 550000,
-    "image_url": "assets/avatars/ooo93o.jpg",
+    "image_url": "assets/avatars/user58402831659341.jpg",
     "rank": 9,
     "saved_to": ""
   },
   {
-    "id": "daminko3372",
-    "nickname": "だぁーみ",
+    "id": "karaindaisuki",
+    "nickname": "なるりれ🦥🍉",
     "score": 500000,
-    "image_url": "assets/avatars/daminko3372.jpg",
+    "image_url": "assets/avatars/karaindaisuki.jpg",
     "rank": 10,
     "saved_to": ""
   }

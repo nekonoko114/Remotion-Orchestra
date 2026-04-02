@@ -310,6 +310,10 @@ export const RemotionRoot: React.FC = () => {
         fps={60}
         width={1080}
         height={1920}
+        defaultProps={{
+          bpm: 160,
+          bgmFile: 'assets/audio/music/CAPTIVATE.mp3',
+        } as any}
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-RED"
