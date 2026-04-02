@@ -6,6 +6,7 @@ import {
   staticFile,
   useCurrentFrame,
   useVideoConfig,
+  Video,
 } from 'remotion';
 import { Confetti } from '../../../components/effects/Confetti';
 import { ParticleBurst } from '../../../components/effects/ParticleBurst';
@@ -25,18 +26,14 @@ type Props = {
   rank: number;
   liver: Liver;
   title: string;
+  backgroundSrc?: string;
 };
 
 
 
-export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
+export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, backgroundSrc }) => {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
-
-  const bgScale = interpolate(frame, [0, durationInFrames], [1, 1.15], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const { fps } = useVideoConfig();
 
   const rankEntrance = spring({
     frame,
@@ -59,17 +56,13 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const rankScale = interpolate(rankEntrance, [0, 1], [0.2, 1]);
   const rankOpacity = interpolate(rankEntrance, [0, 0.2], [0, 1]);
 
-  let imageScale = interpolate(imageEntrance, [0, 1], [0, 1], {
-    easing: (t) => t,
-  });
+  let imageScale = interpolate(imageEntrance, [0, 1], [0.1, 1]);
   let imageRotate = interpolate(imageEntrance, [0, 1], [-20, 0]);
   let imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]);
   let imageY = 0;
 
   if (rank === 3) {
-    imageScale = interpolate(imageEntrance, [0, 1], [0, 1], {
-      easing: (t) => t,
-    });
+    imageScale = interpolate(imageEntrance, [0, 1], [0.1, 1]);
     imageRotate = 0;
   } else if (rank === 2) {
     imageY = interpolate(imageEntrance, [0, 1], [600, 0], {
@@ -78,9 +71,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
     imageScale = interpolate(imageEntrance, [0, 1], [0.2, 1]);
     imageRotate = 0;
   } else if (rank === 1) {
-    imageScale = interpolate(imageEntrance, [0, 1], [0, 1], {
-      easing: (t) => t,
-    });
+    imageScale = interpolate(imageEntrance, [0, 1], [0.1, 1]);
     imageRotate = interpolate(imageEntrance, [0, 1], [-720, 0]); // More spin for top 1
   }
 
@@ -88,10 +79,10 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
 
   const { pulse } = useBeatValue(BPM);
-  const pulseScale = (1 + Math.sin(frame / 6) * 0.04) * (1 + pulse * 0.06);
+  const pulseScale = (1 + Math.sin(frame / 8) * 0.02) * (1 + pulse * 0.008);
 
   const getRankColors = (r: number) => {
-    // Strictly match the metallic frame colors
+    // Restore the intense metallic colors
     if (r === 1) return { primary: '#FFD700', secondary: '#FFFFFF', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
     if (r === 2) return { primary: '#C0C0C0', secondary: '#FFFFFF', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
     if (r === 3) return { primary: '#B87333', secondary: '#FFFFFF', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
@@ -104,20 +95,21 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
 
   return (
     <AbsoluteFill>
+      {/* ===== Abstract Turing Video Background (Fixed for TOP 3rd-1st) ===== */}
       <AbsoluteFill>
-        <Img
-          src={staticFile(`assets/backgrounds/rank_${rank}_bg_new.png`)}
+        <Video
+          src={staticFile('assets/pixabay/videos/absturact-turing.mp4')}
+          loop
+          muted
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            objectPosition: 'center',
-            transform: `scale(${bgScale})`,
-            // Remove hue-rotate(100deg) to prevent green tint on Gold/Silver/Copper screens
-            filter: 'contrast(1.3) brightness(1.1)', 
+            transform: 'scale(2.5) rotate(90deg)', 
           }}
         />
-        <AbsoluteFill style={{ backgroundColor: rank === 1 ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.1)' }} />
+        {/* Subtle overlay to keep text readable */}
+        <AbsoluteFill style={{ backgroundColor: 'rgba(0,10,5,0.4)' }} />
       </AbsoluteFill>
 
       <AdjustmentLayer rank={rank} beatPulse={pulse} />
@@ -183,21 +175,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
                   {title}
                 </h1>
               </TextShine>
-              {rank === 1 && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: -250,
-                    left: '50%',
-                    transform: `translateX(-50%) rotate(${Math.sin(frame / 5) * 10}deg)`,
-                    fontSize: 220,
-                    textShadow: `0 0 40px ${primary}, 0 10px 30px rgba(0,0,0,0.9)`,
-                    zIndex: 10,
-                  }}
-                >
-                  
-                </div>
-              )}
             </div>
           </div>
 
@@ -226,7 +203,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
                     ? liver.image_url
                     : staticFile(liver.image_url)
               }
-              style={{ width: '100%', height: '100%', objectFit: 'cover', transform: rank === 1 ? 'rotate(-90deg)' : 'none' }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
 

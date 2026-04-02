@@ -145,7 +145,7 @@ const JOL_RANKING_DURATION_VERTICAL =
 
 // Calculate Time Duration (Correctly using its own 7s opening)
 // Updated to 3 groups (10-8, 7-6, 5-4)
-const JOL_RANKING_DURATION_TIME = 2750;
+const JOL_RANKING_DURATION_TIME = 2560;
 // Previous calculation was ~2750, confirmed it's exactly 2750 frames.
 /*
   (OPENING_SEC_TIME +
@@ -180,9 +180,9 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         schema={RankingVerticalSchema}
         defaultProps={{
-          bpm: 124,
-          bgmFile: 'assets/audio/music/Breathing-Lighter.mp3',
-          bgmStartFrom: 29,
+          bpm: 152,
+          bgmFile: 'assets/audio/music/doragonSrayer.mp3',
+          bgmStartFrom: 25,
           openingVideo:
             'assets/pixabay/videos/pixabay_sword_diamond_nice_hd_background_of_screen_minecra_99299.mp4',
           rankingVideo:

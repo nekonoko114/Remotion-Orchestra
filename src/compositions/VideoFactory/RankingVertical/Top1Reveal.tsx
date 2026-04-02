@@ -21,16 +21,15 @@ import { AdjustmentLayer } from '../AdjustmentLayer';
 import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
 
-const BPM = 152;
-
 type Props = {
   rank: number;
   liver: Liver;
   title: string;
   top3Video: string;
+  bpm: number;
 };
 
-export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) => {
+export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
 
@@ -94,24 +93,24 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) =
   const nameY = interpolate(nameEntrance, [0, 1], [100, 0]);
   const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
 
-  const { pulse } = useBeatValue(BPM);
+  const { pulse } = useBeatValue(bpm);
   const pulseScale = (1 + Math.sin(frame / 8) * 0.05) * (1 + pulse * 0.05);
 
   const getRankColors = (r: number) => {
-    if (r === 1) return { primary: '#FFD700', secondary: '#FFFACD', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
-    if (r === 2) return { primary: '#C0C0C0', secondary: '#F5F5F5', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
-    if (r === 3) return { primary: '#B87333', secondary: '#E3963E', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
+    // Reduced glow opacity for a softer look
+    if (r === 1) return { primary: '#FF0000', secondary: '#FFD700', glow: 'rgba(255,0,0,0.4)' };
+    if (r === 2) return { primary: '#8B0000', secondary: '#C0C0C0', glow: 'rgba(139,0,0,0.4)' };
+    if (r === 3) return { primary: '#A52A2A', secondary: '#CD7F32', glow: 'rgba(165,42,42,0.4)' };
     return { primary: '#8B0000', secondary: '#ccc', glow: 'transparent' };
   };
 
   const { primary, secondary, glow } = getRankColors(rank);
 
-  // Fire Tunnel Filter based on rank
+  // Fire Tunnel Filter based on rank - Weakened for softer colors
   const getTunnelFilter = (r: number) => {
-    // gold: hue-rotate(-20deg) (Red/Gold), silver: saturate(0) (Grey), copper: hue-rotate(0) (Orange)
-    if (r === 1) return 'brightness(1.5) contrast(1.2) saturate(2) hue-rotate(-15deg)'; // Golden
-    if (r === 2) return 'brightness(1.2) contrast(1.3) grayscale(1) brightness(1.2)'; // Silver/White
-    if (r === 3) return 'brightness(1.1) contrast(1.1) saturate(1.8) hue-rotate(10deg)'; // Copper/Bronze
+    if (r === 1) return 'brightness(1.1) contrast(1.1) saturate(1.2) hue-rotate(-10deg)'; 
+    if (r === 2) return 'brightness(1.0) contrast(1.1) saturate(1.1) hue-rotate(-20deg)'; 
+    if (r === 3) return 'brightness(0.9) contrast(1.0) saturate(1.0) hue-rotate(0deg)'; 
     return 'none';
   };
 
@@ -131,15 +130,15 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) =
           }}
           muted
         />
-        {/* Fire Tint Overlay */}
+        {/* Darker Overlay to weaken background colors */}
         <AbsoluteFill
           style={{
-            background: `radial-gradient(circle, transparent 20%, ${primary}44 100%)`,
-            mixBlendMode: 'screen',
+            background: `radial-gradient(circle, transparent 20%, ${primary}22 100%)`,
+            mixBlendMode: 'multiply',
             pointerEvents: 'none',
           }}
         />
-        <AbsoluteFill style={{ backgroundColor: rank === 1 ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.0)' }} />
+        <AbsoluteFill style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} />
       </AbsoluteFill>
 
       <AdjustmentLayer rank={rank} beatPulse={pulse} />
@@ -173,7 +172,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) =
                 width: 500,
                 height: 500,
                 background: `radial-gradient(circle, ${glow} 0%, transparent 60%)`,
-                opacity: 0.8,
+                opacity: 0.5,
                 zIndex: -1,
               }}
             />
@@ -183,7 +182,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) =
                   fontSize: rank === 1 ? 380 : 300,
                   margin: 0,
                   color: rank === 1 ? '#FFD700' : '#FFFFFF',
-                  textShadow: rank === 1 ? `0 0 40px ${primary}, 0 0 80px ${primary}, 0 10px 20px rgba(0,0,0,0.8)` : `0 0 20px ${primary}, 0 0 40px ${primary}`,
+                  textShadow: rank === 1 ? `0 0 20px ${primary}, 0 10px 20px rgba(0,0,0,0.9)` : `0 0 15px ${primary}`,
                   fontWeight: 900,
                   fontStyle: 'italic',
                   lineHeight: 0.8,
@@ -206,7 +205,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) =
                   zIndex: 10,
                 }}
               >
-                👑
+                　
               </div>
             )}
           </div>
@@ -235,7 +234,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video }) =
                     ? liver.image_url
                     : staticFile(liver.image_url)
               }
-              style={{ width: '100%', height: '100%', objectFit: 'cover', transform: rank === 1 ? 'rotate(-90deg)' : 'none' }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </div>
 
