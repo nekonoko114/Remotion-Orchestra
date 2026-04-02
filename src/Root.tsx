@@ -124,6 +124,8 @@ import { TextEffectCatalog } from './compositions/VideoFactory/TextEffectCatalog
 import { TripleImageEffectsCatalog } from './compositions/VideoFactory/TripleImageEffectsCatalog';
 import { QuadImageEffectsCatalog } from './compositions/VideoFactory/QuadImageEffectsCatalog';
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
+import { ArigatoMV, ArigatoSchema } from './compositions/Arigato';
+import { getArigatoImages } from './compositions/Arigato/image-loader';
 import { AssetPanel } from './components/AssetPanel';
 import './index.css';
 import React from 'react';
@@ -304,7 +306,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-Rookie-Ranking"
         component={RookieRanking}
-        durationInFrames={1260} // 42 seconds total
+        durationInFrames={1440} // 24 seconds total
         fps={60}
         width={1080}
         height={1920}
@@ -962,6 +964,22 @@ export const RemotionRoot: React.FC = () => {
         fps={60}
         width={1080}
         height={1920}
+      />
+      <Composition
+        id="Arigato-MV"
+        component={ArigatoMV}
+        durationInFrames={10800}
+        fps={30}
+        width={1920}
+        height={1080}
+        schema={ArigatoSchema}
+        defaultProps={{
+          images: getArigatoImages(),
+          music: 'assets/audio/music/25-ありがとう.mp3',
+          title: 'レンレン',
+          message: 'いつも今までありがとう　',
+          fps: 30,
+        }}
       />
     </>
   );
