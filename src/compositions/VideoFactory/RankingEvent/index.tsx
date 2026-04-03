@@ -6,8 +6,6 @@ import { Ending } from './Ending';
 import { Opening } from './Opening';
 import { RankingGroup } from './RankingGroup';
 import { Top1Reveal } from './Top1Reveal';
-import { GridBridge } from './GridBridge';
-import { useBeatValue } from '../utils/beat-sync';
 import { slashTransition } from '../transitions/SlashTransition';
 
 import { useCurrentFrame } from 'remotion';
@@ -38,7 +36,6 @@ const RANKING_DATA: Liver[] = [
   mkLiver('ooo93o',              'あむら🧋',                     'assets/avatars/ooo93o.jpg',              15),
 ];
 
-const BPM = 194; // Analyzed BPM
 const BGM_START_FROM = 0;
 
 export const OPENING_SEC = 5;
@@ -49,7 +46,7 @@ export const ENDING_SEC = 4;    // 8 beats
 export const TRANSITION_FRAMES = 12;  // Speedy slash transition
 export const LAST_TRANSITION_FRAMES = 15;
 
-const SLASH = slashTransition({ color: '#00FF7F' });
+const SLASH = slashTransition({ color: '#FF3131' });
 const TIMING = linearTiming({ durationInFrames: TRANSITION_FRAMES });
 const LAST_TIMING = linearTiming({ durationInFrames: LAST_TRANSITION_FRAMES });
 
@@ -58,42 +55,14 @@ export const RankingEvent = () => {
 
   const OPENING_DURATION = Math.round(OPENING_SEC * fps);
   const GROUP_DURATION = Math.round(GROUP_SEC * fps);
-  const TOP_RANK_DURATION = Math.round(TOP_RANK_SEC * fps);
-  const GRID_BRIDGE_DURATION = Math.round(GRID_BRIDGE_SEC * fps);
   const ENDING_DURATION = Math.round(ENDING_SEC * fps);
 
-  const { pulse } = useBeatValue(BPM);
-  const beatScale = 1 + pulse * 0.01;
 
   const frame = useCurrentFrame();
 
-  // Correct Timing Calculation for Event Border (based on TransitionSeries overlapping logic)
-  const T = TRANSITION_FRAMES;
-  const D_opening = OPENING_DURATION;
-  const D_group = GROUP_DURATION;
-  const D_grid = GRID_BRIDGE_DURATION;
-  const D_rank = TOP_RANK_DURATION;
-
-  // 4グループ（15名対応）+ GridBridge + Top3
-  const offsetG1 = D_opening - T;
-  const offsetG2 = offsetG1 + D_group - T;
-  const offsetG3 = offsetG2 + D_group - T;
-  const offsetG4 = offsetG3 + D_group - T;
-  const offsetGrid = offsetG4 + D_group - T;
-  const offset3 = offsetGrid + D_grid - T; // 3位
-  const offset2 = offset3 + D_rank - T;   // 2位
-  const offset1 = offset2 + D_rank - T;   // 1位
-
-  // Adjusted offsets to change color mid-transition (T/2 frames before the new sequence fully takes over)
-  const MID = T / 2;
-  const getBorderColor = (f: number) => {
-    if (f >= offset1 + MID) return { color: '#FFD700', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
-    if (f >= offset2 + MID) return { color: '#C0C0C0', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
-    if (f >= offset3 + MID) return { color: '#B87333', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
-    return { color: '#00FF7F', glow: 'rgba(0, 255, 127, 0.8)' }; // Default Green
-  };
-
-  const { color: frameColor, glow: frameGlow } = getBorderColor(frame);
+  // Unity Red Theme for the entire video
+  const frameColor = '#FF3131';
+  const frameGlow = 'rgba(255, 49, 49, 0.8)';
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000000' }}>
@@ -103,7 +72,7 @@ export const RankingEvent = () => {
         startFrom={Math.floor(BGM_START_FROM * fps)}
       />
 
-      <AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
+      <AbsoluteFill>
         <TransitionSeries>
           <TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
             <Opening />
@@ -153,15 +122,7 @@ export const RankingEvent = () => {
             />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
-
-          <TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
-            <GridBridge />
-          </TransitionSeries.Sequence>
-
-          <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
-
-          <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
+          <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
             <Top1Reveal
               rank={3}
               title="3位"
@@ -172,7 +133,7 @@ export const RankingEvent = () => {
 
           <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
 
-          <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
+          <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
             <Top1Reveal
               rank={2}
               title="2位"
@@ -183,7 +144,7 @@ export const RankingEvent = () => {
 
           <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
 
-          <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
+          <TransitionSeries.Sequence durationInFrames={Math.round(6 * fps)}>
             <Top1Reveal
               rank={1}
               title="1位"

@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from 'remotion';
 
-const UNITY_GREEN = '#00FF7F';
-const UNITY_LIME = '#BFFF00';
+const UNITY_GREEN = '#FF3131';
+const UNITY_LIME = '#FFD700';
 
 interface Props {
   pulse: number;

@@ -39,14 +39,14 @@ export const Ending: React.FC = () => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            filter: 'brightness(0.6) hue-rotate(100deg)', // Hue rotate for Green
+            filter: 'brightness(0.6)', 
           }}
         />
       </AbsoluteFill>
 
       <AbsoluteFill>
         <OffthreadVideo
-          src={staticFile('assets/backgrounds/green_loop.mp4')} // Use green loop instead of red
+          src={staticFile('assets/backgrounds/red_loop.mp4')} 
           style={{
             width: '100%',
             height: '100%',
@@ -59,8 +59,8 @@ export const Ending: React.FC = () => {
       </AbsoluteFill>
 
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', opacity }}>
-        <div style={{ transform: `scale(${scale * logoSpring})`, width: 800, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Img src={staticFile('jol-logo-800.png')} style={{ width: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 40px rgba(0,0,0,0.8))' }} />
+        <div style={{ transform: `scale(${scale * logoSpring})`, width: 1000, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Img src={staticFile('jol-logo-800.png')} style={{ width: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 60px rgba(255, 49, 49, 0.4))' }} />
         </div>
       </AbsoluteFill>
 

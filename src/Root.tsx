@@ -27,13 +27,6 @@ import {
 import { RankingTime } from './compositions/VideoFactory/RankingTime';
 import {
   RankingEvent,
-  OPENING_SEC as OPENING_SEC_EVENT,
-  GROUP_SEC as GROUP_SEC_EVENT,
-  TOP_RANK_SEC as TOP_RANK_SEC_EVENT,
-  GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_EVENT,
-  ENDING_SEC as ENDING_SEC_EVENT,
-  TRANSITION_FRAMES as TRANSITION_FRAMES_EVENT,
-  LAST_TRANSITION_FRAMES as LAST_TRANSITION_FRAMES_EVENT,
 } from './compositions/VideoFactory/RankingEvent';
 import { BattleKawaii } from './compositions/VideoFactory/BattleKawaii';
 import {
@@ -145,7 +138,7 @@ const JOL_RANKING_DURATION_VERTICAL =
 
 // Calculate Time Duration (Correctly using its own 7s opening)
 // Updated to 3 groups (10-8, 7-6, 5-4)
-const JOL_RANKING_DURATION_TIME = 2560;
+const JOL_RANKING_DURATION_TIME = 2490;
 // Previous calculation was ~2750, confirmed it's exactly 2750 frames.
 /*
   (OPENING_SEC_TIME +
@@ -158,14 +151,9 @@ const JOL_RANKING_DURATION_TIME = 2560;
 */
 
 // Calculate Event Duration
-const JOL_RANKING_DURATION_EVENT =
-  (OPENING_SEC_EVENT +
-    GROUP_SEC_EVENT * 3 +
-    GRID_BRIDGE_SEC_EVENT +
-    TOP_RANK_SEC_EVENT * 3 +
-    ENDING_SEC_EVENT) *
-    JOL_RANKING_FPS -
-  (7 * TRANSITION_FRAMES_EVENT + LAST_TRANSITION_FRAMES_EVENT);
+// (Opening 300 + 4 Groups * 270 + 3 Reveals (300, 300, 360) + Ending 240) - (6 * T 12 + 1 * LAST_T 15)
+// = (300 + 1080 + 960 + 240) - (72 + 15) = 2580 - 87 = 2493
+const JOL_RANKING_DURATION_EVENT = 2493;
 
 export const RemotionRoot: React.FC = () => {
   return (

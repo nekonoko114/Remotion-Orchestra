@@ -166,8 +166,8 @@ export const GridBridge: React.FC = () => {
                       borderRadius: 20,
                       flexShrink: 0,
                       overflow: 'hidden',
-                      border: isTop3 ? '12px solid #00AA7F' : '4px solid #444',
-                      boxShadow: isTop3 ? '0 0 40px rgba(0, 255, 127, 0.5)' : 'none',
+                      border: isTop3 ? '12px solid #FF3131' : '4px solid #444',
+                      boxShadow: isTop3 ? '0 0 40px rgba(255, 49, 49, 0.5)' : 'none',
                       backgroundColor: '#111',
                     }}
                   >
@@ -217,11 +217,11 @@ export const GridBridge: React.FC = () => {
                           right: 0,
                           textAlign: 'center',
                           backgroundColor: 'rgba(0,0,0,0.8)',
-                          color: '#00FF7F',
+                          color: '#FF3131',
                           fontSize: 60,
                           fontWeight: 'bold',
                           padding: '10px 0',
-                          textShadow: '0 0 10px rgba(0,255,127,0.5)',
+                          textShadow: '0 0 10px rgba(255, 49, 49, 0.5)',
                         }}
                       >
                         {item.rank}位
@@ -237,7 +237,7 @@ export const GridBridge: React.FC = () => {
 
       <AbsoluteFill
         style={{
-          backgroundColor: '#006400', // Darker forest green flash
+          backgroundColor: '#330000', // Darker red flash
           opacity: interpolate(frame, [beatFrames * 18, beatFrames * 20], [0, 1], {
             extrapolateLeft: 'clamp',
           }),

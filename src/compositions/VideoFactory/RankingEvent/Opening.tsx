@@ -9,17 +9,12 @@ import {
   random,
 } from 'remotion';
 import { NeonGlowText } from '../../../components/effects/NeonGlowText';
-import { CyberTunnel } from './CyberTunnel';
-import { useBeatValue } from '../utils/beat-sync';
-
-const BPM = 194;
 
 export const Opening: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const { pulse } = useBeatValue(BPM);
 
-  const beatScale = 1 + pulse * 0.04;
+  const beatScale = 1;
 
   // Staggered springs for each part
   const createSpring = (delay: number) => spring({
@@ -28,14 +23,14 @@ export const Opening: React.FC = () => {
     config: { damping: 12, stiffness: 200 },
   });
 
-  const spr1 = createSpring(0);   // J.O.L
-  const spr2 = createSpring(15);  // EVENT
-  const spr3 = createSpring(30);  // RANKING
-  const spr4 = createSpring(45);  // SPECIAL
-  const spr5 = createSpring(60);  // 結果発表
+  const spr1 = createSpring(0);   // J.O.L (最上段)
+  const spr4 = createSpring(15);  // 団結No.1 (2段目)
+  const spr2 = createSpring(30);  // イベント (3段目)
+  const spr3 = createSpring(45);  // ランキング (4段目)
+  const spr5 = createSpring(60);  // 結果発表 (5段目)
 
   // Glitch intensity
-  const glitchIntensity = (pulse > 0.8 || random(frame) < 0.05) ? 15 : 2;
+  const glitchIntensity = 0;
 
   const getEntryStyle = (spr: number, direction: 'top' | 'bottom' | 'center') => {
     const opacity = interpolate(spr, [0, 0.5], [0, 1]);
@@ -69,20 +64,20 @@ export const Opening: React.FC = () => {
       }}
     >
       <AbsoluteFill style={{ zIndex: -1 }}>
-        <CyberTunnel />
         <Video
-          src={staticFile('assets/pixabay/particles/particle-squere.mp4')}
+          src={staticFile('assets/pixabay/videos/absturact-turing.mp4')}
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            filter: 'hue-rotate(100deg) brightness(1.2) contrast(1.1) saturate(1.2)',
-            transform: 'scale(1.1)',
+            filter: 'hue-rotate(-120deg) brightness(1.1) contrast(1.1) saturate(1.5)',
+            transform: 'scale(1.2) rotate(180deg)',
             mixBlendMode: 'screen',
           }}
           startFrom={0}
           playbackRate={1}
           muted
+          loop
         />
         <AbsoluteFill
           style={{
@@ -103,22 +98,22 @@ export const Opening: React.FC = () => {
           }}
         >
           <div style={getEntryStyle(spr1, 'top')}>
-            <NeonGlowText text="J.O.L" fontSize={230} color="#FFFFFF" glowColor="#00FF7F" />
+            <NeonGlowText text="J.O.L" fontSize={230} color="#FFFFFF" glowColor="#FF3131" />
           </div>
           <div style={{ ...getEntryStyle(spr4, 'bottom'), transform: `${getEntryStyle(spr4, 'bottom').transform} scale(0.8)` }}>
-              <NeonGlowText text="団結No.1" fontSize={160} color="#FFFFFF" glowColor="rgba(0,255,100,0.4)" />
+              <NeonGlowText text="団結No.1" fontSize={160} color="#FFFFFF" glowColor="rgba(255, 50, 50, 0.6)" />
             </div>
           
           <div style={getEntryStyle(spr2, 'bottom')}>
-            <NeonGlowText text="イベント" fontSize={120} color="#FFFFFF" glowColor="#0088FF" />
+            <NeonGlowText text="イベント" fontSize={120} color="#FFFFFF" glowColor="#FF8C00" />
           </div>
           <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
           <div style={{ ...getEntryStyle(spr3, 'top'), display: 'flex', alignItems: 'center' }}>
-            <NeonGlowText text="ランキング" fontSize={160} color="#FFFFFF" glowColor="#00FF7F" />
+            <NeonGlowText text="ランキング" fontSize={160} color="#FFFFFF" glowColor="#FF4500" />
           </div>
             <div style={getEntryStyle(spr5, 'top')}>
-              <NeonGlowText text="結果発表" fontSize={180} color="#FFFFFF" glowColor="#00FF00" />
+              <NeonGlowText text="結果発表" fontSize={180} color="#FFFFFF" glowColor="#FF0000" />
             </div>
           </div>
         </div>

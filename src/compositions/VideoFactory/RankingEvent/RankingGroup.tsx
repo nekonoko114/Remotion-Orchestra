@@ -8,18 +8,14 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import { useBeatValue } from '../utils/beat-sync';
-import { EnergySVG } from './EnergySVG';
-import { CircuitSVG } from './CircuitSVG';
 import { FlowSVG } from './FlowSVG';
 import type { Liver } from '../types';
 
-const BPM = 194;
 
 // Unity Colors (Unified Design)
-const UNITY_GREEN = '#00FF7F';
-const UNITY_LIME  = '#BFFF00';
-const UNITY_GLOW  = 'rgba(0, 255, 127, 0.2)'; // Reduced for clarity (0.6 -> 0.2)
+const UNITY_GREEN = '#FF3131';
+const UNITY_LIME  = '#FFD700';
+const UNITY_GLOW  = 'rgba(255, 49, 49, 0.3)';
 
 type Props = {
   title: string;
@@ -31,7 +27,6 @@ type Props = {
 export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const { pulse } = useBeatValue(BPM);
 
   const entrance = spring({
     frame,
@@ -41,7 +36,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
 
   const opacity = interpolate(entrance, [0, 1], [0, 1]);
   const scale  = interpolate(entrance, [0, 1], [0.95, 1]);
-  const beatScale = 1 + pulse * 0.005;
+  const beatScale = 1;
 
   // デザイン統制：人数に応じたスケール定義
   const isCompact = livers.length >= 4; // 15-11位 (5名)
@@ -49,18 +44,16 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
   const is2Group  = livers.length === 2;  // 7-4位 (2名)
 
   // パラメータをグループごとに統一
-  const gap          = isCompact ? 24  : is3Group ? 50  : 80;
-  const rankFontSize = isCompact ? 80  : is3Group ? 120 : 160;
-  const nameFontSize = isCompact ? 40  : is3Group ? 60  : 75;
-  const avatarSize   = isCompact ? 220 : is3Group ? 160 : 180;
-  const verticalPad  = isCompact ? 16  : is3Group ? 150  : 200;
-  const marginTop    = isCompact ? 120 : is3Group ? 180 : 200;
+  const gap          = isCompact ? 24  : 0; // Stack based on height
+  const rankFontSize = isCompact ? 80  : 170;
+  const nameFontSize = isCompact ? 40  : 80;
+  const avatarSize   = 500; // Manually updated by user
+  const verticalPad  = isCompact ? 16  : 0;
+  const marginTop    = isCompact ? 120 : 200;
 
   const getEnergyOpacity = (f: number) => {
-    if (f >= 150 && f <= 420) return interpolate(f, [150, 160, 410, 420], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-    if (f >= 420 && f <= 565) return interpolate(f, [420, 426, 555, 565], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-    if (f >= 474 && f <= 744) return 1;
-    if (f >= 756 && f <= 1026) return 1;
+    // Return 1 during the specified backdrop particle range (545 - 1330)
+    if (f >= 545 && f <= 1330) return 1;
     return 0;
   };
 
@@ -68,9 +61,9 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
 
   const renderBackgroundEffect = () => {
     if (absoluteFrame === undefined) return null;
-    if (absoluteFrame < 555) return <EnergySVG pulse={pulse} opacity={finalOpacity} />;
-    if (absoluteFrame < 756) return <CircuitSVG pulse={pulse} opacity={finalOpacity} />;
-    return <FlowSVG pulse={pulse} opacity={finalOpacity} />;
+    // Show flow particles between 545 and 1330 only
+    if (absoluteFrame < 545 || absoluteFrame > 1330) return null;
+    return <FlowSVG pulse={0} opacity={finalOpacity} />;
   };
 
   const getAvatarSrc = (liver: Liver) => {
@@ -119,7 +112,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
         <h1
           style={{
             position: 'absolute',
-            top: 40,
+            top: 80,
             fontSize: isCompact ? 70 : 100,
             fontFamily: "'Segoe UI', Roboto, sans-serif",
             fontWeight: '900',
@@ -145,7 +138,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
           {livers.map((liver: Liver, index: number) => {
             const staggerFrames = isCompact ? 12 : 18;
             const liverEntrance = spring({
-              frame: frame - index * staggerFrames - 30,
+              frame: frame - index * staggerFrames - 5,
               fps,
               config: { damping: 10, stiffness: 350 },
             });
@@ -169,7 +162,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                     border: `3px solid ${UNITY_GREEN}`,
                     boxShadow: `0 0 20px ${UNITY_GLOW}, inset 0 0 15px rgba(0,0,0,0.8)`,
                     backgroundColor: 'rgba(0,15,0,0.85)',
-                    transform: `translateX(${slideX}px) scale(${bounceScale * (1 + pulse * 0.02)})`,
+                    transform: `translateX(${slideX}px) scale(${bounceScale})`,
                     opacity: rowOpacity,
                     padding: `${verticalPad}px 30px`,
                     position: 'relative',
@@ -186,6 +179,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                       flexShrink: 0,
                       overflow: 'hidden',
                       backgroundColor: 'rgba(0,30,0,0.4)',
+                      width: 250,
+                      height: 250,
                     }}
                   >
                     <Img
@@ -199,28 +194,36 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                     />
                   </div>
 
-                  {/* 順位 + 名前 */}
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, flex: 1, whiteSpace: 'nowrap' }}>
+                  {/* 順位 + 名前 (縦並び) */}
+                  <div 
+                    style={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      justifyContent: 'center',
+                      alignItems: 'flex-start', 
+                      gap: 4, 
+                      flex: 1, 
+                      whiteSpace: 'nowrap' 
+                    }}
+                  >
                     <span
                       style={{
                         fontSize: rankFontSize,
                         fontWeight: '900',
                         color: UNITY_LIME,
                         textShadow: `0 0 10px ${UNITY_LIME}`,
-                        minWidth: 70,
-                        lineHeight: 1,
+                        lineHeight: 1.1,
                       }}
                     >
-                      {liver.rank}
+                      {liver.rank}位
                     </span>
                     <span
                       style={{
                         fontSize: nameFontSize,
                         fontWeight: '800',
                         color: '#FFF',
-                        textShadow: '3px 3px 10px rgba(0,0,0,1)',
-                        lineHeight: 1.1,
-                        whiteSpace: 'nowrap',
+                        textShadow: `0 0 10px rgba(0,0,0,0.8)`,
+                        lineHeight: 1.2,
                       }}
                     >
                       {liver.nickname}
@@ -231,83 +234,106 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
             }
 
             // ================================================================
-            // 【大グループ：10~4位】 レクタングルレイアウト (RECTANGLE)
-            // ================================================================
+            // 【大グループ：10~4位】
             return (
               <div
                 key={liver.rank}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  borderRadius: 16,
-                  border: `4px solid ${UNITY_GREEN}`,
-                  boxShadow: `0 0 25px ${UNITY_GLOW}, inset 0 0 20px rgba(0,0,0,0.8)`,
-                  backgroundColor: 'rgba(0,20,0,0.5)',
-                  transform: `translateX(${slideX}px) scale(${bounceScale * (1 + pulse * 0.03)})`,
+                  justifyContent: 'flex-start',
+                  width: '100%',
+                  height: is2Group ? 800 : 580,
+                  transform: `translateX(${slideX}px) scale(${bounceScale})`,
                   opacity: rowOpacity,
                   position: 'relative',
-                  overflow: 'hidden',
-                  padding: `${verticalPad}px 40px`,
+                  padding: '10px 40px',
+                  gap: is2Group ? 40 : 20,
                 }}
               >
-                {/* 背景アイコン */}
-                <AbsoluteFill style={{ opacity: 0.8 }}>
-                  <Img
-                    src={getAvatarSrc(liver)}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'center top',
-                      filter: 'blur(2px)',
-                    }}
-                  />
-                </AbsoluteFill>
-
-                <AbsoluteFill style={{ backgroundColor: 'rgba(0,30,15,0.2)' }} />
-
+                {/* 1. Rank Text (左) - 枠なし */}
                 <div
                   style={{
-                    position: 'relative',
-                    zIndex: 2,
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    justifyContent: 'center',
-                    width: '100%',
-                    height: '100%',
-                    paddingBottom: 20,
+                    minWidth: is2Group ? 100 : 150,
+                    fontSize: rankFontSize,
+                    fontWeight: 900,
+                    color: UNITY_LIME,
+                    textShadow: `0 0 30px ${UNITY_LIME}`,
+                    fontStyle: 'italic',
+                    textAlign: 'center',
+                    lineHeight: 1,
+                    whiteSpace: 'nowrap',
                   }}
                 >
+                  {liver.rank}
+                  <span style={{ fontSize: rankFontSize * 0.4, fontStyle: 'normal', scale: '0.8', marginLeft: 2 }}>
+                    位
+                  </span>
+                </div>
 
+                {/* 2. Middle Section (Avatar + Name Column) */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flex: 1,
+                    gap: 16,
+                  }}
+                >
+                  {/* Avatar Circle */}
                   <div
                     style={{
+                      width: is2Group ? 550 : 400,
+                      height: is2Group ? 550 : 400,
+                      borderRadius: '50%',
+                      border: `8px solid ${UNITY_GREEN}`,
+                      boxShadow: `0 0 40px ${UNITY_GREEN}, inset 0 0 20px ${UNITY_GREEN}`,
+                      overflow: 'hidden',
+                      flexShrink: 0,
+                      backgroundColor: 'rgba(0,0,0,0.5)',
                       position: 'relative',
-                      display: 'flex',
-                      alignItems: 'flex-end',
-                      gap: is2Group ? 40 : 25,
-                      whiteSpace: 'nowrap',
                     }}
                   >
-                    <span
+                    <Img
+                      src={getAvatarSrc(liver)}
                       style={{
-                        fontSize: rankFontSize,
-                        fontWeight: '900',
-                        color: UNITY_LIME,
-                        textShadow: `0 0 15px ${UNITY_LIME}`,
-                        minWidth: is2Group ? 180 : 140,
-                        flexShrink: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center top',
                       }}
-                    >
-                      {liver.rank}
-                    </span>
+                    />
+                  </div>
+
+                  {/* Name Text (Relative) */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    {/* 装飾用ライン（スケッチの矢印に対応） */}
+                    <div 
+                      style={{ 
+                        width: is2Group ? 400 : 300, 
+                        height: 5, 
+                        background: `linear-gradient(90deg, transparent 0%, ${UNITY_GREEN} 50%, transparent 100%)`,
+                        marginBottom: 12,
+                        boxShadow: `0 0 15px ${UNITY_GREEN}`,
+                      }} 
+                    />
                     <span
                       style={{
                         fontSize: nameFontSize,
-                        fontWeight: '800',
+                        fontWeight: 800,
                         color: '#FFF',
-                        textShadow: '4px 4px 15px rgba(0,0,0,1)',
+                        textShadow: `0 0 15px ${UNITY_GREEN}, 3px 3px 10px #000`,
                         whiteSpace: 'nowrap',
-                        flexShrink: 1,
+                        textAlign: 'center',
                       }}
                     >
                       {liver.nickname}

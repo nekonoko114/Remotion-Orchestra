@@ -17,10 +17,8 @@ import { ImpactEffect } from '../ImpactEffect';
 import { CinematicBorder } from '../CinematicBorder';
 import { TextShine } from '../TextShine';
 import { AdjustmentLayer } from '../AdjustmentLayer';
-import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
 
-const BPM = 194;
 
 type Props = {
   rank: number;
@@ -78,15 +76,13 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, backgroundSrc 
   const nameY = interpolate(nameEntrance, [0, 1], [100, 0]);
   const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
 
-  const { pulse } = useBeatValue(BPM);
-  const pulseScale = (1 + Math.sin(frame / 8) * 0.02) * (1 + pulse * 0.008);
 
   const getRankColors = (r: number) => {
     // Restore the intense metallic colors
     if (r === 1) return { primary: '#FFD700', secondary: '#FFFFFF', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
     if (r === 2) return { primary: '#C0C0C0', secondary: '#FFFFFF', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
     if (r === 3) return { primary: '#B87333', secondary: '#FFFFFF', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
-    return { primary: '#00FF7F', secondary: '#FFFFFF', glow: 'transparent' };
+    return { primary: '#FF3131', secondary: '#FFFFFF', glow: 'rgba(255, 49, 49, 0.5)' };
   };
 
   const { primary, secondary, glow } = getRankColors(rank);
@@ -112,7 +108,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, backgroundSrc 
         <AbsoluteFill style={{ backgroundColor: 'rgba(0,10,5,0.4)' }} />
       </AbsoluteFill>
 
-      <AdjustmentLayer rank={rank} beatPulse={pulse} />
+      <AdjustmentLayer rank={rank} />
 
       <AbsoluteFill style={{ opacity: 0.5, pointerEvents: 'none', zIndex: 110 }}>
         <SmokeEffect color={primary} density={0.01} velocity={0.3} />
@@ -129,7 +125,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, backgroundSrc 
         <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
           {frame < 15 && <ImpactEffect color={primary} intensity="high" />}
           <Explosion delay={5} color={primary} secondaryColor={secondary} />
-          <ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
+          <ImpactEffect color={primary} intensity="high" />
         </AbsoluteFill>
 
         <AbsoluteFill style={{ zIndex: 120 }}>
@@ -142,7 +138,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, backgroundSrc 
               width: '100%',
               display: 'flex',
               justifyContent: 'center',
-              transform: `scale(${rankScale * pulseScale})`, 
+              transform: `scale(${rankScale})`, 
               opacity: rankOpacity
             }}
           >
@@ -246,10 +242,9 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, backgroundSrc 
               position: 'absolute',
               bottom: 300,
               left: 0,
-              width: '100%',
+            width: '100%',
               display: 'flex',
               justifyContent: 'center',
-              transform: `scale(${1 + pulse * 0.1})`,
               opacity: nameOpacity,
             }}
           >
