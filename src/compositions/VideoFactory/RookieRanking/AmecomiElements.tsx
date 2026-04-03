@@ -1,17 +1,18 @@
 import React from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { LuxuryFontStack } from './fonts';
 
 /**
  * アメコミ風の太い境界線付きテキストスタイル
  */
 export const AmecomiTextStyle: React.CSSProperties = {
-  fontFamily: '"Mochiy Pop One", "Arial Black", sans-serif',
+  fontFamily: LuxuryFontStack,
   fontWeight: 700,
   color: '#FFD700', // Gold
   WebkitTextStroke: '12px black',
   paintOrder: 'stroke fill',
   textShadow: '8px 8px 0px rgba(0,0,0,0.8)',
-  letterSpacing: '0.1em',
+  letterSpacing: '0.05em',
 };
 
 /**
@@ -22,8 +23,6 @@ export const HalftoneBackground: React.FC<{ color?: string }> = ({ color = '#1a1
     <AbsoluteFill
       style={{
         backgroundColor: color,
-        backgroundImage: 'radial-gradient(circle, rgba(255,215,0,0.1) 1px, transparent 1px)',
-        backgroundSize: '20px 20px',
       }}
     />
   );

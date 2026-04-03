@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
-import { HalftoneBackground, SpeedLines, AmecomiTextStyle } from './AmecomiElements';
+import { SpeedLines, AmecomiTextStyle } from './AmecomiElements';
 import { useBeat, BeatShake, GlitchOverlay } from './BeatSync';
 
 export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
@@ -17,18 +17,17 @@ export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const baseScale = interpolate(entrance, [0, 1], [0.5, 1]);
   const bounce = Math.sin(frame / 5) * 2;
   
-  // Beat Pulse
-  const scale = baseScale + kickStrength * 0.1;
+  // Beat Pulse (Removed as requested)
+  const scale = baseScale;
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
       <GlitchOverlay />
       
       <BeatShake>
-        <HalftoneBackground color="rgba(26, 26, 46, 0.6)" />
         <SpeedLines />
 
-        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <AbsoluteFill style={{ justifyContent: 'end', alignItems: 'center' }}>
           {/* Comic Bubble / Panel */}
           <div style={{
             backgroundColor: '#ff2c2c',
@@ -40,6 +39,7 @@ export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
             flexDirection: 'column',
             alignItems: 'center',
             gap: 40,
+            transform: `translateY(-50px) rotate(-5deg)`,
             filter: `brightness(${1 + kickStrength * 0.5})`,
           }}>          
             <div style={{

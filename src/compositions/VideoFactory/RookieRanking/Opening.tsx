@@ -1,7 +1,8 @@
-import React from 'react';
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
+import React, { useMemo } from 'react';
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Img, staticFile, random } from 'remotion';
 import { ThreeCanvas } from '@remotion/three';
-import { HalftoneBackground, SpeedLines, AmecomiTextStyle } from './AmecomiElements';
+import * as THREE from 'three';
+import { SpeedLines, AmecomiTextStyle } from './AmecomiElements';
 import { useBeat, BeatShake, GlitchOverlay } from './BeatSync';
 
 // 3D Star Component
@@ -14,15 +15,34 @@ type StarProps = {
 
 const Star: React.FC<StarProps> = ({ color, position, rotation, bpm }) => {
   const { kickStrength } = useBeat(bpm);
-  const scale = 1 + kickStrength * 0.2;
+  const scale = 1;
+
+  // 5角星のジオメトリ
+  const geometry = useMemo(() => {
+    const shape = new THREE.Shape();
+    const outerR = 1.4;
+    const innerR = 0.55;
+    const points = 5;
+    for (let i = 0; i < points * 2; i++) {
+      const r = i % 2 === 0 ? outerR : innerR;
+      const angle = (i * Math.PI) / points - Math.PI / 2;
+      const x = Math.cos(angle) * r;
+      const y = Math.sin(angle) * r;
+      if (i === 0) shape.moveTo(x, y);
+      else shape.lineTo(x, y);
+    }
+    shape.closePath();
+    return new THREE.ExtrudeGeometry(shape, { depth: 0.3, bevelEnabled: true, bevelThickness: 0.1, bevelSize: 0.05 });
+  }, []);
 
   return (
-    <mesh position={position} rotation={rotation} scale={[scale, scale, scale]}>
-      <octahedronGeometry args={[1, 0]} />
+    <mesh geometry={geometry} position={position} rotation={rotation} scale={[scale, scale, scale]}>
       <meshStandardMaterial
         color={color}
         emissive={color}
-        emissiveIntensity={2 + kickStrength * 4}
+        emissiveIntensity={0.2 + kickStrength * 0.4}
+        metalness={0.4}
+        roughness={0.6}
       />
     </mesh>
   );
@@ -31,15 +51,39 @@ const Star: React.FC<StarProps> = ({ color, position, rotation, bpm }) => {
 // 3D Scene containing the stars
 const StarsScene: React.FC<{ bpm: number }> = ({ bpm }) => {
   const frame = useCurrentFrame();
-  const rotation = frame * 0.02;
+  
+  // Generate random stars once (Seeded)
+  const stars = useMemo(() => {
+    const colors = ["#00B0FF", "#00E676", "#FF1744"]; // Vivid Blue, Vivid Green, Vivid Pink
+    return Array.from({ length: 20 }).map((_, i) => ({
+      color: colors[i % colors.length],
+      position: [
+        (random(`x-${i}`) - 0.5) * 20, // X: -10 to 10
+        (random(`y-${i}`) - 0.5) * 15, // Y: -7.5 to 7.5
+        (random(`z-${i}`) - 0.5) * 15 - 5, // Z: -12.5 to 2.5
+      ] as [number, number, number],
+      rotationOffset: random(`r-${i}`) * Math.PI * 2,
+      rotationSpeed: (random(`s-${i}`) - 0.5) * 0.05,
+    }));
+  }, []);
 
   return (
     <>
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} intensity={1.5} />
-      <Star bpm={bpm} color="#FFD700" position={[0, 1, 0]} rotation={[0, rotation, 0]} />
-      <Star bpm={bpm} color="#C0C0C0" position={[-8, 4, -10]} rotation={[rotation, 0, rotation]} />
-      <Star bpm={bpm} color="#CD7F32" position={[8, -5, -8]} rotation={[0, -rotation, rotation]} />
+      {stars.map((star, i) => (
+        <Star 
+          key={i}
+          bpm={bpm} 
+          color={star.color} 
+          position={star.position} 
+          rotation={[
+            star.rotationOffset + frame * star.rotationSpeed, 
+            star.rotationOffset + frame * 0.02, 
+            0
+          ]} 
+        />
+      ))}
     </>
   );
 };
@@ -60,8 +104,12 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const textOpacity = interpolate(entrance, [0, 1], [0, 1]);
   
   // Beat Pulse
-  const textScale = baseScale + kickStrength * 0.15;
+  const textScale = baseScale;
   const glowIntensity = kickStrength * 50;
+
+  // Master Image Animation
+  const masterRotate = frame * 0.2;
+  const masterScale = baseScale * 0.8;
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
@@ -73,8 +121,26 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
           <StarsScene bpm={bpm} />
         </ThreeCanvas>
 
+        {/* Master Image Decor (Nanobanana) */}
+        <AbsoluteFill style={{ 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          opacity: textOpacity * 0.7,
+        }}>
+          <div style={{
+            width: 1200,
+            height: 1200,
+            transform: `scale(${masterScale}) rotate(${masterRotate}deg)`,
+            filter: `blur(20px) brightness(${1 + kickStrength * 0.5})`,
+          }}>
+            <Img 
+              src={staticFile("assets/titles/rookie_ranking_master.png")} 
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+            />
+          </div>
+        </AbsoluteFill>
+
         {/* Amecomi Effects */}
-        <HalftoneBackground color="rgba(26, 26, 46, 0.4)" />
         <SpeedLines />
 
         {/* Main Vertical Title */}
@@ -91,23 +157,6 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
             新人王
           </div>
         </AbsoluteFill>
-
-        {/* Subtext */}
-        <div style={{
-          position: 'absolute',
-          bottom: 100,
-          width: '100%',
-          textAlign: 'center',
-          fontSize: 60,
-          color: 'white',
-          fontWeight: 'bold',
-          textShadow: '2px 2px 10px black',
-          letterSpacing: 20,
-          opacity: textOpacity,
-          transform: `translateY(${kickStrength * -10}px)`,
-        }}>
-          J.O.L ROOKIE RANKING
-        </div>
       </BeatShake>
     </AbsoluteFill>
   );

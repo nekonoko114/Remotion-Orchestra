@@ -5,7 +5,7 @@ import { TransitionPresentation, TransitionPresentationComponentProps } from '@r
 /**
  * BPM 160 のビート同期用定数
  */
-export const BPM = 160;
+export const BPM = 60;
 export const FPS = 60;
 export const FRAMES_PER_BEAT = (FPS * 60) / BPM; // 約 22.5 フレーム
 
@@ -26,7 +26,7 @@ export const useBeat = (bpm: number = BPM) => {
   // 2. その拍でキックを発生させるかのランダム判定（拍のインデックスをシードに）
   const kickActive = useMemo(() => {
     // 小節の頭 (4拍ごと) はリズム維持のため必ず発生させる
-    if (beatIndex % 4 === 0) return 1;
+    if (beatIndex % 8 === 0) return 1;
     
     // それ以外は 70% の確率で発生させる (この値を下げるとより「まばら」になります)
     return Math.random() > 0.3 ? 1 : 0;
@@ -53,56 +53,19 @@ export const useBeat = (bpm: number = BPM) => {
 
 /**
  * 色収差 & グリッチオーバーレイ
+ * フィードバックに基づき、一旦 null を返して無効化しています。
  */
 export const GlitchOverlay: React.FC<{ bpm?: number }> = ({ bpm = BPM }) => {
-  const { kickStrength, glitchWeight } = useBeat(bpm);
-  const shift = kickStrength * 15;
-  
-  if (glitchWeight < 0.1 && kickStrength < 0.3) return null;
-
-  return (
-    <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 999, overflow: 'hidden' }}>
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundColor: 'rgba(255, 0, 255, 0.1)',
-        transform: `translate(${shift}px, 0)`,
-        mixBlendMode: 'screen',
-      }} />
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundColor: 'rgba(0, 255, 255, 0.1)',
-        transform: `translate(${-shift}px, 0)`,
-        mixBlendMode: 'screen',
-      }} />
-      
-      {glitchWeight > 0.5 && (
-        <div style={{
-          position: 'absolute',
-          top: `${Math.random() * 100}%`,
-          width: '100%',
-          height: '40px',
-          backgroundColor: 'rgba(255,255,255,0.4)',
-          filter: 'blur(5px)',
-          mixBlendMode: 'overlay',
-        }} />
-      )}
-    </AbsoluteFill>
-  );
+  return null;
 };
 
 /**
  * Screen Shake
+ * フィードバックに基づき、一旦揺れを無効化（children をそのまま表示）しています。
  */
 export const BeatShake: React.FC<{ children: React.ReactNode; bpm?: number }> = ({ children, bpm = BPM }) => {
-  const { kickStrength } = useBeat(bpm);
-  const intensity = kickStrength * 10;
-  const x = (Math.random() - 0.5) * intensity;
-  const y = (Math.random() - 0.5) * intensity;
-
   return (
-    <div style={{ transform: `translate(${x}px, ${y}px)`, width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       {children}
     </div>
   );
@@ -148,3 +111,4 @@ export const highIntensityZoom = (): TransitionPresentation<{}> => {
     props: {},
   };
 };
+

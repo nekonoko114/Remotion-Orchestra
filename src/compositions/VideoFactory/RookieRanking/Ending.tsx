@@ -1,7 +1,8 @@
 import React from 'react';
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
-import { HalftoneBackground, SpeedLines, AmecomiTextStyle } from './AmecomiElements';
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate, Img, staticFile } from 'remotion';
+import { HalftoneBackground, SpeedLines } from './AmecomiElements';
 import { useBeat, BeatShake, GlitchOverlay } from './BeatSync';
+import { LuxuryFontStack } from './fonts';
 
 export const Ending: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const frame = useCurrentFrame();
@@ -17,8 +18,8 @@ export const Ending: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const baseScale = interpolate(entrance, [0, 1], [0.8, 1.2]);
   const opacity = interpolate(entrance, [0, 1], [0, 1]);
   
-  // Beat Pulse
-  const textScale = baseScale + kickStrength * 0.15;
+  // Beat Pulse (Removed as requested)
+  const textScale = baseScale;
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
@@ -36,19 +37,25 @@ export const Ending: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
         }} />
 
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
+          {/* Centered JOL Logo */}
           <div style={{
-            ...AmecomiTextStyle,
-            writingMode: 'vertical-rl',
-            fontSize: 220,
-            color: '#FFD700',
-            WebkitTextStroke: '10px black',
+            width: 800,
+            height: 400,
             transform: `scale(${textScale})`,
             opacity,
-            textOrientation: 'upright',
-            filter: `drop-shadow(0 0 ${40 + kickStrength * 100}px rgba(255, 215, 0, 0.8))`,
-            lineHeight: 1.1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            filter: `drop-shadow(0 0 ${20 + kickStrength * 40}px rgba(255,215,0,0.6))`,
           }}>
-            新人王<br/>おめでとう
+            <Img 
+              src={staticFile("jol-logo-800.png")} 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'contain' 
+              }} 
+            />
           </div>
         </AbsoluteFill>
 
@@ -58,11 +65,12 @@ export const Ending: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
           width: '100%',
           textAlign: 'center',
           fontSize: 50,
-          color: '#fff',
-          fontWeight: 'bold',
-          textShadow: '2px 2px 10px black',
-          letterSpacing: 10,
+          fontFamily: LuxuryFontStack,
+          color: '#FFD700',
+          fontWeight: 700,
+          letterSpacing: 12,
           opacity,
+          filter: `drop-shadow(0 0 ${10 + kickStrength * 30}px rgba(255,215,0,0.8))`,
           transform: `translateY(${kickStrength * -15}px)`,
         }}>
           CONGRATULATIONS
