@@ -101,10 +101,9 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   });
 
   const baseScale = interpolate(entrance, [0, 1], [0.5, 1.2]);
-  const textOpacity = interpolate(entrance, [0, 1], [0, 1]);
+  const textOpacity = interpolate(entrance, [0, 1], [0, 0]); // Not used for main title anymore, fixed to 0
   
   // Beat Pulse
-  const textScale = baseScale;
   const glowIntensity = kickStrength * 50;
 
   // Master Image Animation
@@ -143,18 +142,62 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
         {/* Amecomi Effects */}
         <SpeedLines />
 
-        {/* Main Vertical Title */}
+        {/* Main Vertical Title (Animated Characters) */}
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
           <div style={{
-            ...AmecomiTextStyle,
-            writingMode: 'vertical-rl',
-            fontSize: 280,
-            opacity: textOpacity,
-            transform: `scale(${textScale}) rotate(-5deg)`,
-            textOrientation: 'upright',
-            filter: `drop-shadow(0 0 ${20 + glowIntensity}px rgba(255, 215, 0, 0.6))`,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            transform: 'rotate(-5deg)',
           }}>
-            新人王
+            {['新', '人', '王'].map((char, i) => {
+              const delay = i * (fps * 1.5);
+              const charEntrance = spring({
+                frame: frame - delay,
+                fps,
+                config: { damping: 10, stiffness: 100 },
+              });
+
+              // Multi-stage positions [Start, Middle, End]
+              let stageX = [0, 0, 0];
+              let stageY = [0, 0, 0];
+              let stageRotate = [0, 0, 0];
+
+              if (i === 0) { // 「新」
+                stageX = [-800, -500, 0];
+                stageY = [-800, 400, 0];
+                stageRotate = [-45, -20, 0];
+              } else if (i === 1) { // 「人」
+                stageX = [800, 400, 0];
+                stageY = [0, 600, 0];
+                stageRotate = [45, 20, 0];
+              } else if (i === 2) { // 「王」
+                stageX = [800, -400, 0];
+                stageY = [800, 700, 0];
+                stageRotate = [90, 45, 0];
+              }
+              
+              const x = interpolate(charEntrance, [0, 0.5, 1], stageX);
+              const y = interpolate(charEntrance, [0, 0.5, 1], stageY);
+              const scale = interpolate(charEntrance, [0, 0.2, 1], [0.3, 1.2, 1]);
+              const rotate = interpolate(charEntrance, [0, 0.5, 1], stageRotate);
+              const opacity = interpolate(charEntrance, [0, 0.1, 1], [0, 1, 1]);
+
+              return (
+                <div key={i} style={{
+                  ...AmecomiTextStyle,
+                  fontSize: 280,
+                  opacity,
+                  transform: `translate(${x}px, ${y}px) scale(${scale}) rotate(${rotate}deg)`,
+                  filter: `drop-shadow(0 0 ${20 + glowIntensity}px rgba(255, 215, 0, 0.6))`,
+                  lineHeight: 0.9,
+                  textOrientation: 'upright',
+                  zIndex: 10 - i,
+                }}>
+                  {char}
+                </div>
+              );
+            })}
           </div>
         </AbsoluteFill>
       </BeatShake>

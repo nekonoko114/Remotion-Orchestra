@@ -58,7 +58,7 @@ export const RookieRanking: React.FC<Props> = ({ bpm, bgmFile }) => {
         />
 
         {/* Tension Build-up */}
-        <TransitionSeries.Sequence durationInFrames={360}>
+        <TransitionSeries.Sequence durationInFrames={260}>
           <TensionGap bpm={bpm} />
         </TransitionSeries.Sequence>
 

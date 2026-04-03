@@ -306,7 +306,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-Rookie-Ranking"
         component={RookieRanking}
-        durationInFrames={1440} // 24 seconds total
+        durationInFrames={1350} // 24 seconds total
         fps={60}
         width={1080}
         height={1920}
