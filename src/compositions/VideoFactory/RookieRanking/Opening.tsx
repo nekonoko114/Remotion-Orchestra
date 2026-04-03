@@ -107,8 +107,6 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const glowIntensity = kickStrength * 50;
 
   // Master Image Animation
-  const masterRotate = frame * 0.2;
-  const masterScale = baseScale * 0.8;
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
@@ -120,24 +118,6 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
           <StarsScene bpm={bpm} />
         </ThreeCanvas>
 
-        {/* Master Image Decor (Nanobanana) */}
-        <AbsoluteFill style={{ 
-          justifyContent: 'center', 
-          alignItems: 'center',
-          opacity: textOpacity * 0.7,
-        }}>
-          <div style={{
-            width: 1200,
-            height: 1200,
-            transform: `scale(${masterScale}) rotate(${masterRotate}deg)`,
-            filter: `blur(20px) brightness(${1 + kickStrength * 0.5})`,
-          }}>
-            <Img 
-              src={staticFile("assets/titles/rookie_ranking_master.png")} 
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
-            />
-          </div>
-        </AbsoluteFill>
 
         {/* Amecomi Effects */}
         <SpeedLines />

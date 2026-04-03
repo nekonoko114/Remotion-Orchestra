@@ -3,7 +3,6 @@ import {
   AbsoluteFill,
   Img,
   interpolate,
-  random,
   spring,
   staticFile,
   useCurrentFrame,
@@ -197,29 +196,6 @@ export const RankingGroup: React.FC<Props> = ({
                   marginBottom: 10 * scale,
                 }}>
                   {liver.nickname}
-                </div>
-                {/* Time Progress Bar Mockup */}
-                <div style={{
-                  height: 10 * scale,
-                  width: '80%',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  borderRadius: 5,
-                  overflow: 'hidden',
-                }}>
-                  <div style={{
-                    height: '100%',
-                    width: `${interpolate(random(liver.rank), [0, 1], [40, 95])}%`,
-                    backgroundColor: THEME_COLOR,
-                    boxShadow: `0 0 10px ${THEME_COLOR}`,
-                  }} />
-                </div>
-                <div style={{
-                  fontSize: 60 * scale,
-                  color: THEME_COLOR,
-                  marginTop: 5,
-                  fontFamily: 'monospace',
-                }}>
-                  配信時間: {Math.floor(random(liver.rank) * 99999).toString(16).toUpperCase()}
                 </div>
               </div>
             </div>
