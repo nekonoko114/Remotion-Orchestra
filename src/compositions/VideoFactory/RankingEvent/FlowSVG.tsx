@@ -1,7 +1,7 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 
-const UNITY_GREEN = '#FF3131';
+const UNITY_GREEN = '#f85718';
 const UNITY_LIME = '#FFD700';
 
 interface Props {

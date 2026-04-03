@@ -1,126 +1,36 @@
-import React, { useMemo } from 'react';
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, Img, staticFile, random } from 'remotion';
-import { ThreeCanvas } from '@remotion/three';
-import * as THREE from 'three';
-import { SpeedLines, AmecomiTextStyle } from './AmecomiElements';
-import { useBeat, BeatShake, GlitchOverlay } from './BeatSync';
-
-// 3D Star Component
-type StarProps = {
-  color: string;
-  position: [number, number, number];
-  rotation: [number, number, number];
-  bpm: number;
-};
-
-const Star: React.FC<StarProps> = ({ color, position, rotation, bpm }) => {
-  const { kickStrength } = useBeat(bpm);
-  const scale = 1;
-
-  // 5角星のジオメトリ
-  const geometry = useMemo(() => {
-    const shape = new THREE.Shape();
-    const outerR = 1.4;
-    const innerR = 0.55;
-    const points = 5;
-    for (let i = 0; i < points * 2; i++) {
-      const r = i % 2 === 0 ? outerR : innerR;
-      const angle = (i * Math.PI) / points - Math.PI / 2;
-      const x = Math.cos(angle) * r;
-      const y = Math.sin(angle) * r;
-      if (i === 0) shape.moveTo(x, y);
-      else shape.lineTo(x, y);
-    }
-    shape.closePath();
-    return new THREE.ExtrudeGeometry(shape, { depth: 0.3, bevelEnabled: true, bevelThickness: 0.1, bevelSize: 0.05 });
-  }, []);
-
-  return (
-    <mesh geometry={geometry} position={position} rotation={rotation} scale={[scale, scale, scale]}>
-      <meshStandardMaterial
-        color={color}
-        emissive={color}
-        emissiveIntensity={0.2 + kickStrength * 0.4}
-        metalness={0.4}
-        roughness={0.6}
-      />
-    </mesh>
-  );
-};
-
-// 3D Scene containing the stars
-const StarsScene: React.FC<{ bpm: number }> = ({ bpm }) => {
-  const frame = useCurrentFrame();
-  
-  // Generate random stars once (Seeded)
-  const stars = useMemo(() => {
-    const colors = ["#00B0FF", "#00E676", "#FF1744"]; // Vivid Blue, Vivid Green, Vivid Pink
-    return Array.from({ length: 20 }).map((_, i) => ({
-      color: colors[i % colors.length],
-      position: [
-        (random(`x-${i}`) - 0.5) * 20, // X: -10 to 10
-        (random(`y-${i}`) - 0.5) * 15, // Y: -7.5 to 7.5
-        (random(`z-${i}`) - 0.5) * 15 - 5, // Z: -12.5 to 2.5
-      ] as [number, number, number],
-      rotationOffset: random(`r-${i}`) * Math.PI * 2,
-      rotationSpeed: (random(`s-${i}`) - 0.5) * 0.05,
-    }));
-  }, []);
-
-  return (
-    <>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1.5} />
-      {stars.map((star, i) => (
-        <Star 
-          key={i}
-          bpm={bpm} 
-          color={star.color} 
-          position={star.position} 
-          rotation={[
-            star.rotationOffset + frame * star.rotationSpeed, 
-            star.rotationOffset + frame * 0.02, 
-            0
-          ]} 
-        />
-      ))}
-    </>
-  );
-};
+import React from 'react';
+import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
+import { LuxuryJapaneseFont } from './fonts';
+import { BeatShake, GlitchOverlay } from './BeatSync';
 
 export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const frame = useCurrentFrame();
-  const { fps, width, height } = useVideoConfig();
-  const { kickStrength } = useBeat(bpm);
+  const { fps, durationInFrames } = useVideoConfig();
 
   // Entrance animation for text
   const entrance = spring({
     frame,
     fps,
-    config: { damping: 12, stiffness: 100 },
+    config: { damping: 14, stiffness: 60 },
   });
 
-  const baseScale = interpolate(entrance, [0, 1], [0.5, 1.2]);
-  const textOpacity = interpolate(entrance, [0, 1], [0, 0]); // Not used for main title anymore, fixed to 0
-  
-  // Beat Pulse
-  const glowIntensity = kickStrength * 50;
+  // Fade out at the end (last 30 frames before the sequence ends)
+  const fadeOut = interpolate(frame, [240, 270], [1, 0], { extrapolateRight: 'clamp' });
 
   // Master Image Animation
+  const titleOpacity = interpolate(entrance, [0, 1], [0, 1]) * fadeOut;
+  const titleTranslateY = interpolate(entrance, [0, 1], [50, 0]);
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
       <GlitchOverlay bpm={bpm} />
       
       <BeatShake bpm={bpm}>
-        {/* 3D Background */}
-        <ThreeCanvas width={width} height={height}>
-          <StarsScene bpm={bpm} />
-        </ThreeCanvas>
-
-
-        {/* Amecomi Effects */}
-        <SpeedLines />
+        {/* Subtle Dark Radial Gradient to Dim the Center Trophy */}
+        <AbsoluteFill style={{
+          background: 'radial-gradient(circle, rgba(0,0,0,0.5) 0%, transparent 60%)',
+          opacity: titleOpacity * 0.8,
+        }} />
 
         {/* Main Vertical Title (Animated Characters) */}
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -128,51 +38,37 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            transform: 'rotate(-5deg)',
+            opacity: titleOpacity,
+            transform: `translateY(${titleTranslateY}px)`,
           }}>
             {['新', '人', '王'].map((char, i) => {
-              const delay = i * (fps * 1.5);
+              const charDelay = i * 15;
               const charEntrance = spring({
-                frame: frame - delay,
+                frame: frame - charDelay,
                 fps,
-                config: { damping: 10, stiffness: 100 },
+                config: { damping: 12, stiffness: 80 },
               });
 
-              // Multi-stage positions [Start, Middle, End]
-              let stageX = [0, 0, 0];
-              let stageY = [0, 0, 0];
-              let stageRotate = [0, 0, 0];
-
-              if (i === 0) { // 「新」
-                stageX = [-800, -500, 0];
-                stageY = [-800, 400, 0];
-                stageRotate = [-45, -20, 0];
-              } else if (i === 1) { // 「人」
-                stageX = [800, 400, 0];
-                stageY = [0, 600, 0];
-                stageRotate = [45, 20, 0];
-              } else if (i === 2) { // 「王」
-                stageX = [800, -400, 0];
-                stageY = [800, 700, 0];
-                stageRotate = [90, 45, 0];
-              }
-              
-              const x = interpolate(charEntrance, [0, 0.5, 1], stageX);
-              const y = interpolate(charEntrance, [0, 0.5, 1], stageY);
-              const scale = interpolate(charEntrance, [0, 0.2, 1], [0.3, 1.2, 1]);
-              const rotate = interpolate(charEntrance, [0, 0.5, 1], stageRotate);
-              const opacity = interpolate(charEntrance, [0, 0.1, 1], [0, 1, 1]);
+              const charScale = interpolate(charEntrance, [0, 1], [0.8, 1]);
+              const charOpacity = interpolate(charEntrance, [0, 1], [0, 1]);
 
               return (
                 <div key={i} style={{
-                  ...AmecomiTextStyle,
-                  fontSize: 280,
-                  opacity,
-                  transform: `translate(${x}px, ${y}px) scale(${scale}) rotate(${rotate}deg)`,
-                  filter: `drop-shadow(0 0 ${20 + glowIntensity}px rgba(255, 215, 0, 0.6))`,
-                  lineHeight: 0.9,
+                  fontFamily: LuxuryJapaneseFont,
+                  fontSize: 320,
+                  fontWeight: 900,
+                  color: '#FFD700', // Gold
+                  opacity: charOpacity,
+                  transform: `scale(${charScale})`,
+                  // Dark Shadow for Contrast
+                  filter: `drop-shadow(0 0 20px rgba(0, 0, 0, 0.8)) drop-shadow(0 10px 40px rgba(40, 20, 0, 0.6))`,
+                  lineHeight: 1.0,
                   textOrientation: 'upright',
                   zIndex: 10 - i,
+                  // Gold Gradient Effect
+                  background: 'linear-gradient(to bottom, #FFE082 0%, #FFD700 50%, #B8860B 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
                 }}>
                   {char}
                 </div>

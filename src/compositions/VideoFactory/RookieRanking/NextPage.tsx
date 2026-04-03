@@ -1,66 +1,73 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
-import { SpeedLines, AmecomiTextStyle } from './AmecomiElements';
-import { useBeat, BeatShake, GlitchOverlay } from './BeatSync';
+import { LuxuryJapaneseFont, LuxuryLatinFont } from './fonts';
+import { BeatShake, GlitchOverlay } from './BeatSync';
 
 export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const { kickStrength } = useBeat(bpm);
 
   const entrance = spring({
     frame,
     fps,
-    config: { damping: 12, stiffness: 100 },
+    config: { damping: 14, stiffness: 60 },
   });
 
-  const baseScale = interpolate(entrance, [0, 1], [0.5, 1]);
-  const bounce = Math.sin(frame / 5) * 2;
-  
-  // Beat Pulse (Removed as requested)
-  const scale = baseScale;
+  const scale = interpolate(entrance, [0, 1], [0.8, 1]);
+  const opacity = interpolate(entrance, [0, 1], [0, 1]);
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
       <GlitchOverlay />
       
       <BeatShake>
-        <SpeedLines />
+        {/* Subtle Dark Radial Gradient to Dim the Center Trophy */}
+        <AbsoluteFill style={{
+          background: 'radial-gradient(circle, rgba(0,0,0,0.6) 0%, transparent 65%)',
+          opacity,
+        }} />
 
-        <AbsoluteFill style={{ justifyContent: 'end', alignItems: 'center' }}>
-          {/* Comic Bubble / Panel */}
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
           <div style={{
-            backgroundColor: '#ff2c2c',
-            border: '10px solid black',
-            padding: '60px 100px',
-            transform: `scale(${scale}) rotate(${bounce}deg)`,
-            boxShadow: `${20 + kickStrength * 30}px ${20 + kickStrength * 30}px 0px rgba(0,0,0,0.5)`,
+            opacity,
+            transform: `scale(${scale})`,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: 40,
-            transform: `translateY(-50px) rotate(-5deg)`,
-            filter: `brightness(${1 + kickStrength * 0.5})`,
+            gap: 20,
           }}>          
             <div style={{
-              ...AmecomiTextStyle,
-              fontSize: 100,
+              fontFamily: LuxuryLatinFont,
+              fontSize: 80,
               color: '#FFD700',
-              WebkitTextStroke: '6px black',
-              lineHeight: 1.2,
+              letterSpacing: '0.2em',
+              // Dark shadow for Gold text
+              filter: `drop-shadow(0 0 10px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(0,0,0,0.6))`,
             }}>
               RANKING
             </div>
 
-            <h2 style={{
-              ...AmecomiTextStyle,
-              fontSize: 120,
+            <div style={{
+              height: '4px',
+              width: '200px',
+              background: 'linear-gradient(90deg, transparent, #FFD700, transparent)',
+              margin: '10px 0',
+            }} />
+
+            <div style={{
+              fontFamily: LuxuryJapaneseFont,
+              fontSize: 140,
+              fontWeight: 900,
               color: 'white',
-              WebkitTextStroke: '8px black',
               margin: 0,
+              background: 'linear-gradient(to bottom, #ffffff 50%, #cccccc 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              // Stronger dark shadow for White text
+              filter: `drop-shadow(0 0 15px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 40px rgba(0, 0, 0, 0.5))`,
             }}>
               結果発表！
-            </h2>
+            </div>
           </div>
         </AbsoluteFill>
       </BeatShake>

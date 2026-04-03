@@ -1,5 +1,6 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate, Img, staticFile } from 'remotion';
-import { SpeedLines, AmecomiTextStyle } from './AmecomiElements';
+import { SpeedLines } from './AmecomiElements';
+import { LuxuryJapaneseFont } from './fonts';
 import { useBeat, BeatShake, GlitchOverlay } from './BeatSync';
 
 
@@ -87,18 +88,18 @@ export const RankingAnnouncement: React.FC<{ rank: number, color: string, name?:
           />
         </div>
 
-        {/* Profile Frame */}
+        {/* Profile Frame (Smaller to show background) */}
         <div style={{
           position: 'absolute',
-          top: '55%',
+          top: '50%',
           left: '50%',
-          transform: `translate(-50%, -50%) scale(${textScale})`,
-          width: 750,
+          transform: `translate(-50%, -50%) scale(${textScale * 0.7})`, 
+          width: 750, 
           height: 750,
           borderRadius: "50%",
-          border: `15px solid black`,
+          border: `12px solid ${color}`,
           backgroundColor: '#111',
-          boxShadow: `0 0 ${40 + kickStrength * 60}px ${color}, 15px 15px 0px rgba(0,0,0,0.5)`,
+          boxShadow: `0 0 ${30 + kickStrength * 40}px ${color}`,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -123,31 +124,40 @@ export const RankingAnnouncement: React.FC<{ rank: number, color: string, name?:
           )}
         </div>
 
-        {/* Name Label (Vertical, Top-Left) */}
+        {/* Name Label (Premium Horizontal Plate) */}
         <div style={{
           position: 'absolute',
-          top: 100,
-          left: 80,
-          transform: `scale(${textScale}) rotate(-5deg)`,
-          backgroundColor: color,
-          padding: '60px 20px',
-          border: '12px solid black',
-          boxShadow: '15px 15px 0px rgba(0,0,0,0.5)',
+          bottom: 450,
+          left: '50%',
+          transform: `translateX(-50%) scale(${textScale})`,
+          width: '90%',
+          display: 'flex',
+          justifyContent: 'center',
           zIndex: 20,
         }}>
-          <span style={{
-            ...AmecomiTextStyle,
-            writingMode: 'vertical-rl',
-            textOrientation: 'upright',
-            fontSize: 60,
-            letterSpacing: '0.1em',
-            color: 'black',
-            WebkitTextStroke: '0px',
-            textShadow: 'none',
-            textTransform: 'uppercase',
+          <div style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(10px)',
+            padding: '20px 60px',
+            border: `3px solid ${color}`,
+            borderRadius: '10px',
+            boxShadow: `0 0 20px ${color}44`,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minWidth: 400,
           }}>
-            {name}
-          </span>
+            <span style={{
+              fontFamily: LuxuryJapaneseFont,
+              fontSize: 70,
+              fontWeight: 700,
+              color: 'white',
+              letterSpacing: '0.05em',
+              textShadow: `0 0 10px ${color}`,
+            }}>
+              {name}
+            </span>
+          </div>
         </div>
       </BeatShake>
     </AbsoluteFill>

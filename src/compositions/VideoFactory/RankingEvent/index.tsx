@@ -46,7 +46,7 @@ export const ENDING_SEC = 4;    // 8 beats
 export const TRANSITION_FRAMES = 12;  // Speedy slash transition
 export const LAST_TRANSITION_FRAMES = 15;
 
-const SLASH = slashTransition({ color: '#FF3131' });
+const SLASH = slashTransition({ color: '#f85718' });
 const TIMING = linearTiming({ durationInFrames: TRANSITION_FRAMES });
 const LAST_TIMING = linearTiming({ durationInFrames: LAST_TRANSITION_FRAMES });
 
@@ -60,9 +60,9 @@ export const RankingEvent = () => {
 
   const frame = useCurrentFrame();
 
-  // Unity Red Theme for the entire video
-  const frameColor = '#FF3131';
-  const frameGlow = 'rgba(255, 49, 49, 0.8)';
+  // Unity Custom Theme (#f85718) for the entire video
+  const frameColor = '#f85718'; 
+  const frameGlow = 'rgba(248, 87, 24, 0.6)';
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000000' }}>
@@ -168,7 +168,7 @@ export const RankingEvent = () => {
       <AbsoluteFill
         style={{
           pointerEvents: 'none',
-          border: `15px solid ${frameColor}`,
+          border: `10px solid ${frameColor}`,
           boxShadow: `inset 0 0 50px ${frameGlow}, 0 0 50px ${frameGlow}`,
           zIndex: 9999,
           transition: 'border-color 0.3s ease, box-shadow 0.3s ease',

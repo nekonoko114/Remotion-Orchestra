@@ -70,15 +70,29 @@ export const Opening: React.FC = () => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            filter: 'hue-rotate(-120deg) brightness(1.1) contrast(1.1) saturate(1.5)',
-            transform: 'scale(1.2) rotate(180deg)',
-            mixBlendMode: 'screen',
+            transform: 'scale(2.5) rotate(90deg)', 
           }}
           startFrom={0}
           playbackRate={1}
           muted
           loop
         />
+        {/* Deep Matte Overlay matching Top1Reveal */}
+        <AbsoluteFill style={{ backgroundColor: 'rgba(0,10,5,0.4)' }} />
+        
+        {/* Gold Tint Overlay matching AdjustmentLayer (rank 1) */}
+        <AbsoluteFill style={{
+          background: 'linear-gradient(to bottom, #FFD70000, #FFD7001a)',
+          mixBlendMode: 'overlay',
+        }} />
+
+        {/* Gold Center Glow matching AdjustmentLayer (rank 1) */}
+        <AbsoluteFill style={{
+          background: 'radial-gradient(circle, #FFD70033 0%, transparent 60%)',
+          mixBlendMode: 'screen',
+          filter: 'blur(40px)',
+        }} />
+
         <AbsoluteFill
           style={{
             background: 'radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.4) 100%)', 
@@ -98,22 +112,22 @@ export const Opening: React.FC = () => {
           }}
         >
           <div style={getEntryStyle(spr1, 'top')}>
-            <NeonGlowText text="J.O.L" fontSize={230} color="#FFFFFF" glowColor="#FF3131" />
+            <NeonGlowText text="J.O.L" fontSize={230} color="#FFFFFF" glowColor="#f85718" />
           </div>
           <div style={{ ...getEntryStyle(spr4, 'bottom'), transform: `${getEntryStyle(spr4, 'bottom').transform} scale(0.8)` }}>
-              <NeonGlowText text="団結No.1" fontSize={160} color="#FFFFFF" glowColor="rgba(255, 50, 50, 0.6)" />
-            </div>
+            <NeonGlowText text="団結No.1" fontSize={160} color="#FFFFFF" glowColor="rgba(248, 87, 24, 0.6)" />
+          </div>
           
           <div style={getEntryStyle(spr2, 'bottom')}>
-            <NeonGlowText text="イベント" fontSize={120} color="#FFFFFF" glowColor="#FF8C00" />
+            <NeonGlowText text="イベント" fontSize={120} color="#FFFFFF" glowColor="#f85718" />
           </div>
           <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
           <div style={{ ...getEntryStyle(spr3, 'top'), display: 'flex', alignItems: 'center' }}>
-            <NeonGlowText text="ランキング" fontSize={160} color="#FFFFFF" glowColor="#FF4500" />
+            <NeonGlowText text="ランキング" fontSize={160} color="#FFFFFF" glowColor="#f85718" />
           </div>
             <div style={getEntryStyle(spr5, 'top')}>
-              <NeonGlowText text="結果発表" fontSize={180} color="#FFFFFF" glowColor="#FF0000" />
+              <NeonGlowText text="結果発表" fontSize={180} color="#FFFFFF" glowColor="#f85718" />
             </div>
           </div>
         </div>

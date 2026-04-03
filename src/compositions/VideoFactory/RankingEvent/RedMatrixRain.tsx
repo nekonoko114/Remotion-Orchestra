@@ -25,7 +25,7 @@ export const RedMatrixRain: React.FC<{ opacity?: number, pulse?: number }> = ({ 
         ctx.fillRect(0, 0, width, height);
         
         // Intense Crimson/Red color for Matrix rain
-        ctx.fillStyle = '#FF3131';
+        ctx.fillStyle = '#f85718';
         ctx.font = '24px monospace';
         ctx.shadowBlur = 10 + (pulse * 20);
         ctx.shadowColor = '#FF0000';

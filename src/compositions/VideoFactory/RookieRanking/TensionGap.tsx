@@ -1,6 +1,5 @@
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
-import { HalftoneBackground, SpeedLines } from './AmecomiElements';
 import { GlitchOverlay, BeatShake } from './BeatSync';
 
 export const TensionGap: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
@@ -9,7 +8,7 @@ export const TensionGap: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
       <GlitchOverlay bpm={bpm} />
       
       <BeatShake bpm={bpm}>
-        <SpeedLines />
+        {/* Removed SpeedLines to keep it premium */}
       </BeatShake>
     </AbsoluteFill>
   );

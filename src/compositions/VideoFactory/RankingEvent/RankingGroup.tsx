@@ -13,9 +13,9 @@ import type { Liver } from '../types';
 
 
 // Unity Colors (Unified Design)
-const UNITY_GREEN = '#FF3131';
+const UNITY_THEME = '#f85718';
 const UNITY_LIME  = '#FFD700';
-const UNITY_GLOW  = 'rgba(255, 49, 49, 0.3)';
+const UNITY_GLOW  = 'rgba(248, 87, 24, 0.4)';
 
 type Props = {
   title: string;
@@ -118,8 +118,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
             fontWeight: '900',
             textAlign: 'center',
             margin: 0,
-            color: UNITY_GREEN,
-            textShadow: `0 0 20px ${UNITY_GREEN}, 0 0 40px ${UNITY_LIME}`,
+            color: UNITY_THEME,
+            textShadow: `0 0 20px ${UNITY_THEME}, 0 0 40px ${UNITY_LIME}`,
           }}
         >
           {title}
@@ -159,7 +159,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                     alignItems: 'center',
                     gap: 20,
                     borderRadius: 12,
-                    border: `3px solid ${UNITY_GREEN}`,
+                    border: `3px solid ${UNITY_THEME}`,
                     boxShadow: `0 0 20px ${UNITY_GLOW}, inset 0 0 15px rgba(0,0,0,0.8)`,
                     backgroundColor: 'rgba(0,15,0,0.85)',
                     transform: `translateX(${slideX}px) scale(${bounceScale})`,
@@ -288,8 +288,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                       width: is2Group ? 550 : 400,
                       height: is2Group ? 550 : 400,
                       borderRadius: '50%',
-                      border: `8px solid ${UNITY_GREEN}`,
-                      boxShadow: `0 0 40px ${UNITY_GREEN}, inset 0 0 20px ${UNITY_GREEN}`,
+                      border: `8px solid ${UNITY_THEME}`,
+                      boxShadow: `0 0 40px ${UNITY_THEME}, inset 0 0 20px ${UNITY_THEME}`,
                       overflow: 'hidden',
                       flexShrink: 0,
                       backgroundColor: 'rgba(0,0,0,0.5)',
@@ -321,9 +321,9 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                       style={{ 
                         width: is2Group ? 400 : 300, 
                         height: 5, 
-                        background: `linear-gradient(90deg, transparent 0%, ${UNITY_GREEN} 50%, transparent 100%)`,
+                        background: `linear-gradient(90deg, transparent 0%, ${UNITY_THEME} 50%, transparent 100%)`,
                         marginBottom: 12,
-                        boxShadow: `0 0 15px ${UNITY_GREEN}`,
+                        boxShadow: `0 0 15px ${UNITY_THEME}`,
                       }} 
                     />
                     <span
@@ -331,7 +331,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                         fontSize: nameFontSize,
                         fontWeight: 800,
                         color: '#FFF',
-                        textShadow: `0 0 15px ${UNITY_GREEN}, 3px 3px 10px #000`,
+                        textShadow: `0 0 15px ${UNITY_THEME}, 3px 3px 10px #000`,
                         whiteSpace: 'nowrap',
                         textAlign: 'center',
                       }}

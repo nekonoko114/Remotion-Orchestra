@@ -52,15 +52,15 @@ export const Ending: React.FC = () => {
             height: '100%',
             objectFit: 'cover',
             mixBlendMode: 'screen',
-            filter: 'contrast(1.5) brightness(0.8)',
+            filter: 'contrast(1.5) brightness(0.8) hue-rotate(18deg)',
           }}
           muted
         />
       </AbsoluteFill>
 
       <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', opacity }}>
-        <div style={{ transform: `scale(${scale * logoSpring})`, width: 1000, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Img src={staticFile('jol-logo-800.png')} style={{ width: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 60px rgba(255, 49, 49, 0.4))' }} />
+        <div style={{ transform: `scale(${scale * logoSpring})`, width: 650, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Img src={staticFile('jol-logo-800.png')} style={{ width: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 40px rgba(248, 87, 24, 0.6))' }} />
         </div>
       </AbsoluteFill>
 

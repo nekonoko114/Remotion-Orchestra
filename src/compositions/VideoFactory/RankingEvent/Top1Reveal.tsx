@@ -82,7 +82,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, backgroundSrc 
     if (r === 1) return { primary: '#FFD700', secondary: '#FFFFFF', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
     if (r === 2) return { primary: '#C0C0C0', secondary: '#FFFFFF', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
     if (r === 3) return { primary: '#B87333', secondary: '#FFFFFF', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
-    return { primary: '#FF3131', secondary: '#FFFFFF', glow: 'rgba(255, 49, 49, 0.5)' };
+    return { primary: '#f85718', secondary: '#FFFFFF', glow: 'rgba(248, 87, 24, 0.5)' };
   };
 
   const { primary, secondary, glow } = getRankColors(rank);

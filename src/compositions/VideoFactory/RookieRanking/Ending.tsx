@@ -1,6 +1,5 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate, Img, staticFile } from 'remotion';
-import { HalftoneBackground, SpeedLines } from './AmecomiElements';
 import { useBeat, BeatShake, GlitchOverlay } from './BeatSync';
 import { LuxuryFontStack } from './fonts';
 
@@ -26,9 +25,6 @@ export const Ending: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
       <GlitchOverlay bpm={bpm} />
       
       <BeatShake bpm={bpm}>
-        <HalftoneBackground color="rgba(255, 215, 0, 0.2)" />
-        <SpeedLines />
-
         {/* Gold Flare / Glow */}
         <AbsoluteFill style={{
           background: 'radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%)',
@@ -36,24 +32,23 @@ export const Ending: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
           opacity: 0.5 + kickStrength * 0.5
         }} />
 
-        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <AbsoluteFill style={{ position: 'absolute', top: 1000, left: "53%", transform: "translateX(-50%)" }}>
           {/* Centered JOL Logo */}
           <div style={{
-            width: 800,
-            height: 400,
+            width: 1000, 
             transform: `scale(${textScale})`,
             opacity,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            filter: `drop-shadow(0 0 ${20 + kickStrength * 40}px rgba(255,215,0,0.6))`,
+            filter: `drop-shadow(0 0 ${25 + kickStrength * 50}px rgba(255,215,0,0.4))`,
           }}>
             <Img 
-              src={staticFile("jol-logo-800.png")} 
+              src={staticFile("video-factory/images/logo/logo.png")} 
               style={{ 
-                width: '100%', 
-                height: '100%', 
-                objectFit: 'contain' 
+                width: '40%', 
+                objectFit: 'contain' ,
+                borderRadius: '10%',
               }} 
             />
           </div>

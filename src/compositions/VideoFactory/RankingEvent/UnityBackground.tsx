@@ -39,8 +39,8 @@ export const UnityBackground: React.FC = () => {
                 left: '50%',
                 width: 2,
                 height: 1200,
-                backgroundColor: '#FF3131',
-                boxShadow: '0 0 20px #FF3131, 0 0 40px #FFD700',
+                backgroundColor: '#f85718',
+                boxShadow: '0 0 20px #f85718, 0 0 40px #FFD700',
                 transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-200px)`,
                 opacity,
               }}
@@ -52,7 +52,7 @@ export const UnityBackground: React.FC = () => {
       {/* 4. Center Core Glow */}
       <AbsoluteFill
         style={{
-          background: 'radial-gradient(circle at center, rgba(255, 49, 49, 0.3) 0%, transparent 40%)',
+          background: 'radial-gradient(circle at center, rgba(248, 87, 24, 0.3) 0%, transparent 40%)',
           mixBlendMode: 'screen',
           transform: `scale(${1 + pulse * 0.1})`,
         }}

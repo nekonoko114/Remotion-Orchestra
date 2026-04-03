@@ -39,9 +39,9 @@ export const CyberTunnel: React.FC = () => {
                 position: 'absolute',
                 width: 400,
                 height: 400,
-                border: '4px solid #FF3131',
+                border: '4px solid #f85718',
                 borderRadius: '20px', // Soft square / HUD feel
-                boxShadow: `0 0 30px #FF3131, inset 0 0 30px #FF3131`,
+                boxShadow: `0 0 30px #f85718, inset 0 0 30px #f85718`,
                 transform: `scale(${scale}) rotate(${rotate}deg)`,
                 opacity: opacity * (0.8 + pulse * 0.2),
                 filter: `blur(${interpolate(scale, [10, 30], [0, 10])}px)`,
@@ -72,10 +72,10 @@ export const CyberTunnel: React.FC = () => {
                 left: '50%',
                 width: 2,
                 height: 1000,
-                backgroundColor: '#FF3131',
+                backgroundColor: '#f85718',
                 opacity: linePulse * (0.3 + pulse * 0.7),
                 transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-200px)`,
-                boxShadow: '0 0 15px #FF3131',
+                boxShadow: '0 0 15px #f85718',
               }}
             />
           );
@@ -85,7 +85,7 @@ export const CyberTunnel: React.FC = () => {
       {/* 4. Center Core Light */}
       <AbsoluteFill
         style={{
-          background: 'radial-gradient(circle at center, rgba(255, 49, 49, 0.5) 0%, transparent 30%)',
+          background: 'radial-gradient(circle at center, rgba(248, 87, 24, 0.5) 0%, transparent 30%)',
           mixBlendMode: 'screen',
           transform: `scale(${1 + pulse * 0.3})`,
         }}
