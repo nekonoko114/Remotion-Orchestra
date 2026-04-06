@@ -8,6 +8,7 @@ import {
   useVideoConfig,
   Easing,
   OffthreadVideo,
+  Audio,
 } from 'remotion';
 import { Confetti } from '../../../components/effects/Confetti';
 import { ParticleBurst } from '../../../components/effects/ParticleBurst';
@@ -20,6 +21,10 @@ import { TextShine } from '../TextShine';
 import { AdjustmentLayer } from '../AdjustmentLayer';
 import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
+
+const VOICE_FIRST = staticFile('assets/audio/voice/rankVoicefirst.wav');
+const VOICE_SECOND = staticFile('assets/audio/voice/rankVoiceSecond.wav');
+const VOICE_THIRD = staticFile('assets/audio/voice/rankVoiceThrad.wav');
 
 type Props = {
   rank: number;
@@ -210,6 +215,9 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
 
   return (
     <AbsoluteFill>
+      {rank === 1 && <Audio src={VOICE_FIRST} />}
+      {rank === 2 && <Audio src={VOICE_SECOND} />}
+      {rank === 3 && <Audio src={VOICE_THIRD} />}
       <AbsoluteFill>
         <OffthreadVideo
           src={staticFile(top3Video)}

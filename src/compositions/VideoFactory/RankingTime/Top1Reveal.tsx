@@ -10,6 +10,7 @@ import {
   useVideoConfig,
   OffthreadVideo,
   Easing,
+  Audio,
 } from 'remotion';
 import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { TimeBackground } from '../TimeBackground';
@@ -22,6 +23,10 @@ import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
 
 const BPM = 160;
+
+const VOICE_FIRST = staticFile('assets/audio/voice/rankVoicefirst.wav');
+const VOICE_SECOND = staticFile('assets/audio/voice/rankVoiceSecond.wav');
+const VOICE_THIRD = staticFile('assets/audio/voice/rankVoiceThrad.wav');
 
 
 const MAGIC_CIRCLES = [
@@ -266,6 +271,9 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+      {rank === 1 && <Audio src={VOICE_FIRST} />}
+      {rank === 2 && <Audio src={VOICE_SECOND} />}
+      {rank === 3 && <Audio src={VOICE_THIRD} />}
       <TimeBackground
         overlayColor={primary + '33'}
         hideBackground
