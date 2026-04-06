@@ -112,22 +112,20 @@ export const Opening: React.FC = () => {
           }}
         >
           <div style={getEntryStyle(spr1, 'top')}>
-            <NeonGlowText text="J.O.L" fontSize={230} color="#FFFFFF" glowColor="#f85718" />
+            <NeonGlowText text="J.O.L" fontSize={180} color="#FFFFFF" glowColor="#f85718" />
           </div>
           <div style={{ ...getEntryStyle(spr4, 'bottom'), transform: `${getEntryStyle(spr4, 'bottom').transform} scale(0.8)` }}>
-            <NeonGlowText text="団結No.1" fontSize={160} color="#FFFFFF" glowColor="rgba(248, 87, 24, 0.6)" />
-          </div>
-          
-          <div style={getEntryStyle(spr2, 'bottom')}>
-            <NeonGlowText text="イベント" fontSize={120} color="#FFFFFF" glowColor="#f85718" />
+            <NeonGlowText text="⭐団結力⭐" fontSize={200} color="#FFFFFF" glowColor="rgba(248, 87, 24, 0.6)" />
+            <NeonGlowText text="NO.1" fontSize={200} color="#FFFFFF" glowColor="rgba(248, 87, 24, 0.6)" />
+            <NeonGlowText text="を勝ち取れ" fontSize={200} color="#FFFFFF" glowColor="rgba(248, 87, 24, 0.6)" />
           </div>
           <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
           <div style={{ ...getEntryStyle(spr3, 'top'), display: 'flex', alignItems: 'center' }}>
-            <NeonGlowText text="ランキング" fontSize={160} color="#FFFFFF" glowColor="#f85718" />
+            <NeonGlowText text="ランキング" fontSize={140} color="#FFFFFF" glowColor="#f85718" />
           </div>
             <div style={getEntryStyle(spr5, 'top')}>
-              <NeonGlowText text="結果発表" fontSize={180} color="#FFFFFF" glowColor="#f85718" />
+              <NeonGlowText text="結果発表" fontSize={140} color="#FFFFFF" glowColor="#f85718" />
             </div>
           </div>
         </div>

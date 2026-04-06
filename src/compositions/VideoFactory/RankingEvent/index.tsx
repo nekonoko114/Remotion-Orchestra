@@ -20,7 +20,7 @@ const mkLiver = (id: string, nickname: string, image_url: string, rank: number):
 
 const RANKING_DATA: Liver[] = [
   mkLiver('mizuki2525214',       '💋一条美月-Mizuki-💋',        'assets/avatars/mizuki2525214.jpg',       1),
-  mkLiver('donbeikun9999',       '☠️やらかしタロー☠️',          'assets/avatars/donbeikun9999.jpg',       2),
+  mkLiver('donbeikun9999',       '☠️やらかしタロー☠️',          'assets/avatars/donbeikun9999.png',       2),
   mkLiver('t.o.p_u_jin_',        '🔆≒ユージン≒🔆',              'assets/avatars/t.o.p_u_jin_.jpg',        3),
   mkLiver('2161646824',          'まゆみ',                       'assets/avatars/2161646824.jpg',          4),
   mkLiver('l5332541',            '🌸さくら🌸',                  'assets/avatars/l5332541.jpg',            5),

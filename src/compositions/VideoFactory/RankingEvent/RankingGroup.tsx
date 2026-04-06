@@ -44,12 +44,12 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
   const is2Group  = livers.length === 2;  // 7-4位 (2名)
 
   // パラメータをグループごとに統一
-  const gap          = isCompact ? 24  : 0; // Stack based on height
-  const rankFontSize = isCompact ? 80  : 170;
-  const nameFontSize = isCompact ? 40  : 80;
+  const gap          = isCompact ? 18  : 0; // Stack based on height
+  const rankFontSize = isCompact ? 90  : 170;
+  const nameFontSize = isCompact ? 48  : 80;
   const avatarSize   = 500; // Manually updated by user
-  const verticalPad  = isCompact ? 16  : 0;
-  const marginTop    = isCompact ? 120 : 200;
+  const verticalPad  = isCompact ? 20  : 0;
+  const marginTop    = isCompact ? 140 : 200;
 
   const getEnergyOpacity = (f: number) => {
     // Return 1 during the specified backdrop particle range (545 - 1330)
@@ -119,7 +119,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
             textAlign: 'center',
             margin: 0,
             color: UNITY_THEME,
-            textShadow: `0 0 20px ${UNITY_THEME}, 0 0 40px ${UNITY_LIME}`,
+            textShadow: `0 0 10px ${UNITY_THEME}, 0 0 30px ${UNITY_THEME}, 0 0 60px ${UNITY_LIME}`,
           }}
         >
           {title}
@@ -138,7 +138,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
           {livers.map((liver: Liver, index: number) => {
             const staggerFrames = isCompact ? 12 : 18;
             const liverEntrance = spring({
-              frame: frame - index * staggerFrames - 5,
+              frame: frame - (livers.length - 1 - index) * staggerFrames - 5,
               fps,
               config: { damping: 10, stiffness: 350 },
             });
@@ -159,9 +159,9 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                     alignItems: 'center',
                     gap: 20,
                     borderRadius: 12,
-                    border: `3px solid ${UNITY_THEME}`,
-                    boxShadow: `0 0 20px ${UNITY_GLOW}, inset 0 0 15px rgba(0,0,0,0.8)`,
-                    backgroundColor: 'rgba(0,15,0,0.85)',
+                    border: `2px solid ${UNITY_THEME}`,
+                    boxShadow: `0 8px 32px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.5)`,
+                    backgroundColor: 'rgba(0,10,2,0.92)',
                     transform: `translateX(${slideX}px) scale(${bounceScale})`,
                     opacity: rowOpacity,
                     padding: `${verticalPad}px 30px`,
@@ -171,16 +171,14 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                   {/* アイコン枠 */}
                   <div
                     style={{
-                      width: avatarSize,
-                      height: avatarSize,
-                      borderRadius: 10,
-                      border: `2px solid ${UNITY_LIME}`,
-                      boxShadow: `0 0 10px ${UNITY_LIME}, inset 0 0 4px rgba(0,0,0,0.5)`,
+                      width: 220,
+                      height: 220,
+                      borderRadius: 9999,
+                      border: `3px solid ${UNITY_LIME}`,
+                      boxShadow: `0 0 15px rgba(255, 215, 0, 0.4)`,
                       flexShrink: 0,
                       overflow: 'hidden',
-                      backgroundColor: 'rgba(0,30,0,0.4)',
-                      width: 250,
-                      height: 250,
+                      backgroundColor: 'rgba(0,0,0,0.5)',
                     }}
                   >
                     <Img

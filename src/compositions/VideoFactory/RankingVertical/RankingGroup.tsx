@@ -9,7 +9,6 @@ import {
   useVideoConfig,
 } from 'remotion';
 import type { Liver } from '../types';
-import { GlitchEffect } from '../../../components/effects/GlitchEffect';
 
 type Props = {
   title: string;
@@ -17,6 +16,11 @@ type Props = {
   useGlitch?: boolean;
   glitchIntensity?: number;
 };
+
+// Unity Colors (Unified Design)
+const UNITY_THEME = '#f85718';
+const UNITY_LIME  = '#FFD700';
+const UNITY_GLOW  = 'rgba(248, 87, 24, 0.4)';
 
 const getBackgroundPosition = (rank: number) => {
   if (rank === 10) return 'center 20%';
@@ -28,16 +32,9 @@ const getBackgroundPosition = (rank: number) => {
   return 'center';
 };
 
-const getBackgroundTransform = (rank: number) => {
-  if (rank === 5) return 'scale(1.2) translateX(10%)';
-  return 'none';
-};
-
 export const RankingGroup: React.FC<Props> = ({
   title,
   livers,
-  useGlitch = true,
-  glitchIntensity = 10,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -51,20 +48,40 @@ export const RankingGroup: React.FC<Props> = ({
   const opacity = interpolate(entrance, [0, 1], [0, 1]);
   const scale = interpolate(entrance, [0, 1], [0.95, 1]);
 
+  const isCompact = livers.length >= 4; // 15-11位 (5名)
   const is3Group = livers.length === 3;
   const is2Group = livers.length === 2;
-  const gap = is2Group ? 80 : is3Group ? 120 : 80;
-  const rankFontSize = is2Group ? 180 : is3Group ? 140 : 120;
-  const nameFontSize = is2Group ? 80 : 100;
- 
+  const gap = isCompact ? 18 : is2Group ? 80 : is3Group ? 90 : 80;
+  const rankFontSize = isCompact ? 90 : is2Group ? 160 : 130;
+  const nameFontSize = isCompact ? 48 : is2Group ? 85 : 75;
+  const verticalPad = isCompact ? 20 : 0;
+  const marginTop = isCompact ? 140 : 200;
+
   return (
     <AbsoluteFill>
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%)',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* ===== 背景 (CLEAN DESIGN) ===== */}
+      <AbsoluteFill style={{ backgroundColor: '#010a01' }}>
+        <Img
+          src={staticFile(
+            isCompact || is3Group
+              ? 'assets/backgrounds/dark_temple_bg_top10.png'
+              : 'assets/backgrounds/dark_temple_bg_top6.png',
+          )}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.5,
+            filter: 'brightness(1.1) contrast(1.2)', 
+          }}
+        />
+        <AbsoluteFill
+          style={{
+            background: `radial-gradient(circle, ${UNITY_GLOW} 0%, rgba(0,10,0,0.9) 100%)`,
+            pointerEvents: 'none',
+          }}
+        />
+      </AbsoluteFill>
 
       <AbsoluteFill
         style={{
@@ -75,16 +92,16 @@ export const RankingGroup: React.FC<Props> = ({
         }}
       >
         <h1
-          className="metallic-gold"
           style={{
             position: 'absolute',
             top: 100, 
-            fontSize: 120,
+            fontSize: isCompact ? 80 : 120,
             fontFamily: "'Segoe UI', Roboto, sans-serif",
             fontWeight: '900',
             textAlign: 'center',
             margin: 0,
-            textShadow: '0 5px 15px rgba(255,0,0,0.8)',
+            color: UNITY_THEME,
+            textShadow: `0 0 10px ${UNITY_THEME}, 0 0 30px ${UNITY_THEME}, 0 0 60px ${UNITY_LIME}`,
           }}
         >
           {title}
@@ -95,115 +112,194 @@ export const RankingGroup: React.FC<Props> = ({
             display: 'flex',
             flexDirection: 'column',
             gap,
-            width: '94%',
-            marginTop: 200,
+            width: isCompact ? '90%' : '94%',
+            marginTop,
           }}
         >
           {livers.map((liver, index) => {
+            const staggerFrames = isCompact ? 12 : 18;
             const liverEntrance = spring({
-              frame: frame - index * 5 - 10,
+              frame: frame - index * staggerFrames - 10,
               fps,
               config: { damping: 12, stiffness: 120 },
             });
 
+            const slideY = interpolate(liverEntrance, [0, 1], [-1000, 0]);
+            const rowOpacity = interpolate(liverEntrance, [0, 0.4], [0, 1]);
+            const bounceScale = interpolate(liverEntrance, [0, 1], [0.8, 1]);
+
+            const avatarSrc = liver.saved_to
+              ? staticFile(liver.saved_to)
+              : liver.image_url.startsWith('http')
+                ? liver.image_url
+                : staticFile(liver.image_url);
+
+            if (isCompact) {
+              return (
+                <div
+                  key={liver.rank}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 30,
+                    borderRadius: 12,
+                    border: `2px solid ${UNITY_THEME}`,
+                    boxShadow: `0 8px 32px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.5)`,
+                    backgroundColor: 'rgba(0,10,2,0.92)',
+                    transform: `translateY(${slideY}px) scale(${bounceScale})`,
+                    opacity: rowOpacity,
+                    padding: `${verticalPad}px 30px`,
+                    position: 'relative',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 220,
+                      height: 220,
+                      borderRadius: 9999,
+                      border: `3px solid ${UNITY_LIME}`,
+                      boxShadow: `0 0 15px rgba(255, 215, 0, 0.4)`,
+                      flexShrink: 0,
+                      overflow: 'hidden',
+                      backgroundColor: 'rgba(0,0,0,0.5)',
+                    }}
+                  >
+                    <Img
+                      src={avatarSrc}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center top',
+                      }}
+                    />
+                  </div>
+
+                  <div 
+                    style={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      justifyContent: 'center',
+                      alignItems: 'flex-start', 
+                      gap: 4, 
+                      flex: 1, 
+                      whiteSpace: 'nowrap' 
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: rankFontSize,
+                        fontWeight: '900',
+                        color: UNITY_LIME,
+                        textShadow: `0 0 10px ${UNITY_LIME}`,
+                        lineHeight: 1.1,
+                      }}
+                    >
+                      {liver.rank}位
+                    </span>
+                    <span
+                      style={{
+                        fontSize: nameFontSize,
+                        fontWeight: '800',
+                        color: '#FFF',
+                        textShadow: `0 0 10px rgba(0,0,0,0.8)`,
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {liver.nickname}
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+
+            // is2Group / is3Group Layout (Image format)
             return (
               <div
                 key={liver.rank}
                 style={{
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
-                  borderRadius: 40,
-                  border: '4px solid #8B0000',
-                  boxShadow: '0 0 20px 10px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.8)',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                  transform: `translateY(${interpolate(liverEntrance, [0, 1], [-1000, 0])}px)`,
-                  opacity: interpolate(liverEntrance, [0, 0.4], [0, 1]),
+                  transform: `translateY(${slideY}px) scale(${bounceScale})`,
+                  opacity: rowOpacity,
                   position: 'relative',
-                  overflow: 'hidden',
-                  padding: is2Group ? '250px 50px' : is3Group ? '200px 20px' : '150px 20px',
+                  width: '100%',
+                  gap: 15,
                 }}
               >
-                <AbsoluteFill style={{ opacity: 0.9 }}>
-                  {useGlitch ? (
-                    <GlitchEffect intensity={glitchIntensity}>
-                      <Img
-                        src={
-                          liver.saved_to
-                            ? staticFile(liver.saved_to)
-                            : liver.image_url.startsWith('http')
-                              ? liver.image_url
-                              : staticFile(liver.image_url)
-                        }
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          objectPosition: getBackgroundPosition(liver.rank),
-                          transform: `${getBackgroundTransform(liver.rank)} ${is2Group ? 'scale(1.15)' : ''}`,
-                        }}
-                      />
-                    </GlitchEffect>
-                  ) : (
-                    <Img
-                      src={
-                        liver.saved_to
-                          ? staticFile(liver.saved_to)
-                          : liver.image_url.startsWith('http')
-                            ? liver.image_url
-                            : staticFile(liver.image_url)
-                      }
+                <div style={{ display: 'flex', alignItems: 'center', position: 'relative', width: '100%', justifyContent: 'center' }}>
+                    {/* Rank Text (Left) */}
+                    <div
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: getBackgroundPosition(liver.rank),
-                        transform: `${getBackgroundTransform(liver.rank)} ${is2Group ? 'scale(1.15)' : ''}`,
+                        position: 'absolute',
+                        left: '0px',
+                        width: '24%',
+                        fontSize: rankFontSize,
+                        fontWeight: 900,
+                        color: UNITY_LIME,
+                        textShadow: `0 0 30px ${UNITY_LIME}, 0 0 10px #000`,
+                        fontStyle: 'italic',
+                        textAlign: 'right',
+                        paddingRight: 40,
+                        lineHeight: 1,
+                        whiteSpace: 'nowrap',
                       }}
-                    />
-                  )}
-                </AbsoluteFill>
+                    >
+                      {liver.rank}
+                      <span style={{ fontSize: rankFontSize * 0.4, fontStyle: 'normal', marginLeft: 2 }}>
+                        位
+                      </span>
+                    </div>
 
-                <AbsoluteFill style={{ backgroundColor: 'rgba(0,0,0,0.2)' }} />
+                    {/* Avatar Circle (Center) */}
+                    <div
+                        style={{
+                          width: is2Group ? 550 : 380,
+                          height: is2Group ? 550 : 380,
+                          borderRadius: '50%',
+                          border: `8px solid ${UNITY_THEME}`,
+                          boxShadow: `0 0 50px ${UNITY_THEME}, inset 0 0 25px ${UNITY_THEME}`,
+                          overflow: 'hidden',
+                          flexShrink: 0,
+                          backgroundColor: 'rgba(0,0,0,0.5)',
+                          position: 'relative',
+                        }}
+                    >
+                        <Img
+                          src={avatarSrc}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: getBackgroundPosition(liver.rank),
+                          }}
+                        />
+                    </div>
+                </div>
 
-                {/* --- Bottom Center Align --- */}
-                <AbsoluteFill
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'flex-end',
-                    justifyContent: 'center',
-                    paddingBottom: 30,
-                    zIndex: 5,
-                    gap: 30,
-                  }}
+                {/* Nickname (Below) */}
+                <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      pointerEvents: 'none',
+                    }}
                 >
-                  <div
-                    style={{
-                      fontSize: rankFontSize * 1.3,
-                      fontWeight: 900,
-                      color: '#FFD700',
-                      textAlign: 'center',
-                      lineHeight: 1,
-                      textShadow: '0 2px 10px rgba(255,0,0,0.8)',
-                    }}
-                  >
-                    {liver.rank}
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: liver.nickname.length > 8 ? nameFontSize * 0.8 : nameFontSize,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      lineHeight: 1.1,
-                      textAlign: 'center',
-                      textShadow: '0 4px 15px rgba(0,0,0,0.9)',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {liver.nickname}
-                  </div>
-                </AbsoluteFill>
+                    <span
+                      style={{
+                        fontSize: nameFontSize,
+                        fontWeight: 800,
+                        color: '#FFF',
+                        textShadow: `0 0 20px ${UNITY_THEME}, 3px 3px 10px #000`,
+                        whiteSpace: 'nowrap',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {liver.nickname}
+                    </span>
+                </div>
               </div>
             );
           })}

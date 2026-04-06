@@ -64,9 +64,9 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
   const { pulse } = useBeatValue(bpm);
   const beatScale = 1 + pulse * 0.015;
 
-  // Background video timing for Top 10-4
+  // Background video timing for Top 15-4
   const bgStart = OPENING_DURATION;
-  const bgEnd = OPENING_DURATION + GROUP_DURATION * 3;
+  const bgEnd = OPENING_DURATION + GROUP_DURATION * 4;
   const bgOpacity = interpolate(
     frame,
     [bgStart - 10, bgStart, bgEnd, bgEnd + 10],
@@ -122,6 +122,17 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
               title3={openingTitle3}
               date={openingDate}
               subtitle={openingSubtitle}
+            />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
+
+          <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
+            <RankingGroup
+              title={'TOP\n15~11'}
+              livers={livers.filter((d) => d.rank >= 11 && d.rank <= 15) as Liver[]}
+              useGlitch={useGlitch}
+              glitchIntensity={glitchIntensity}
             />
           </TransitionSeries.Sequence>
 

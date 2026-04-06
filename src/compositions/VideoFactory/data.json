@@ -1,82 +1,122 @@
 [
   {
-    "id": "2161646824",
-    "nickname": "まゆみ",
-    "score": 1000000,
-    "image_url": "assets/avatars/2161646824.jpg",
+    "id": "l5332541",
+    "nickname": "さくら",
+    "score": 1500000,
+    "image_url": "assets/avatars/l5332541.jpg",
     "rank": 1,
-    "saved_to": ""
-  },
-  {
-    "id": "donbeikun9999",
-    "nickname": "やらかしタロー",
-    "score": 900000,
-    "image_url": "assets/avatars/donbeikun9999.jpg",
-    "rank": 2,
-    "saved_to": ""
-  },
-  {
-    "id": "karaindaisuki",
-    "nickname": "なるりれ",
-    "score": 850000,
-    "image_url": "assets/avatars/karaindaisuki.jpg",
-    "rank": 3,
-    "saved_to": ""
-  },
-  {
-    "id": "t.o.p_u_jin_",
-    "nickname": "ユージン",
-    "score": 800000,
-    "image_url": "assets/avatars/t.o.p_u_jin_.jpg",
-    "rank": 4,
     "saved_to": ""
   },
   {
     "id": "mizuki2525214",
     "nickname": "一条美月",
-    "score": 750000,
+    "score": 1400000,
     "image_url": "assets/avatars/mizuki2525214.jpg",
-    "rank": 5,
+    "rank": 2,
+    "saved_to": ""
+  },
+  {
+    "id": "t.o.p_u_jin_",
+    "nickname": "ユージン",
+    "score": 1300000,
+    "image_url": "assets/avatars/t.o.p_u_jin_.jpg",
+    "rank": 3,
     "saved_to": ""
   },
   {
     "id": "koakumachiyan",
     "nickname": "小悪魔",
-    "score": 700000,
+    "score": 1200000,
     "image_url": "assets/avatars/koakumachiyan_new.png",
+    "rank": 4,
+    "saved_to": ""
+  },
+  {
+    "id": "ooo93o",
+    "nickname": "あむら",
+    "score": 1100000,
+    "image_url": "assets/avatars/ooo93o.jpg",
+    "rank": 5,
+    "saved_to": ""
+  },
+  {
+    "id": "mrm0115",
+    "nickname": "限界突破まみ",
+    "score": 1000000,
+    "image_url": "assets/avatars/mrm0115.jpg",
     "rank": 6,
+    "saved_to": ""
+  },
+  {
+    "id": "ria.kangoshi",
+    "nickname": "りあ",
+    "score": 900000,
+    "image_url": "assets/avatars/ria.kangoshi.jpg",
+    "rank": 7,
+    "saved_to": ""
+  },
+  {
+    "id": "donbeikun9999",
+    "nickname": "やらかしタロー",
+    "score": 800000,
+    "image_url": "assets/avatars/donbeikun9999.png",
+    "rank": 8,
+    "saved_to": ""
+  },
+  {
+    "id": "user58402831659341",
+    "nickname": "ぼく天然ミッキー",
+    "score": 700000,
+    "image_url": "assets/avatars/user58402831659341.jpg",
+    "rank": 9,
+    "saved_to": ""
+  },
+  {
+    "id": "karaindaisuki",
+    "nickname": "なるりれ",
+    "score": 600000,
+    "image_url": "assets/avatars/karaindaisuki.jpg",
+    "rank": 10,
+    "saved_to": ""
+  },
+  {
+    "id": "ritu_1115",
+    "nickname": "ジンヤ",
+    "score": 500000,
+    "image_url": "assets/avatars/ritu_1115.jpg",
+    "rank": 11,
+    "saved_to": ""
+  },
+  {
+    "id": "2161646824",
+    "nickname": "まゆみ",
+    "score": 400000,
+    "image_url": "assets/avatars/2161646824.jpg",
+    "rank": 12,
     "saved_to": ""
   },
   {
     "id": "yyuukkii0402",
     "nickname": "yukiんこ",
-    "score": 650000,
+    "score": 300000,
     "image_url": "assets/avatars/yyuukkii0402.jpg",
-    "rank": 7,
+    "rank": 13,
     "saved_to": ""
   },
   {
     "id": "ceo1014",
     "nickname": "CEO",
-    "score": 600000,
+    "score": 200000,
     "image_url": "assets/avatars/ceo1014.jpg",
-    "rank": 8,
+    "rank": 14,
     "saved_to": ""
   },
   {
-    "id": "l5332541",
-    "nickname": "さくら",
-    "score": 550000,
-    "image_url": "assets/avatars/l5332541.jpg",
-    "rank": 9,
-    "saved_to": ""
-  },
-  {
-    "id": "ikkurrex7ja",
-    "nickname": "そら",
-    "score": 500000,
-    "image_url": "assets/avatars/ikkurrex7ja.jpg",
-    "rank": 10,
+    "id": "taka19427",
+    "nickname": "taka",
+    "score": 100000,
+    "image_url": "assets/avatars/taka19427.jpg",
+    "rank": 15,
     "saved_to": ""
   }
 ]

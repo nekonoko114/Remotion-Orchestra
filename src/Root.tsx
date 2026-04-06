@@ -126,15 +126,15 @@ import React from 'react';
 const JOL_RANKING_FPS = 60;
 
 // Calculate Vertical Duration
-// Updated to 3 groups (10-8, 7-6, 5-4)
+// Updated to 4 groups (15-11, 10-8, 7-6, 5-4)
 const JOL_RANKING_DURATION_VERTICAL =
   (OPENING_SEC +
-    GROUP_SEC * 3 +
+    GROUP_SEC * 4 +
     GRID_BRIDGE_SEC +
     TOP_RANK_SEC * 3 +
     ENDING_SEC) *
     JOL_RANKING_FPS -
-  (7 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
+  (8 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
 
 // Calculate Time Duration (Correctly using its own 7s opening)
 // Updated to 3 groups (10-8, 7-6, 5-4)
@@ -176,7 +176,7 @@ export const RemotionRoot: React.FC = () => {
           rankingVideo:
             'assets/pixabay/videos/pixabay_fire_flame_beautiful_wallpaper_burn_hot_smoke_feve_200715.mp4',
           openingTitle1: 'J.O.L',
-          openingTitle2: 'ダイヤモンド',
+          openingTitle2: '3月度ダイヤモンド獲得',
           openingTitle3: 'RANKING',
           openingDate: '2026年3月',
           openingSubtitle: '結果発表',
