@@ -64,7 +64,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
   const t = Math.max(0, localFrame - triStart);
   
   const centerX = width / 2;
-  const centerY = height / 2 + 80 * (width / 1080);
+  const centerY = height / 2 + 80 * (height / 1080);
   
   const Point1X = rank === 2 ? width * 0.9 : width * 0.1;
   const Point2X = rank === 2 ? width * 0.1 : width * 0.9;
@@ -411,7 +411,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
           >
             <MorphingTitle
               text={title}
-              fontSize={220 * (height / 1080)}
+              fontSize={180 * (height / 1080)}
               style={{
                 textShadow: `0 0 ${30 * (height / 1080)}px ${primary}, 0 0 ${60 * (height / 1080)}px ${primary}`,
               }}
@@ -438,11 +438,11 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
               key={i}
               style={{
                 position: 'absolute',
-                width: (780 + i * 35) * (width / 1080),
-                height: (780 + i * 35) * (width / 1080),
+                width: (780 + i * 35) * (height / 1080),
+                height: (780 + i * 35) * (height / 1080),
                 borderRadius: i % 2 === 0 ? '20%' : '50%',
-                border: `${(3 - i * 0.5) * (width / 1080)}px solid ${primary}`,
-                boxShadow: `0 0 ${40 * (width / 1080)}px ${glow}, inset 0 0 ${20 * (width / 1080)}px ${glow}`,
+                border: `${(3 - i * 0.5) * (height / 1080)}px solid ${primary}`,
+                boxShadow: `0 0 ${40 * (height / 1080)}px ${glow}, inset 0 0 ${20 * (height / 1080)}px ${glow}`,
                 opacity: 0.8 - i * 0.15,
                 transform: `rotate(${frame * (i % 2 === 0 ? 0.3 : -0.2) * (i + 1)}deg)`,
               }}
@@ -452,22 +452,22 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
           <div
             style={{
               position: 'absolute',
-              width: 900 * (width / 1080),
-              height: 900 * (width / 1080),
+              width: 900 * (height / 1080),
+              height: 900 * (height / 1080),
               background: `radial-gradient(circle, ${primary}99 0%, transparent 70%)`,
               opacity: 0.4 + pulse * 0.2,
-              filter: `blur(${60 * (width / 1080)}px)`,
+              filter: `blur(${60 * (height / 1080)}px)`,
             }}
           />
 
           <div
             style={{
-              width: 750 * (width / 1080),
-              height: 750 * (width / 1080),
+              width: 750 * (height / 1080),
+              height: 750 * (height / 1080),
               borderRadius: '50%',
               overflow: 'hidden',
-              border: `${8 * (width / 1080)}px solid white`,
-              boxShadow: `0 0 ${120 * (width / 1080)}px ${primary}, 0 0 ${40 * (width / 1080)}px white`,
+              border: `${8 * (height / 1080)}px solid white`,
+              boxShadow: `0 0 ${120 * (height / 1080)}px ${primary}, 0 0 ${40 * (height / 1080)}px white`,
               position: 'relative',
               backgroundColor: '#000',
               zIndex: 5,
@@ -506,7 +506,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
           >
             <h2
               style={{
-                fontSize: (rank === 1 ? 100 : 80) * (height / 1080),
+                fontSize: (rank === 1 ? 70 : 50) * (height / 1080),
                 margin: 0,
                 textShadow: `0 0 ${30 * (height / 1080)}px ${glow}, 0 0 ${60 * (height / 1080)}px ${glow}, 0 0 ${100 * (height / 1080)}px ${primary}`,
                 fontWeight: 900,
