@@ -57,25 +57,12 @@ export const RankingGroup: React.FC<Props> = ({
 
   return (
     <AbsoluteFill>
-      {/* ===== 背景 (CLEAN DESIGN - PURPLE TINTED) ===== */}
-      <AbsoluteFill style={{ backgroundColor: '#0a010a' }}>
-        <Img
-          src={staticFile(
-            isCompact || is3Group
-              ? 'assets/backgrounds/dark_temple_bg_top10.png'
-              : 'assets/backgrounds/dark_temple_bg_top6.png',
-          )}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.5,
-            filter: 'brightness(1.1) contrast(1.2) hue-rotate(280deg)', 
-          }}
-        />
+      {/* ===== 背景 (透明化して下層の動画を表示) ===== */}
+      <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
+
         <AbsoluteFill
           style={{
-            background: `radial-gradient(circle, ${UNITY_GLOW} 0%, rgba(10,0,10,0.9) 100%)`,
+            background: `radial-gradient(circle, ${UNITY_GLOW} 0%, rgba(10,0,10,0.4) 100%)`,
             pointerEvents: 'none',
           }}
         />
@@ -146,7 +133,7 @@ export const RankingGroup: React.FC<Props> = ({
                     borderRadius: 12,
                     border: `2px solid ${UNITY_THEME}`,
                     boxShadow: `0 8px 32px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.5), 0 0 20px ${UNITY_THEME}40`,
-                    backgroundColor: 'rgba(5,0,15,0.92)',
+                    backgroundColor: 'rgba(5,0,15,0.6)',
                     transform: `translateY(${slideY}px) scale(${bounceScale})`,
                     opacity: rowOpacity,
                     padding: `${verticalPad}px 30px`,

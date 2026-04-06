@@ -59,30 +59,6 @@ export const RankingGroup: React.FC<Props> = ({
 
   return (
     <AbsoluteFill>
-      {/* ===== 背景 (CLEAN DESIGN) ===== */}
-      <AbsoluteFill style={{ backgroundColor: '#010a01' }}>
-        <Img
-          src={staticFile(
-            isCompact || is3Group
-              ? 'assets/backgrounds/dark_temple_bg_top10.png'
-              : 'assets/backgrounds/dark_temple_bg_top6.png',
-          )}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.5,
-            filter: 'brightness(1.1) contrast(1.2)', 
-          }}
-        />
-        <AbsoluteFill
-          style={{
-            background: `radial-gradient(circle, ${UNITY_GLOW} 0%, rgba(0,10,0,0.9) 100%)`,
-            pointerEvents: 'none',
-          }}
-        />
-      </AbsoluteFill>
-
       <AbsoluteFill
         style={{
           justifyContent: 'center',
@@ -145,7 +121,7 @@ export const RankingGroup: React.FC<Props> = ({
                     borderRadius: 12,
                     border: `2px solid ${UNITY_THEME}`,
                     boxShadow: `0 8px 32px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.5)`,
-                    backgroundColor: 'rgba(0,10,2,0.92)',
+                    backgroundColor: 'rgba(0,10,2,0.6)',
                     transform: `translateY(${slideY}px) scale(${bounceScale})`,
                     opacity: rowOpacity,
                     padding: `${verticalPad}px 30px`,

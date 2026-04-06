@@ -9,16 +9,20 @@ import {
   staticFile,
   useVideoConfig,
   OffthreadVideo,
+  Easing,
 } from 'remotion';
 import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { TimeBackground } from '../TimeBackground';
 import { CinematicBorder } from '../CinematicBorder';
 import { MorphingTitle } from '../MorphingTitle';
 import { Confetti } from '../Confetti';
+import { Explosion } from '../../../components/effects/Explosion';
+import { ParticleBurst } from '../../../components/effects/ParticleBurst';
 import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
 
 const BPM = 160;
+
 
 const MAGIC_CIRCLES = [
   'magic-circle-blue.png',
@@ -40,43 +44,176 @@ type Props = {
 
 export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, glowColor }) => {
   const frame = useCurrentFrame();
-  const { fps, width } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
 
   const { pulse } = useBeatValue(BPM);
 
   const snapReduction = pulse * 0.05;
   const localFrame = frame - snapReduction;
 
+  // ===== FOOLPROOF SQUARE/TRIANGLE MOTION =====
+  
+  // Timing: Wipe completes at 40. Start sweeping at 45.
+  const triStart = 45;
+  const triDuration = rank === 1 ? 50 : 40;
+  const t = Math.max(0, localFrame - triStart);
+  
+  const centerX = width / 2;
+  const centerY = height / 2 + 80 * (width / 1080);
+  
+  const Point1X = rank === 2 ? width * 0.9 : width * 0.1;
+  const Point2X = rank === 2 ? width * 0.1 : width * 0.9;
+  const Rot1 = rank === 2 ? 35 : -35;
+  const Rot2 = rank === 2 ? -35 : 35;
+
+  let triX = centerX;
+  let triY = -1000;
+  let triRotate = 0;
+  let motionBlur = 0;
+  let triScale = 1;
+
+  if (rank === 1) {
+    if (t < 0) {
+      triX = centerX;
+      triY = -1000;
+    } else if (t <= 10) {
+      // Phase 1: Top -> Top Left
+      const p = interpolate(t, [0, 10], [0, 1], { easing: Easing.in(Easing.poly(3)) });
+      triX = interpolate(p, [0, 1], [centerX, width * 0.1]);
+      triY = interpolate(p, [0, 1], [-1000, height * 0.2]);
+      triRotate = interpolate(p, [0, 1], [0, -45]);
+      motionBlur = interpolate(p, [0, 1], [0, 25]);
+      triScale = interpolate(p, [0, 1], [0.5, 1.2]); 
+    } else if (t <= 20) {
+      // Phase 2: Top Left -> Bottom Left
+      const p = interpolate(t, [10, 20], [0, 1]); 
+      triX = width * 0.1;
+      triY = interpolate(p, [0, 1], [height * 0.2, height * 0.8]);
+      triRotate = -45;
+      motionBlur = 30; 
+      triScale = 1.2;
+    } else if (t <= 30) {
+      // Phase 3: Bottom Left -> Bottom Right
+      const p = interpolate(t, [20, 30], [0, 1]); 
+      triX = interpolate(p, [0, 1], [width * 0.1, width * 0.9]);
+      triY = height * 0.8;
+      triRotate = interpolate(p, [0, 1], [-45, 45]);
+      motionBlur = 30; 
+      triScale = 1.2;
+    } else if (t <= 40) {
+      // Phase 4: Bottom Right -> Top Right
+      const p = interpolate(t, [30, 40], [0, 1]); 
+      triX = width * 0.9;
+      triY = interpolate(p, [0, 1], [height * 0.8, height * 0.2]);
+      triRotate = 45;
+      motionBlur = 30; 
+      triScale = 1.2;
+    } else if (t <= 50) {
+      // Phase 5: Top Right -> Center
+      const p = interpolate(t, [40, 50], [0, 1], { easing: Easing.out(Easing.back(2)) });
+      triX = interpolate(p, [0, 1], [width * 0.9, centerX]);
+      triY = interpolate(p, [0, 1], [height * 0.2, centerY]);
+      triRotate = interpolate(p, [0, 1], [45, 0]);
+      motionBlur = interpolate(p, [0, 1], [25, 0]);
+      triScale = interpolate(p, [0, 1], [1.2, 1]);
+    } else {
+      triX = centerX;
+      triY = centerY;
+      triRotate = 0;
+      motionBlur = 0;
+      triScale = 1;
+    }
+  } else if (t < 0) {
+    triX = centerX;
+    triY = -1000;
+  } else if (t <= 12) {
+    // Phase 1: Top -> Bottom Side
+    const p = interpolate(t, [0, 12], [0, 1], { easing: Easing.in(Easing.poly(3)) });
+    triX = interpolate(p, [0, 1], [centerX, Point1X]);
+    triY = interpolate(p, [0, 1], [-1000, height * 0.8]);
+    triRotate = interpolate(p, [0, 1], [0, Rot1]);
+    motionBlur = interpolate(p, [0, 1], [0, 25]);
+    triScale = interpolate(p, [0, 1], [0.5, 1.2]); 
+  } else if (t <= 24) {
+    // Phase 2: Bottom Side Dash
+    const p = interpolate(t, [12, 24], [0, 1]); 
+    triX = interpolate(p, [0, 1], [Point1X, Point2X]);
+    triY = height * 0.8;
+    triRotate = interpolate(p, [0, 1], [Rot1, Rot2]);
+    motionBlur = 30; 
+    triScale = 1.2;
+  } else if (t <= 40) {
+    // Phase 3: Bottom Side -> Center 
+    const p = interpolate(t, [24, 40], [0, 1], { easing: Easing.out(Easing.back(2)) });
+    triX = interpolate(p, [0, 1], [Point2X, centerX]);
+    triY = interpolate(p, [0, 1], [height * 0.8, centerY]);
+    triRotate = interpolate(p, [0, 1], [Rot2, 0]);
+    motionBlur = interpolate(p, [0, 1], [25, 0]);
+    triScale = interpolate(p, [0, 1], [1.2, 1]);
+  } else {
+    triX = centerX;
+    triY = centerY;
+    triRotate = 0;
+    motionBlur = 0;
+    triScale = 1;
+  }
+
+  // Final scale logic
+  let impactRotate = 0;
+  let impactY = 0;
+  let rankExtraScale = 1;
+
+  if (rank === 2) {
+    const pRank2 = interpolate(t, [40, 55], [0, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp', easing: Easing.out(Easing.back(1.5)) });
+    impactY = interpolate(pRank2, [0, 1], [300, 0]);
+  } else if (rank === 1) {
+    const pRank1 = interpolate(t, [triDuration, triDuration + 15], [0, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp', easing: Easing.out(Easing.exp) });
+    impactRotate = interpolate(pRank1, [0, 1], [-180, 0]);
+    rankExtraScale = 1.05;
+  }
+
+  const finalImageScale = triScale * rankExtraScale * (1 + pulse * 0.015);
+  const pulseScale = (1 + Math.sin(frame / 8) * 0.02) * (1 + pulse * 0.03);
+  const finalImageOpacity = interpolate(t, [0, 4], [0, 1], { extrapolateRight: 'clamp' });
+
+  // Landing impact happens exactly at exactly t = triDuration
+  const sprImpact = spring({
+    frame: localFrame - (triStart + triDuration),
+    fps,
+    config: { damping: 10, stiffness: 180 },
+  });
+
   const nameEntrance = spring({
-    frame: localFrame - 25,
+    frame: localFrame - 80,
     fps,
     config: { damping: 14, stiffness: 120 },
   });
 
-  const nameLength = liver.nickname.length;
-  const charsVisible = Math.floor(
-    interpolate(localFrame - 25, [0, 20], [0, nameLength], {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    }),
-  );
-  const displayedName = liver.nickname.slice(0, charsVisible);
-
-  const imageScale =
-    interpolate(frame, [0, 20], [0.7, 1.05], {
-      extrapolateRight: 'clamp',
-    }) *
-    (1 + pulse * 0.005);
-  const imageOpacity = interpolate(frame, [0, 15], [0, 1]);
-
-  const nameY = interpolate(nameEntrance, [0, 1], [50, 0]);
-  const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
-
-  const flashOpacity = interpolate(frame, [0, 5, 25], [0, 0.9, 0], {
-    extrapolateRight: 'clamp',
+  const rankEntrance = spring({
+    frame: localFrame - 40,
+    fps,
+    config: { damping: 10, stiffness: 160 },
   });
 
-  const pulseScale = 1 + pulse * 0.002;
+  const nameLength = liver.nickname.length;
+  // Get characters visible using Remotion core utilities
+  const pName = interpolate(localFrame - 80, [0, 20], [0, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
+  const charsVisible = Math.floor(interpolate(pName, [0, 1], [0, nameLength]));
+  const displayedName = liver.nickname.slice(0, charsVisible);
+
+  const nameYPos = interpolate(nameEntrance, [0, 1], [50, 0]);
+  const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
+
+  const flashOpacityRaw = Math.max(
+    interpolate(sprImpact, [0, 0.1, 0.5], [0, 0.8, 0], { extrapolateRight: 'clamp' }),
+    interpolate(frame, [0, 5, 25], [0, 0.9, 0], { extrapolateRight: 'clamp' })
+  );
+  const flashOpacity = flashOpacityRaw;
+
+  const rankScale = interpolate(rankEntrance, [0, 1], [6, 1], {
+    easing: Easing.out(Easing.back(2)),
+  });
+  const rankOpacity = interpolate(rankEntrance, [0, 0.3], [0, 1]);
 
   const magicCirclesData = useMemo(() => {
     const scaleFactor = width / 2160; // Corrected to use 4K baseline
@@ -111,11 +248,11 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
   const getRankColors = (r: number) => {
     const baseColor = themeColor || '#d000ff';
     const baseGlow = glowColor || 'rgba(208, 0, 255, 0.8)';
-    if (r === 1) return { primary: baseColor, glow: baseGlow };
-    return { primary: baseColor, glow: baseGlow };
+    if (r === 1) return { primary: '#9d00ff', secondary: '#00ffff', glow: 'rgba(157, 0, 255, 0.6)' };
+    return { primary: baseColor, glow: baseGlow, secondary: '#00ffff' };
   };
 
-  const { primary, glow } = getRankColors(rank);
+  const { primary, secondary, glow } = getRankColors(rank);
 
   const bgScale = interpolate(
     Math.sin(frame * 0.04),
@@ -157,6 +294,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
         </AbsoluteFill>
       )}
       <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
+        {frame < 20 && <ImpactEffect color={primary} intensity="high" />}
+        <Explosion delay={triStart + triDuration} color={primary} secondaryColor={secondary} />
         <ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
       </AbsoluteFill>
       <AbsoluteFill style={{ zIndex: 10, overflow: 'hidden' }}>
@@ -220,36 +359,24 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
                   zIndex: 1,
                 }}
               />
-
-              {[...new Array(12)].map((_, j) => (
-                <div
-                  key={`ray-${i}-${j}`}
-                  style={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    width: 4,
-                    height: m.size * 1.5,
-                    marginLeft: -2 + m.x,
-                    marginTop: -m.size * 0.75 + m.y,
-                    backgroundColor: primary,
-                    boxShadow: `0 0 20px ${primary}`,
-                    transform: `rotate(${j * 30 + frame * 0.2 * m.rotationDir}deg) scaleY(${circleEntrance})`,
-                    opacity: m.opacity * 0.3 * circleEntrance,
-                    filter: 'blur(2px)',
-                    zIndex: 0,
-                  }}
-                />
-              ))}
             </React.Fragment>
           );
         })}
       </AbsoluteFill>
       <AbsoluteFill style={{ zIndex: 110 }}>
         <Confetti
-          count={150}
-          colors={[primary, '#ffffff', '#ffd700', '#ff0080']}
+          count={rank === 1 ? 250 : 150}
+          colors={[primary, '#ffffff', '#ffd700', '#00ffff']}
         />
+        {(localFrame > triStart + triDuration) && (
+          <ParticleBurst 
+            count={60} 
+            colors={[primary, '#ffffff', '#00ffff']} 
+            x={width/2} 
+            y={height/2 + 80 * (width/1080)} // Adjusted to center of icon area
+            speed={4}
+          />
+        )}
       </AbsoluteFill>
       <AbsoluteFill
         style={{
@@ -261,32 +388,41 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
           zIndex: 120,
         }}
       >
-        <div
-          style={{
-            marginTop: 80 * (width / 1080),
-            transform: `scale(${pulseScale})`,
-          }}
-        >
-          <MorphingTitle
-            text={title}
-            fontSize={220 * (width / 1080)}
+        <AbsoluteFill style={{ zIndex: 120 }}>
+          <div
             style={{
-              textShadow: `0 0 ${30 * (width / 1080)}px ${primary}, 0 0 ${60 * (width / 1080)}px ${primary}`,
+              position: 'absolute',
+              top: 50 * (height / 1080),
+              left: 0,
+              right: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              transform: `scale(${pulseScale * rankScale})`,
+              opacity: rankOpacity,
             }}
-          />
-        </div>
+          >
+            <MorphingTitle
+              text={title}
+              fontSize={220 * (height / 1080)}
+              style={{
+                textShadow: `0 0 ${30 * (height / 1080)}px ${primary}, 0 0 ${60 * (height / 1080)}px ${primary}`,
+              }}
+            />
+          </div>
 
+        {/* TRIANGLE MOTION WRAPPER */}
         <div
           style={{
-            position: 'relative',
-            width: 850 * (width / 1080),
-            height: 850 * (width / 1080),
+            position: 'absolute',
+            left: triX,
+            top: triY,
+            width: 750 * (height / 1080),
+            height: 750 * (height / 1080),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 10 * (width / 1080),
-            transform: `scale(${imageScale}) rotateX(10deg)`,
-            opacity: imageOpacity,
+            transform: `translate(-50%, -50%) rotate(${triRotate + impactRotate}deg) translateY(${impactY}px)`,
+            filter: `blur(${motionBlur}px)`,
           }}
         >
           {[...new Array(4)].map((_, i) => (
@@ -327,6 +463,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
               position: 'relative',
               backgroundColor: '#000',
               zIndex: 5,
+              opacity: finalImageOpacity,
+              transform: `scale(${finalImageScale})`,
             }}
           >
             <Img
@@ -348,22 +486,34 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
           </div>
         </div>
 
-        <h2
-          style={{
-            fontSize: (rank === 1 ? 100 : 80) * (width / 1080),
-            marginTop: (rank === 1 ? 30 : 20) * (width / 1080),
-            textShadow: `0 0 ${30 * (width / 1080)}px ${glow}, 0 0 ${60 * (width / 1080)}px ${glow}, 0 0 ${100 * (width / 1080)}px ${primary}`,
-            fontWeight: 900,
-            color: '#fff',
-            opacity: nameOpacity,
-            transform: `translateY(${nameY * (width / 1080)}px)`,
-            letterSpacing: `${4 * (width / 1080)}px`,
-            minHeight: `${120 * (width / 1080)}px`,
-          }}
-        >
-          {displayedName}
-        </h2>
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 80 * (height / 1080),
+              left: 0,
+              right: 0,
+              display: 'flex',
+              justifyContent: 'center'
+            }}
+          >
+            <h2
+              style={{
+                fontSize: (rank === 1 ? 100 : 80) * (height / 1080),
+                margin: 0,
+                textShadow: `0 0 ${30 * (height / 1080)}px ${glow}, 0 0 ${60 * (height / 1080)}px ${glow}, 0 0 ${100 * (height / 1080)}px ${primary}`,
+                fontWeight: 900,
+                color: '#fff',
+                opacity: nameOpacity,
+                transform: `translateY(${nameYPos * (height / 1080)}px)`,
+                letterSpacing: `${4 * (height / 1080)}px`,
+              }}
+            >
+              {displayedName}
+            </h2>
+          </div>
+        </AbsoluteFill>
       </AbsoluteFill>
+
       <AbsoluteFill
         style={{
           backgroundColor: 'white',

@@ -15,7 +15,7 @@ import { CinematicBorder } from '../CinematicBorder';
 const BGM_SOURCE = staticFile('assets/audio/music/Velocity-Shift.mp3');
 const BGM_START_FROM = 0.0; // Seconds
 
-const BACKGROUND_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_fire_flame_ritual_149142.mp4');
+const BACKGROUND_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_minutes_old_gold_retro_antique_spiral_l_207864.mp4');
 
 export const OPENING_SEC = 5;
 export const GRID_BRIDGE_SEC = 4.0;
