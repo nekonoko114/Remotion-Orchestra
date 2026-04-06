@@ -28,6 +28,7 @@ export const TRANSITION_FRAMES = 40;
 type RankingTimeProps = {
   data?: Liver[];
   openingTitle2?: string;
+  openingTitle3?: string;
   openingDate?: string;
   themeColor?: string;
   glowColor?: string;
@@ -37,7 +38,8 @@ export const RankingTime = (props: RankingTimeProps) => {
   const { fps } = useVideoConfig();
   const RANKING_DATA = props.data || (RANKING_DATA_TIME_JSON as unknown as Liver[]);
   const {
-    openingTitle2 = '3月度 配信時間',
+    openingTitle2 = '配信時間',
+    openingTitle3 = 'ランキング',
     openingDate = '2026年3月',
     themeColor = '#d000ff',
     glowColor = 'rgba(208, 0, 255, 0.6)',
@@ -96,7 +98,7 @@ export const RankingTime = (props: RankingTimeProps) => {
 
         <TransitionSeries>
           <TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
-            <Opening title2={openingTitle2} date={openingDate} themeColor={themeColor} />
+            <Opening title2={openingTitle2} title3={openingTitle3} date={openingDate} themeColor={themeColor} />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={wipe({ direction: 'from-top-left' })} timing={timing} />

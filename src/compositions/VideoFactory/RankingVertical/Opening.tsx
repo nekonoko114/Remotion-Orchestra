@@ -74,6 +74,7 @@ export const Opening: React.FC<OpeningProps> = ({
         style={{
           justifyContent: 'center',
           alignItems: 'center',
+          marginTop: '50px', // Shifted slightly down for better centering with many lines
         }}
       >
         <div
@@ -81,19 +82,21 @@ export const Opening: React.FC<OpeningProps> = ({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '10px',
+            gap: '30px', // Increased gap between main sections
           }}
         >
           <NeonGlowText text={title1} fontSize={230} color="#FF0000" glowColor="#CC0000" delay={5} />
-          <NeonGlowText text={title2} fontSize={120} color="#00f2ff" glowColor="#0088ff" delay={20} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
-            <NeonGlowText text={title3} fontSize={160} color="#FFD700" glowColor="#FF8C00" delay={35} />
+          <div style={{ margin: '10px 0' }}>
+            <NeonGlowText text={title2} fontSize={124} color="#00f2ff" glowColor="#0088ff" delay={20} />
           </div>
-          <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div style={{ transform: 'scale(0.8)' }}>
-              <NeonGlowText text={date} fontSize={120} color="#FFFFFF" glowColor="rgba(255,255,255,0.5)" delay={50} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
+            <NeonGlowText text={title3} fontSize={140} color="#FFD700" glowColor="#FF8C00" delay={35} />
+          </div>
+          <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ transform: 'scale(0.8)', marginBottom: '10px' }}>
+              <NeonGlowText text={date} fontSize={100} color="#FFFFFF" glowColor="rgba(255,255,255,0.5)" delay={50} />
             </div>
-            <NeonGlowText text={subtitle} fontSize={180} color="#FFD700" glowColor="#FF8C00" delay={65} />
+            <NeonGlowText text={subtitle} fontSize={160} color="#FFD700" glowColor="#FF8C00" delay={65} />
           </div>
         </div>
       </AbsoluteFill>

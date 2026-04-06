@@ -120,7 +120,7 @@ export const RankingGroup: React.FC<Props> = ({
           {livers.map((liver, index) => {
             const staggerFrames = isCompact ? 12 : 18;
             const liverEntrance = spring({
-              frame: frame - index * staggerFrames - 10,
+              frame: frame - (livers.length - 1 - index) * staggerFrames - 10,
               fps,
               config: { damping: 12, stiffness: 120 },
             });

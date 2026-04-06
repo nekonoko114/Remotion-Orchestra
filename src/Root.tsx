@@ -21,6 +21,7 @@ import {
   TOP1_RANK_SEC as TOP1_RANK_SEC_TIME,
   ENDING_SEC as ENDING_SEC_TIME,
   GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
+  TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
 } from './compositions/VideoFactory/RankingTime';
 import {
   RankingEvent,
@@ -142,7 +143,7 @@ const JOL_RANKING_DURATION_TIME =
     TOP32_RANK_SEC_TIME * 2 +
     TOP1_RANK_SEC_TIME +
     ENDING_SEC_TIME) *
-    JOL_RANKING_FPS;
+    JOL_RANKING_FPS - (9 * TRANSITION_FRAMES_TIME);
 // Previous calculation was ~2750, confirmed it's exactly 2750 frames.
 /*
   (OPENING_SEC_TIME +
@@ -180,9 +181,8 @@ export const RemotionRoot: React.FC = () => {
           rankingVideo:
             'assets/pixabay/videos/pixabay_fire_flame_beautiful_wallpaper_burn_hot_smoke_feve_200715.mp4',
           openingTitle1: 'J.O.L',
-          openingTitle2: '3月度ダイヤモンド獲得',
-          openingTitle3: 'RANKING',
-          openingDate: '2026年3月',
+          openingTitle2: '2026年\nダイヤモンド獲得',
+          openingTitle3: 'ランキング',
           openingSubtitle: '結果発表',
           useGlitch: true,
           glitchIntensity: 10,
@@ -198,8 +198,8 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={{
-          openingTitle2: '3月度 配信時間',
-          openingDate: '2026年3月',
+          openingTitle2: '配信時間',
+          openingTitle3: 'ランキング',
           themeColor: '#d000ff',
           glowColor: 'rgba(208, 0, 255, 0.6)',
         }}

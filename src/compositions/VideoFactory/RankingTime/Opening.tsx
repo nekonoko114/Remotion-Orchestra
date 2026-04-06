@@ -25,17 +25,8 @@ const DigitalTypewriter: React.FC<{
   yOffset: number;
 }> = ({ text, fontSize, delay, duration, color = '#d000ff', yOffset }) => {
   const frame = useCurrentFrame();
-  if (frame < delay) return null;
-
-  const progress = Math.min(1, (frame - delay) / duration);
-  const charCount = Math.floor(text.length * progress);
-  const visibleText = text.substring(0, charCount);
-
-  const isGlitching = progress < 1 && charCount < text.length;
-  const glitchChars = '01!@#$%^&*()_+<>{}[]';
-  const glitchChar = isGlitching
-    ? glitchChars[Math.floor(random(frame) * glitchChars.length)]
-    : '';
+  const lines = text.split('\n');
+  const totalLength = text.length;
 
   return (
     <div
@@ -44,41 +35,72 @@ const DigitalTypewriter: React.FC<{
         top: `calc(50% + ${yOffset}px)`,
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        fontFamily: 'system-ui, -apple-system, sans-serif',
-        fontSize,
-        fontWeight: 900,
-        color: '#fff',
-        textShadow: `0 0 15px ${color}, 0 0 30px ${color}88`,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        whiteSpace: 'nowrap',
+        gap: fontSize * 0.2, // Increased gap for clarity
+        zIndex: 100,
       }}
     >
-      {visibleText}
-      {isGlitching && (
-        <span style={{ opacity: 0.8, color: '#e088ff' }}>{glitchChar}</span>
-      )}
-      {(progress < 1 || Math.floor(frame / 5) % 2 === 0) && (
-        <div
-          style={{
-            width: 15,
-            height: fontSize * 0.8,
-            background: color,
-            marginLeft: 8,
-            boxShadow: `0 0 10px ${color}`,
-          }}
-        />
-      )}
+      {lines.map((line, segmentIdx) => {
+        const charStartIdx = lines.slice(0, segmentIdx).join('\n').length + (segmentIdx > 0 ? 1 : 0);
+        const segmentProgress = Math.min(1, Math.max(0, (frame - delay - (charStartIdx / totalLength) * duration) / (line.length / totalLength * duration)));
+        const charCount = Math.floor(line.length * segmentProgress);
+        const visibleText = line.substring(0, charCount);
+
+        const isGlitching = segmentProgress < 1 && charCount < line.length;
+        const glitchChars = '01!@#$%^&*()_+<>{}[]';
+        const glitchChar = isGlitching
+          ? glitchChars[Math.floor(random(frame + segmentIdx) * glitchChars.length)]
+          : '';
+
+        if (visibleText.length === 0 && !isGlitching && frame < delay + (charStartIdx / totalLength) * duration) return null;
+
+        return (
+          <div
+            key={segmentIdx}
+            style={{
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontSize,
+              fontWeight: 900,
+              color: '#fff',
+              textShadow: `0 0 15px ${color}, 0 0 30px ${color}88`,
+              display: 'flex',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+              lineHeight: 1.1, // Added a bit more line height
+            }}
+          >
+            {visibleText}
+            {isGlitching && (
+              <span style={{ opacity: 0.8, color: '#e088ff' }}>{glitchChar}</span>
+            )}
+            {segmentIdx === lines.filter(l => l.length > 0).length - 1 && (segmentProgress < 1 || Math.floor(frame / 5) % 2 === 0) && (
+              <div
+                style={{
+                  width: 15,
+                  height: fontSize * 0.8,
+                  background: color,
+                  marginLeft: 8,
+                  boxShadow: `0 0 10px ${color}`,
+                }}
+              />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
 
 export const Opening: React.FC<{
   title2?: string;
+  title3?: string;
   date?: string;
   themeColor?: string;
 }> = ({
-  title2 = '3月度 配信時間',
+  title2 = '配信時間',
+  title3 = 'ランキング',
   date = '2026年3月',
   themeColor = '#d000ff',
 }) => {
@@ -141,10 +163,11 @@ export const Opening: React.FC<{
       </AbsoluteFill>
 
       <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 50 }}>
-        <DigitalTypewriter text="J.O.L" fontSize={260 * scale} delay={0} duration={30} yOffset={-320 * scale} color={themeColor} />
-        <DigitalTypewriter text={date} fontSize={130 * scale} delay={30} duration={30} yOffset={-100 * scale} color={themeColor} />
-        <DigitalTypewriter text={title2} fontSize={160 * scale} delay={60} duration={30} yOffset={150 * scale} color={themeColor} />
-        <DigitalTypewriter text="結果発表!" fontSize={160 * scale} delay={90} duration={30} yOffset={380 * scale} color={themeColor} />
+        <DigitalTypewriter text="J.O.L" fontSize={260 * scale} delay={0} duration={30} yOffset={-450 * scale} color={themeColor} />
+        <DigitalTypewriter text={date} fontSize={120 * scale} delay={45} duration={30} yOffset={-200 * scale} color={themeColor} />
+        <DigitalTypewriter text={title2} fontSize={140 * scale} delay={90} duration={30} yOffset={0 * scale} color={themeColor} />
+        <DigitalTypewriter text={title3} fontSize={140 * scale} delay={140} duration={30} yOffset={200 * scale} color={themeColor} />
+        <DigitalTypewriter text="結果発表!" fontSize={160 * scale} delay={190} duration={30} yOffset={450 * scale} color={themeColor} />
       </div>
 
       <AbsoluteFill style={{ zIndex: 20, pointerEvents: 'none' }}>
