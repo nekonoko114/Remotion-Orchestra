@@ -8,22 +8,17 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
-import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
 
 type Props = {
   title: string;
   livers: Liver[];
-  isHighlight?: boolean;
 };
 
-const BPM = 180; // Velocity-Shift BPM
-
-// Cyber Magenta Theme
-const THEME_COLOR = '#d000ff';
-const SECONDARY_COLOR = '#00f2ff';
-const GLOW_COLOR = 'rgba(208, 0, 255, 0.6)';
+// Purple Theme (Unified Design for RankingTime)
+const UNITY_THEME = '#9d00ff'; // Vibrant Purple
+const UNITY_LIME  = '#00ffff'; // Neon Cyan/Blue for Rank
+const UNITY_GLOW  = 'rgba(157, 0, 255, 0.4)';
 
 const getAvatarPosition = (rank: number) => {
   if (rank === 10) return 'center 20%';
@@ -38,172 +33,279 @@ const getAvatarPosition = (rank: number) => {
 export const RankingGroup: React.FC<Props> = ({
   title,
   livers,
-  isHighlight,
 }) => {
   const frame = useCurrentFrame();
-  const { fps, width } = useVideoConfig();
-  const scale = width / 1080;
-  const { pulse } = useBeatValue(BPM);
+  const { fps } = useVideoConfig();
 
   const entrance = spring({
     frame,
     fps,
-    config: { damping: 20, stiffness: 200 },
+    config: { damping: 15, stiffness: 100 },
   });
 
   const opacity = interpolate(entrance, [0, 1], [0, 1]);
-  const beamScale = interpolate(entrance, [0, 1], [0.9, 1]);
-  const beatScale = 1 + pulse * 0.02;
+  const scale = interpolate(entrance, [0, 1], [0.95, 1]);
 
-  const is2Group = livers.length === 2;
+  const isCompact = livers.length >= 4; // 15-11位 (5名)
   const is3Group = livers.length === 3;
-  const gap = is2Group ? 120 : is3Group ? 80 : 60;
-  const iconSize = (is2Group ? 220 : 160) * scale;
-  const fontSize = (is2Group ? 80 : 60) * scale;
+  const is2Group = livers.length === 2;
+  const gap = isCompact ? 18 : is2Group ? 80 : is3Group ? 20 : 80;
+  const rankFontSize = isCompact ? 90 : is2Group ? 160 : 130;
+  const nameFontSize = isCompact ? 48 : is2Group ? 85 : 75;
+  const verticalPad = isCompact ? 20 : 0;
+  const marginTop = isCompact ? 220 : 230; // Reduced from 280 to fit 3 items better vertically
 
   return (
-    <AbsoluteFill
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        opacity,
-        transform: `scale(${beamScale * beatScale})`,
-      }}
-    >
-      {/* Background is now managed by parent index.tsx for seamless playback */}
+    <AbsoluteFill>
+      {/* ===== 背景 (CLEAN DESIGN - PURPLE TINTED) ===== */}
+      <AbsoluteFill style={{ backgroundColor: '#0a010a' }}>
+        <Img
+          src={staticFile(
+            isCompact || is3Group
+              ? 'assets/backgrounds/dark_temple_bg_top10.png'
+              : 'assets/backgrounds/dark_temple_bg_top6.png',
+          )}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.5,
+            filter: 'brightness(1.1) contrast(1.2) hue-rotate(280deg)', 
+          }}
+        />
+        <AbsoluteFill
+          style={{
+            background: `radial-gradient(circle, ${UNITY_GLOW} 0%, rgba(10,0,10,0.9) 100%)`,
+            pointerEvents: 'none',
+          }}
+        />
+      </AbsoluteFill>
 
-
-      {/* 1. Header Title */}
-      <div style={{ position: 'absolute', top: 120 * scale, zIndex: 100 }}>
+      <AbsoluteFill
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          opacity,
+          transform: `scale(${scale})`,
+        }}
+      >
+        {/* 1. Header Title */}
         <h1
           style={{
-            fontSize: 100 * scale,
+            position: 'absolute',
+            top: 100, 
+            fontSize: isCompact ? 80 : 120,
+            fontFamily: "'Segoe UI', Roboto, sans-serif",
             fontWeight: '900',
-            color: '#FFF',
+            textAlign: 'center',
             margin: 0,
+            color: '#FFF',
+            textShadow: `0 0 10px ${UNITY_THEME}, 0 0 30px ${UNITY_THEME}, 0 0 60px ${UNITY_LIME}`,
             fontStyle: 'italic',
-            textShadow: `0 0 20px ${THEME_COLOR}, 0 0 40px ${SECONDARY_COLOR}`,
-            fontFamily: 'Impact, sans-serif',
           }}
         >
           {title}
         </h1>
-      </div>
 
-      {/* 2. Ranking List Container */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: gap * scale,
-          width: '90%',
-          marginTop: 200 * scale,
-        }}
-      >
-        {livers.map((liver, index) => {
-          const staggerFrames = 15;
-          const liverEntrance = spring({
-            frame: frame - index * staggerFrames - 20,
-            fps,
-            config: { damping: 14, stiffness: 200 },
-          });
+        {/* 2. Ranking List Container */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap,
+            width: isCompact ? '90%' : '94%',
+            marginTop,
+          }}
+        >
+          {livers.map((liver, index) => {
+            const staggerFrames = isCompact ? 12 : 18;
+            const liverEntrance = spring({
+              frame: frame - index * staggerFrames - 10,
+              fps,
+              config: { damping: 12, stiffness: 120 },
+            });
 
-          const scaleIn = interpolate(liverEntrance, [0, 1], [0.6, 1]);
-          const blurIn = interpolate(liverEntrance, [0, 1], [40, 0]);
-          const rowOpacity = interpolate(liverEntrance, [0, 0.4], [0, 1]);
+            const slideY = interpolate(liverEntrance, [0, 1], [-1000, 0]);
+            const rowOpacity = interpolate(liverEntrance, [0, 0.4], [0, 1]);
+            const bounceScale = interpolate(liverEntrance, [0, 1], [0.8, 1]);
 
-          return (
-            <div
-              key={liver.rank}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                backgroundColor: 'rgba(5, 0, 15, 0.7)',
-                padding: `${is2Group ? 50 : 30}px ${40}px`,
-                borderRadius: 15 * scale,
-                transform: `scale(${scaleIn})`,
-                filter: `blur(${blurIn}px)`,
-                opacity: rowOpacity,
-                border: `2px solid ${THEME_COLOR}`,
-                boxShadow: `0 0 15px ${GLOW_COLOR}`,
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-            >
-              {/* Background Digital Decor (Time themed) */}
-              <div style={{
-                position: 'absolute',
-                top: 0, right: 0, bottom: 0, left: '60%',
-                background: `linear-gradient(to right, transparent, ${THEME_COLOR}15)`,
-                zIndex: 0,
-              }} />
+            const avatarSrc = liver.saved_to
+              ? staticFile(liver.saved_to)
+              : liver.image_url.startsWith('http')
+                ? liver.image_url
+                : staticFile(liver.image_url);
 
-              {/* Rank Badge */}
-              <div style={{
-                width: 40 * scale,
-                height: 380 * scale,
-                fontSize: 80 * scale,
-                fontWeight: '900',
-                color: SECONDARY_COLOR,
-                fontStyle: 'italic',
-                textShadow: `0 0 10px ${SECONDARY_COLOR}`,
-                fontFamily: 'Impact, sans-serif',
-                zIndex: 2,
-              }}>
-                {liver.rank}
-              </div>
-
-              {/* Avatar Icon */}
-              <div style={{
-                width: iconSize,
-                height: iconSize,
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: `3px solid #FFF`,
-                boxShadow: `0 0 15px rgba(0,0,0,0.5)`,
-                flexShrink: 0,
-                zIndex: 2,
-                backgroundColor: '#222',
-              }}>
-                <Img
-                  src={
-                    liver.saved_to
-                      ? staticFile(liver.saved_to)
-                      : liver.image_url.startsWith('http')
-                        ? liver.image_url
-                        : staticFile(liver.image_url)
-                  }
+            if (isCompact) {
+              return (
+                <div
+                  key={liver.rank}
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: getAvatarPosition(liver.rank),
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 30,
+                    borderRadius: 12,
+                    border: `2px solid ${UNITY_THEME}`,
+                    boxShadow: `0 8px 32px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.5), 0 0 20px ${UNITY_THEME}40`,
+                    backgroundColor: 'rgba(5,0,15,0.92)',
+                    transform: `translateY(${slideY}px) scale(${bounceScale})`,
+                    opacity: rowOpacity,
+                    padding: `${verticalPad}px 30px`,
+                    position: 'relative',
                   }}
-                />
-              </div>
+                >
+                  <div
+                    style={{
+                      width: 220,
+                      height: 220,
+                      borderRadius: 9999,
+                      border: `3px solid ${UNITY_LIME}`,
+                      boxShadow: `0 0 15px ${UNITY_LIME}80`,
+                      flexShrink: 0,
+                      overflow: 'hidden',
+                      backgroundColor: 'rgba(0,0,0,0.5)',
+                    }}
+                  >
+                    <Img
+                      src={avatarSrc}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center top',
+                      }}
+                    />
+                  </div>
 
-              {/* Nickname and "Time" Decor */}
-              <div style={{
-                marginLeft: 40 * scale,
-                flex: 1,
-                zIndex: 2,
-              }}>
-                <div style={{
-                  fontSize: fontSize,
-                  fontWeight: '800',
-                  color: '#FFF',
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                  marginBottom: 10 * scale,
-                }}>
-                  {liver.nickname}
+                  <div 
+                    style={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      justifyContent: 'center',
+                      alignItems: 'flex-start', 
+                      gap: 4, 
+                      flex: 1, 
+                      whiteSpace: 'nowrap' 
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: rankFontSize,
+                        fontWeight: '900',
+                        color: UNITY_LIME,
+                        textShadow: `0 0 10px ${UNITY_LIME}`,
+                        lineHeight: 1.1,
+                      }}
+                    >
+                      {liver.rank}位
+                    </span>
+                    <span
+                      style={{
+                        fontSize: nameFontSize,
+                        fontWeight: '800',
+                        color: '#FFF',
+                        textShadow: `0 0 10px rgba(0,0,0,0.8)`,
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {liver.nickname}
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+
+            // is2Group / is3Group Layout (Featured Centered Icon)
+            return (
+              <div
+                key={liver.rank}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  transform: `translateY(${slideY}px) scale(${bounceScale})`,
+                  opacity: rowOpacity,
+                  position: 'relative',
+                  width: '100%',
+                  gap: 15,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', position: 'relative', width: '100%', justifyContent: 'center' }}>
+                    {/* Rank Text (Left) */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '0px',
+                        width: '24%',
+                        fontSize: rankFontSize,
+                        fontWeight: 900,
+                        color: UNITY_LIME,
+                        textShadow: `0 0 30px ${UNITY_LIME}, 0 0 10px #000`,
+                        fontStyle: 'italic',
+                        textAlign: 'right',
+                        paddingRight: 40,
+                        lineHeight: 1,
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {liver.rank}
+                      <span style={{ fontSize: rankFontSize * 0.4, fontStyle: 'normal', marginLeft: 2 }}>
+                        位
+                      </span>
+                    </div>
+
+                    {/* Avatar Circle (Center) */}
+                    <div
+                        style={{
+                          width: is2Group ? 550 : 380,
+                          height: is2Group ? 550 : 380,
+                          borderRadius: '50%',
+                          border: `8px solid ${UNITY_THEME}`,
+                          boxShadow: `0 0 50px ${UNITY_THEME}, inset 0 0 25px ${UNITY_THEME}`,
+                          overflow: 'hidden',
+                          flexShrink: 0,
+                          backgroundColor: 'rgba(0,0,0,0.5)',
+                          position: 'relative',
+                        }}
+                    >
+                        <Img
+                          src={avatarSrc}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: getAvatarPosition(liver.rank),
+                          }}
+                        />
+                    </div>
+                </div>
+
+                {/* Nickname (Below) */}
+                <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      pointerEvents: 'none',
+                    }}
+                >
+                    <span
+                      style={{
+                        fontSize: nameFontSize,
+                        fontWeight: 800,
+                        color: '#FFF',
+                        textShadow: `0 0 20px ${UNITY_THEME}, 3px 3px 10px #000`,
+                        whiteSpace: 'nowrap',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {liver.nickname}
+                    </span>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <ImpactEffect beatPulse={pulse} color={THEME_COLOR} />
+            );
+          })}
+        </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };

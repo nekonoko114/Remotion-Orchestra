@@ -31,7 +31,7 @@ type Props = {
 
 export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm }) => {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { fps, durationInFrames, width } = useVideoConfig();
 
   const bgScale = interpolate(frame, [0, durationInFrames], [1, 1.15], {
     extrapolateLeft: 'clamp',
@@ -169,8 +169,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: 500,
-                height: 500,
+                width: 500 * (width / 2160),
+                height: 500 * (width / 2160),
                 background: `radial-gradient(circle, ${glow} 0%, transparent 60%)`,
                 opacity: 0.5,
                 zIndex: -1,
@@ -179,10 +179,10 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
             <TextShine color="rgba(255, 255, 255, 0.9)" delay={15} duration={45}>
               <h1
                 style={{
-                  fontSize: rank === 1 ? 380 : 300,
+                  fontSize: (rank === 1 ? 380 : 300) * (width / 2160),
                   margin: 0,
                   color: rank === 1 ? '#FFD700' : '#FFFFFF',
-                  textShadow: rank === 1 ? `0 0 20px ${primary}, 0 10px 20px rgba(0,0,0,0.9)` : `0 0 15px ${primary}`,
+                  textShadow: rank === 1 ? `0 0 ${20 * (width / 2160)}px ${primary}, 0 ${10 * (width / 2160)}px ${20 * (width / 2160)}px rgba(0,0,0,0.9)` : `0 0 ${15 * (width / 2160)}px ${primary}`,
                   fontWeight: 900,
                   fontStyle: 'italic',
                   lineHeight: 0.8,
@@ -197,11 +197,11 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
               <div
                 style={{
                   position: 'absolute',
-                  top: -230,
+                  top: -230 * (width / 2160),
                   left: '50%',
                   transform: 'translateX(-50%) rotate(-5deg)',
-                  fontSize: 180,
-                  textShadow: `0 0 30px ${primary}, 0 0 60px ${primary}, 0 10px 20px rgba(0,0,0,0.8)`,
+                  fontSize: 180 * (width / 2160),
+                  textShadow: `0 0 ${30 * (width / 2160)}px ${primary}, 0 0 ${60 * (width / 2160)}px ${primary}, 0 ${10 * (width / 2160)}px ${20 * (width / 2160)}px rgba(0,0,0,0.8)`,
                   zIndex: 10,
                 }}
               >
@@ -212,16 +212,16 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
 
           <div
             style={{
-              width: rank === 1 ? 1000 : 896,
-              height: rank === 1 ? 1000 : 896,
+              width: (rank === 1 ? 1000 : 896) * (width / 2160),
+              height: (rank === 1 ? 1000 : 896) * (width / 2160),
               borderRadius: '50%',
               overflow: 'hidden',
-              border: rank === 1 ? '15px solid #FFD700' : '10px solid #FFFFFF',
-              boxShadow: rank === 1 ? `0 0 0 15px ${primary}, 0 0 80px ${glow}, 0 20px 60px rgba(0,0,0,0.9)` : `0 0 0 8px ${primary}, 0 0 40px ${glow}, 0 20px 40px rgba(0,0,0,0.8)`,
+              border: `${(rank === 1 ? 15 : 10) * (width / 2160)}px solid #FFD700`,
+              boxShadow: rank === 1 ? `0 0 0 ${(15 * (width / 2160))}px ${primary}, 0 0 ${80 * (width / 2160)}px ${glow}, 0 ${20 * (width / 2160)}px ${60 * (width / 2160)}px rgba(0,0,0,0.9)` : `0 0 0 ${(8 * (width / 2160))}px ${primary}, 0 0 ${40 * (width / 2160)}px ${glow}, 0 ${20 * (width / 2160)}px ${40 * (width / 2160)}px rgba(0,0,0,0.8)`,
               position: 'relative',
               backgroundColor: '#000',
               zIndex: 5,
-              marginTop: 10,
+              marginTop: 10 * (width / 2160),
               transform: `scale(${imageScale}) rotate(${imageRotate}deg) translateY(${imageY}px)`,
               opacity: imageOpacity,
             }}
@@ -240,13 +240,13 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
 
           <h2
             style={{
-              fontSize: 100,
-              marginTop: 50,
-              textShadow: `0 0 20px ${glow}, 0 4px 10px black`,
+              fontSize: 100 * (width / 2160),
+              marginTop: 50 * (width / 2160),
+              textShadow: `0 0 ${20 * (width / 2160)}px ${glow}, 0 ${4 * (width / 2160)}px ${10 * (width / 2160)}px black`,
               fontWeight: 900,
               fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
               color: '#fff',
-              transform: `translateY(${nameY}px)`,
+              transform: `translateY(${nameY * (width / 2160)}px)`,
               opacity: nameOpacity,
             }}
           >
@@ -262,7 +262,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
       {rank === 1 && (
         <>
           <AbsoluteFill style={{ zIndex: 120, pointerEvents: 'none' }}>
-            <LightningBolt color={primary} thickness={20} />
+            <LightningBolt color={primary} thickness={20 * (width / 2160)} />
           </AbsoluteFill>
           <AbsoluteFill style={{ zIndex: 8, pointerEvents: 'none', mixBlendMode: 'screen' }}>
             <div
@@ -271,10 +271,10 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
                 top: '50%',
                 left: '50%',
                 transform: `translate(-50%, -50%) rotate(${frame}deg)`,
-                width: 1500,
-                height: 1500,
+                width: 1500 * (width / 2160),
+                height: 1500 * (width / 2160),
                 background: 'radial-gradient(circle, rgba(255,215,0,0) 40%, rgba(255,215,0,0.1) 50%, rgba(255,215,0,0) 60%)',
-                border: '2px dashed rgba(255,215,0,0.3)',
+                border: `${2 * (width / 2160)}px dashed rgba(255,215,0,0.3)`,
                 borderRadius: '50%',
               }}
             />

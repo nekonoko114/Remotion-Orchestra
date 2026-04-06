@@ -13,18 +13,15 @@ import {
 import { RankingVerticalSchema } from './compositions/VideoFactory/RankingVertical/schema';
 import RANKING_DATA_JSON from './compositions/VideoFactory/data.json';
 import type { Liver } from './compositions/VideoFactory/types';
-/*
 import {
   RankingTime,
   OPENING_SEC as OPENING_SEC_TIME,
   GROUP_SEC as GROUP_SEC_TIME,
-  TOP_RANK_SEC as TOP_RANK_SEC_TIME,
+  TOP32_RANK_SEC as TOP32_RANK_SEC_TIME,
+  TOP1_RANK_SEC as TOP1_RANK_SEC_TIME,
   ENDING_SEC as ENDING_SEC_TIME,
-  TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
   GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
 } from './compositions/VideoFactory/RankingTime';
-*/
-import { RankingTime } from './compositions/VideoFactory/RankingTime';
 import {
   RankingEvent,
 } from './compositions/VideoFactory/RankingEvent';
@@ -136,9 +133,16 @@ const JOL_RANKING_DURATION_VERTICAL =
     JOL_RANKING_FPS -
   (8 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
 
-// Calculate Time Duration (Correctly using its own 7s opening)
-// Updated to 3 groups (10-8, 7-6, 5-4)
-const JOL_RANKING_DURATION_TIME = 2490;
+// Calculate Time Duration (Correctly using its own 5s opening)
+// Updated to 4 groups (15-11, 10-8, 7-6, 5-4)
+const JOL_RANKING_DURATION_TIME = 
+  (OPENING_SEC_TIME +
+    GROUP_SEC_TIME * 4 +
+    GRID_BRIDGE_SEC_TIME +
+    TOP32_RANK_SEC_TIME * 2 +
+    TOP1_RANK_SEC_TIME +
+    ENDING_SEC_TIME) *
+    JOL_RANKING_FPS;
 // Previous calculation was ~2750, confirmed it's exactly 2750 frames.
 /*
   (OPENING_SEC_TIME +
@@ -191,8 +195,14 @@ export const RemotionRoot: React.FC = () => {
         component={RankingTime}
         durationInFrames={Math.ceil(JOL_RANKING_DURATION_TIME)}
         fps={JOL_RANKING_FPS}
-        width={2160}
-        height={3840}
+        width={1080}
+        height={1920}
+        defaultProps={{
+          openingTitle2: '3月度 配信時間',
+          openingDate: '2026年3月',
+          themeColor: '#d000ff',
+          glowColor: 'rgba(208, 0, 255, 0.6)',
+        }}
       />
       <Composition
         id="JOL-Ranking-Event"

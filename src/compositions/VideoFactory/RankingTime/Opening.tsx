@@ -73,7 +73,15 @@ const DigitalTypewriter: React.FC<{
   );
 };
 
-export const Opening: React.FC = () => {
+export const Opening: React.FC<{
+  title2?: string;
+  date?: string;
+  themeColor?: string;
+}> = ({
+  title2 = '3月度 配信時間',
+  date = '2026年3月',
+  themeColor = '#d000ff',
+}) => {
   const frame = useCurrentFrame();
   const { width } = useVideoConfig();
   const scale = width / 1080;
@@ -133,18 +141,18 @@ export const Opening: React.FC = () => {
       </AbsoluteFill>
 
       <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 50 }}>
-        <DigitalTypewriter text="J.O.L" fontSize={260 * scale} delay={0} duration={30} yOffset={-320 * scale} />
-        <DigitalTypewriter text="2026年3月度" fontSize={130 * scale} delay={30} duration={30} yOffset={-100 * scale} />
-        <DigitalTypewriter text="ランキング" fontSize={160 * scale} delay={60} duration={30} yOffset={150 * scale} />
-        <DigitalTypewriter text="結果発表!" fontSize={160 * scale} delay={90} duration={30} yOffset={380 * scale} />
+        <DigitalTypewriter text="J.O.L" fontSize={260 * scale} delay={0} duration={30} yOffset={-320 * scale} color={themeColor} />
+        <DigitalTypewriter text={date} fontSize={130 * scale} delay={30} duration={30} yOffset={-100 * scale} color={themeColor} />
+        <DigitalTypewriter text={title2} fontSize={160 * scale} delay={60} duration={30} yOffset={150 * scale} color={themeColor} />
+        <DigitalTypewriter text="結果発表!" fontSize={160 * scale} delay={90} duration={30} yOffset={380 * scale} color={themeColor} />
       </div>
 
       <AbsoluteFill style={{ zIndex: 20, pointerEvents: 'none' }}>
-        <LensFlare opacity={pulse * 0.02} scale={1.1 * scale} color="#d000ff" intensity={0.8} />
+        <LensFlare opacity={pulse * 0.02} scale={1.1 * scale} color={themeColor} intensity={0.8} />
       </AbsoluteFill>
 
       <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 80 }}>
-        <CinematicBorder color="#d000ff" glowColor="rgba(208, 0, 255, 0.5)" />
+        <CinematicBorder color={themeColor} glowColor={`${themeColor}80`} />
       </div>
     </AbsoluteFill>
   );

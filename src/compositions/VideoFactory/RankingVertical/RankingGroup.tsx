@@ -51,7 +51,7 @@ export const RankingGroup: React.FC<Props> = ({
   const isCompact = livers.length >= 4; // 15-11位 (5名)
   const is3Group = livers.length === 3;
   const is2Group = livers.length === 2;
-  const gap = isCompact ? 18 : is2Group ? 80 : is3Group ? 90 : 80;
+  const gap = isCompact ? 18 : is2Group ? 80 : is3Group ? 30 : 80;
   const rankFontSize = isCompact ? 90 : is2Group ? 160 : 130;
   const nameFontSize = isCompact ? 48 : is2Group ? 85 : 75;
   const verticalPad = isCompact ? 20 : 0;

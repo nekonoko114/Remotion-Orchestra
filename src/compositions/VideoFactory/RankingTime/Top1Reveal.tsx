@@ -34,9 +34,11 @@ type Props = {
   rank: number;
   liver: Liver;
   title: string;
+  themeColor?: string;
+  glowColor?: string;
 };
 
-export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
+export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, glowColor }) => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
 
@@ -77,13 +79,14 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const pulseScale = 1 + pulse * 0.002;
 
   const magicCirclesData = useMemo(() => {
+    const scaleFactor = width / 2160; // Corrected to use 4K baseline
     const count = rank === 1 ? 5 : 3;
     return [...new Array(count)].map((_, i) => {
       const seed = `magic-${rank}-${i}`;
-      const size = 1200 + random(seed + 'size') * 800;
+      const size = (1200 + random(seed + 'size') * 800) * scaleFactor;
       const angle = (i / count) * Math.PI * 2 + random(seed + 'ang') * 0.5;
-      const baseRadius = rank === 1 ? 500 : 450;
-      const radiusVariance = rank === 1 ? 400 : 350;
+      const baseRadius = (rank === 1 ? 500 : 450) * scaleFactor;
+      const radiusVariance = (rank === 1 ? 400 : 350) * scaleFactor;
       const radius = baseRadius + random(seed + 'rad') * radiusVariance;
       const x = Math.cos(angle) * radius;
       const y = Math.sin(angle) * radius;
@@ -103,11 +106,13 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
       const blur = 1 + random(seed + 'blur') * 4;
       return { size, x, y, rotationDir, rotationSpeed, asset, opacity, blur };
     });
-  }, [rank]);
+  }, [rank, width]);
 
   const getRankColors = (r: number) => {
-    if (r === 1) return { primary: '#d000ff', glow: 'rgba(208, 0, 255, 0.8)' };
-    return { primary: '#a200ff', glow: 'rgba(162, 0, 255, 0.8)' };
+    const baseColor = themeColor || '#d000ff';
+    const baseGlow = glowColor || 'rgba(208, 0, 255, 0.8)';
+    if (r === 1) return { primary: baseColor, glow: baseGlow };
+    return { primary: baseColor, glow: baseGlow };
   };
 
   const { primary, glow } = getRankColors(rank);

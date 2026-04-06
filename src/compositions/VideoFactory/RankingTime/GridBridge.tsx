@@ -84,7 +84,7 @@ export const GridBridge: React.FC = () => {
 
     const gatherProgress = interpolate(
       frame,
-      [beatFrames * 8, beatFrames * 12],
+      [beatFrames * 3, beatFrames * 5],
       [0, 1],
       {
         easing: Easing.out(Easing.back(2)),
@@ -147,7 +147,7 @@ export const GridBridge: React.FC = () => {
                   ? 1
                   : interpolate(
                       frame,
-                      [beatFrames * 10, beatFrames * 14],
+                      [beatFrames * 4, beatFrames * 6],
                       [1, 0.75],
                       {
                         extrapolateLeft: 'clamp',
@@ -178,10 +178,10 @@ export const GridBridge: React.FC = () => {
                       flexShrink: 0,
                       overflow: 'hidden',
                       border: isTop3
-                        ? `${12 * (width / 1080)}px solid #FFD700`
+                        ? `${12 * (width / 1080)}px solid #d000ff`
                         : `${4 * (width / 1080)}px solid #444`,
                       boxShadow: isTop3
-                        ? `0 0 ${50 * (width / 1080)}px rgba(255, 215, 0, 0.8)`
+                        ? `0 0 ${50 * (width / 1080)}px rgba(208, 0, 255, 0.8)`
                         : 'none',
                       backgroundColor: '#111',
                     }}
@@ -233,7 +233,7 @@ export const GridBridge: React.FC = () => {
                           right: 0,
                           textAlign: 'center',
                           backgroundColor: 'rgba(0,0,0,0.7)',
-                          color: '#FFD700',
+                          color: '#00f2ff',
                           fontSize: 60 * (width / 1080),
                           fontWeight: 'bold',
                           padding: `${10 * (width / 1080)}px 0`,
@@ -255,7 +255,7 @@ export const GridBridge: React.FC = () => {
           backgroundColor: '#fff',
           opacity: interpolate(
             frame,
-            [beatFrames * 18, beatFrames * 21],
+            [beatFrames * 8, beatFrames * 10],
             [0, 1],
             { extrapolateLeft: 'clamp' },
           ),
