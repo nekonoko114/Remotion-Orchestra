@@ -23,7 +23,7 @@ export const GROUP_SEC = 6;
 export const TOP32_RANK_SEC = 5.0;
 export const TOP1_RANK_SEC = 6.0;
 export const ENDING_SEC = 3;
-export const TRANSITION_FRAMES = 40;
+export const TRANSITION_FRAMES = 16;
 
 type RankingTimeProps = {
   data?: Liver[];
@@ -105,28 +105,28 @@ export const RankingTime = (props: RankingTimeProps) => {
 
           {/* 15~11位 */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
-            <RankingGroup title={'TOP 15~11'} livers={RANKING_DATA.filter((d) => d.rank >= 11 && d.rank <= 15)} />
+            <RankingGroup title={'TOP 11~15'} livers={RANKING_DATA.filter((d) => d.rank >= 11 && d.rank <= 15)} />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={wipe({ direction: 'from-left' })} timing={timing} />
 
           {/* 10~8位 */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
-            <RankingGroup title={'TOP 10~8'} livers={RANKING_DATA.filter((d) => d.rank >= 8 && d.rank <= 10)} />
+            <RankingGroup title={'TOP 8~10'} livers={RANKING_DATA.filter((d) => d.rank >= 8 && d.rank <= 10)} />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={wipe({ direction: 'from-top' })} timing={timing} />
 
           {/* 7~6位 */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
-            <RankingGroup title={'TOP 7~6'} livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 7)} />
+            <RankingGroup title={'TOP 6~7'} livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 7)} />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={wipe({ direction: 'from-top-right' })} timing={timing} />
 
           {/* 5~4位 */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
-            <RankingGroup title={'TOP 5~4'} livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 5)} />
+            <RankingGroup title={'TOP 4~5'} livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 5)} />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={wipe({ direction: 'from-right' })} timing={timing} />

@@ -2,20 +2,12 @@ import { z } from 'zod';
 
 export const LiverSchema = z.object({
   rank: z.number(),
-  id: z.string().optional(),
-  username: z.string().optional(),
-  image_url: z.string().optional(),
-  saved_to: z.string().optional(),
-  ok: z.boolean().optional(),
-  error: z.string().nullable().optional(),
-  user_id: z.string().optional(),
-  unique_id: z.string().optional(),
-  nickname: z.string().optional(),
-  signature: z.string().nullable().optional(),
-  creator_account: z.string().optional(),
-  creator_name: z.string().optional(),
-  content: z.string().nullable().optional(),
-});
+  id: z.string().default(''),
+  nickname: z.string().default(''),
+  image_url: z.string().default(''),
+  saved_to: z.string().default(''),
+  score: z.number().default(0),
+}).passthrough(); // data.json に追加フィールドがあっても無視
 
 export const RankingVerticalSchema = z.object({
   bpm: z.number().default(124),

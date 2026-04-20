@@ -93,9 +93,6 @@ export const Opening: React.FC<OpeningProps> = ({
             <NeonGlowText text={title3} fontSize={140} color="#FFD700" glowColor="#FF8C00" delay={35} />
           </div>
           <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div style={{ transform: 'scale(0.8)', marginBottom: '10px' }}>
-              <NeonGlowText text={date} fontSize={100} color="#FFFFFF" glowColor="rgba(255,255,255,0.5)" delay={50} />
-            </div>
             <NeonGlowText text={subtitle} fontSize={160} color="#FFD700" glowColor="#FF8C00" delay={65} />
           </div>
         </div>

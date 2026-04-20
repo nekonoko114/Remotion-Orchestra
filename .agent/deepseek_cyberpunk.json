@@ -1,0 +1,29 @@
+{
+  "id": "chatcmpl-fqhjjx5aa3ekpjfd465su",
+  "object": "chat.completion",
+  "created": 1776554432,
+  "model": "deepseek-coder-v2-lite-instruct",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": " もちろんです！以下は、『サイバーパンク・フューチャー』というテーマに沿ったリメイク版「DeepSeekとAntigravityのコラボレーション」の各シーンの提案です。\n\n### Opening - 開始シーン\n- **タイトル**: 未来の邂逅\n- **テキスト**: \"DeepSeekとAntigravityが未来を切り拓く瞬間\"\n- **推奨カラーコード**: #00FFCC（ネオン青）\n\n### Scene1 - シーン1\n- **タイトル**: サイバーランドの輝き\n- **テキスト**: \"光と影が交錯するサイバーパンクの街\"\n- **推奨カラーコード**: #FF006E（ネオンピンク）\n\n### Scene2 - シーン2\n- **タイトル**: デジタルフュージョン\n- **テキスト**: \"ハードとソフトが融合する瞬間\"\n- **推奨カラーコード**: #FFD700（ネオンゴールド）\n\n### Ending - 終了シーン\n- **タイトル**: 新たなる時代へ\n- **テキスト**: \"DeepSeekとAntigravityが開かれし未来へ\"\n- **推奨カラーコード**: #00FF95（ネオングリーン）\n\nこれらのタイトル、テキスト、そしてカラーコードを使用することで、映像がさらにエネルギッシュかつサイバーパンクな雰囲気に彩られるでしょう。",
+        "reasoning_content": "",
+        "tool_calls": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 209,
+    "completion_tokens": 549,
+    "total_tokens": 758,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "stats": {},
+  "system_fingerprint": "deepseek-coder-v2-lite-instruct"
+}

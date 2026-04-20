@@ -83,7 +83,7 @@ export const RankingEvent = () => {
           {/* TOP 15~11（5名） */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n15~11'}
+              title={'TOP\n11~15'}
               livers={RANKING_DATA.filter((d) => d.rank >= 11 && d.rank <= 15)}
               absoluteFrame={frame}
             />
@@ -94,7 +94,7 @@ export const RankingEvent = () => {
           {/* TOP 10~8（3名） */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n10~8'}
+              title={'TOP\n8~10'}
               livers={RANKING_DATA.filter((d) => d.rank >= 8 && d.rank <= 10)}
               absoluteFrame={frame}
             />
@@ -105,7 +105,7 @@ export const RankingEvent = () => {
           {/* TOP 7~6（2名） */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n7~6'}
+              title={'TOP\n6~7'}
               livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 7)}
               absoluteFrame={frame}
             />
@@ -116,7 +116,7 @@ export const RankingEvent = () => {
           {/* TOP 5~4（2名） */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n5~4'}
+              title={'TOP\n4~5'}
               livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 5)}
               absoluteFrame={frame}
             />

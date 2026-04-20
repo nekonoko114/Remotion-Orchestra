@@ -3,8 +3,8 @@ import { z } from 'zod';
 export const ArigatoSchema = z.object({
   images: z.array(z.string()),
   music: z.string(),
-  title: z.string().optional(),
-  message: z.string().optional(),
+  title: z.string().optional().default(''),
+  message: z.string().optional().default(''),
   fps: z.number().default(60),
 });
 

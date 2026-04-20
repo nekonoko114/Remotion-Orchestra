@@ -24,7 +24,7 @@ export const GROUP_SEC = 5;
 export const TOP_RANK_SEC = 5.6;
 export const GRID_BRIDGE_SEC = 3.5;
 export const ENDING_SEC = 2.5;
-export const TRANSITION_FRAMES = 28;
+export const TRANSITION_FRAMES = 16;
 export const LAST_TRANSITION_FRAMES = 20;
 
 export const RankingVertical: React.FC<RankingVerticalProps> = ({
@@ -129,7 +129,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n15~11'}
+              title={'TOP\n11~15'}
               livers={livers.filter((d) => d.rank >= 11 && d.rank <= 15) as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}
@@ -140,7 +140,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n10~8'}
+              title={'TOP\n8~10'}
               livers={livers.filter((d) => d.rank >= 8 && d.rank <= 10) as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}
@@ -151,7 +151,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n7~6'}
+              title={'TOP\n6~7'}
               livers={livers.filter((d) => d.rank >= 6 && d.rank <= 7) as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}
@@ -162,7 +162,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n5~4'}
+              title={'TOP\n4~5'}
               livers={livers.filter((d) => d.rank >= 4 && d.rank <= 5) as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}

@@ -10,9 +10,8 @@ import {
   TRANSITION_FRAMES,
   LAST_TRANSITION_FRAMES,
 } from './compositions/VideoFactory/RankingVertical';
-import { RankingVerticalSchema } from './compositions/VideoFactory/RankingVertical/schema';
+import { RankingVerticalSchema, LiverSchema } from './compositions/VideoFactory/RankingVertical/schema';
 import RANKING_DATA_JSON from './compositions/VideoFactory/data.json';
-import type { Liver } from './compositions/VideoFactory/types';
 import {
   RankingTime,
   OPENING_SEC as OPENING_SEC_TIME,
@@ -117,7 +116,13 @@ import { QuadImageEffectsCatalog } from './compositions/VideoFactory/QuadImageEf
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import { ArigatoMV, ArigatoSchema } from './compositions/Arigato';
 import { getArigatoImages } from './compositions/Arigato/image-loader';
+import { BookFlipSample } from './compositions/VideoFactory/BookFlipSample';
 import { AssetPanel } from './components/AssetPanel';
+import {
+  MinibaUniverse,
+  MINIBA_UNIVERSE_TOTAL_FRAMES,
+} from './compositions/MinibaUniverse';
+import { DeepSeekCollaboration } from './compositions/DeepSeekCollaboration';
 import './index.css';
 import React from 'react';
 
@@ -177,17 +182,18 @@ export const RemotionRoot: React.FC = () => {
           bgmFile: 'assets/audio/music/doragonSrayer.mp3',
           bgmStartFrom: 25,
           openingVideo:
-            'assets/pixabay/videos/pixabay_sword_diamond_nice_hd_background_of_screen_minecra_99299.mp4',
+            'backgrounds/diamond-ranking-opening.mp4',
           rankingVideo:
             'assets/pixabay/videos/pixabay_fire_flame_beautiful_wallpaper_burn_hot_smoke_feve_200715.mp4',
           openingTitle1: 'J.O.L',
-          openingTitle2: '2026年\nダイヤモンド獲得',
+          openingTitle2: '2026年3月\nダイヤモンド獲得',
           openingTitle3: 'ランキング',
           openingSubtitle: '結果発表',
           useGlitch: true,
           glitchIntensity: 10,
           top3Video: 'assets/pixabay/videos/pixabay_dimension_space_psychedelic_abstract_portal_time_w_31183.mp4',
-          livers: RANKING_DATA_JSON as unknown as Liver[],
+          openingDate: '',
+          livers: (RANKING_DATA_JSON as unknown[]).map((l) => LiverSchema.parse(l)),
         }}
       />
       <Composition
@@ -330,6 +336,7 @@ export const RemotionRoot: React.FC = () => {
             src: 'assets/audio/music/Breathing-Lighter.mp3',
             volume: 0.6,
             startFrom: 1440,
+            bpm: 120,
           },
           opponent: {
             name: '限界突破まみ🎽',
@@ -340,6 +347,10 @@ export const RemotionRoot: React.FC = () => {
           liver: {
             name: '🔆≒ユージン≒🔆',
             image: 'assets/images-01/t.o.p_u_jin_.jpeg',
+            altImage: '',
+            altImageStartFrame: 0,
+            altImageEndFrame: 0,
+            gridImage: '',
             borderColor: '#ff0000',
             glowColor: '#FF6600',
           },
@@ -348,6 +359,16 @@ export const RemotionRoot: React.FC = () => {
             useGlitch: true,
             useMirror: true,
             useDoublingGrid: false,
+            useGridConvergence: false,
+            useSnowEffect: false,
+            useKaleidoscope: false,
+            useSpinIntro: false,
+            useCircleLiver: false,
+            useMetallicVs: false,
+            hideVsFocusLines: false,
+            colorizeVsVideo: false,
+            useSakuraEffect: false,
+            hideDefaultParticles: false,
           },
           liverIntroDuration: 120,
           reverseVsOrder: true,
@@ -366,7 +387,7 @@ export const RemotionRoot: React.FC = () => {
             zIndex: 600,
             muted: true,
           },
-        }}
+        } as any}
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-GREEN"
@@ -412,6 +433,7 @@ export const RemotionRoot: React.FC = () => {
             src: 'assets/audio/music/Breathing-Lighter.mp3',
             startFrom: 126 * 60,
             volume: 0.6,
+            bpm: 120,
           },
           opponent: {
             name: '❤️‍🔥しおぴ❤️‍🔥',
@@ -422,6 +444,10 @@ export const RemotionRoot: React.FC = () => {
           liver: {
             name: '限界突破まみ🎽',
             image: 'assets/images-01/mrm0115-01.png',
+            altImage: '',
+            altImageStartFrame: 0,
+            altImageEndFrame: 0,
+            gridImage: '',
             borderColor: '#FFF',
             glowColor: '#0066ff',
           },
@@ -430,11 +456,21 @@ export const RemotionRoot: React.FC = () => {
             useGlitch: true,
             useMirror: true,
             useDoublingGrid: false,
+            useGridConvergence: false,
+            useSnowEffect: false,
+            useKaleidoscope: false,
+            useSpinIntro: false,
+            useCircleLiver: false,
+            useMetallicVs: false,
+            hideVsFocusLines: false,
+            colorizeVsVideo: false,
+            useSakuraEffect: false,
+            hideDefaultParticles: false,
           },
-        }}
+        } as any}
       />
       <Composition
-        id="JOL-BATTLE-SPIRIT-ORENGE"
+        id="JOL-BATTLE-SPIRIT-ORANGE"
         component={JolBattleSpiritOrange}
         durationInFrames={JOL_ORANGE_DURATION}
         fps={60}
@@ -442,39 +478,26 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         schema={BattleSpiritThemeSchema}
         defaultProps={{
-          themeColor: 'orange',
-          glowColor: 'rgba(255, 140, 0, 0.8)',
-          particleColor1: '#cc5500',
-          particleColor2: '#ffbb00',
-          music: {
-            src: 'assets/audio/music/冷蔵庫のメモ.mp3',
-            startFrom: 4717,
-            volume: 0.6,
-          },
-          opponent: {
-            name: '🔆≒ユージン≒🔆',
-            image: 'assets/images-01/t.o.p_u_jin_.jpeg',
-            borderColor: '#fff',
-            glowColor: '#ff4400',
-          },
-          liver: {
-            name: '限界突破まみ🎽',
-            image: 'assets/images-01/mrm0115-01.png',
-            gridImage: 'assets/images-01/mrm0115.jpeg',
-            borderColor: '#FFE4B5',
-            glowColor: 'orange',
-          },
-          endingText: 'この戦いは<br/>絶対に<br/>負けられない',
+          ...speedOrangeTheme,
           features: {
             useGlitch: false,
             useMirror: false,
             useDoublingGrid: false,
             useGridConvergence: true,
+            useSnowEffect: false,
+            useKaleidoscope: false,
+            useSpinIntro: false,
+            useCircleLiver: false,
+            useMetallicVs: false,
+            hideVsFocusLines: false,
+            colorizeVsVideo: false,
+            useSakuraEffect: false,
+            hideDefaultParticles: false,
           },
           lightLeakColor: '#ff8800',
           reverseVsOrder: true,
           fontFamily: '"Mochiy Pop One", sans-serif',
-        }}
+        } as any}
       />
       <Composition
         id="Magic-Circle-Showcase"
@@ -556,8 +579,12 @@ export const RemotionRoot: React.FC = () => {
             glowColor: '#7cb342',
           },
           liver: {
-            name: 'なるりれ🦥🍉',
+            name: 'なるりれ🦚🍉',
             image: 'assets/images-01/karaindaisuki.png',
+            altImage: '',
+            altImageStartFrame: 0,
+            altImageEndFrame: 0,
+            gridImage: '',
             borderColor: '#ffffff',
             glowColor: '#81d4fa',
           },
@@ -570,6 +597,11 @@ export const RemotionRoot: React.FC = () => {
             useKaleidoscope: false,
             useSpinIntro: true,
             useCircleLiver: true,
+            useMetallicVs: false,
+            hideVsFocusLines: false,
+            colorizeVsVideo: false,
+            useSakuraEffect: false,
+            hideDefaultParticles: false,
           },
           customBackground:
             'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
@@ -982,6 +1014,32 @@ export const RemotionRoot: React.FC = () => {
           message: 'いつも今までありがとう　',
           fps: 30,
         }}
+      />
+
+      {/* 🎉 なるりれ マイイベント告知動画 */}
+      <Composition
+        id="JOL-MINIBA-UNIVERSE"
+        component={MinibaUniverse}
+        durationInFrames={MINIBA_UNIVERSE_TOTAL_FRAMES}
+        fps={60}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="DeepSeek-Collaboration"
+        component={DeepSeekCollaboration}
+        durationInFrames={600}
+        fps={60}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="BookFlipSample"
+        component={BookFlipSample}
+        durationInFrames={600}
+        fps={30}
+        width={1080}
+        height={1920}
       />
     </>
   );

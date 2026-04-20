@@ -88,7 +88,7 @@ export const PopularityBattle3vs1Schema = z.object({
       id: z.string(),
       name: z.string(),
       image: z.string(),
-      borderColor: z.string().optional(),
+      borderColor: z.string().optional().default('#fff'),
     })
   ),
   dateInfo: z.object({
@@ -96,11 +96,11 @@ export const PopularityBattle3vs1Schema = z.object({
     date: z.string(),
     time: z.string(),
   }),
-  rules: z.array(z.string()).optional(),
-  finalMessage: z.string().optional(),
-  music: z.string().optional(),
-  customBackground: z.string().optional(),
-  sakuraImages: z.array(z.string()).optional(),
+  rules: z.array(z.string()).optional().default([]),
+  finalMessage: z.string().optional().default(''),
+  music: z.string().optional().default(''),
+  customBackground: z.string().optional().default(''),
+  sakuraImages: z.array(z.string()).optional().default([]),
 });
 
 type Props = z.infer<typeof PopularityBattle3vs1Schema>;

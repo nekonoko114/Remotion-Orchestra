@@ -13,17 +13,17 @@ import {
   random,
 } from 'remotion';
 import { z } from 'zod';
-import { BurningLightningText, ElegantBokehText, StarburstCoreText } from './components/BattleShared/BattleSharedComponents';
+import { BurningLightningText, StarburstCoreText } from './components/BattleShared/BattleSharedComponents';
 import { NeonGlowText } from '../../components/effects/NeonGlowText';
 
 export const ReservationBattleSchema = z.object({
   themeColor: z.string(),
-  music: z.string().optional(),
+  music: z.string().optional().default(''),
   livers: z.array(
     z.object({
       name: z.string(),
       image: z.string(),
-      borderColor: z.string().optional(),
+      borderColor: z.string().optional().default('#fff'),
     })
   ).length(4), // 主役(右)1人 + 左3人 = 計4人
   dateInfo: z.object({

@@ -215,9 +215,10 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
 
   return (
     <AbsoluteFill>
-      {rank === 1 && <Audio src={VOICE_FIRST} />}
-      {rank === 2 && <Audio src={VOICE_SECOND} />}
-      {rank === 3 && <Audio src={VOICE_THIRD} />}
+      {/* Rank voices removed by user request */}
+      {/* {rank === 1 && <Audio src={VOICE_FIRST} />} */}
+      {/* {rank === 2 && <Audio src={VOICE_SECOND} />} */}
+      {/* {rank === 3 && <Audio src={VOICE_THIRD} />} */}
       <AbsoluteFill>
         <OffthreadVideo
           src={staticFile(top3Video)}

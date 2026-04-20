@@ -271,9 +271,10 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
 
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
-      {rank === 1 && <Audio src={VOICE_FIRST} />}
-      {rank === 2 && <Audio src={VOICE_SECOND} />}
-      {rank === 3 && <Audio src={VOICE_THIRD} />}
+      {/* Rank voices removed by user request */}
+      {/* {rank === 1 && <Audio src={VOICE_FIRST} />} */}
+      {/* {rank === 2 && <Audio src={VOICE_SECOND} />} */}
+      {/* {rank === 3 && <Audio src={VOICE_THIRD} />} */}
       <TimeBackground
         overlayColor={primary + '33'}
         hideBackground
@@ -424,8 +425,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
             position: 'absolute',
             left: triX,
             top: triY,
-            width: 750 * (height / 1080),
-            height: 750 * (height / 1080),
+            width: 500 * (height / 1080),
+            height: 500 * (height / 1080),
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -438,8 +439,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
               key={i}
               style={{
                 position: 'absolute',
-                width: (780 + i * 35) * (height / 1080),
-                height: (780 + i * 35) * (height / 1080),
+                width: (530 + i * 35) * (height / 1080),
+                height: (530 + i * 35) * (height / 1080),
                 borderRadius: i % 2 === 0 ? '20%' : '50%',
                 border: `${(3 - i * 0.5) * (height / 1080)}px solid ${primary}`,
                 boxShadow: `0 0 ${40 * (height / 1080)}px ${glow}, inset 0 0 ${20 * (height / 1080)}px ${glow}`,
@@ -452,8 +453,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
           <div
             style={{
               position: 'absolute',
-              width: 900 * (height / 1080),
-              height: 900 * (height / 1080),
+              width: 680 * (height / 1080),
+              height: 680 * (height / 1080),
               background: `radial-gradient(circle, ${primary}99 0%, transparent 70%)`,
               opacity: 0.4 + pulse * 0.2,
               filter: `blur(${60 * (height / 1080)}px)`,
@@ -462,8 +463,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
 
           <div
             style={{
-              width: 750 * (height / 1080),
-              height: 750 * (height / 1080),
+              width: 500 * (height / 1080),
+              height: 500 * (height / 1080),
               borderRadius: '50%',
               overflow: 'hidden',
               border: `${8 * (height / 1080)}px solid white`,
