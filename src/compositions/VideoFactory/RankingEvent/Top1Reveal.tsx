@@ -1,24 +1,31 @@
+import React from 'react';
 import {
   AbsoluteFill,
   Img,
   interpolate,
   spring,
-  staticFile,
   useCurrentFrame,
+  staticFile,
   useVideoConfig,
-  Video,
+  Easing,
+  random, // 【NEW】ランダム関数を追加
 } from 'remotion';
-import { Confetti } from '../../../components/effects/Confetti';
-import { ParticleBurst } from '../../../components/effects/ParticleBurst';
-import { Explosion } from '../../../components/effects/Explosion';
-import { LightningBolt } from '../../../components/effects/LightningBolt';
-import { SmokeEffect } from '../../../components/effects/SmokeEffect';
-import { ImpactEffect } from '../ImpactEffect';
+import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { CinematicBorder } from '../CinematicBorder';
-import { TextShine } from '../TextShine';
-import { AdjustmentLayer } from '../AdjustmentLayer';
+import { MorphingTitle } from '../MorphingTitle';
+import { Explosion } from '../../../components/effects/Explosion';
+import { ParticleBurst } from '../../../components/effects/ParticleBurst';
+import { HolographicHUD } from '../../../components/effects/HolographicHUD';
+import { GlitchEffect } from '../../../components/effects/GlitchEffect';
+import { ChromaticAberration } from '../../../components/effects/ChromaticAberration';
+import { Confetti } from '../../../components/effects/Confetti';
+import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
+import { loadFont } from '@remotion/google-fonts/Orbitron';
 
+const { fontFamily } = loadFont();
+
+const BPM = 160;
 
 type Props = {
   rank: number;
@@ -27,276 +34,336 @@ type Props = {
   backgroundSrc?: string;
 };
 
-
-
-export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, backgroundSrc }) => {
+export const Top1Reveal: React.FC<Props> = ({ rank, liver, title }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
 
-  const rankEntrance = spring({
-    frame,
-    fps,
-    config: { damping: 8, stiffness: 220 }, // Snappy "Poyon"
-  });
+  useBeatValue(BPM);
+  const localFrame = frame;
 
-  const imageEntrance = spring({
-    frame: frame - Math.floor(fps * 0.8),
+  // ===== CYBER DECODE LOGIC =====
+  const triStart = 45;
+  const triDuration = 60;
+  const t = Math.max(0, localFrame - triStart);
+  
+  const centerX = width / 2;
+  const centerY = height / 2 + 80 * (height / 1080);
+
+  // Digital Stutter
+  const stutterFrame = Math.floor(t / 2) * 2;
+  const revealProgress = interpolate(stutterFrame, [0, 20], [0, 1], { extrapolateRight: 'clamp' });
+  
+  // RGB Convergence
+  const rgbShift = interpolate(t, [0, 30], [120, 0], { easing: Easing.out(Easing.exp), extrapolateRight: 'clamp' }); // 【UPDATE】分離幅を80→120に拡大
+  const rgbAlpha = interpolate(t, [0, 10, 30], [0, 0.8, 1], { extrapolateRight: 'clamp' });
+
+  // Motion path
+  const motionX = centerX;
+  const motionY = interpolate(revealProgress, [0, 1], [centerY + 300, centerY]);
+  const motionScale = interpolate(revealProgress, [0, 1], [2.0, 1], { easing: Easing.out(Easing.back(2)) }); // 【UPDATE】スケールを強調
+  const motionRotate = interpolate(revealProgress, [0, 1], [30, 0]);
+
+  // Scanline Wipe Mask (Softer digital reveal)
+  const scanProgress = interpolate(t, [10, 45], [0, 100], { extrapolateRight: 'clamp' });
+  const maskStyle: React.CSSProperties = scanProgress < 100 ? {
+    maskImage: `linear-gradient(to bottom, black ${scanProgress}%, transparent ${scanProgress}%, transparent 100%)`,
+    WebkitMaskImage: `linear-gradient(to bottom, black ${scanProgress}%, transparent ${scanProgress}%, transparent 100%)`,
+  } : {};
+
+  let impactRotate = 0;
+  let impactY = 0;
+  let rankExtraScale = 1;
+
+  if (rank === 2) {
+    const pRank2 = interpolate(t, [40, 55], [0, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp', easing: Easing.out(Easing.back(1.5)) });
+    impactY = interpolate(pRank2, [0, 1], [300, 0]);
+  } else if (rank === 1) {
+    const pRank1 = interpolate(t, [triDuration, triDuration + 15], [0, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp', easing: Easing.out(Easing.exp) });
+    impactRotate = interpolate(pRank1, [0, 1], [-180, 0]);
+    rankExtraScale = 1.05;
+  }
+
+  const finalImageScale = motionScale * rankExtraScale;
+  const pulseScale = (1 + Math.sin(frame / 8) * 0.02);
+  const finalImageOpacity = rgbAlpha;
+
+  const sprImpact = spring({
+    frame: localFrame - (triStart + triDuration),
     fps,
-    config: { damping: 8, stiffness: 220 },
+    config: { damping: 10, stiffness: 180 },
   });
 
   const nameEntrance = spring({
-    frame: frame - Math.floor(fps * 1.1),
+    frame: localFrame - 80,
     fps,
-    config: { damping: 10, stiffness: 180 }, // Slightly softer for name
+    config: { damping: 14, stiffness: 120 },
   });
 
-  const rankScale = interpolate(rankEntrance, [0, 1], [0.2, 1]);
-  const rankOpacity = interpolate(rankEntrance, [0, 0.2], [0, 1]);
+  const rankEntrance = spring({
+    frame: localFrame - 40,
+    fps,
+    config: { damping: 10, stiffness: 160 },
+  });
 
-  let imageScale = interpolate(imageEntrance, [0, 1], [0.1, 1]);
-  let imageRotate = interpolate(imageEntrance, [0, 1], [-20, 0]);
-  let imageOpacity = interpolate(imageEntrance, [0, 1], [0, 1]);
-  let imageY = 0;
+  // 【NEW】ハッキング風のテキストデコード演出（文字がランダムな記号から名前に変化）
+  const scramblePool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>!?';
+  const decodedName = liver.nickname.split('').map((char, i) => {
+    // 文字ごとに登場タイミングをずらす
+    const charProgress = interpolate(localFrame - 80 - i * 3, [0, 10], [0, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
+    if (charProgress === 1) return char; // 完全表示
+    if (charProgress > 0) return scramblePool[Math.floor(random(`scramble-${frame}-${i}`) * scramblePool.length)]; // スクランブル状態
+    return ''; // 未表示
+  }).join('');
 
-  if (rank === 3) {
-    imageScale = interpolate(imageEntrance, [0, 1], [0.1, 1]);
-    imageRotate = 0;
-  } else if (rank === 2) {
-    imageY = interpolate(imageEntrance, [0, 1], [600, 0], {
-      easing: (t) => t,
-    });
-    imageScale = interpolate(imageEntrance, [0, 1], [0.2, 1]);
-    imageRotate = 0;
-  } else if (rank === 1) {
-    imageScale = interpolate(imageEntrance, [0, 1], [0.1, 1]);
-    imageRotate = interpolate(imageEntrance, [0, 1], [-720, 0]); // More spin for top 1
-  }
-
-  const nameY = interpolate(nameEntrance, [0, 1], [100, 0]);
+  const nameYPos = interpolate(nameEntrance, [0, 1], [50, 0]);
   const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
 
+  const impactIntensity = interpolate(sprImpact, [0, 0.1, 0.5], [0, 1, 0], { extrapolateRight: 'clamp' });
+  const flashOpacity = Math.max(
+    impactIntensity * 0.8,
+    interpolate(frame, [0, 5, 25], [0, 0.9, 0], { extrapolateRight: 'clamp' })
+  );
+
+  // 【NEW】画面全体のアグレッシブなシェイク（インパクト時）
+  const masterShakeX = impactIntensity * (random('shakeX' + frame) - 0.5) * 80;
+  const masterShakeY = impactIntensity * (random('shakeY' + frame) - 0.5) * 80;
+
+  // 【NEW】ランダムなマイクロGlitch（時々一瞬だけ画面がバグる）
+  const isRandomGlitch = localFrame > 60 && random('microGlitch' + frame) > 0.92;
+  const microGlitchIntensity = isRandomGlitch ? random('gInt' + frame) * 50 : 0;
+
+  // Glitchと色収差の激しさを計算
+  const currentGlitchIntensity = impactIntensity * 80 + (1 - revealProgress) * 60 + microGlitchIntensity;
+  const currentChromaticIntensity = impactIntensity * 40 + (1 - revealProgress) * 30 + microGlitchIntensity * 0.5;
+
+  const rankScale = interpolate(rankEntrance, [0, 1], [6, 1], {
+    easing: Easing.out(Easing.back(2)),
+  });
+  const rankOpacity = interpolate(rankEntrance, [0, 0.3], [0, 1]);
 
   const getRankColors = (r: number) => {
-    // Restore the intense metallic colors
-    if (r === 1) return { primary: '#FFD700', secondary: '#FFFFFF', glow: 'rgba(255, 215, 0, 0.8)' }; // Gold
-    if (r === 2) return { primary: '#C0C0C0', secondary: '#FFFFFF', glow: 'rgba(192, 192, 192, 0.8)' }; // Silver
-    if (r === 3) return { primary: '#B87333', secondary: '#FFFFFF', glow: 'rgba(184, 115, 51, 0.8)' }; // Copper
-    return { primary: '#f85718', secondary: '#FFFFFF', glow: 'rgba(248, 87, 24, 0.5)' };
+    if (r === 1) return { primary: '#ff0000', secondary: '#00ffff', glow: 'rgba(255, 0, 0, 0.8)' }; 
+    if (r === 2) return { primary: '#00ffff', secondary: '#ff0000', glow: 'rgba(0, 255, 255, 0.6)' }; 
+    return { primary: '#ff3333', secondary: '#00ffff', glow: 'rgba(255, 51, 51, 0.5)' }; 
   };
 
   const { primary, secondary, glow } = getRankColors(rank);
 
-  if (!liver) return null;
-
   return (
-    <AbsoluteFill>
-      {/* ===== Abstract Turing Video Background (Fixed for TOP 3rd-1st) ===== */}
-      <AbsoluteFill>
-        <Video
-          src={staticFile('assets/pixabay/videos/absturact-turing.mp4')}
-          loop
-          muted
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transform: 'scale(2.5) rotate(90deg)', 
-          }}
-        />
-        {/* Subtle overlay to keep text readable */}
-        <AbsoluteFill style={{ backgroundColor: 'rgba(0,10,5,0.4)' }} />
+    <AbsoluteFill style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
+      
+      <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
+        {frame < 20 && <ImpactEffect color={primary} intensity="normal" />}
+        <Explosion delay={triStart + triDuration} color={primary} secondaryColor={secondary} />
+        <ImpactEffect color={primary} intensity="normal" />
       </AbsoluteFill>
 
-      <AdjustmentLayer rank={rank} />
-
-      <AbsoluteFill style={{ opacity: 0.5, pointerEvents: 'none', zIndex: 110 }}>
-        <SmokeEffect color={primary} density={0.01} velocity={0.3} />
+      <AbsoluteFill style={{ zIndex: 110 }}>
+        <Confetti count={rank === 1 ? 250 : 150} colors={[primary, '#ffffff', secondary, '#00ffff']} />
+        {(localFrame > triStart + triDuration) && (
+          <ParticleBurst count={60} colors={[primary, '#ffffff', '#00ffff']} x={width/2} y={height/2 + 80 * (width/1080)} speed={4} />
+        )}
       </AbsoluteFill>
 
+      {/* 【NEW】全体を揺らすマスターラッパー */}
       <AbsoluteFill
         style={{
-          justifyContent: 'center',
+          transform: `translate(${masterShakeX}px, ${masterShakeY}px) scale(${1 + impactIntensity * 0.05})`,
+          display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
+          fontFamily,
           color: 'white',
+          zIndex: 120,
         }}
       >
-        <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
-          {frame < 15 && <ImpactEffect color={primary} intensity="high" />}
-          <Explosion delay={5} color={primary} secondaryColor={secondary} />
-          <ImpactEffect color={primary} intensity="high" />
-        </AbsoluteFill>
-
         <AbsoluteFill style={{ zIndex: 120 }}>
-          {/* Rank Title */}
-          <div 
-            style={{ 
-              position: 'absolute',
-              top: 80,
-              left: 0,
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              transform: `scale(${rankScale})`, 
-              opacity: rankOpacity
-            }}
-          >
-            <div style={{ position: 'relative' }}>
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 600,
-                  height: 600,
-                  background: `radial-gradient(circle, ${glow} 0%, transparent 60%)`,
-                  opacity: 0.9,
-                  zIndex: -1,
-                }}
-              />
-              <TextShine color="rgba(255, 255, 255, 1.0)" delay={15} duration={45}>
-                <h1
-                  style={{
-                    fontSize: rank === 1 ? 400 : 320,
-                    margin: 0,
-                    color: '#FFFFFF',
-                    textShadow: `0 0 40px ${primary}, 0 0 80px ${primary}, 0 15px 30px rgba(0,0,0,0.9)`,
-                    fontWeight: 900,
-                    fontStyle: 'italic',
-                    lineHeight: 1.0,
-                  }}
-                >
-                  {title}
-                </h1>
-              </TextShine>
-            </div>
-          </div>
-
-          {/* Avatar Circle */}
           <div
             style={{
               position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: `translate(-50%, -50%) scale(${imageScale}) rotate(${imageRotate}deg) translateY(${imageY}px)`,
-              width: 550,
-              height: 550,
-              borderRadius: '50%',
-              overflow: 'hidden',
-              boxShadow: rank === 1 ? `0 0 0 15px ${primary}, 0 0 100px ${glow}, 0 30px 80px rgba(0,0,0,0.9)` : `0 0 0 10px ${primary}, 0 0 50px ${glow}, 0 20px 50px rgba(0,0,0,0.8)`,
-              backgroundColor: '#000',
-              zIndex: 5,
-              opacity: imageOpacity,
+              top: 50 * (height / 1080),
+              left: 0,
+              right: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              transform: `scale(${pulseScale * rankScale})`,
+              opacity: rankOpacity,
             }}
           >
-            <Img
-              src={
-                liver.saved_to
-                  ? staticFile(liver.saved_to)
-                  : liver.image_url.startsWith('http')
-                    ? liver.image_url
-                    : staticFile(liver.image_url)
-              }
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            <MorphingTitle
+              text={title}
+              fontSize={180 * (height / 1080)}
+              style={{
+                fontFamily,
+                textShadow: `0 0 ${2 * (height / 1080)}px ${primary}, 0 0 ${15 * (height / 1080)}px ${primary}`,
+              }}
             />
           </div>
 
-          {/* Laurel Wreath */}
-          {(rank === 1 || rank === 2 || rank === 3) && (
-            <div
-              style={{
-                position: 'absolute',
-                top: rank === 1 ? '51%' : '50%',
-                left: '50%',
-                transform: `translate(-50%, -50%) scale(${imageScale * (rank === 1 ? 1.5 : 1.3)})`,
-                opacity: imageOpacity * 1,
-                width: 700,
-                height: 700,
-                zIndex: 4,
-                pointerEvents: 'none',
-              }}
-            >
-              <Img
-                src={staticFile(
-                  rank === 1 
-                    ? 'assets/images/laurel-wreath-gold.svg' 
-                    : rank === 2 
-                      ? 'assets/images/laurel-wreath-silver.svg' 
-                      : 'assets/images/laurel-wreath-copper.svg'
-                )}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'contain',
-                  filter: `drop-shadow(0 0 30px ${rank === 1 ? '#FFD700' : rank === 2 ? '#C0C0C0' : '#CD7F32'})`,
-                }}
-              />
-            </div>
-          )}
-
-          {/* Nickname Title */}
-          <div 
-            style={{ 
+          {/* CYBER MOTION WRAPPER */}
+          <div
+            style={{
               position: 'absolute',
-              bottom: 300,
-              left: 0,
-            width: '100%',
+              left: motionX,
+              top: motionY,
+              width: 500 * (height / 1080),
+              height: 500 * (height / 1080),
               display: 'flex',
               justifyContent: 'center',
-              opacity: nameOpacity,
+              alignItems: 'center',
+              transform: `translate(-50%, -50%) rotate(${motionRotate + impactRotate}deg) translateY(${impactY}px)`,
+            }}
+          >
+            <GlitchEffect intensity={currentGlitchIntensity}>
+              <ChromaticAberration intensity={currentChromaticIntensity}>
+                
+                {/* 【NEW】インポートされていたHolographicHUDをアバターの背面に配置 */}
+                <AbsoluteFill style={{ transform: 'scale(1.4)', opacity: revealProgress * 0.7 }}>
+                  <HolographicHUD color={primary} />
+                </AbsoluteFill>
+
+                {/* 【NEW】SF風の回転するターゲットリング */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    width: '120%',
+                    height: '120%',
+                    top: '-10%',
+                    left: '-10%',
+                    borderRadius: '50%',
+                    border: `2px dashed ${secondary}`,
+                    opacity: revealProgress * 0.5,
+                    transform: `rotate(${frame * 3}deg)`,
+                    zIndex: 2,
+                  }}
+                />
+
+                {/* Liver Image Container */}
+                <div
+                  style={{
+                    width: 500 * (height / 1080),
+                    height: 500 * (height / 1080),
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: `${8 * (height / 1080)}px solid white`,
+                    boxShadow: `0 0 ${15 * (height / 1080)}px ${primary}, 0 0 ${20 * (height / 1080)}px ${secondary}`, // 【UPDATE】影の色を2色にしてサイバー感をアップ
+                    position: 'relative',
+                    backgroundColor: '#000',
+                    zIndex: 5,
+                    opacity: finalImageOpacity,
+                    transform: `scale(${finalImageScale})`,
+                    ...maskStyle,
+                  }}
+                >
+                  {/* RGB Channels Split Rendering */}
+                  {[
+                    { color: '#ff0000', shiftX: rgbShift, shiftY: 0, blend: 'screen' },
+                    { color: '#00ff00', shiftX: -rgbShift * 0.5, shiftY: rgbShift * 0.5, blend: 'screen' },
+                    { color: '#0000ff', shiftX: -rgbShift * 0.5, shiftY: -rgbShift * 0.5, blend: 'screen' },
+                  ].map((layer, i) => (
+                    <AbsoluteFill key={i} style={{ mixBlendMode: layer.blend as any, transform: `translate(${layer.shiftX}px, ${layer.shiftY}px)` }}>
+                      <Img
+                        src={liver.saved_to ? staticFile(liver.saved_to) : liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url)}
+                        style={{ 
+                          width: '100%', 
+                          height: '100%', 
+                          objectFit: 'cover',
+                          filter: i === 0 ? 'brightness(1.5) grayscale(1) sepia(1) hue-rotate(-50deg) saturate(5)' : i === 1 ? 'brightness(1.5) grayscale(1) sepia(1) hue-rotate(80deg) saturate(5)' : 'brightness(1.5) grayscale(1) sepia(1) hue-rotate(200deg) saturate(5)',
+                          opacity: t < 30 ? 0.7 : 0,
+                        }}
+                      />
+                    </AbsoluteFill>
+                  ))}
+
+                  {/* Main Image */}
+                  <Img
+                    src={liver.saved_to ? staticFile(liver.saved_to) : liver.image_url.startsWith('http') ? liver.image_url : staticFile(liver.image_url)}
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      filter: `brightness(0.9) contrast(1.2) saturate(1.1)`, // 【UPDATE】コントラストを強めにしてエッジを立たせる
+                      opacity: t < 25 ? 0 : 1,
+                    }}
+                  />
+                  
+                  {/* Scanning Highlight Line */}
+                  {scanProgress > 0 && scanProgress < 100 && (
+                    <div style={{
+                      position: 'absolute',
+                      top: `${scanProgress}%`,
+                      width: '100%',
+                      height: '8px', // 【UPDATE】太くして発光を強める
+                      backgroundColor: '#fff',
+                      boxShadow: `0 0 20px #fff, 0 0 40px ${primary}`,
+                      zIndex: 10,
+                    }} />
+                  )}
+
+                  {/* 【NEW】ランダムな横線ノイズ（スキャンライン）を上から重ねる */}
+                  {isRandomGlitch && (
+                     <div style={{
+                       position: 'absolute',
+                       top: `${random('line' + frame) * 100}%`,
+                       width: '100%',
+                       height: '10px',
+                       backgroundColor: 'rgba(255,255,255,0.8)',
+                       mixBlendMode: 'overlay',
+                       zIndex: 15,
+                     }} />
+                  )}
+
+                  <AbsoluteFill
+                    style={{
+                      background: `radial-gradient(circle, transparent 20%, ${primary}44 100%)`,
+                      mixBlendMode: 'screen',
+                    }}
+                  />
+                </div>
+              </ChromaticAberration>
+            </GlitchEffect>
+          </div>
+
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 80 * (height / 1080),
+              left: 0,
+              right: 0,
+              display: 'flex',
+              justifyContent: 'center'
             }}
           >
             <h2
               style={{
-                fontSize: 110,
+                fontFamily,
+                fontSize: (rank === 1 ? 70 : 50) * (height / 1080),
                 margin: 0,
-                textShadow: `0 0 30px ${glow}, 2px 2px 20px black`,
+                textShadow: `0 0 ${8 * (height / 1080)}px ${glow}, 0 0 ${20 * (height / 1080)}px ${glow}, 0 0 ${40 * (height / 1080)}px ${primary}`, // 【UPDATE】テキストのGlowを強化
                 fontWeight: 900,
-                fontFamily: '"Zen Maru Gothic", "Inter", sans-serif',
                 color: '#fff',
-                transform: `translateY(${nameY}px)`,
+                opacity: nameOpacity,
+                transform: `translateY(${nameYPos * (height / 1080)}px)`,
+                letterSpacing: `${4 * (height / 1080)}px`,
               }}
             >
-              {liver.nickname}
+              {/* 【UPDATE】普通に表示するのではなく、デコードアニメーションさせる */}
+              {decodedName}
             </h2>
           </div>
         </AbsoluteFill>
       </AbsoluteFill>
 
+      <AbsoluteFill
+        style={{
+          backgroundColor: 'white',
+          opacity: flashOpacity * 0.5,
+          pointerEvents: 'none',
+          zIndex: 1000,
+          mixBlendMode: 'overlay',
+        }}
+      />
       <CinematicBorder color={primary} glowColor={glow} />
-
-      <AdjustmentLayer rank={rank} />
-
-      {rank === 1 && (
-        <>
-          <AbsoluteFill style={{ zIndex: 120, pointerEvents: 'none' }}>
-            <LightningBolt color={primary} thickness={25} />
-          </AbsoluteFill>
-          <AbsoluteFill style={{ zIndex: 8, pointerEvents: 'none', mixBlendMode: 'screen' }}>
-            <div
-              style={{
-                position: 'absolute',
-                top: '54%',
-                left: '50%',
-                transform: `translate(-50%, -50%) rotate(${frame * 2}deg)`,
-                width: 1600,
-                height: 1600,
-                background: `radial-gradient(circle, ${primary}00 40%, ${primary}33 50%, ${primary}00 60%)`,
-                border: `200px dashed ${primary}66`,
-                borderRadius: '50%',
-                
-              }}
-            />
-          </AbsoluteFill>
-        </>
-      )}
-
-      <AbsoluteFill style={{ zIndex: 110, pointerEvents: 'none' }}>
-        <Confetti count={rank === 1 ? 250 : 150} colors={[primary, '#fff', secondary]} />
-        <ParticleBurst count={rank === 1 ? 100 : 60} colors={[primary, '#fff', secondary]} x={540} y={960} speed={4} />
-      </AbsoluteFill>
     </AbsoluteFill>
   );
 };

@@ -12,21 +12,21 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
   const getTheme = () => {
     if (rank === 1)
       return {
-        tint: '#FFD700',
+        tint: '#00ffff',
         contrast: 1.0,
         saturate: 1.3,
         brightness: 1.0,
       };
     if (rank === 2)
       return {
-        tint: '#A0C0FF',
+        tint: '#8b00ff',
         contrast: 1.0,
         saturate: 1.2,
         brightness: 1.0,
       };
     if (rank === 3)
       return {
-        tint: '#FF8C00',
+        tint: '#9d00ff',
         contrast: 1.0,
         saturate: 1.2,
         brightness: 1.0,

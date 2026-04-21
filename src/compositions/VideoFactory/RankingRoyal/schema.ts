@@ -11,7 +11,7 @@ export const LiverSchema = z.object({
 
 export const RankingRoyalSchema = z.object({
   bpm: z.number().default(124), // TODO: BGMに合わせて変更可能
-  bgmFile: z.string().default('assets/audio/music/Breathing-Lighter.mp3'),
+  bgmFile: z.string().default('assets/audio/music/Improba.mp3'),
   bgmStartFrom: z.number().default(29),
   // ランキング全体の背景: ダイヤモンド・ジュエリーの雨
   rankingVideo: z.string().default('assets/pixabay/videos/pixabay_diamonds_jewels_rain_falling_wealth_value_money_cr_3125.mp4'),

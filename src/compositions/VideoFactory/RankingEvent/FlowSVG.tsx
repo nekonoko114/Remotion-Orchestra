@@ -1,8 +1,8 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 
-const UNITY_GREEN = '#f85718';
-const UNITY_LIME = '#FFD700';
+const UNITY_GREEN = '#00ffff'; // Cyan
+const UNITY_RED = '#ff1e1e';  // Red
 
 interface Props {
   pulse: number;
@@ -16,7 +16,7 @@ export const FlowSVG: React.FC<Props> = ({ pulse, opacity }) => {
     const seed = i * 37.7;
     const xBase = (seed % 100) * 10;
     const size = 2 + (seed % 6);
-    return { xBase, size, color: i % 2 === 0 ? UNITY_GREEN : UNITY_LIME };
+    return { xBase, size, color: i % 2 === 0 ? UNITY_GREEN : UNITY_RED };
   });
 
   return (

@@ -166,8 +166,8 @@ export const GridBridge: React.FC = () => {
                       borderRadius: 20,
                       flexShrink: 0,
                       overflow: 'hidden',
-                      border: isTop3 ? '12px solid #f85718' : '4px solid #444',
-                      boxShadow: isTop3 ? '0 0 40px rgba(248, 87, 24, 0.5)' : 'none',
+                      border: isTop3 ? '12px solid #ff1e1e' : '4px solid #444',
+                      boxShadow: isTop3 ? '0 0 40px rgba(255, 30, 30, 0.5)' : 'none',
                       backgroundColor: '#111',
                     }}
                   >
@@ -217,11 +217,11 @@ export const GridBridge: React.FC = () => {
                           right: 0,
                           textAlign: 'center',
                           backgroundColor: 'rgba(0,0,0,0.8)',
-                          color: '#f85718',
+                          color: '#ff1e1e',
                           fontSize: 60,
                           fontWeight: 'bold',
                           padding: '10px 0',
-                          textShadow: '0 0 10px rgba(248, 87, 24, 0.5)',
+                          textShadow: '0 0 10px rgba(255, 30, 30, 0.5)',
                         }}
                       >
                         {item.rank}位

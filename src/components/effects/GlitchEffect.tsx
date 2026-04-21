@@ -30,9 +30,12 @@ export const GlitchEffect: React.FC<GlitchEffectProps> = ({
           transform: `translate(${shakeX + rgbOffset}px, ${shakeY}px)`,
           opacity: 0.8,
           mixBlendMode: 'screen',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <div style={{ filter: 'drop-shadow(-2px 0 red)' }}>{children}</div>
+        <div style={{ filter: 'drop-shadow(-2px 0 red)', width: '100%', height: '100%' }}>{children}</div>
       </AbsoluteFill>
 
       {/* Blue Channel */}
@@ -41,14 +44,23 @@ export const GlitchEffect: React.FC<GlitchEffectProps> = ({
           transform: `translate(${shakeX - rgbOffset}px, ${shakeY}px)`,
           opacity: 0.8,
           mixBlendMode: 'screen',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <div style={{ filter: 'drop-shadow(2px 0 blue)' }}>{children}</div>
+        <div style={{ filter: 'drop-shadow(2px 0 blue)', width: '100%', height: '100%' }}>{children}</div>
       </AbsoluteFill>
 
       {/* Main Content */}
       <AbsoluteFill
-        style={{ transform: `translate(${shakeX}px, ${shakeY}px)`, opacity }}
+        style={{ 
+          transform: `translate(${shakeX}px, ${shakeY}px)`, 
+          opacity,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       >
         {children}
       </AbsoluteFill>

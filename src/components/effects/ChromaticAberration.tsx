@@ -19,7 +19,7 @@ export const ChromaticAberration: React.FC<ChromaticAberrationProps> = ({
   const finalOffset = offset * intensity;
 
   return (
-    <div style={{ position: 'relative', overflow: 'visible', ...style }}>
+    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', overflow: 'visible', ...style }}>
       {/* 赤（Red）レイヤー */}
       <div
         style={{
@@ -33,6 +33,9 @@ export const ChromaticAberration: React.FC<ChromaticAberrationProps> = ({
           color: 'red',
           zIndex: 2,
           pointerEvents: 'none',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         {children}
@@ -51,13 +54,16 @@ export const ChromaticAberration: React.FC<ChromaticAberrationProps> = ({
           color: 'blue',
           zIndex: 1,
           pointerEvents: 'none',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         {children}
       </div>
 
       {/* ベースレイヤー（緑を想定して合成） */}
-      <div style={{ position: 'relative', zIndex: 0 }}>{children}</div>
+      <div style={{ position: 'relative', zIndex: 0, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{children}</div>
     </div>
   );
 };

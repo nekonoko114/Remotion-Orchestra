@@ -40,7 +40,7 @@ export const RankingTime = (props: RankingTimeProps) => {
   const {
     openingTitle2 = '配信時間',
     openingTitle3 = 'ランキング',
-    openingDate = '2026年3月',
+    openingDate = '2026年4月',
     themeColor = '#d000ff',
     glowColor = 'rgba(208, 0, 255, 0.6)',
   } = props;

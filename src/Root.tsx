@@ -183,7 +183,7 @@ const JOL_RANKING_DURATION_TIME =
 // Calculate Event Duration
 // (Opening 300 + 4 Groups * 270 + 3 Reveals (300, 300, 360) + Ending 240) - (6 * T 12 + 1 * LAST_T 15)
 // = (300 + 1080 + 960 + 240) - (72 + 15) = 2580 - 87 = 2493
-const JOL_RANKING_DURATION_EVENT = 2493;
+const JOL_RANKING_DURATION_EVENT = 3213;
 
 export const RemotionRoot: React.FC = () => {
   return (

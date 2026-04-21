@@ -38,16 +38,16 @@ export const ImpactEffectTime: React.FC<Props> = ({
         }}
       />
 
-      {/* Geometric Neon Rings (Square) */}
+      {/* Technical Frame (Cyber Style) */}
       {rings.map((delay, i) => {
         const ringFrame = frame - delay;
         if (ringFrame < 0) return null;
 
-        const ringScale = interpolate(ringFrame, [0, 15], [0.2, 2], {
+        const ringScale = interpolate(ringFrame, [0, 15], [0.8, 1.5], {
           easing: Easing.out(Easing.exp),
           extrapolateRight: 'clamp',
         });
-        const ringOpacity = interpolate(ringFrame, [0, 8, 15], [1, 0.5, 0], {
+        const ringOpacity = interpolate(ringFrame, [0, 10, 15], [0.8, 0.4, 0], {
           extrapolateRight: 'clamp',
         });
 
@@ -55,15 +55,27 @@ export const ImpactEffectTime: React.FC<Props> = ({
           <div
             key={i}
             style={{
-              width: 800,
-              height: 800,
-              border: `${10}px solid ${color}`,
-              transform: `scale(${ringScale}) rotate(${frame * 2}deg)`,
+              width: 800 + i * 100,
+              height: 800 + i * 100,
+              border: `${2}px solid ${color}`,
+              transform: `scale(${ringScale}) rotate(${frame * (i % 2 === 0 ? 0.5 : -0.3)}deg)`,
               opacity: ringOpacity,
-              boxShadow: `0 0 30px ${color}, inset 0 0 30px ${color}`,
+              boxShadow: `0 0 20px ${color}, inset 0 0 10px ${color}`,
               position: 'absolute',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
-          />
+          >
+            {/* Inner Technical Lines */}
+            <div style={{
+              width: '90%',
+              height: '90%',
+              border: `1px solid ${color}`,
+              opacity: 0.5,
+              transform: `rotate(${frame * 1}deg)`,
+            }} />
+          </div>
         );
       })}
     </AbsoluteFill>

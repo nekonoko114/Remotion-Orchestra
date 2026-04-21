@@ -1,43 +1,35 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   AbsoluteFill,
   Img,
   interpolate,
   spring,
-  random,
   useCurrentFrame,
   staticFile,
   useVideoConfig,
-  OffthreadVideo,
-  Easing,
-  Audio,
+  Video,
+  Easing, 
+  random,
 } from 'remotion';
 import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { TimeBackground } from '../TimeBackground';
 import { CinematicBorder } from '../CinematicBorder';
 import { MorphingTitle } from '../MorphingTitle';
-import { Confetti } from '../Confetti';
 import { Explosion } from '../../../components/effects/Explosion';
 import { ParticleBurst } from '../../../components/effects/ParticleBurst';
+import { HolographicHUD } from '../../../components/effects/HolographicHUD';
+import { GlitchEffect } from '../../../components/effects/GlitchEffect';
+import { ChromaticAberration } from '../../../components/effects/ChromaticAberration';
 import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
+import { loadFont } from '@remotion/google-fonts/Orbitron';
+
+const { fontFamily } = loadFont();
 
 const BPM = 160;
 
-const VOICE_FIRST = staticFile('assets/audio/voice/rankVoicefirst.wav');
-const VOICE_SECOND = staticFile('assets/audio/voice/rankVoiceSecond.wav');
-const VOICE_THIRD = staticFile('assets/audio/voice/rankVoiceThrad.wav');
-
-
-const MAGIC_CIRCLES = [
-  'magic-circle-blue.png',
-  'magic-circle-green.png',
-  'magic-circle-orange.png',
-  'magic-circle-red.png',
-  'magic-circle-yellow.png',
-];
-
-const ANTIQUE_GOLD_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_minutes_old_gold_retro_antique_spiral_l_207864.mp4');
+// Cyber Tunnel Loop
+const CYBER_TUNNEL_VIDEO = staticFile('assets/pixabay/videos/pixabay_tunnel_loop_science_fiction_futuristic_fantasy_227152.mp4');
 
 type Props = {
   rank: number;
@@ -45,6 +37,7 @@ type Props = {
   title: string;
   themeColor?: string;
   glowColor?: string;
+  backgroundSrc?: string;
 };
 
 export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, glowColor }) => {
@@ -53,12 +46,9 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
 
   const { pulse } = useBeatValue(BPM);
 
-  const snapReduction = pulse * 0.05;
-  const localFrame = frame - snapReduction;
+  const localFrame = frame;
 
-  // ===== FOOLPROOF SQUARE/TRIANGLE MOTION =====
-  
-  // Timing: Wipe completes at 40. Start sweeping at 45.
+  // ===== CYBER MOTION LOGIC =====
   const triStart = 45;
   const triDuration = rank === 1 ? 50 : 40;
   const t = Math.max(0, localFrame - triStart);
@@ -82,7 +72,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
       triX = centerX;
       triY = -1000;
     } else if (t <= 10) {
-      // Phase 1: Top -> Top Left
       const p = interpolate(t, [0, 10], [0, 1], { easing: Easing.in(Easing.poly(3)) });
       triX = interpolate(p, [0, 1], [centerX, width * 0.1]);
       triY = interpolate(p, [0, 1], [-1000, height * 0.2]);
@@ -90,7 +79,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
       motionBlur = interpolate(p, [0, 1], [0, 25]);
       triScale = interpolate(p, [0, 1], [0.5, 1.2]); 
     } else if (t <= 20) {
-      // Phase 2: Top Left -> Bottom Left
       const p = interpolate(t, [10, 20], [0, 1]); 
       triX = width * 0.1;
       triY = interpolate(p, [0, 1], [height * 0.2, height * 0.8]);
@@ -98,7 +86,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
       motionBlur = 30; 
       triScale = 1.2;
     } else if (t <= 30) {
-      // Phase 3: Bottom Left -> Bottom Right
       const p = interpolate(t, [20, 30], [0, 1]); 
       triX = interpolate(p, [0, 1], [width * 0.1, width * 0.9]);
       triY = height * 0.8;
@@ -106,7 +93,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
       motionBlur = 30; 
       triScale = 1.2;
     } else if (t <= 40) {
-      // Phase 4: Bottom Right -> Top Right
       const p = interpolate(t, [30, 40], [0, 1]); 
       triX = width * 0.9;
       triY = interpolate(p, [0, 1], [height * 0.8, height * 0.2]);
@@ -114,7 +100,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
       motionBlur = 30; 
       triScale = 1.2;
     } else if (t <= 50) {
-      // Phase 5: Top Right -> Center
       const p = interpolate(t, [40, 50], [0, 1], { easing: Easing.out(Easing.back(2)) });
       triX = interpolate(p, [0, 1], [width * 0.9, centerX]);
       triY = interpolate(p, [0, 1], [height * 0.2, centerY]);
@@ -128,39 +113,39 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
       motionBlur = 0;
       triScale = 1;
     }
-  } else if (t < 0) {
-    triX = centerX;
-    triY = -1000;
-  } else if (t <= 12) {
-    // Phase 1: Top -> Bottom Side
-    const p = interpolate(t, [0, 12], [0, 1], { easing: Easing.in(Easing.poly(3)) });
-    triX = interpolate(p, [0, 1], [centerX, Point1X]);
-    triY = interpolate(p, [0, 1], [-1000, height * 0.8]);
-    triRotate = interpolate(p, [0, 1], [0, Rot1]);
-    motionBlur = interpolate(p, [0, 1], [0, 25]);
-    triScale = interpolate(p, [0, 1], [0.5, 1.2]); 
-  } else if (t <= 24) {
-    // Phase 2: Bottom Side Dash
-    const p = interpolate(t, [12, 24], [0, 1]); 
-    triX = interpolate(p, [0, 1], [Point1X, Point2X]);
-    triY = height * 0.8;
-    triRotate = interpolate(p, [0, 1], [Rot1, Rot2]);
-    motionBlur = 30; 
-    triScale = 1.2;
-  } else if (t <= 40) {
-    // Phase 3: Bottom Side -> Center 
-    const p = interpolate(t, [24, 40], [0, 1], { easing: Easing.out(Easing.back(2)) });
-    triX = interpolate(p, [0, 1], [Point2X, centerX]);
-    triY = interpolate(p, [0, 1], [height * 0.8, centerY]);
-    triRotate = interpolate(p, [0, 1], [Rot2, 0]);
-    motionBlur = interpolate(p, [0, 1], [25, 0]);
-    triScale = interpolate(p, [0, 1], [1.2, 1]);
   } else {
-    triX = centerX;
-    triY = centerY;
-    triRotate = 0;
-    motionBlur = 0;
-    triScale = 1;
+    // Ranks 2 & 3
+    if (t < 0) {
+      triX = centerX;
+      triY = -1000;
+    } else if (t <= 12) {
+      const p = interpolate(t, [0, 12], [0, 1], { easing: Easing.in(Easing.poly(3)) });
+      triX = interpolate(p, [0, 1], [centerX, Point1X]);
+      triY = interpolate(p, [0, 1], [-1000, height * 0.8]);
+      triRotate = interpolate(p, [0, 1], [0, Rot1]);
+      motionBlur = interpolate(p, [0, 1], [0, 25]);
+      triScale = interpolate(p, [0, 1], [0.5, 1.2]); 
+    } else if (t <= 24) {
+      const p = interpolate(t, [12, 24], [0, 1]); 
+      triX = interpolate(p, [0, 1], [Point1X, Point2X]);
+      triY = height * 0.8;
+      triRotate = interpolate(p, [0, 1], [Rot1, Rot2]);
+      motionBlur = 30; 
+      triScale = 1.2;
+    } else if (t <= 40) {
+      const p = interpolate(t, [24, 40], [0, 1], { easing: Easing.out(Easing.back(2)) });
+      triX = interpolate(p, [0, 1], [Point2X, centerX]);
+      triY = interpolate(p, [0, 1], [height * 0.8, centerY]);
+      triRotate = interpolate(p, [0, 1], [Rot2, 0]);
+      motionBlur = interpolate(p, [0, 1], [25, 0]);
+      triScale = interpolate(p, [0, 1], [1.2, 1]);
+    } else {
+      triX = centerX;
+      triY = centerY;
+      triRotate = 0;
+      motionBlur = 0;
+      triScale = 1;
+    }
   }
 
   // Final scale logic
@@ -181,7 +166,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
   const pulseScale = (1 + Math.sin(frame / 8) * 0.02) * (1 + pulse * 0.03);
   const finalImageOpacity = interpolate(t, [0, 4], [0, 1], { extrapolateRight: 'clamp' });
 
-  // Landing impact happens exactly at exactly t = triDuration
+  // Landing impact happens exactly at t = triDuration
   const sprImpact = spring({
     frame: localFrame - (triStart + triDuration),
     fps,
@@ -201,7 +186,6 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
   });
 
   const nameLength = liver.nickname.length;
-  // Get characters visible using Remotion core utilities
   const pName = interpolate(localFrame - 80, [0, 20], [0, 1], { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' });
   const charsVisible = Math.floor(interpolate(pName, [0, 1], [0, nameLength]));
   const displayedName = liver.nickname.slice(0, charsVisible);
@@ -209,190 +193,89 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
   const nameYPos = interpolate(nameEntrance, [0, 1], [50, 0]);
   const nameOpacity = interpolate(nameEntrance, [0, 1], [0, 1]);
 
-  const flashOpacityRaw = Math.max(
-    interpolate(sprImpact, [0, 0.1, 0.5], [0, 0.8, 0], { extrapolateRight: 'clamp' }),
+  const impactIntensity = interpolate(sprImpact, [0, 0.1, 0.5], [0, 1, 0], { extrapolateRight: 'clamp' });
+  const flashOpacity = Math.max(
+    impactIntensity * 0.8,
     interpolate(frame, [0, 5, 25], [0, 0.9, 0], { extrapolateRight: 'clamp' })
   );
-  const flashOpacity = flashOpacityRaw;
 
   const rankScale = interpolate(rankEntrance, [0, 1], [6, 1], {
     easing: Easing.out(Easing.back(2)),
   });
   const rankOpacity = interpolate(rankEntrance, [0, 0.3], [0, 1]);
 
-  const magicCirclesData = useMemo(() => {
-    const scaleFactor = width / 2160; // Corrected to use 4K baseline
-    const count = rank === 1 ? 5 : 3;
-    return [...new Array(count)].map((_, i) => {
-      const seed = `magic-${rank}-${i}`;
-      const size = (1200 + random(seed + 'size') * 800) * scaleFactor;
-      const angle = (i / count) * Math.PI * 2 + random(seed + 'ang') * 0.5;
-      const baseRadius = (rank === 1 ? 500 : 450) * scaleFactor;
-      const radiusVariance = (rank === 1 ? 400 : 350) * scaleFactor;
-      const radius = baseRadius + random(seed + 'rad') * radiusVariance;
-      const x = Math.cos(angle) * radius;
-      const y = Math.sin(angle) * radius;
-
-      const rotationDir = random(seed + 'dir') > 0.5 ? 1 : -1;
-      const rotationSpeed = 0.2 + random(seed + 'speed') * 2.5;
-      const asset =
-        count === 5
-          ? MAGIC_CIRCLES[i % MAGIC_CIRCLES.length]
-          : MAGIC_CIRCLES[
-              Math.floor(random(seed + 'asset') * MAGIC_CIRCLES.length)
-            ];
-      const opacity =
-        rank === 1
-          ? 0.8 + random(seed + 'opacity') * 0.2
-          : 0.4 + random(seed + 'opacity') * 0.3;
-      const blur = 1 + random(seed + 'blur') * 4;
-      return { size, x, y, rotationDir, rotationSpeed, asset, opacity, blur };
-    });
-  }, [rank, width]);
-
   const getRankColors = (r: number) => {
-    const baseColor = themeColor || '#d000ff';
-    const baseGlow = glowColor || 'rgba(208, 0, 255, 0.8)';
-    if (r === 1) return { primary: '#9d00ff', secondary: '#00ffff', glow: 'rgba(157, 0, 255, 0.6)' };
-    return { primary: baseColor, glow: baseGlow, secondary: '#00ffff' };
+    // Cyber Red & Neon Blue Theme
+    if (r === 1) return { primary: '#ff0000', secondary: '#00ffff', glow: 'rgba(255, 0, 0, 0.8)' }; // Intense Red for No.1
+    if (r === 2) return { primary: '#00ffff', secondary: '#ff0000', glow: 'rgba(0, 255, 255, 0.6)' }; // Neon Blue for No.2
+    return { primary: '#ff3333', secondary: '#00ffff', glow: 'rgba(255, 51, 51, 0.5)' }; // Red for No.3
   };
 
   const { primary, secondary, glow } = getRankColors(rank);
 
-  const bgScale = interpolate(
-    Math.sin(frame * 0.04),
-    [-1, 1],
-    [1, 1.08],
-  );
-
-  if (!liver) return null;
-
-  const magicalBg = rank <= 3;
-
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
-      {/* Rank voices removed by user request */}
-      {/* {rank === 1 && <Audio src={VOICE_FIRST} />} */}
-      {/* {rank === 2 && <Audio src={VOICE_SECOND} />} */}
-      {/* {rank === 3 && <Audio src={VOICE_THIRD} />} */}
-      <TimeBackground
-        overlayColor={primary + '33'}
-        hideBackground
-        hideBaseVideo
+      <Video
+        src={CYBER_TUNNEL_VIDEO}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: 0.6,
+          filter: `hue-rotate(${rank === 2 ? '0deg' : '180deg'}) contrast(1.2) brightness(1.1)`,
+        }}
+        muted
+        loop
       />
-      {magicalBg && (
-        <AbsoluteFill style={{ zIndex: 5 }}>
-          <OffthreadVideo
-            src={ANTIQUE_GOLD_VIDEO}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transform: `scale(${bgScale})`,
-              opacity: 0.65,
-              filter: 'sepia(0.3) brightness(1.2) contrast(1.1)',
-            }}
-            muted
-          />
-          <AbsoluteFill
-            style={{
-              background: `radial-gradient(circle at center, transparent 20%, #000 100%)`,
-              opacity: 0.4,
-            }}
-          />
-        </AbsoluteFill>
-      )}
+
+      {/* Technical Grid Overlay */}
+      <AbsoluteFill
+        style={{
+          backgroundImage: `linear-gradient(${primary}22 1px, transparent 1px), linear-gradient(90deg, ${primary}22 1px, transparent 1px)`,
+          backgroundSize: '60px 60px',
+          opacity: 0.2,
+          zIndex: 2,
+        }}
+      />
+      
+      {/* Scanline Overlay */}
+      <AbsoluteFill
+        style={{
+          background: 'linear-gradient(to bottom, rgba(0,255,255,0.03) 50%, transparent 50%)',
+          backgroundSize: '100% 4px',
+          zIndex: 3,
+          pointerEvents: 'none',
+        }}
+      />
+
       <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
         {frame < 20 && <ImpactEffect color={primary} intensity="high" />}
         <Explosion delay={triStart + triDuration} color={primary} secondaryColor={secondary} />
         <ImpactEffect color={primary} intensity="high" beatPulse={pulse} />
       </AbsoluteFill>
-      <AbsoluteFill style={{ zIndex: 10, overflow: 'hidden' }}>
-        {magicCirclesData.map((m, i) => {
-          const delayFrames = i * 0.3 * fps;
-          const circleEntrance = spring({
-            frame: localFrame - delayFrames,
-            fps,
-            config: { damping: 12, stiffness: 100 },
-          });
 
-          return (
-            <React.Fragment key={i}>
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: '50%',
-                  width: m.size,
-                  height: m.size,
-                  marginLeft: -m.size / 2 + m.x,
-                  marginTop: -m.size / 2 + m.y,
-                  transform: `rotate(${frame * m.rotationSpeed * m.rotationDir}deg) scale(${circleEntrance})`,
-                  opacity: m.opacity * circleEntrance,
-                  filter:
-                    rank === 1
-                      ? `blur(${m.blur}px) brightness(2.0) drop-shadow(0 0 30px ${primary})`
-                      : `blur(${m.blur}px) brightness(1.5)`,
-                  zIndex: 2,
-                }}
-              >
-                <Img
-                  src={staticFile(`assets/magic/${m.asset}`)}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                  }}
-                />
-              </div>
-
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: '50%',
-                  width: m.size * 2,
-                  height: m.size * 2,
-                  marginLeft: -m.size + m.x,
-                  marginTop: -m.size + m.y,
-                  background: `radial-gradient(circle, ${primary}66 0%, transparent 70%)`,
-                  transform: `scale(${circleEntrance * (1 + pulse * 0.1)})`,
-                  opacity:
-                    rank === 1
-                      ? m.opacity * 0.5 * circleEntrance
-                      : m.opacity *
-                        0.4 *
-                        circleEntrance *
-                        (0.8 + Math.sin(frame / 5) * 0.2),
-                  filter: 'blur(40px)',
-                  zIndex: 1,
-                }}
-              />
-            </React.Fragment>
-          );
-        })}
-      </AbsoluteFill>
       <AbsoluteFill style={{ zIndex: 110 }}>
         <Confetti
           count={rank === 1 ? 250 : 150}
-          colors={[primary, '#ffffff', '#ffd700', '#00ffff']}
+          colors={[primary, '#ffffff', secondary, '#00ffff']}
         />
         {(localFrame > triStart + triDuration) && (
           <ParticleBurst 
             count={60} 
             colors={[primary, '#ffffff', '#00ffff']} 
             x={width/2} 
-            y={height/2 + 80 * (width/1080)} // Adjusted to center of icon area
+            y={height/2 + 80 * (width/1080)} 
             speed={4}
           />
         )}
       </AbsoluteFill>
+
       <AbsoluteFill
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          fontFamily: '"Mochiy Pop One", sans-serif',
+          fontFamily,
           color: 'white',
           zIndex: 120,
         }}
@@ -414,86 +297,69 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
               text={title}
               fontSize={180 * (height / 1080)}
               style={{
+                fontFamily,
                 textShadow: `0 0 ${30 * (height / 1080)}px ${primary}, 0 0 ${60 * (height / 1080)}px ${primary}`,
               }}
             />
           </div>
 
-        {/* TRIANGLE MOTION WRAPPER */}
-        <div
-          style={{
-            position: 'absolute',
-            left: triX,
-            top: triY,
-            width: 500 * (height / 1080),
-            height: 500 * (height / 1080),
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            transform: `translate(-50%, -50%) rotate(${triRotate + impactRotate}deg) translateY(${impactY}px)`,
-            filter: `blur(${motionBlur}px)`,
-          }}
-        >
-          {[...new Array(4)].map((_, i) => (
-            <div
-              key={i}
-              style={{
-                position: 'absolute',
-                width: (530 + i * 35) * (height / 1080),
-                height: (530 + i * 35) * (height / 1080),
-                borderRadius: i % 2 === 0 ? '20%' : '50%',
-                border: `${(3 - i * 0.5) * (height / 1080)}px solid ${primary}`,
-                boxShadow: `0 0 ${40 * (height / 1080)}px ${glow}, inset 0 0 ${20 * (height / 1080)}px ${glow}`,
-                opacity: 0.8 - i * 0.15,
-                transform: `rotate(${frame * (i % 2 === 0 ? 0.3 : -0.2) * (i + 1)}deg)`,
-              }}
-            />
-          ))}
-
+          {/* CYBER MOTION WRAPPER */}
           <div
             style={{
               position: 'absolute',
-              width: 680 * (height / 1080),
-              height: 680 * (height / 1080),
-              background: `radial-gradient(circle, ${primary}99 0%, transparent 70%)`,
-              opacity: 0.4 + pulse * 0.2,
-              filter: `blur(${60 * (height / 1080)}px)`,
-            }}
-          />
-
-          <div
-            style={{
+              left: triX,
+              top: triY,
               width: 500 * (height / 1080),
               height: 500 * (height / 1080),
-              borderRadius: '50%',
-              overflow: 'hidden',
-              border: `${8 * (height / 1080)}px solid white`,
-              boxShadow: `0 0 ${120 * (height / 1080)}px ${primary}, 0 0 ${40 * (height / 1080)}px white`,
-              position: 'relative',
-              backgroundColor: '#000',
-              zIndex: 5,
-              opacity: finalImageOpacity,
-              transform: `scale(${finalImageScale})`,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              transform: `translate(-50%, -50%) rotate(${triRotate + impactRotate}deg) translateY(${impactY}px)`,
             }}
           >
-            <Img
-              src={
-                liver.saved_to
-                  ? staticFile(liver.saved_to)
-                  : liver.image_url.startsWith('http')
-                    ? liver.image_url
-                    : staticFile(liver.image_url)
-              }
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-            <AbsoluteFill
-              style={{
-                background: `radial-gradient(circle, transparent 20%, ${primary}66 100%)`,
-                mixBlendMode: 'screen',
-              }}
-            />
+            <GlitchEffect intensity={impactIntensity * 40}>
+              <ChromaticAberration intensity={impactIntensity * 10}>
+                {/* Holographic HUD */}
+                <div style={{ transform: 'scale(1.6)', opacity: finalImageOpacity }}>
+                  <HolographicHUD color={primary} />
+                </div>
+
+                {/* Liver Image Container */}
+                <div
+                  style={{
+                    width: 500 * (height / 1080),
+                    height: 500 * (height / 1080),
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: `${8 * (height / 1080)}px solid white`,
+                    boxShadow: `0 0 ${120 * (height / 1080)}px ${primary}, 0 0 ${40 * (height / 1080)}px white`,
+                    position: 'relative',
+                    backgroundColor: '#000',
+                    zIndex: 5,
+                    opacity: finalImageOpacity,
+                    transform: `scale(${finalImageScale})`,
+                  }}
+                >
+                  <Img
+                    src={
+                      liver.saved_to
+                        ? staticFile(liver.saved_to)
+                        : liver.image_url.startsWith('http')
+                          ? liver.image_url
+                          : staticFile(liver.image_url)
+                    }
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <AbsoluteFill
+                    style={{
+                      background: `radial-gradient(circle, transparent 20%, ${primary}66 100%)`,
+                      mixBlendMode: 'screen',
+                    }}
+                  />
+                </div>
+              </ChromaticAberration>
+            </GlitchEffect>
           </div>
-        </div>
 
           <div
             style={{
@@ -507,6 +373,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
           >
             <h2
               style={{
+                fontFamily,
                 fontSize: (rank === 1 ? 70 : 50) * (height / 1080),
                 margin: 0,
                 textShadow: `0 0 ${30 * (height / 1080)}px ${glow}, 0 0 ${60 * (height / 1080)}px ${glow}, 0 0 ${100 * (height / 1080)}px ${primary}`,

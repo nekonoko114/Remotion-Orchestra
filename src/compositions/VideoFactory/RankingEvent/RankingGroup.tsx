@@ -8,14 +8,16 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import { FlowSVG } from './FlowSVG';
 import type { Liver } from '../types';
+import { loadFont } from '@remotion/google-fonts/Orbitron';
+
+const { fontFamily } = loadFont();
 
 
 // Unity Colors (Unified Design)
-const UNITY_THEME = '#f85718';
-const UNITY_LIME  = '#FFD700';
-const UNITY_GLOW  = 'rgba(248, 87, 24, 0.4)';
+// Hyper-Space Cyber Colors (Red & Neon Blue)
+const UNITY_THEME = '#ff1e1e'; // Neon Red
+const UNITY_LIME  = '#00ffff'; // Neon Blue
 
 type Props = {
   title: string;
@@ -29,42 +31,22 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
   const { fps } = useVideoConfig();
 
   const entrance = spring({
-    frame,
+    frame: Math.max(0, frame),
     fps,
-    config: { damping: 20, stiffness: 200 },
+    config: { damping: 40, stiffness: 60 },
   });
 
   const opacity = interpolate(entrance, [0, 1], [0, 1]);
-  const scale  = interpolate(entrance, [0, 1], [0.95, 1]);
-  const beatScale = 1;
-
+  const scale  = interpolate(entrance, [0, 1], [0.98, 1]);
   // デザイン統制：人数に応じたスケール定義
-  const isCompact = livers.length >= 4; // 15-11位 (5名)
-  const is3Group  = livers.length === 3;  // 10-8位 (3名)
+  const isCompact = livers.length >= 4; // 15-6位 (5名)
   const is2Group  = livers.length === 2;  // 7-4位 (2名)
-
   // パラメータをグループごとに統一
   const gap          = isCompact ? 18  : 0; // Stack based on height
   const rankFontSize = isCompact ? 90  : 170;
   const nameFontSize = isCompact ? 48  : 80;
-  const avatarSize   = 500; // Manually updated by user
   const verticalPad  = isCompact ? 20  : 0;
   const marginTop    = isCompact ? 140 : 200;
-
-  const getEnergyOpacity = (f: number) => {
-    // Return 1 during the specified backdrop particle range (545 - 1330)
-    if (f >= 545 && f <= 1330) return 1;
-    return 0;
-  };
-
-  const finalOpacity = getEnergyOpacity(absoluteFrame ?? 0);
-
-  const renderBackgroundEffect = () => {
-    if (absoluteFrame === undefined) return null;
-    // Show flow particles between 545 and 1330 only
-    if (absoluteFrame < 545 || absoluteFrame > 1330) return null;
-    return <FlowSVG pulse={0} opacity={finalOpacity} />;
-  };
 
   const getAvatarSrc = (liver: Liver) => {
     if (liver.saved_to) return staticFile(liver.saved_to);
@@ -73,31 +55,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
   };
 
   return (
-    <AbsoluteFill>
-      {/* ===== 背景 (CLEAN DESIGN) ===== */}
-      <AbsoluteFill style={{ backgroundColor: '#011201' }}>
-        <Img
-          src={staticFile(
-            isCompact || is3Group
-              ? 'assets/backgrounds/dark_temple_bg_top10.png'
-              : 'assets/backgrounds/dark_temple_bg_top6.png',
-          )}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            opacity: 0.4,
-            filter: 'brightness(1.1) contrast(1.2)', 
-          }}
-        />
-        <AbsoluteFill
-          style={{
-            background: `radial-gradient(circle, ${UNITY_GLOW} 0%, rgba(0,10,0,0.9) 100%)`,
-            pointerEvents: 'none',
-          }}
-        />
-        {finalOpacity > 0 && renderBackgroundEffect()}
-      </AbsoluteFill>
+    <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
+      {/* 共通の背景レイヤーを使用するため、個別背景コードを削除 */}
 
       {/* ===== コンテンツ ===== */}
       <AbsoluteFill
@@ -105,21 +64,22 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
           justifyContent: 'center',
           alignItems: 'center',
           opacity,
-          transform: `scale(${scale * beatScale})`,
+          transform: `scale(${scale})`,
         }}
       >
         {/* タイトル */}
         <h1
           style={{
             position: 'absolute',
-            top: 80,
-            fontSize: isCompact ? 70 : 100,
-            fontFamily: "'Segoe UI', Roboto, sans-serif",
+            top: 100,
+            fontSize: isCompact ? 120 : 130,
+            fontFamily,
             fontWeight: '900',
             textAlign: 'center',
             margin: 0,
-            color: UNITY_THEME,
-            textShadow: `0 0 10px ${UNITY_THEME}, 0 0 30px ${UNITY_THEME}, 0 0 60px ${UNITY_LIME}`,
+            color: '#FFFFFF',
+            textShadow: `0 0 20px ${UNITY_THEME}, 0 0 40px ${UNITY_THEME}`,
+            zIndex: 10,
           }}
         >
           {title}
@@ -136,16 +96,16 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
           }}
         >
           {livers.map((liver: Liver, index: number) => {
-            const staggerFrames = isCompact ? 12 : 18;
+            const staggerFrames = isCompact ? 20 : 30; // 広めの間隔
             const liverEntrance = spring({
-              frame: frame - (livers.length - 1 - index) * staggerFrames - 5,
+              frame: Math.max(0, frame - (livers.length - 1 - index) * staggerFrames - 10),
               fps,
-              config: { damping: 10, stiffness: 350 },
+              config: { damping: 24, stiffness: 40 }, // 非常に柔らかい動き
             });
 
-            const bounceScale = interpolate(liverEntrance, [0, 1], [0.6, 1]);
-            const slideX      = interpolate(liverEntrance, [0, 1], [-1000, 0]);
-            const rowOpacity  = interpolate(liverEntrance, [0, 0.2], [0, 1]);
+            const bounceScale = interpolate(liverEntrance, [0, 1], [0.95, 1]);
+            const slideX      = interpolate(liverEntrance, [0, 1], [-200, 0]);
+            const rowOpacity  = interpolate(liverEntrance, [0, 0.4], [0, 1]);
 
             if (isCompact) {
               // ================================================================
@@ -175,7 +135,7 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                       height: 220,
                       borderRadius: 9999,
                       border: `3px solid ${UNITY_LIME}`,
-                      boxShadow: `0 0 15px rgba(255, 215, 0, 0.4)`,
+                      boxShadow: `0 0 20px ${UNITY_LIME}66`,
                       flexShrink: 0,
                       overflow: 'hidden',
                       backgroundColor: 'rgba(0,0,0,0.5)',
@@ -208,9 +168,10 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                       style={{
                         fontSize: rankFontSize,
                         fontWeight: '900',
-                        color: UNITY_LIME,
-                        textShadow: `0 0 10px ${UNITY_LIME}`,
+                        color: '#fff',
+                        textShadow: `0 0 10px ${UNITY_THEME}`,
                         lineHeight: 1.1,
+                        fontFamily,
                       }}
                     >
                       {liver.rank}位
@@ -255,12 +216,13 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                     minWidth: is2Group ? 100 : 150,
                     fontSize: rankFontSize,
                     fontWeight: 900,
-                    color: UNITY_LIME,
-                    textShadow: `0 0 30px ${UNITY_LIME}`,
+                    color: '#fff',
+                    textShadow: `0 0 30px ${UNITY_THEME}`,
                     fontStyle: 'italic',
                     textAlign: 'center',
                     lineHeight: 1,
                     whiteSpace: 'nowrap',
+                    fontFamily,
                   }}
                 >
                   {liver.rank}

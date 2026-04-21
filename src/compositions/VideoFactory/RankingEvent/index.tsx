@@ -1,12 +1,14 @@
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
-import { slide } from '@remotion/transitions/slide';
 import { AbsoluteFill, useVideoConfig, Audio, staticFile } from 'remotion';
 import type { Liver } from '../types';
 import { Ending } from './Ending';
 import { Opening } from './Opening';
 import { RankingGroup } from './RankingGroup';
 import { Top1Reveal } from './Top1Reveal';
-import { slashTransition } from '../transitions/SlashTransition';
+import { LiverScan } from './LiverScan';
+import { DualCyberFrame } from './DualCyberFrame';
+import { CyberBackground } from './CyberBackground';
+import { cyberGateTransition } from '../transitions/CyberGateTransition'; 
 
 import { useCurrentFrame } from 'remotion';
 
@@ -43,10 +45,10 @@ export const GROUP_SEC = 4.5;     // 10 beats (relaxed stagger)
 export const TOP_RANK_SEC = 4;  // 8 beats
 export const GRID_BRIDGE_SEC = 4; // 12 beats
 export const ENDING_SEC = 4;    // 8 beats
-export const TRANSITION_FRAMES = 12;  // Speedy slash transition
-export const LAST_TRANSITION_FRAMES = 15;
+export const TRANSITION_FRAMES = 30;  // Heavy mechanical transition
+export const LAST_TRANSITION_FRAMES = 80;
 
-const SLASH = slashTransition({ color: '#f85718' });
+const SLASH = cyberGateTransition({ color: '#00ffff', accentColor: '#ff1e1e' });
 const TIMING = linearTiming({ durationInFrames: TRANSITION_FRAMES });
 const LAST_TIMING = linearTiming({ durationInFrames: LAST_TRANSITION_FRAMES });
 
@@ -60,14 +62,17 @@ export const RankingEvent = () => {
 
   const frame = useCurrentFrame();
 
-  // Unity Custom Theme (#f85718) for the entire video
-  const frameColor = '#f85718'; 
-  const frameGlow = 'rgba(248, 87, 24, 0.6)';
-
   return (
-    <AbsoluteFill style={{ backgroundColor: '#000000' }}>
+    <AbsoluteFill style={{ backgroundColor: '#000' }}>
+      {/* 共通の背景レイヤーを一括読み込み */}
+      <CyberBackground 
+        opacity={frame < 300 ? 1.0 : 0.5} 
+        brightness={frame < 300 ? 1.0 : 0.8}
+        playbackRate={frame < 300 ? 1.2 : 1.0}
+      />
+
       <Audio
-        src={staticFile('assets/audio/music/Ours-to-Hold.mp3')}
+        src={staticFile('assets/audio/music/Kurba.mp3')}
         loop
         startFrom={Math.floor(BGM_START_FROM * fps)}
       />
@@ -91,36 +96,59 @@ export const RankingEvent = () => {
 
           <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
 
-          {/* TOP 10~8（3名） */}
+          {/* TOP 6~10（5名） */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n8~10'}
-              livers={RANKING_DATA.filter((d) => d.rank >= 8 && d.rank <= 10)}
+              title={'TOP\n6~10'}
+              livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 10)}
               absoluteFrame={frame}
             />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
 
-          {/* TOP 7~6（2名） */}
-          <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
-            <RankingGroup
-              title={'TOP\n6~7'}
-              livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 7)}
-              absoluteFrame={frame}
+          {/* TOP 5位 */}
+          <TransitionSeries.Sequence durationInFrames={Math.round(1.5 * fps)}>
+            <LiverScan rank={5} />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
+
+          <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
+            <Top1Reveal
+              rank={5}
+              title="5位"
+              liver={RANKING_DATA.find((d) => d.rank === 5)!}
+              backgroundSrc="assets/backgrounds/unity_rank_bg_top3.png"
             />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
 
-          {/* TOP 5~4（2名） */}
-          <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
-            <RankingGroup
-              title={'TOP\n4~5'}
-              livers={RANKING_DATA.filter((d) => d.rank >= 4 && d.rank <= 5)}
-              absoluteFrame={frame}
+          {/* TOP 4位 */}
+          <TransitionSeries.Sequence durationInFrames={Math.round(1.5 * fps)}>
+            <LiverScan rank={4} />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
+
+          <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
+            <Top1Reveal
+              rank={4}
+              title="4位"
+              liver={RANKING_DATA.find((d) => d.rank === 4)!}
+              backgroundSrc="assets/backgrounds/unity_rank_bg_top3.png"
             />
           </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
+
+          {/* TOP 3位 */}
+          <TransitionSeries.Sequence durationInFrames={Math.round(1.5 * fps)}>
+            <LiverScan rank={3} />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
 
           <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
             <Top1Reveal
@@ -129,6 +157,13 @@ export const RankingEvent = () => {
               liver={RANKING_DATA.find((d) => d.rank === 3)!}
               backgroundSrc="assets/backgrounds/unity_rank_bg_top3.png"
             />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
+
+          {/* TOP 2位 */}
+          <TransitionSeries.Sequence durationInFrames={Math.round(1.5 * fps)}>
+            <LiverScan rank={2} />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
@@ -144,6 +179,13 @@ export const RankingEvent = () => {
 
           <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
 
+          {/* TOP 1位 */}
+          <TransitionSeries.Sequence durationInFrames={Math.round(1.5 * fps)}>
+            <LiverScan rank={1} />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={SLASH} timing={TIMING} />
+
           <TransitionSeries.Sequence durationInFrames={Math.round(6 * fps)}>
             <Top1Reveal
               rank={1}
@@ -154,7 +196,7 @@ export const RankingEvent = () => {
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition
-            presentation={slide({ direction: 'from-right' })}
+            presentation={SLASH}
             timing={LAST_TIMING}
           />
 
@@ -164,16 +206,7 @@ export const RankingEvent = () => {
         </TransitionSeries>
       </AbsoluteFill>
 
-      {/* DYNAMIC GLOWING BORDER */}
-      <AbsoluteFill
-        style={{
-          pointerEvents: 'none',
-          border: `10px solid ${frameColor}`,
-          boxShadow: `inset 0 0 50px ${frameGlow}, 0 0 50px ${frameGlow}`,
-          zIndex: 9999,
-          transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-        }}
-      />
+      <DualCyberFrame />
     </AbsoluteFill>
   );
 };

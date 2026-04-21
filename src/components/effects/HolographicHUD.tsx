@@ -1,8 +1,9 @@
 import type React from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, useCurrentFrame } from 'remotion';
 
-export const HolographicHUD: React.FC<{ color?: string }> = ({
+export const HolographicHUD: React.FC<{ color?: string; text?: string }> = ({
   color = '#00f3ff',
+  text,
 }) => {
   const frame = useCurrentFrame();
 
@@ -73,22 +74,24 @@ export const HolographicHUD: React.FC<{ color?: string }> = ({
       />
 
       {/* Core Data */}
-      <div
-        style={{
-          position: 'absolute',
-          color: color,
-          fontFamily: 'monospace',
-          fontSize: 24,
-          fontWeight: 'bold',
-          textShadow: `0 0 5px ${color}`,
-          opacity: blink,
-          textAlign: 'center',
-        }}
-      >
-        SYSTEM READY
-        <br />
-        {Math.floor(frame * 1.25)}%
-      </div>
+      {text && (
+        <div
+          style={{
+            position: 'absolute',
+            color: color,
+            fontFamily: 'monospace',
+            fontSize: 24,
+            fontWeight: 'bold',
+            textShadow: `0 0 5px ${color}`,
+            opacity: blink,
+            textAlign: 'center',
+          }}
+        >
+          {text}
+          <br />
+          {Math.floor(frame * 1.25)}%
+        </div>
+      )}
 
       {/* Grid Background (Optional) */}
       <div

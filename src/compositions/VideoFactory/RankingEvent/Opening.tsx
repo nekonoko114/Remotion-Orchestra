@@ -1,134 +1,151 @@
+import React from 'react';
 import {
   AbsoluteFill,
   interpolate,
   useCurrentFrame,
   useVideoConfig,
-  Video,
-  staticFile,
   spring,
   random,
+  Easing,
 } from 'remotion';
 import { NeonGlowText } from '../../../components/effects/NeonGlowText';
+import { loadFont as loadOrbitron } from '@remotion/google-fonts/Orbitron';
+import { loadFont as loadDelaGothic } from '@remotion/google-fonts/DelaGothicOne';
+import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
+import { ParticleBurst } from '../../../components/effects/ParticleBurst';
+import { GlitchEffect } from '../../../components/effects/GlitchEffect';
+import { ChromaticAberration } from '../../../components/effects/ChromaticAberration';
+
+const { fontFamily: orbitron } = loadOrbitron();
+const { fontFamily: delaGothic } = loadDelaGothic();
 
 export const Opening: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-
-  const beatScale = 1;
+  const { fps, width, height } = useVideoConfig();
 
   // Staggered springs for each part
   const createSpring = (delay: number) => spring({
-    frame: frame - delay,
+    frame: Math.max(0, frame - delay), // マイナスフレームの安全対策
     fps,
-    config: { damping: 12, stiffness: 200 },
+    config: { damping: 10, stiffness: 350, mass: 0.6 },
   });
 
   const spr1 = createSpring(0);   // J.O.L (最上段)
-  const spr4 = createSpring(15);  // 団結No.1 (2段目)
-  const spr2 = createSpring(30);  // イベント (3段目)
+  const spr4 = createSpring(20);  // 団結No.1 (2段目)
   const spr3 = createSpring(45);  // ランキング (4段目)
   const spr5 = createSpring(60);  // 結果発表 (5段目)
 
-  // Glitch intensity
-  const glitchIntensity = 0;
-
-  const getEntryStyle = (spr: number, direction: 'top' | 'bottom' | 'center') => {
-    const opacity = interpolate(spr, [0, 0.5], [0, 1]);
-    const scale = interpolate(spr, [0, 1], [0.8, 1]);
-    let translate = '0px';
-    let blur = '0px';
+  // 登場スタイルの定義（アニメーションのみに限定）
+  const getEntryStyle = (spr: number, direction: 'top' | 'bottom' | 'center', baseScale: number = 1) => {
+    const opacity = interpolate(spr, [0, 0.4], [0, 1]);
+    const scale = interpolate(spr, [0, 1], [0.3 * baseScale, 1 * baseScale], { easing: Easing.out(Easing.back(1.5)) });
+    let translate = 0;
 
     if (direction === 'top') {
-      translate = `${interpolate(spr, [0, 1], [-200, 0])}px`;
-      blur = `${interpolate(spr, [0, 1], [20, 0])}px`;
+      translate = interpolate(spr, [0, 1], [-300, 0]);
     } else if (direction === 'bottom') {
-      translate = `${interpolate(spr, [0, 1], [200, 0])}px`;
-      blur = `${interpolate(spr, [0, 1], [20, 0])}px`;
+      translate = interpolate(spr, [0, 1], [300, 0]);
     }
 
     return {
       opacity,
-      transform: `translateY(${translate}) scale(${scale})`,
-      filter: `blur(${blur})`,
+      transform: `translateY(${translate}px) scale(${scale})`,
     };
   };
+
+  // 各パートの登場インパクト計算
+  const getImpact = (f: number, delay: number) => interpolate(Math.max(0, f - delay), [0, 5, 20], [0, 1, 0], { extrapolateRight: 'clamp' });
+  
+  const impact1 = getImpact(frame, 0);
+  const impact4 = getImpact(frame, 20);
+  const impact5 = getImpact(frame, 60);
+
+  const masterImpact = Math.max(impact1, impact4, impact5);
+  const masterShakeX = masterImpact * (random('oshakeX' + frame) - 0.5) * 60;
+  const masterShakeY = masterImpact * (random('oshakeY' + frame) - 0.5) * 60;
 
   return (
     <AbsoluteFill
       style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        backgroundColor: '#000',
-        transform: `scale(${beatScale})`,
+        backgroundColor: 'transparent',
+        transform: `translate(${masterShakeX}px, ${masterShakeY}px) scale(${1 + masterImpact * 0.05})`,
       }}
     >
-      <AbsoluteFill style={{ zIndex: -1 }}>
-        <Video
-          src={staticFile('assets/pixabay/videos/absturact-turing.mp4')}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transform: 'scale(2.5) rotate(90deg)', 
-          }}
-          startFrom={0}
-          playbackRate={1}
-          muted
-          loop
-        />
-        {/* Deep Matte Overlay matching Top1Reveal */}
-        <AbsoluteFill style={{ backgroundColor: 'rgba(0,10,5,0.4)' }} />
-        
-        {/* Gold Tint Overlay matching AdjustmentLayer (rank 1) */}
-        <AbsoluteFill style={{
-          background: 'linear-gradient(to bottom, #FFD70000, #FFD7001a)',
-          mixBlendMode: 'overlay',
-        }} />
-
-        {/* Gold Center Glow matching AdjustmentLayer (rank 1) */}
-        <AbsoluteFill style={{
-          background: 'radial-gradient(circle, #FFD70033 0%, transparent 60%)',
-          mixBlendMode: 'screen',
-          filter: 'blur(40px)',
-        }} />
-
-        <AbsoluteFill
-          style={{
-            background: 'radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.4) 100%)', 
-          }}
-        />
+      {/* 1. エフェクトレイヤー (背景側の閃光や火花) */}
+      <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 10 }}>
+        {impact1 > 0 && <ImpactEffect color="#00ffff" intensity="high" />}
+        {impact4 > 0 && <ImpactEffect color="#ff1e1e" intensity="high" />}
+        {impact4 > 0.5 && (
+          <ParticleBurst 
+            count={100} 
+            colors={['#ff1e1e', '#00ffff', '#ffffff']} 
+            x={width/2} 
+            y={height/2} 
+            speed={6}
+          />
+        )}
       </AbsoluteFill>
 
+      {/* 2. メインコンテンツ (中央配置を保証する構造) */}
+      <AbsoluteFill
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <GlitchEffect intensity={masterImpact * 50}>
+          <ChromaticAberration intensity={masterImpact * 30}>
+            {/* エフェクト内部で改めて中央寄せを確定させる */}
+            <div 
+              style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                gap: 45,
+              }}
+            >
+              {/* J.O.L */}
+              <div style={getEntryStyle(spr1, 'top')}>
+                <NeonGlowText text="J.O.L" fontSize={210} color="#FFFFFF" glowColor="#00ffff" style={{ fontFamily: orbitron }} />
+              </div>
 
-      <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <div 
-          style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            gap: '10px',
-            transform: `translate(${random(frame) * glitchIntensity - glitchIntensity / 2}px, ${random(frame + 1) * glitchIntensity - glitchIntensity / 2}px)`,
-          }}
-        >
-          <div style={getEntryStyle(spr1, 'top')}>
-            <NeonGlowText text="J.O.L" fontSize={180} color="#FFFFFF" glowColor="#f85718" />
-          </div>
-          <div style={{ ...getEntryStyle(spr4, 'bottom'), transform: `${getEntryStyle(spr4, 'bottom').transform} scale(0.8)` }}>
-            <NeonGlowText text="⭐団結力⭐" fontSize={200} color="#FFFFFF" glowColor="rgba(248, 87, 24, 0.6)" />
-            <NeonGlowText text="NO.1" fontSize={200} color="#FFFFFF" glowColor="rgba(248, 87, 24, 0.6)" />
-            <NeonGlowText text="を勝ち取れ" fontSize={200} color="#FFFFFF" glowColor="rgba(248, 87, 24, 0.6)" />
-          </div>
-          <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            
-          <div style={{ ...getEntryStyle(spr3, 'top'), display: 'flex', alignItems: 'center' }}>
-            <NeonGlowText text="ランキング" fontSize={140} color="#FFFFFF" glowColor="#f85718" />
-          </div>
-            <div style={getEntryStyle(spr5, 'top')}>
-              <NeonGlowText text="結果発表" fontSize={140} color="#FFFFFF" glowColor="#f85718" />
+              {/* 団結力 NO.1 を勝ち取れ */}
+              <div 
+                style={{ 
+                  ...getEntryStyle(spr4, 'bottom', 0.85),
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 10,
+                }}
+              >
+                <NeonGlowText text="⭐団結力⭐" fontSize={210} color="#FFFFFF" glowColor="#ff1e1e" style={{ fontFamily: delaGothic }} />
+                <NeonGlowText text="NO.1" fontSize={210} color="#FFFFFF" glowColor="#00ffff" style={{ fontFamily: orbitron }} />
+                <NeonGlowText text="を勝ち取れ" fontSize={180} color="#FFFFFF" glowColor="#ff1e1e" style={{ fontFamily: delaGothic }} />
+              </div>
+
+              {/* ランキング 結果発表 */}
+              <div 
+                style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center', 
+                  gap: 15
+                }}
+              >
+                <div style={getEntryStyle(spr3, 'top')}>
+                  <NeonGlowText text="ランキング" fontSize={140} color="#FFFFFF" glowColor="#00ffff" style={{ fontFamily: delaGothic }} />
+                </div>
+                <div style={getEntryStyle(spr5, 'top')}>
+                  <NeonGlowText text="結果発表" fontSize={120} color="#FFFFFF" glowColor="#ff1e1e" style={{ fontFamily: delaGothic }} />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </ChromaticAberration>
+        </GlitchEffect>
       </AbsoluteFill>
     </AbsoluteFill>
   );
