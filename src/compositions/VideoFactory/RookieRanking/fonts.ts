@@ -6,8 +6,12 @@
 import { loadFont as loadCinzel } from '@remotion/google-fonts/CinzelDecorative';
 import { loadFont as loadMincho } from '@remotion/google-fonts/BIZUDMincho';
 
-const { fontFamily: cinzelFamily } = loadCinzel();
-const { fontFamily: minchoFamily } = loadMincho();
+const { fontFamily: cinzelFamily } = loadCinzel('normal', {
+  ignoreTooManyRequestsWarning: true,
+});
+const { fontFamily: minchoFamily } = loadMincho('normal', {
+  ignoreTooManyRequestsWarning: true,
+});
 
 /** 英語タイトル用（RANKING, CONGRATULATIONS など） */
 export const LuxuryLatinFont = cinzelFamily;

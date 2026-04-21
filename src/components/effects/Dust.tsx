@@ -10,14 +10,18 @@ import {
 export interface DustProps {
   count?: number;
   opacity?: number;
+  colors?: string[];
 }
 
-export const Dust: React.FC<DustProps> = ({ count = 150, opacity = 0.8 }) => {
+export const Dust: React.FC<DustProps> = ({
+  count = 150,
+  opacity = 0.8,
+  colors = ['#00f0ff', '#ff00ff', '#ffff00', '#00ff00', '#fff'],
+}) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
 
   const particles = useMemo(() => {
-    const colors = ['#00f0ff', '#ff00ff', '#ffff00', '#00ff00', '#fff'];
     return Array.from({ length: count }).map((_, i) => ({
       x: random(`dust-x-${i}`) * width,
       y: random(`dust-y-${i}`) * height,
@@ -29,7 +33,7 @@ export const Dust: React.FC<DustProps> = ({ count = 150, opacity = 0.8 }) => {
       glow: 10 + random(`dust-g-${i}`) * 20,
       phase: random(`dust-p-${i}`) * Math.PI * 2,
     }));
-  }, [count, width, height]);
+  }, [count, width, height, colors]);
 
   return (
     <AbsoluteFill style={{ pointerEvents: 'none' }}>
@@ -39,12 +43,10 @@ export const Dust: React.FC<DustProps> = ({ count = 150, opacity = 0.8 }) => {
         const driftY =
           (p.y + frame * p.vY + Math.cos(frame / 30 + i) * 50) % height;
 
-        // Intense pulsing
         const pulse = 0.6 + Math.sin(frame / 8 + p.phase) * 0.4;
 
         return (
           <div
-            // biome-ignore lint/suspicious/noArrayIndexKey: Visual dust particles
             key={i}
             style={{
               position: 'absolute',
@@ -53,7 +55,7 @@ export const Dust: React.FC<DustProps> = ({ count = 150, opacity = 0.8 }) => {
               width: p.size,
               height: p.size,
               backgroundColor: p.color,
-              borderRadius: i % 3 === 0 ? '0%' : '50%', // Mix squares/circles for "data" look
+              borderRadius: i % 3 === 0 ? '0%' : '50%',
               opacity: p.o * opacity * pulse,
               boxShadow: `0 0 ${p.glow}px ${p.color}, 0 0 ${p.glow * 2}px ${p.color}`,
               transform: `translate3d(${driftX}px, ${driftY}px, 0) rotate(${frame * 2 + i}deg) scale(${pulse})`,

@@ -117,6 +117,17 @@ import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/
 import { ArigatoMV, ArigatoSchema } from './compositions/Arigato';
 import { getArigatoImages } from './compositions/Arigato/image-loader';
 import { BookFlipSample } from './compositions/VideoFactory/BookFlipSample';
+import {
+  RankingRoyal,
+  OPENING_SEC as ROYAL_OPENING_SEC,
+  GROUP_SEC as ROYAL_GROUP_SEC,
+  TOP_RANK_SEC as ROYAL_TOP_RANK_SEC,
+  GRID_BRIDGE_SEC as ROYAL_GRID_BRIDGE_SEC,
+  ENDING_SEC as ROYAL_ENDING_SEC,
+  TRANSITION_FRAMES as ROYAL_TRANSITION_FRAMES,
+  LAST_TRANSITION_FRAMES as ROYAL_LAST_TRANSITION_FRAMES,
+} from './compositions/VideoFactory/RankingRoyal';
+import { RankingRoyalSchema } from './compositions/VideoFactory/RankingRoyal/schema';
 import { AssetPanel } from './components/AssetPanel';
 import {
   MinibaUniverse,
@@ -138,6 +149,15 @@ const JOL_RANKING_DURATION_VERTICAL =
     ENDING_SEC) *
     JOL_RANKING_FPS -
   (8 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
+
+const JOL_RANKING_ROYAL_DURATION =
+  (ROYAL_OPENING_SEC +
+    ROYAL_GROUP_SEC * 4 +
+    ROYAL_GRID_BRIDGE_SEC * 3 + // 3回分（1~3位の前）を正しく加算
+    ROYAL_TOP_RANK_SEC * 3 +
+    ROYAL_ENDING_SEC) *
+    JOL_RANKING_FPS -
+  (10 * ROYAL_TRANSITION_FRAMES + ROYAL_LAST_TRANSITION_FRAMES); // 11個のトランジションに対応
 
 // Calculate Time Duration (Correctly using its own 5s opening)
 // Updated to 4 groups (15-11, 10-8, 7-6, 5-4)
@@ -606,7 +626,7 @@ export const RemotionRoot: React.FC = () => {
           customBackground:
             'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
           opponentBackground: 'assets/images-01/meadow_animals_bg.png',
-        }}
+        } as any}
       />
       <Composition
         id="JOL-BATTLE-PATTERN6"
@@ -711,6 +731,7 @@ export const RemotionRoot: React.FC = () => {
             altImage: 'assets/images-01/karaindaisuki-photo.jpg',
             altImageStartFrame: 420,
             altImageEndFrame: 469,
+            gridImage: '',
             borderColor: '#ffffff',
             glowColor: '#ff80ab',
           },
@@ -725,12 +746,15 @@ export const RemotionRoot: React.FC = () => {
             useSpinIntro: true,
             useCircleLiver: true,
             hideDefaultParticles: true,
-          },
+            useMetallicVs: false,
+            hideVsFocusLines: false,
+            colorizeVsVideo: false,
+          } as any,
           customBackground:
             'assets/pixabay/videos/pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769.mp4',
           opponentBackground: 'assets/images-01/meadow_animals_bg.png',
           fontFamily: '"Mochiy Pop One", sans-serif',
-        }}
+        } as any}
       />
       <Composition
         id="JOL-RESERVATION-BATTLE"
@@ -1040,6 +1064,20 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1080}
         height={1920}
+      />
+      <Composition
+        id="RankingRoyal"
+        component={RankingRoyal}
+        durationInFrames={Math.floor(JOL_RANKING_ROYAL_DURATION)}
+        fps={JOL_RANKING_FPS}
+        width={1080}
+        height={1920}
+        schema={RankingRoyalSchema}
+        defaultProps={{
+          ...RankingRoyalSchema.parse({
+            livers: (RANKING_DATA_JSON as unknown[]).map((l) => LiverSchema.parse(l)),
+          }),
+        }}
       />
     </>
   );

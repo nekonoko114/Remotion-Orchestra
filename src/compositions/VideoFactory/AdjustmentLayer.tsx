@@ -13,23 +13,23 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
     if (rank === 1)
       return {
         tint: '#FFD700',
-        contrast: 1.3,
-        saturate: 1.4,
-        brightness: 1.1,
+        contrast: 1.0,
+        saturate: 1.3,
+        brightness: 1.0,
       };
     if (rank === 2)
       return {
         tint: '#A0C0FF',
-        contrast: 1.1,
-        saturate: 1.25,
-        brightness: 1.2,
+        contrast: 1.0,
+        saturate: 1.2,
+        brightness: 1.0,
       };
     if (rank === 3)
       return {
         tint: '#FF8C00',
-        contrast: 1.1,
-        saturate: 1.3,
-        brightness: 1.2,
+        contrast: 1.0,
+        saturate: 1.2,
+        brightness: 1.0,
       };
     return { tint: '#ffffff', contrast: 1, saturate: 1, brightness: 1 };
   };
@@ -43,9 +43,9 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
   const shiftX = isGlitching ? (random(frame + 10) - 0.5) * 10 : 0;
   const shiftY = isGlitching ? (random(frame + 20) - 0.5) * 5 : 0;
 
-  // 1. Contrast Pumping (Intense contrast boost on beat)
-  const beatBrightness = theme.brightness + (beatPulse || 0) * 0.4;
-  const beatContrast = theme.contrast + (beatPulse || 0) * 0.6; // Stronger pump
+  // 1. Contrast Pumping (Subtle boost on beat)
+  const beatBrightness = theme.brightness + (beatPulse || 0) * 0.1;
+  const beatContrast = theme.contrast + (beatPulse || 0) * 0.15; 
 
   // 2. RGB Split Logic (Stylized color separation on beat)
   const aberration = (beatPulse || 0) * 15;
@@ -114,15 +114,7 @@ export const AdjustmentLayer: React.FC<Props> = ({ rank, beatPulse = 0 }) => {
         }}
       />
 
-      {/* 4. Soft Glow (Center Bloom) - WEAKENED */}
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(circle, ${theme.tint}33 0%, transparent 60%)`,
-          zIndex: 103,
-          mixBlendMode: 'screen',
-          filter: 'blur(40px)',
-        }}
-      />
+      {/* Soft Glow (Center Bloom) を削除しました */}
     </AbsoluteFill>
   );
 };

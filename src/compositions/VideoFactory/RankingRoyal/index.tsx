@@ -1,37 +1,35 @@
+import React from 'react';
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
-import { flip } from '@remotion/transitions/flip';
-import { slide } from '@remotion/transitions/slide';
+import { fade } from '@remotion/transitions/fade';
 import {
   AbsoluteFill,
   useVideoConfig,
   Audio,
   staticFile,
   OffthreadVideo,
-  interpolate,
-  useCurrentFrame,
+  Sequence,
 } from 'remotion';
-import type { RankingVerticalProps } from './schema';
+import type { RankingRoyalProps } from './schema';
 import { Ending } from './Ending';
 import { Opening } from './Opening';
 import { RankingGroup } from './RankingGroup';
 import { Top1Reveal } from './Top1Reveal';
 import { GridBridge } from './GridBridge';
-import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
+import { ROYAL_THEME } from './theme';
 
 export const OPENING_SEC = 5.5;
 export const GROUP_SEC = 5;
 export const TOP_RANK_SEC = 5.6;
-export const GRID_BRIDGE_SEC = 3.5;
-export const ENDING_SEC = 2.5;
-export const TRANSITION_FRAMES = 24;
+export const GRID_BRIDGE_SEC = 2.5;
+export const ENDING_SEC = 3.5;
+export const TRANSITION_FRAMES = 24; // ゆったりとしたトランジション
 export const LAST_TRANSITION_FRAMES = 30;
 
-export const RankingVertical: React.FC<RankingVerticalProps> = ({
+export const RankingRoyal: React.FC<RankingRoyalProps> = ({
   bpm,
   bgmFile,
   bgmStartFrom,
-  openingVideo,
   rankingVideo,
   openingTitle1,
   openingTitle2,
@@ -44,7 +42,6 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
   livers,
 }) => {
   const { fps } = useVideoConfig();
-  const frame = useCurrentFrame();
 
   const OPENING_DURATION = OPENING_SEC * fps;
   const GROUP_DURATION = GROUP_SEC * fps;
@@ -54,50 +51,21 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
   const TRANSITION_DURATION = TRANSITION_FRAMES;
   const LAST_TRANSITION_DURATION = LAST_TRANSITION_FRAMES;
 
-  const transition = flip({
-    direction: 'from-bottom',
-    perspective: 1000,
-  });
-
+  // ラグジュアリーなので少しゆっくりとしたフェードやスライドを使用
+  const transition = fade(); // エレガントなフェード遷移
   const timing = linearTiming({ durationInFrames: TRANSITION_DURATION });
 
-  const { pulse } = useBeatValue(bpm);
-  const beatScale = 1 + pulse * 0.015;
-
-  // Background video timing for Top 15-4
-  const bgStart = OPENING_DURATION;
-  const bgEnd = OPENING_DURATION + GROUP_DURATION * 4;
-  const bgOpacity = interpolate(
-    frame,
-    [bgStart - 10, bgStart, bgEnd, bgEnd + 10],
-    [0, 1, 1, 0],
-    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
-  );
-
-  // Slow pan from right to left (Show right side first, then move to left)
-  const panX = interpolate(
-    frame,
-    [bgStart, bgEnd],
-    [0, 0], // Starting at -75% (far right) and moving to 0% (far left) for 400% width
-    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
-  );
-
   return (
-    <AbsoluteFill style={{ backgroundColor: '#1a1a1a' }}>
+    <AbsoluteFill style={{ backgroundColor: ROYAL_THEME.colors.midnightBlue }}>
       <Audio
         src={staticFile(bgmFile)}
         loop
         startFrom={Math.floor(bgmStartFrom * fps)}
       />
 
-      {/* Persistent Fire Background for Ranks 10-4 */}
-      <AbsoluteFill style={{ opacity: bgOpacity, overflow: 'hidden' }}>
-        <AbsoluteFill
-          style={{
-            width: '200%', // 4x width for panning
-            transform: `translateX(${panX}%)`,
-          }}
-        >
+      {/* ランキング発表中（15位〜4位）のみ現れる、リセットされない背景動画レイヤー */}
+      <Sequence from={OPENING_DURATION - TRANSITION_DURATION} durationInFrames={(GROUP_DURATION * 4) + (TRANSITION_DURATION * 4)}>
+        <AbsoluteFill style={{ overflow: 'hidden' }}>
           <OffthreadVideo
             src={staticFile(rankingVideo)}
             style={{
@@ -105,31 +73,45 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
               height: '100%',
               objectFit: 'cover',
               objectPosition: 'center',
+              filter: 'brightness(0.5) contrast(1.2) saturate(0.8)',
             }}
-            startFrom={0}
+            startFrom={306}
             muted
+            playbackRate={0.7}
+          />
+          <AbsoluteFill
+            style={{
+              background: 'radial-gradient(circle, transparent 20%, rgba(0,8,20,0) 100%)',
+            }}
           />
         </AbsoluteFill>
+      </Sequence>
+
+      {/* 背景の深みを出すためのヴィネット（周辺減光）レイヤー */}
+      <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 10 }}>
+        <AbsoluteFill
+          style={{
+            background: 'radial-gradient(circle, transparent 20%, rgba(0,8,20,0) 100%)',
+          }}
+        />
       </AbsoluteFill>
 
-      <AbsoluteFill style={{ transform: `scale(${beatScale})` }}>
-        <TransitionSeries>
-          <TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
-            <Opening
-              videoSrc={openingVideo}
-              title1={openingTitle1}
-              title2={openingTitle2}
-              title3={openingTitle3}
-              date={openingDate}
-              subtitle={openingSubtitle}
-            />
-          </TransitionSeries.Sequence>
+      <TransitionSeries>
+        <TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
+          <Opening
+            title1={openingTitle1}
+            title2={openingTitle2}
+            title3={openingTitle3}
+            date={openingDate}
+            subtitle={openingSubtitle}
+          />
+        </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={transition} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n11~15'}
+              title={'TOP 11~15'}
               livers={livers.filter((d) => d.rank >= 11 && d.rank <= 15) as unknown as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}
@@ -140,7 +122,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n8~10'}
+              title={'TOP 8~10'}
               livers={livers.filter((d) => d.rank >= 8 && d.rank <= 10) as unknown as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}
@@ -151,7 +133,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n6~7'}
+              title={'TOP 6~7'}
               livers={livers.filter((d) => d.rank >= 6 && d.rank <= 7) as unknown as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}
@@ -162,7 +144,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP\n4~5'}
+              title={'TOP 4~5'}
               livers={livers.filter((d) => d.rank >= 4 && d.rank <= 5) as unknown as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}
@@ -170,9 +152,9 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={transition} timing={timing} />
-
+          
           <TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
-            <GridBridge />
+            <GridBridge rank={3} />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={transition} timing={timing} />
@@ -188,6 +170,12 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={transition} timing={timing} />
+          
+          <TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
+            <GridBridge rank={2} />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal
@@ -197,6 +185,12 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
               top3Video={top3Video}
               bpm={bpm}
             />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
+          
+          <TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
+            <GridBridge rank={1} />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={transition} timing={timing} />
@@ -212,24 +206,31 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition
-            presentation={slide({ direction: 'from-right' })}
+            presentation={fade()} // エンディングへの最後もフェードで
             timing={linearTiming({ durationInFrames: LAST_TRANSITION_DURATION })}
           />
 
           <TransitionSeries.Sequence durationInFrames={ENDING_DURATION}>
-            <Ending />
+            <Ending videoSrc={rankingVideo} />
           </TransitionSeries.Sequence>
         </TransitionSeries>
-      </AbsoluteFill>
 
+      {/* ロイヤル仕様の外枠とロゴ */}
       <AbsoluteFill
         style={{
           pointerEvents: 'none',
-          border: '15px solid #FF0000',
-          boxShadow: 'inset 0 0 50px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.8)',
+          border: `6px solid ${ROYAL_THEME.colors.champagneGoldDark}`,
+          boxShadow: `inset 0 0 100px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 0, 0, 0.8)`,
           zIndex: 9999,
         }}
-      />
+      >
+         <AbsoluteFill style={{
+          border: `2px solid ${ROYAL_THEME.colors.champagneGoldLight}`,
+          margin: 10,
+          opacity: 0.5,
+         }} />
+
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
