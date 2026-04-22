@@ -117,7 +117,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
               objectPosition: 'center',
               filter: 'brightness(0.15) contrast(1.1) saturate(0.5)',
             }}
-            startFrom={isRank1 ? 500 : rank === 2 ? 300 : 100} 
+            startFrom={isRank1 ? 500 : rank === 2 ? 300 : rank === 3 ? 100 : rank === 4 ? 400 : 200} 
             muted
             playbackRate={0.7}
           />
@@ -227,18 +227,49 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
             right: 0,
             display: 'flex',
             justifyContent: 'center',
+            alignItems: 'baseline',
             transform: `scale(${rankScale * pulseScale})`, 
             opacity: rankOpacity 
           }}>
-            <LuxuryGoldText 
-              text={title} 
-              fontSize={(isRank1 ? 250 : 200) * (width / 1080)} 
-              delay={25}
-              style={{
-                fontStyle: 'italic',
-                textShadow: `0 10px 30px rgba(0,0,0,0.9)`,
-              }}
-            />
+            {(() => {
+              const match = title.match(/^(\d+)(.*)$/);
+              if (match) {
+                const [, num, suffix] = match;
+                return (
+                  <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                    <LuxuryGoldText 
+                      text={num} 
+                      fontSize={(isRank1 ? 250 : 200) * (width / 1080)} 
+                      delay={25}
+                      style={{
+                        fontStyle: 'italic',
+                        textShadow: `0 10px 30px rgba(0,0,0,0.9)`,
+                      }}
+                    />
+                    <LuxuryGoldText 
+                      text={suffix} 
+                      fontSize={(isRank1 ? 120 : 100) * (width / 1080)} 
+                      delay={25}
+                      fontFamily={ROYAL_THEME.fonts.japanese}
+                      style={{
+                        textShadow: `0 10px 30px rgba(0,0,0,0.9)`,
+                      }}
+                    />
+                  </div>
+                );
+              }
+              return (
+                <LuxuryGoldText 
+                  text={title} 
+                  fontSize={(isRank1 ? 250 : 200) * (width / 1080)} 
+                  delay={25}
+                  style={{
+                    fontStyle: 'italic',
+                    textShadow: `0 10px 30px rgba(0,0,0,0.9)`,
+                  }}
+                />
+              );
+            })()}
           </div>
 
           {/* アイコン（3Dキューブ） */}
@@ -297,6 +328,7 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
                 fontWeight: 900,
                 color: ROYAL_THEME.colors.textWhite,
                 textAlign: 'center',
+                fontFamily: ROYAL_THEME.fonts.japanese,
               }}
             >
               {liver.nickname}

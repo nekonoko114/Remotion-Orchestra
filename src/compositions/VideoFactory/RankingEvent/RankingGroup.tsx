@@ -174,7 +174,10 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                         fontFamily,
                       }}
                     >
-                      {liver.rank}位
+                      {liver.rank}
+                      <span style={{ fontSize: rankFontSize * 0.4, fontStyle: 'normal', fontFamily: 'serif', marginLeft: 2 }}>
+                        th
+                      </span>
                     </span>
                     <span
                       style={{
@@ -226,8 +229,8 @@ export const RankingGroup: React.FC<Props> = ({ title, livers, absoluteFrame }) 
                   }}
                 >
                   {liver.rank}
-                  <span style={{ fontSize: rankFontSize * 0.4, fontStyle: 'normal', scale: '0.8', marginLeft: 2 }}>
-                    位
+                  <span style={{ fontSize: rankFontSize * 0.4, fontStyle: 'normal', scale: '0.8', fontFamily: 'serif', marginLeft: 2 }}>
+                    th
                   </span>
                 </div>
 

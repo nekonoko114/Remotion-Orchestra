@@ -1,10 +1,12 @@
-import { loadFont as loadCinzel } from '@remotion/google-fonts/CinzelDecorative';
-import { loadFont as loadMincho } from '@remotion/google-fonts/BIZUDMincho';
+import { loadFont as loadCinzel } from '@remotion/google-fonts/Cinzel';
+import { loadFont as loadMincho } from '@remotion/google-fonts/ShipporiMincho';
 
 const { fontFamily: cinzelFamily } = loadCinzel('normal', {
+  weights: ['400', '700', '900'],
   ignoreTooManyRequestsWarning: true,
 });
 const { fontFamily: minchoFamily } = loadMincho('normal', {
+  weights: ['400', '700', '800'],
   ignoreTooManyRequestsWarning: true,
 });
 
@@ -22,18 +24,18 @@ export const ROYAL_THEME = {
     champagneGold: '#F7E7CE',      // ベース
     champagneGoldDark: '#B89B66',  // シャドウ・エッジ
     
-    // 発光・シャドウ
-    goldGlow: 'rgba(247, 231, 206, 0.4)',
-    cyanGlow: 'rgba(0, 168, 255, 0.3)', // さりげない宝石の輝き
+    // 発光・シャドウ (より強く、純金に近い鮮やかさに)
+    goldGlow: 'rgba(255, 215, 0, 0.8)',
+    cyanGlow: 'rgba(0, 168, 255, 0.4)', // さりげない宝石の輝き
     
     textWhite: '#FFFFFF',
   },
   
-  // ゴールドグラデーション (本物の金属のような質感)
+  // ゴールドグラデーション (影を排除し、白と純金のみで構成)
   gradients: {
-    goldLinear: 'linear-gradient(135deg, #F7E7CE 0%, #B89B66 40%, #FFF8E7 50%, #B89B66 60%, #8A7347 100%)',
+    goldLinear: 'linear-gradient(135deg, #FFFFFF 0%, #FFD700 25%, #FFF8E7 50%, #FFD700 75%, #FFFFFF 100%)',
     goldShine: 'linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%)',
-    navyPanel: 'linear-gradient(180deg, rgba(0,29,61,0.8) 0%, rgba(0,8,20,0.95) 100%)',
+    navyPanel: 'linear-gradient(180deg, rgba(0,29,61,0.8) 0%, rgba(0, 20, 0, 0.95) 100%)',
   },
   
   // 上品なドロップシャドウ

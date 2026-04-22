@@ -180,7 +180,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal
               rank={3}
-              title="3位"
+              title="3th"
               liver={livers.find((d) => d.rank === 3) as unknown as Liver}
               top3Video={top3Video}
               bpm={bpm}
@@ -192,7 +192,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal
               rank={2}
-              title="2位"
+              title="2th"
               liver={livers.find((d) => d.rank === 2) as unknown as Liver}
               top3Video={top3Video}
               bpm={bpm}
@@ -204,7 +204,7 @@ export const RankingVertical: React.FC<RankingVerticalProps> = ({
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal
               rank={1}
-              title="1位"
+              title="1th"
               liver={livers.find((d) => d.rank === 1) as unknown as Liver}
               top3Video={top3Video}
               bpm={bpm}

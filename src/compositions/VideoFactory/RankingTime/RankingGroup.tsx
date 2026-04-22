@@ -183,7 +183,7 @@ export const RankingGroup: React.FC<Props> = ({
                         lineHeight: 1.1,
                       }}
                     >
-                      {liver.rank}位
+                      {liver.rank}th
                     </span>
                     <span
                       style={{
@@ -236,7 +236,7 @@ export const RankingGroup: React.FC<Props> = ({
                     >
                       {liver.rank}
                       <span style={{ fontSize: rankFontSize * 0.4, fontStyle: 'normal', marginLeft: 2 }}>
-                        位
+                        th
                       </span>
                     </div>
 

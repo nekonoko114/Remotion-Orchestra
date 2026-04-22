@@ -224,7 +224,7 @@ export const GridBridge: React.FC = () => {
                           textShadow: '0 0 10px rgba(255, 30, 30, 0.5)',
                         }}
                       >
-                        {item.rank}位
+                        {item.rank}th
                       </div>
                     )}
                   </div>

@@ -22,8 +22,8 @@ export const RankingRoyalSchema = z.object({
   openingSubtitle: z.string().default('結果発表'),
   useGlitch: z.boolean().default(false), // ラグジュアリーなのでグリッチはデフォルトOFF
   glitchIntensity: z.number().default(0),
-  // Top1発表用: ダイヤモンドやクリスタルの神秘的な背景を想定（ここでは同じダイヤモンドを利用）
-  top3Video: z.string().default('assets/pixabay/videos/pixabay_diamonds_jewels_rain_falling_wealth_value_money_cr_3125.mp4'),
+  // Top1発表用: ダイヤモンドやクリスタルの神秘的な背景を想定（不要のため削除）
+  top3Video: z.string().default(''),
   livers: z.array(LiverSchema),
 });
 

@@ -6,6 +6,7 @@ interface LuxuryGoldTextProps {
   text: string;
   fontSize: number;
   delay?: number;
+  fontFamily?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -18,6 +19,7 @@ export const LuxuryGoldText: React.FC<LuxuryGoldTextProps> = ({
   text,
   fontSize,
   delay = 0,
+  fontFamily = ROYAL_THEME.fonts.primary,
   className = '',
   style = {},
 }) => {
@@ -46,14 +48,15 @@ export const LuxuryGoldText: React.FC<LuxuryGoldTextProps> = ({
         fontSize,
         opacity,
         transform: `scale(${scale})`,
-        fontFamily: ROYAL_THEME.fonts.primary,
-        fontWeight: '900',
+        fontFamily,
+        fontWeight: '800',
         lineHeight: 1.2,
+        filter: 'brightness(1.5) saturate(1.2)',
         ...style,
       }}
     >
       {/* ドロップシャドウ専用のラッパー（影が文字の透過部分に干渉しないように分離） */}
-      <div style={{ filter: `drop-shadow(0px 8px 16px rgba(0,0,0,0.9)) drop-shadow(0px 0px 40px ${ROYAL_THEME.colors.goldGlow})` }}>
+      <div style={{ filter: `drop-shadow(0px 8px 16px rgba(0,0,0,0.9)) drop-shadow(0px 0px 50px ${ROYAL_THEME.colors.goldGlow})` }}>
         <span
           style={{
             background: ROYAL_THEME.gradients.goldLinear,
@@ -63,7 +66,7 @@ export const LuxuryGoldText: React.FC<LuxuryGoldTextProps> = ({
             WebkitTextFillColor: 'transparent',
             position: 'relative',
             display: 'inline-block',
-            WebkitTextStroke: `2px ${ROYAL_THEME.colors.champagneGoldDark}`,
+            WebkitTextStroke: `1px #FFFFFF`,
           }}
         >
           {text}

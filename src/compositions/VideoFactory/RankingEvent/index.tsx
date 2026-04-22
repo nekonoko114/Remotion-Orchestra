@@ -43,9 +43,11 @@ const BGM_START_FROM = 0;
 export const OPENING_SEC = 5;
 export const GROUP_SEC = 4.5;     // 10 beats (relaxed stagger)
 export const TOP_RANK_SEC = 4;  // 8 beats
-export const GRID_BRIDGE_SEC = 4; // 12 beats
-export const ENDING_SEC = 4;    // 8 beats
-export const TRANSITION_FRAMES = 30;  // Heavy mechanical transition
+export const SCAN_SEC = 1.5;
+export const REVEAL_SEC = 5;
+export const REVEAL_1_SEC = 6;
+export const ENDING_SEC = 4;
+export const TRANSITION_FRAMES = 30;
 export const LAST_TRANSITION_FRAMES = 80;
 
 const SLASH = cyberGateTransition({ color: '#00ffff', accentColor: '#ff1e1e' });
@@ -117,7 +119,7 @@ export const RankingEvent = () => {
           <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
             <Top1Reveal
               rank={5}
-              title="5位"
+              title="5th"
               liver={RANKING_DATA.find((d) => d.rank === 5)!}
               backgroundSrc="assets/backgrounds/unity_rank_bg_top3.png"
             />
@@ -135,7 +137,7 @@ export const RankingEvent = () => {
           <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
             <Top1Reveal
               rank={4}
-              title="4位"
+              title="4th"
               liver={RANKING_DATA.find((d) => d.rank === 4)!}
               backgroundSrc="assets/backgrounds/unity_rank_bg_top3.png"
             />
@@ -153,7 +155,7 @@ export const RankingEvent = () => {
           <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
             <Top1Reveal
               rank={3}
-              title="3位"
+              title="3th"
               liver={RANKING_DATA.find((d) => d.rank === 3)!}
               backgroundSrc="assets/backgrounds/unity_rank_bg_top3.png"
             />
@@ -171,7 +173,7 @@ export const RankingEvent = () => {
           <TransitionSeries.Sequence durationInFrames={Math.round(5 * fps)}>
             <Top1Reveal
               rank={2}
-              title="2位"
+              title="2th"
               liver={RANKING_DATA.find((d) => d.rank === 2)!}
               backgroundSrc="assets/backgrounds/unity_rank_bg_top3.png"
             />
@@ -189,7 +191,7 @@ export const RankingEvent = () => {
           <TransitionSeries.Sequence durationInFrames={Math.round(6 * fps)}>
             <Top1Reveal
               rank={1}
-              title="1位"
+              title="1th"
               liver={RANKING_DATA.find((d) => d.rank === 1)!}
               backgroundSrc="assets/backgrounds/unity_rank_bg_top3.png"
             />

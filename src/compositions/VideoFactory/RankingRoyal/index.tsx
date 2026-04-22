@@ -20,8 +20,8 @@ import { ROYAL_THEME } from './theme';
 
 export const OPENING_SEC = 5.5;
 export const GROUP_SEC = 5;
-export const TOP_RANK_SEC = 5.6;
-export const GRID_BRIDGE_SEC = 2.5;
+export const TOP_RANK_SEC = 5.0;
+export const GRID_BRIDGE_SEC = 2.0;
 export const ENDING_SEC = 3.5;
 export const TRANSITION_FRAMES = 24; // ゆったりとしたトランジション
 export const LAST_TRANSITION_FRAMES = 30;
@@ -63,8 +63,8 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
         startFrom={Math.floor(bgmStartFrom * fps)}
       />
 
-      {/* ランキング発表中（15位〜4位）のみ現れる、リセットされない背景動画レイヤー */}
-      <Sequence from={OPENING_DURATION - TRANSITION_DURATION} durationInFrames={(GROUP_DURATION * 4) + (TRANSITION_DURATION * 4)}>
+      {/* ランキング発表中（15位〜1位）のみ現れる、リセットされない背景動画レイヤー */}
+      <Sequence from={OPENING_DURATION - TRANSITION_DURATION} durationInFrames={(GROUP_DURATION * 2) + (GRID_BRIDGE_DURATION * 5) + (TOP_RANK_DURATION * 5) + (TRANSITION_DURATION * 13)}>
         <AbsoluteFill style={{ overflow: 'hidden' }}>
           <OffthreadVideo
             src={staticFile(rankingVideo)}
@@ -122,8 +122,8 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
 
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup
-              title={'TOP 8~10'}
-              livers={livers.filter((d) => d.rank >= 8 && d.rank <= 10) as unknown as Liver[]}
+              title={'TOP 6~10'}
+              livers={livers.filter((d) => d.rank >= 6 && d.rank <= 10) as unknown as Liver[]}
               useGlitch={useGlitch}
               glitchIntensity={glitchIntensity}
             />
@@ -131,23 +131,37 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
 
           <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
-            <RankingGroup
-              title={'TOP 6~7'}
-              livers={livers.filter((d) => d.rank >= 6 && d.rank <= 7) as unknown as Liver[]}
-              useGlitch={useGlitch}
-              glitchIntensity={glitchIntensity}
+          <TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
+            <GridBridge rank={5} />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
+
+          <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
+            <Top1Reveal
+              rank={5}
+              title="5th"
+              liver={livers.find((d) => d.rank === 5) as unknown as Liver}
+              top3Video={top3Video}
+              bpm={bpm}
             />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition presentation={transition} timing={timing} />
 
-          <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
-            <RankingGroup
-              title={'TOP 4~5'}
-              livers={livers.filter((d) => d.rank >= 4 && d.rank <= 5) as unknown as Liver[]}
-              useGlitch={useGlitch}
-              glitchIntensity={glitchIntensity}
+          <TransitionSeries.Sequence durationInFrames={GRID_BRIDGE_DURATION}>
+            <GridBridge rank={4} />
+          </TransitionSeries.Sequence>
+
+          <TransitionSeries.Transition presentation={transition} timing={timing} />
+
+          <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
+            <Top1Reveal
+              rank={4}
+              title="4th"
+              liver={livers.find((d) => d.rank === 4) as unknown as Liver}
+              top3Video={top3Video}
+              bpm={bpm}
             />
           </TransitionSeries.Sequence>
 
@@ -162,7 +176,7 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal
               rank={3}
-              title="3位"
+              title="3th"
               liver={livers.find((d) => d.rank === 3) as unknown as Liver}
               top3Video={top3Video}
               bpm={bpm}
@@ -180,7 +194,7 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal
               rank={2}
-              title="2位"
+              title="2th"
               liver={livers.find((d) => d.rank === 2) as unknown as Liver}
               top3Video={top3Video}
               bpm={bpm}
@@ -198,7 +212,7 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
             <Top1Reveal
               rank={1}
-              title="1位"
+              title="1th"
               liver={livers.find((d) => d.rank === 1) as unknown as Liver}
               top3Video={top3Video}
               bpm={bpm}

@@ -140,7 +140,7 @@ export const RankingTime = (props: RankingTimeProps) => {
           <TransitionSeries.Sequence durationInFrames={TOP32_RANK_DURATION}>
             <Top1Reveal 
               rank={3} 
-              title="3位" 
+              title="3th" 
               liver={RANKING_DATA.find((d) => d.rank === 3) || RANKING_DATA[0]} 
               themeColor={themeColor}
               glowColor={glowColor}
@@ -152,7 +152,7 @@ export const RankingTime = (props: RankingTimeProps) => {
           <TransitionSeries.Sequence durationInFrames={TOP32_RANK_DURATION}>
             <Top1Reveal 
               rank={2} 
-              title="2位" 
+              title="2th" 
               liver={RANKING_DATA.find((d) => d.rank === 2) || RANKING_DATA[1]} 
               themeColor={themeColor}
               glowColor={glowColor}
@@ -164,7 +164,7 @@ export const RankingTime = (props: RankingTimeProps) => {
           <TransitionSeries.Sequence durationInFrames={TOP1_RANK_DURATION}>
             <Top1Reveal 
               rank={1} 
-              title="1位" 
+              title="1th" 
               liver={RANKING_DATA.find((d) => d.rank === 1) || RANKING_DATA[2]} 
               themeColor={themeColor}
               glowColor={glowColor}

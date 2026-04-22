@@ -24,6 +24,14 @@ import {
 } from './compositions/VideoFactory/RankingTime';
 import {
   RankingEvent,
+  OPENING_SEC as EVENT_OPENING_SEC,
+  GROUP_SEC as EVENT_GROUP_SEC,
+  SCAN_SEC as EVENT_SCAN_SEC,
+  REVEAL_SEC as EVENT_REVEAL_SEC,
+  REVEAL_1_SEC as EVENT_REVEAL_1_SEC,
+  ENDING_SEC as EVENT_ENDING_SEC,
+  TRANSITION_FRAMES as EVENT_TRANSITION_FRAMES,
+  LAST_TRANSITION_FRAMES as EVENT_LAST_TRANSITION_FRAMES,
 } from './compositions/VideoFactory/RankingEvent';
 import { BattleKawaii } from './compositions/VideoFactory/BattleKawaii';
 import {
@@ -152,12 +160,12 @@ const JOL_RANKING_DURATION_VERTICAL =
 
 const JOL_RANKING_ROYAL_DURATION =
   (ROYAL_OPENING_SEC +
-    ROYAL_GROUP_SEC * 4 +
-    ROYAL_GRID_BRIDGE_SEC * 3 + // 3回分（1~3位の前）を正しく加算
-    ROYAL_TOP_RANK_SEC * 3 +
+    ROYAL_GROUP_SEC * 2 +
+    ROYAL_GRID_BRIDGE_SEC * 5 +
+    ROYAL_TOP_RANK_SEC * 5 +
     ROYAL_ENDING_SEC) *
     JOL_RANKING_FPS -
-  (10 * ROYAL_TRANSITION_FRAMES + ROYAL_LAST_TRANSITION_FRAMES); // 11個のトランジションに対応
+  (12 * ROYAL_TRANSITION_FRAMES + ROYAL_LAST_TRANSITION_FRAMES);
 
 // Calculate Time Duration (Correctly using its own 5s opening)
 // Updated to 4 groups (15-11, 10-8, 7-6, 5-4)
@@ -183,7 +191,12 @@ const JOL_RANKING_DURATION_TIME =
 // Calculate Event Duration
 // (Opening 300 + 4 Groups * 270 + 3 Reveals (300, 300, 360) + Ending 240) - (6 * T 12 + 1 * LAST_T 15)
 // = (300 + 1080 + 960 + 240) - (72 + 15) = 2580 - 87 = 2493
-const JOL_RANKING_DURATION_EVENT = 3213;
+const JOL_RANKING_DURATION_EVENT = 
+  (EVENT_OPENING_SEC +
+    EVENT_GROUP_SEC * 2 +
+    (EVENT_SCAN_SEC + EVENT_REVEAL_SEC) * 4 +
+    (EVENT_SCAN_SEC + EVENT_REVEAL_1_SEC) +
+    EVENT_ENDING_SEC) * JOL_RANKING_FPS - (12 * EVENT_TRANSITION_FRAMES + EVENT_LAST_TRANSITION_FRAMES);
 
 export const RemotionRoot: React.FC = () => {
   return (

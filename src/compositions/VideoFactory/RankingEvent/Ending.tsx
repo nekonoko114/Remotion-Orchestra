@@ -45,11 +45,11 @@ export const Ending: React.FC = () => {
       <AbsoluteFill style={{ opacity }}>
         
         {/* ロゴ（右側に配置） */}
-        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'flex-end', paddingRight: '80px' }}>
+        <AbsoluteFill style={{ justifyContent: 'flex-end', alignItems: 'flex-end', paddingRight: '80px', paddingBottom: '80px' }}>
           <div
             style={{
               transform: `scale(${scale * logoSpring}) translateX(${interpolate(logoSpring, [0, 1], [100, 0])}px)`,
-              width: 500,
+              width: 400,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',

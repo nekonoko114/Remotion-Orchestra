@@ -205,7 +205,7 @@ export const RankingGroup: React.FC<Props> = ({
                   <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 4, flex: 1, whiteSpace: 'nowrap' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 5 }}>
                       <LuxuryGoldText text={liver.rank.toString()} fontSize={rankFontSize} />
-                      <LuxuryGoldText text="位" fontSize={rankFontSize * 0.4} />
+                      <LuxuryGoldText text="th" fontSize={rankFontSize * 0.4} fontFamily={ROYAL_THEME.fonts.japanese} />
                     </div>
                     <span style={{
                         fontSize: nameFontSize, fontWeight: 800, color: ROYAL_THEME.colors.textWhite,
@@ -231,7 +231,7 @@ export const RankingGroup: React.FC<Props> = ({
                 <div style={{ display: 'flex', alignItems: 'center', position: 'relative', width: '100%', justifyContent: 'center' }}>
                     <div style={{ position: 'absolute', left: '0px', width: '28%', textAlign: 'right', paddingRight: 40 }}>
                       <LuxuryGoldText text={liver.rank.toString()} fontSize={rankFontSize * 0.9} style={{ fontStyle: 'italic' }} />
-                      <span style={{ fontSize: rankFontSize * 0.25, color: ROYAL_THEME.colors.champagneGold, fontWeight: 800, fontFamily: ROYAL_THEME.fonts.japanese, marginLeft: 5 }}>位</span>
+                      <span style={{ fontSize: rankFontSize * 0.25, color: ROYAL_THEME.colors.champagneGold, fontWeight: 800, fontFamily: ROYAL_THEME.fonts.japanese, marginLeft: 5 }}>th</span>
                     </div>
                     <div style={{
                           width: is2Group ? 480 : 330, height: is2Group ? 480 : 330,

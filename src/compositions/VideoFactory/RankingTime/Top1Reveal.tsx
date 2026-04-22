@@ -289,18 +289,48 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor, gl
               right: 0,
               display: 'flex',
               justifyContent: 'center',
+              alignItems: 'baseline',
               transform: `scale(${pulseScale * rankScale})`,
               opacity: rankOpacity,
             }}
           >
-            <MorphingTitle
-              text={title}
-              fontSize={180 * (height / 1080)}
-              style={{
-                fontFamily,
-                textShadow: `0 0 ${30 * (height / 1080)}px ${primary}, 0 0 ${60 * (height / 1080)}px ${primary}`,
-              }}
-            />
+            {(() => {
+              const match = title.match(/^(\d+)(.*)$/);
+              if (match) {
+                const [, num, suffix] = match;
+                return (
+                  <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                    <MorphingTitle
+                      text={num}
+                      fontSize={180 * (height / 1080)}
+                      style={{
+                        fontFamily,
+                        textShadow: `0 0 ${30 * (height / 1080)}px ${primary}, 0 0 ${60 * (height / 1080)}px ${primary}`,
+                      }}
+                    />
+                    <MorphingTitle
+                      text={suffix}
+                      fontSize={80 * (height / 1080)}
+                      style={{
+                        fontFamily: 'serif', // もしくは日本語フォント
+                        textShadow: `0 0 ${10 * (height / 1080)}px ${primary}, 0 0 ${20 * (height / 1080)}px ${primary}`,
+                        marginLeft: 10,
+                      }}
+                    />
+                  </div>
+                );
+              }
+              return (
+                <MorphingTitle
+                  text={title}
+                  fontSize={180 * (height / 1080)}
+                  style={{
+                    fontFamily,
+                    textShadow: `0 0 ${30 * (height / 1080)}px ${primary}, 0 0 ${60 * (height / 1080)}px ${primary}`,
+                  }}
+                />
+              );
+            })()}
           </div>
 
           {/* CYBER MOTION WRAPPER */}

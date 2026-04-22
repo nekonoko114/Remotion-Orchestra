@@ -223,7 +223,7 @@ export const GridBridge: React.FC = () => {
                           padding: '10px 0',
                         }}
                       >
-                        {item.rank}位
+                        {item.rank}th
                       </div>
                     )}
                   </div>

@@ -107,7 +107,7 @@ export const LiverCubeScene: React.FC<Props> = ({ imageUrl, rank }) => {
   return (
     <React.Suspense fallback={null}>
       <Environment preset="night" />
-      <ambientLight intensity={0.5 * lightIntensityScale} />
+      <ambientLight intensity={0.8 + lightIntensityScale} />
       <directionalLight position={[10, 10, 10]} intensity={1.2 * lightIntensityScale} color="#f7ffe7" />
       <pointLight position={[-10, 10, 10]} intensity={20 * lightIntensityScale} color="#FFF2C8" />
       <spotLight position={[0, 20, 20]} intensity={15 * lightIntensityScale} angle={0.5} penumbra={1} />

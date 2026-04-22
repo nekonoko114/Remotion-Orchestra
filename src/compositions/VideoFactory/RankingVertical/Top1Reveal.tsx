@@ -287,21 +287,64 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
               }}
             />
             <TextShine color="rgba(255, 255, 255, 0.9)" delay={15} duration={45}>
-              <h1
-                style={{
-                  fontSize: (rank === 1 ? 280 : 220) * (width / 1080),
-                  margin: 0,
-                  color: rank === 1 ? '#FFD700' : '#FFFFFF',
-                  textShadow: rank === 1 ? `0 0 ${20 * (width / 1080)}px ${primary}, 0 ${10 * (width / 1080)}px ${20 * (width / 1080)}px rgba(0,0,0,0.9)` : `0 0 ${15 * (width / 1080)}px ${primary}`,
-                  fontWeight: 900,
-                  fontStyle: 'italic',
-                  lineHeight: 0.8,
-                  position: 'relative',
-                  zIndex: 2,
-                }}
-              >
-                {title}
-              </h1>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center' }}>
+                {(() => {
+                  const match = title.match(/^(\d+)(.*)$/);
+                  if (match) {
+                    const [, num, suffix] = match;
+                    return (
+                      <>
+                        <h1
+                          style={{
+                            fontSize: (rank === 1 ? 280 : 220) * (width / 1080),
+                            margin: 0,
+                            color: rank === 1 ? '#FFD700' : '#FFFFFF',
+                            textShadow: rank === 1 ? `0 0 ${20 * (width / 1080)}px ${primary}, 0 ${10 * (width / 1080)}px ${20 * (width / 1080)}px rgba(0,0,0,0.9)` : `0 0 ${15 * (width / 1080)}px ${primary}`,
+                            fontWeight: 900,
+                            fontStyle: 'italic',
+                            lineHeight: 0.8,
+                            position: 'relative',
+                            zIndex: 2,
+                          }}
+                        >
+                          {num}
+                        </h1>
+                        <span
+                          style={{
+                            fontSize: (rank === 1 ? 120 : 100) * (width / 1080),
+                            margin: 0,
+                            color: rank === 1 ? '#FFD700' : '#FFFFFF',
+                            textShadow: rank === 1 ? `0 0 ${10 * (width / 1080)}px ${primary}` : `0 0 ${8 * (width / 1080)}px ${primary}`,
+                            fontWeight: 900,
+                            fontStyle: 'normal',
+                            marginLeft: 10,
+                            zIndex: 2,
+                          }}
+                        >
+                          {suffix}
+                        </span>
+                      </>
+                    );
+                  }
+                  return (
+                    <h1
+                      style={{
+                        fontSize: (rank === 1 ? 280 : 220) * (width / 1080),
+                        margin: 0,
+                        color: rank === 1 ? '#FFD700' : '#FFFFFF',
+                        textShadow: rank === 1 ? `0 0 ${20 * (width / 1080)}px ${primary}, 0 ${10 * (width / 1080)}px ${20 * (width / 1080)}px rgba(0,0,0,0.9)` : `0 0 ${15 * (width / 1080)}px ${primary}`,
+                        fontWeight: 900,
+                        fontStyle: 'italic',
+                        lineHeight: 0.8,
+                        position: 'relative',
+                        zIndex: 2,
+                      }}
+                    >
+                      {title}
+                    </h1>
+                  );
+                })()}
+              </div>
             </TextShine>
           </div>
 
