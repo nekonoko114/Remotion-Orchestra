@@ -14,7 +14,6 @@ import { loadFont as loadDelaGothic } from '@remotion/google-fonts/DelaGothicOne
 import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { ParticleBurst } from '../../../components/effects/ParticleBurst';
 import { GlitchEffect } from '../../../components/effects/GlitchEffect';
-import { ChromaticAberration } from '../../../components/effects/ChromaticAberration';
 
 const { fontFamily: orbitron } = loadOrbitron();
 const { fontFamily: delaGothic } = loadDelaGothic();
@@ -42,9 +41,9 @@ export const Opening: React.FC = () => {
     let translate = 0;
 
     if (direction === 'top') {
-      translate = interpolate(spr, [0, 1], [-300, 0]);
+      translate = interpolate(spr, [0, 1], [-100, 0]);
     } else if (direction === 'bottom') {
-      translate = interpolate(spr, [0, 1], [300, 0]);
+      translate = interpolate(spr, [0, 1], [50, 0]);
     }
 
     return {
@@ -61,8 +60,8 @@ export const Opening: React.FC = () => {
   const impact5 = getImpact(frame, 60);
 
   const masterImpact = Math.max(impact1, impact4, impact5);
-  const masterShakeX = masterImpact * (random('oshakeX' + frame) - 0.5) * 60;
-  const masterShakeY = masterImpact * (random('oshakeY' + frame) - 0.5) * 60;
+  const masterShakeX = masterImpact * (random('oshakeX' + frame) - 0.5) * 10;
+  const masterShakeY = masterImpact * (random('oshakeY' + frame) - 0.5) * 10;
 
   return (
     <AbsoluteFill
@@ -73,15 +72,15 @@ export const Opening: React.FC = () => {
     >
       {/* 1. エフェクトレイヤー (背景側の閃光や火花) */}
       <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 10 }}>
-        {impact1 > 0 && <ImpactEffect color="#00ffff" intensity="high" />}
-        {impact4 > 0 && <ImpactEffect color="#ff1e1e" intensity="high" />}
+        {impact1 > 0 && <ImpactEffect color="#00ffff" intensity="normal" />}
+        {impact4 > 0 && <ImpactEffect color="#ff1e1e" intensity="normal" />}
         {impact4 > 0.5 && (
           <ParticleBurst 
-            count={100} 
+            count={20} 
             colors={['#ff1e1e', '#00ffff', '#ffffff']} 
             x={width/2} 
             y={height/2} 
-            speed={6}
+            speed={3}
           />
         )}
       </AbsoluteFill>
@@ -95,21 +94,20 @@ export const Opening: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <GlitchEffect intensity={masterImpact * 50}>
-          <ChromaticAberration intensity={masterImpact * 30}>
-            {/* エフェクト内部で改めて中央寄せを確定させる */}
-            <div 
-              style={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                gap: 45,
-              }}
-            >
+        <GlitchEffect intensity={masterImpact * 20}>
+          {/* 中央寄せを確定させる */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              gap: 45,
+            }}
+          >
               {/* J.O.L */}
               <div style={getEntryStyle(spr1, 'top')}>
-                <NeonGlowText text="J.O.L" fontSize={210} color="#FFFFFF" glowColor="#00ffff" style={{ fontFamily: orbitron }} />
+                <NeonGlowText text="J.O.L" fontSize={210} color="#e0f7ff" glowColor="#00e5ff" style={{ fontFamily: orbitron }} />
               </div>
 
               {/* 団結力 NO.1 を勝ち取れ */}
@@ -136,15 +134,14 @@ export const Opening: React.FC = () => {
                   gap: 15
                 }}
               >
-                <div style={getEntryStyle(spr3, 'top')}>
-                  <NeonGlowText text="ランキング" fontSize={140} color="#FFFFFF" glowColor="#00ffff" style={{ fontFamily: delaGothic }} />
-                </div>
+                 <div style={getEntryStyle(spr3, 'top')}>
+                   <NeonGlowText text="ランキング" fontSize={140} color="#e0f7ff" glowColor="#00e5ff" style={{ fontFamily: delaGothic }} />
+                 </div>
                 <div style={getEntryStyle(spr5, 'top')}>
                   <NeonGlowText text="結果発表" fontSize={120} color="#FFFFFF" glowColor="#ff1e1e" style={{ fontFamily: delaGothic }} />
                 </div>
               </div>
-            </div>
-          </ChromaticAberration>
+          </div>
         </GlitchEffect>
       </AbsoluteFill>
     </AbsoluteFill>

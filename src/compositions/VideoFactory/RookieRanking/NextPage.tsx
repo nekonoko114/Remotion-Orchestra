@@ -21,6 +21,13 @@ export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
       <GlitchOverlay />
       
       <BeatShake>
+        {/* White burst at the very start of the transition */}
+        <AbsoluteFill style={{
+          backgroundColor: 'white',
+          opacity: interpolate(frame, [0, 10], [1, 0]),
+          zIndex: 100,
+        }} />
+
         {/* Subtle Dark Radial Gradient to Dim the Center Trophy */}
         <AbsoluteFill style={{
           background: 'radial-gradient(circle, rgba(0,0,0,0.6) 0%, transparent 65%)',

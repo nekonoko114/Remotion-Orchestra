@@ -88,11 +88,12 @@ export const NeonGlowText: React.FC<NeonGlowTextProps> = ({
               const bigFlicker = flicker && random(`big-flicker-${lineIdx}-${i}-${frame}`) > 0.98 ? 0.3 : 1;
 
               const baseShadow = `
-                0 0 2px #fff,
-                0 0 5px #fff,
+                0 0 1px #fff,
+                0 0 3px #fff,
+                0 0 5px ${finalGlowColor},
+                0 0 7px ${finalGlowColor},
                 0 0 10px ${finalGlowColor},
-                0 0 20px ${finalGlowColor},
-                0 0 40px ${finalGlowColor}
+                0 0 12px ${finalGlowColor}
               `;
 
               return (

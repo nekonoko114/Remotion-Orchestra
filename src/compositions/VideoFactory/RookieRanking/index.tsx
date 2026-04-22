@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, Audio, Img, staticFile, Sequence, Video } from 'remotion';
+import { AbsoluteFill, Audio, staticFile, Sequence, Video, interpolate, useCurrentFrame } from 'remotion';
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import { fade } from '@remotion/transitions/fade';
 import { IntroSequence } from './IntroSequence';
@@ -20,26 +20,31 @@ export const RookieRanking: React.FC<Props> = ({ bpm, bgmFile }) => {
     <AbsoluteFill style={{ backgroundColor: '#000', color: 'white', overflow: 'hidden' }}>
       <GlitchOverlay bpm={bpm} />
       
-      {/* 1. Permanent Unified Background (Rookie Ranking Image) */}
-      <AbsoluteFill style={{ zIndex: 0 }}>
+      {/* 1. Permanent Unified Background (Rookie Ranking Stadium Video) */}
+      <AbsoluteFill style={{ 
+        zIndex: 0,
+        opacity: interpolate(useCurrentFrame(), [260, 275], [0, 1]), // Reveal as laser finishes
+      }}>
         <BeatShake bpm={bpm}>
           <AbsoluteFill style={{ 
             transform: `scale(1.1)`,
           }}>
-            <Img 
-              src={staticFile("assets/backgrounds/rookie-ranking.png")} 
+            <Video 
+              src={staticFile("assets/video/Move_to_stadium_202604221731.mp4")} 
               style={{ 
                 width: '100%', 
                 height: '100%', 
                 objectFit: 'cover',
-                filter: 'brightness(0.8) contrast(1.2) saturate(1.1)',
+                filter: 'brightness(0.7) contrast(1.1) saturate(1.1)',
               }} 
+              muted
+              loop
             />
             {/* Subtle Vignette Overlay */}
             <div style={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(circle, transparent 40%, rgba(0,0,0,0.4) 100%)',
+              background: 'radial-gradient(circle, transparent 40%, rgba(0,0,0,0.5) 100%)',
               mixBlendMode: 'multiply',
             }} />
           </AbsoluteFill>

@@ -35,7 +35,7 @@ export const GlitchEffect: React.FC<GlitchEffectProps> = ({
           alignItems: 'center',
         }}
       >
-        <div style={{ filter: 'drop-shadow(-2px 0 red)', width: '100%', height: '100%' }}>{children}</div>
+        <div style={{ filter: 'drop-shadow(-1px 0 red)', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{children}</div>
       </AbsoluteFill>
 
       {/* Blue Channel */}
@@ -49,7 +49,7 @@ export const GlitchEffect: React.FC<GlitchEffectProps> = ({
           alignItems: 'center',
         }}
       >
-        <div style={{ filter: 'drop-shadow(2px 0 blue)', width: '100%', height: '100%' }}>{children}</div>
+        <div style={{ filter: 'drop-shadow(1px 0 blue)', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{children}</div>
       </AbsoluteFill>
 
       {/* Main Content */}
