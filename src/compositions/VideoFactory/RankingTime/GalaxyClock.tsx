@@ -9,7 +9,7 @@ import {
 // ローカルフォント
 const cinzelFont = "'Cinzel', serif";
 
-const ROMAN_NUMERALS = ['XII', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
+const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 
 interface GalaxyClockProps {
   rank: number;
@@ -256,7 +256,7 @@ export const GalaxyClock: React.FC<GalaxyClockProps> = ({
                   frame: frame - 20, 
                   fps: 60, 
                   config: { stiffness: 60, damping: 10 }
-                }) * (360 * 3 + (rank % 12 === 0 ? 0 : rank * 30))
+                }) * (360 * 3 + ((rank - 1) * 30))
           }deg)`,
           zIndex: 150,
           mixBlendMode: 'screen',
