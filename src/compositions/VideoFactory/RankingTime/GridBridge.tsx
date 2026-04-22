@@ -9,24 +9,19 @@ import {
   Easing,
 } from 'remotion';
 import RANKING_DATA_JSON_RAW from '../data-time.json';
-const RANKING_DATA_JSON = Array.isArray(RANKING_DATA_JSON_RAW) ? RANKING_DATA_JSON_RAW : [];
 import FETCHED_USERS_JSON from '../../../../jol-liver.json';
 import type { Liver } from '../types';
 
+const RANKING_DATA_JSON = Array.isArray(RANKING_DATA_JSON_RAW) ? RANKING_DATA_JSON_RAW : [];
 const RANKING_DATA = RANKING_DATA_JSON as unknown as Liver[];
-
-type FetchedUser = {
-  id: string;
-  nickname: string;
-  avatar: string;
-  localAvatar: string;
-};
-
-const FETCHED_USERS = FETCHED_USERS_JSON as FetchedUser[];
-
+const FETCHED_USERS = FETCHED_USERS_JSON as any[];
 const BPM = 160;
 
-export const GridBridge: React.FC = () => {
+type Props = {
+  rank?: number;
+};
+
+export const GridBridge: React.FC<Props> = ({ rank: targetRank }) => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
 
@@ -34,7 +29,7 @@ export const GridBridge: React.FC = () => {
 
   const top10Items = RANKING_DATA.map((liver) => {
     const liverId = liver.id || liver.username;
-    const fetchedMatch = FETCHED_USERS.find((fu) => fu.id === liverId);
+    const fetchedMatch = FETCHED_USERS.find((fu: any) => fu.id === liverId);
 
     let avatarPath = liver.saved_to;
     if (fetchedMatch && fetchedMatch.localAvatar) {
@@ -55,10 +50,10 @@ export const GridBridge: React.FC = () => {
 
   const top10Usernames = top10Items.map((item) => item.id);
   const otherUsers = FETCHED_USERS.filter(
-    (u) => u.localAvatar && u.localAvatar !== '',
+    (u: any) => u.localAvatar && u.localAvatar !== '',
   )
-    .filter((u) => !top10Usernames.includes(u.id))
-    .map((u) => ({
+    .filter((u: any) => !top10Usernames.includes(u.id))
+    .map((u: any) => ({
       id: u.id,
       avatarPath: u.localAvatar,
       liver: null,
@@ -80,7 +75,8 @@ export const GridBridge: React.FC = () => {
   const rotation = -6;
 
   const getGatherOffset = (colIndex: number, rank: number) => {
-    if (rank > 3) return { x: 0, y: 0 };
+    if (targetRank && rank !== targetRank) return { x: 0, y: 0 };
+    if (!targetRank && rank > 3) return { x: 0, y: 0 };
 
     const gatherProgress = interpolate(
       frame,
@@ -105,7 +101,7 @@ export const GridBridge: React.FC = () => {
   const gap = 20 * (width / 1080);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+    <AbsoluteFill style={{ overflow: 'hidden' }}>
       <AbsoluteFill
         style={{
           transform: `rotate(${rotation}deg) scale(1.4)`,
@@ -141,14 +137,15 @@ export const GridBridge: React.FC = () => {
             >
               {columnLong.map((item, rowIndex) => {
                 const { x: ox } = getGatherOffset(colIndex, item.rank);
-                const isTop3 = item.rank <= 3;
+                const isTarget = targetRank ? item.rank === targetRank : item.rank <= 3;
+                const isTop10 = item.rank <= 10;
 
-                const opacity = isTop3
+                const opacity = isTarget
                   ? 1
                   : interpolate(
                       frame,
                       [beatFrames * 4, beatFrames * 6],
-                      [1, 0.75],
+                      [isTop10 ? 0.9 : 0.6, 0.4],
                       {
                         extrapolateLeft: 'clamp',
                         extrapolateRight: 'clamp',
@@ -177,10 +174,12 @@ export const GridBridge: React.FC = () => {
                       borderRadius: 20 * (width / 1080),
                       flexShrink: 0,
                       overflow: 'hidden',
-                      border: isTop3
+                      border: isTarget
                         ? `${12 * (width / 1080)}px solid #d000ff`
-                        : `${4 * (width / 1080)}px solid #444`,
-                      boxShadow: isTop3
+                        : isTop10 
+                          ? `${4 * (width / 1080)}px solid #d000ff44`
+                          : `${4 * (width / 1080)}px solid #444`,
+                      boxShadow: isTarget
                         ? `0 0 ${50 * (width / 1080)}px rgba(208, 0, 255, 0.8)`
                         : 'none',
                       backgroundColor: '#111',
@@ -196,7 +195,7 @@ export const GridBridge: React.FC = () => {
                         }}
                       />
                     )}
-                    {!isTop3 && (
+                    {!isTarget && (
                       <AbsoluteFill
                         style={{
                           background:
@@ -205,7 +204,7 @@ export const GridBridge: React.FC = () => {
                         }}
                       />
                     )}
-                    {!isTop3 && (
+                    {!isTarget && (
                       <div
                         style={{
                           position: 'absolute',
@@ -224,7 +223,7 @@ export const GridBridge: React.FC = () => {
                         {item.nickname}
                       </div>
                     )}
-                    {isTop3 && (
+                    {isTarget && (
                       <div
                         style={{
                           position: 'absolute',
@@ -249,7 +248,6 @@ export const GridBridge: React.FC = () => {
           );
         })}
       </AbsoluteFill>
-
       <AbsoluteFill
         style={{
           backgroundColor: '#fff',

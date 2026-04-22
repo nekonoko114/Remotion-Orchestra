@@ -16,7 +16,7 @@ import {
   RankingTime,
   OPENING_SEC as OPENING_SEC_TIME,
   GROUP_SEC as GROUP_SEC_TIME,
-  TOP32_RANK_SEC as TOP32_RANK_SEC_TIME,
+  TOP_RANK_SEC as TOP_RANK_SEC_TIME,
   TOP1_RANK_SEC as TOP1_RANK_SEC_TIME,
   ENDING_SEC as ENDING_SEC_TIME,
   GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
@@ -168,15 +168,14 @@ const JOL_RANKING_ROYAL_DURATION =
   (12 * ROYAL_TRANSITION_FRAMES + ROYAL_LAST_TRANSITION_FRAMES);
 
 // Calculate Time Duration (Correctly using its own 5s opening)
-// Updated to 4 groups (15-11, 10-8, 7-6, 5-4)
+// Updated to exclude GridBridges: Opening + 2 Groups + 5 Reveals + Ending
 const JOL_RANKING_DURATION_TIME = 
   (OPENING_SEC_TIME +
-    GROUP_SEC_TIME * 4 +
-    GRID_BRIDGE_SEC_TIME +
-    TOP32_RANK_SEC_TIME * 2 +
+    GROUP_SEC_TIME * 2 +
+    TOP_RANK_SEC_TIME * 4 +
     TOP1_RANK_SEC_TIME +
     ENDING_SEC_TIME) *
-    JOL_RANKING_FPS - (9 * TRANSITION_FRAMES_TIME);
+    JOL_RANKING_FPS - (8 * TRANSITION_FRAMES_TIME);
 // Previous calculation was ~2750, confirmed it's exactly 2750 frames.
 /*
   (OPENING_SEC_TIME +
