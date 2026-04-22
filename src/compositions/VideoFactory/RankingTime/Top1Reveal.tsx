@@ -7,75 +7,75 @@ import {
   useCurrentFrame,
   staticFile,
   useVideoConfig,
-  Video,
-  Easing,
 } from 'remotion';
 import { ConfettiTime } from './ConfettiTime';
 import { CinematicBorder } from '../CinematicBorder';
 import { MorphingTitle } from '../MorphingTitle';
-import { TimeBackground } from '../TimeBackground';
 import { useBeatValue } from '../utils/beat-sync';
 import type { Liver } from '../types';
-import { loadFont } from '@remotion/google-fonts/Orbitron';
+// ローカルフォント定義
+const cinzelFont = "'Cinzel', serif";
+const shipporiFont = "'Shippori Mincho', serif";
+const bellefairFont = "'Bellefair', serif"; // 必要に応じて維持
 
-const { fontFamily } = loadFont();
+import { GalaxyClock } from './GalaxyClock';
 
 const BPM = 160;
 
-// Reverting to the original Clock theme
-const CLOCK_BACK_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_minutes_old_gold_retro_antique_spiral_l_207864.mp4');
-
-type Props = {
-  rank: number;
-  liver: Liver;
-  title: string;
-  themeColor?: string;
-  glowColor?: string;
-};
-
-export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor = '#d000ff', glowColor = 'rgba(208, 0, 255, 0.6)' }) => {
+export const Top1Reveal: React.FC<{ rank: number; liver: Liver; title: string; themeColor?: string; glowColor?: string }> = ({ rank, liver, title, themeColor = '#d000ff', glowColor = 'rgba(208, 0, 255, 0.6)' }) => {
   const frame = useCurrentFrame();
-  const { fps, width, height } = useVideoConfig();
+  const { fps, height } = useVideoConfig();
   const { pulse } = useBeatValue(BPM);
 
+  // 時計の登場
   const entrance = spring({
-    frame: frame - 15,
+    frame: frame - 10,
     fps,
-    config: { damping: 12, stiffness: 100 },
+    config: { damping: 14, stiffness: 80 },
   });
 
+  // ライバーのリビール（針が着地するフレーム85以降に開始）
+  const revealEntrance = spring({
+    frame: frame - 85,
+    fps,
+    config: { damping: 10, stiffness: 120 },
+  });
+
+  // 名前のリビール（さらに少し遅延）
   const nameEntrance = spring({
-    frame: frame - 45,
+    frame: frame - 110,
     fps,
     config: { damping: 14, stiffness: 120 },
   });
 
-  const rankScale = interpolate(entrance, [0, 1], [0.8, 1], { easing: Easing.out(Easing.back(1.5)) });
-  const contentOpacity = interpolate(frame, [10, 20], [0, 1]);
+  const stardustScale = 1;
+  const stardustOpacity = interpolate(frame - 85, [0, 20], [0, 1], { extrapolateRight: 'clamp' });
 
   return (
     <AbsoluteFill style={{ overflow: 'hidden' }}>
+      <GalaxyClock rank={rank} themeColor={themeColor} entrance={entrance} variant="enhanced" />
+
       <AbsoluteFill style={{ zIndex: 110 }}>
-        <ConfettiTime count={rank === 1 ? 250 : 150} />
+        {frame > 85 && <ConfettiTime count={rank === 1 ? 250 : 150} />}
       </AbsoluteFill>
 
       <AbsoluteFill
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily,
+          fontFamily: cinzelFont,
           color: 'white',
           zIndex: 120,
         }}
       >
-        {/* Title / Rank */}
+        {/* Title / Rank - Re-centered at the Top with Premium Typo */}
         <div
           style={{
-            transform: `translateY(${-300 * (1 - entrance)}px) scale(${rankScale * (1 + pulse * 0.02)})`,
-            opacity: entrance,
-            marginBottom: 40 * (height / 1080),
+            position: 'absolute',
+            top: 80 * (height / 1080),
+            left: '50%',
+            transform: `translate(-50%, ${20 * (1 - revealEntrance)}px)`,
+            opacity: revealEntrance,
+            textAlign: 'center',
+            width: '100%',
           }}
         >
           {(() => {
@@ -83,22 +83,35 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor = '
             if (match) {
               const [, num, suffix] = match;
               return (
-                <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                <div 
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'baseline', 
+                    justifyContent: 'center',
+                    whiteSpace: 'nowrap',
+                    width: '100%',
+                  }}
+                >
                   <MorphingTitle
                     text={num}
-                    fontSize={220 * (height / 1080)}
+                    fontSize={120 * (height / 1080)}
                     style={{
-                      fontFamily,
-                      textShadow: `0 0 30px ${themeColor}, 0 0 60px ${themeColor}`,
+                      fontFamily: cinzelFont,
+                      fontWeight: 900,
+                      letterSpacing: '0.05em',
+                      textShadow: `0 0 20px ${themeColor}, 0 0 40px ${themeColor}, 0 0 80px ${themeColor}aa`,
+                      display: 'inline-flex',
                     }}
                   />
                   <MorphingTitle
                     text={suffix}
-                    fontSize={100 * (height / 1080)}
+                    fontSize={90 * (height / 1080)}
                     style={{
-                      fontFamily: 'serif',
-                      textShadow: `0 0 15px ${themeColor}`,
-                      marginLeft: 15,
+                      fontFamily: bellefairFont,
+                      textShadow: `0 0 15px ${themeColor}, 0 0 30px white`,
+                      marginLeft: 10,
+                      fontStyle: 'italic',
+                      display: 'inline-flex',
                     }}
                   />
                 </div>
@@ -107,64 +120,78 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, themeColor = '
             return (
               <MorphingTitle
                 text={title}
-                fontSize={220 * (height / 1080)}
+                fontSize={180 * (height / 1080)}
                 style={{
-                  fontFamily,
-                  textShadow: `0 0 30px ${themeColor}, 0 0 60px ${themeColor}`,
+                  fontFamily: cinzelFont,
+                  fontWeight: 900,
+                  textShadow: `0 0 20px ${themeColor}, 0 0 40px ${themeColor}`,
                 }}
               />
             );
           })()}
         </div>
 
-        {/* Liver Image */}
-        <div
-          style={{
-            width: 500 * (height / 1080),
-            height: 500 * (height / 1080),
-            borderRadius: '50%',
-            overflow: 'hidden',
-            border: `10px solid white`,
-            boxShadow: `0 0 80px ${themeColor}, 0 0 30px white`,
-            transform: `scale(${entrance}) rotate(${rank === 1 ? frame * 0.2 : 0}deg)`,
-            opacity: entrance,
-            backgroundColor: '#111',
-          }}
-        >
-          <Img
-            src={
-              liver.saved_to
-                ? staticFile(liver.saved_to)
-                : liver.image_url.startsWith('http')
-                  ? liver.image_url
-                  : staticFile(liver.image_url)
-            }
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        </div>
-
-        {/* Liver Name */}
-        <div
-          style={{
-            marginTop: 60 * (height / 1080),
-            opacity: nameEntrance,
-            transform: `translateY(${50 * (1 - nameEntrance)}px)`,
-          }}
-        >
-          <h2
+        {/* Global Wrapper for Centered Liver Content */}
+        <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', pointerEvents: 'none' }}>
+           {/* Liver Image - Fixed at Absolute Center */}
+          <div
             style={{
-              fontFamily,
-              fontSize: (rank === 1 ? 80 : 60) * (height / 1080),
-              margin: 0,
-              textShadow: `0 0 20px black, 0 0 40px ${themeColor}`,
-              fontWeight: 900,
-              color: '#fff',
-              letterSpacing: '4px',
+              width: 400 * (height / 1080),
+              height: 400 * (height / 1080),
+              borderRadius: '50%',
+              overflow: 'hidden',
+              border: `10px solid ${themeColor}`,
+              boxShadow: `0 0 120px ${themeColor}, 0 0 60px white`,
+              transform: `scale(${revealEntrance * stardustScale})`,
+              opacity: revealEntrance * stardustOpacity,
+              backgroundColor: '#000510',
+              position: 'relative',
             }}
           >
-            {liver.nickname}
-          </h2>
-        </div>
+            <AbsoluteFill style={{
+              background: `radial-gradient(circle, ${themeColor}33 0%, transparent 70%)`,
+              transform: `scale(${1 + pulse * 0.1})`,
+              pointerEvents: 'none',
+            }} />
+            
+            <Img
+              src={
+                liver.saved_to
+                  ? staticFile(liver.saved_to)
+                  : liver.image_url.startsWith('http')
+                    ? liver.image_url
+                    : staticFile(liver.image_url)
+              }
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+
+          {/* Liver Name - Offset from Center */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              marginTop: 280 * (height / 1080),
+              opacity: nameEntrance,
+              transform: `translateY(${30 * (1 - nameEntrance)}px)`,
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: shipporiFont,
+                fontSize: (rank === 1 ? 80 : 60) * (height / 1080),
+                margin: 0,
+                textShadow: `0 2px 20px #000, 0 0 30px ${themeColor}`,
+                fontWeight: 900,
+                color: '#fff',
+                letterSpacing: '6px',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {liver.nickname}
+            </h2>
+          </div>
+        </AbsoluteFill>
       </AbsoluteFill>
 
       <CinematicBorder color={themeColor} glowColor={glowColor} />

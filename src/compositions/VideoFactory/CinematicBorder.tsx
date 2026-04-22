@@ -30,8 +30,7 @@ export const CinematicBorder: React.FC<Props> = ({ color, glowColor }) => {
                         0 0 ${40 * scale}px ${color},
                         inset 0 0 ${40 * scale}px ${color}
                     `,
-          filter: `brightness(${breath})`,
-          opacity: 0.9,
+          opacity: 0.7 * breath, // brightnessの代わりに不透明度で光の強弱を表現
         }}
       />
     </AbsoluteFill>

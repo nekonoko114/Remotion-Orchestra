@@ -8,7 +8,11 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
+import { GalaxyClock } from './GalaxyClock';
 import type { Liver } from '../types';
+import { loadFont as loadCinzel } from '@remotion/google-fonts/Cinzel';
+
+const { fontFamily: cinzelFont } = loadCinzel();
 
 type Props = {
   title: string;
@@ -16,9 +20,29 @@ type Props = {
 };
 
 // Purple Theme (Unified Design for RankingTime)
-const UNITY_THEME = '#9d00ff'; // Vibrant Purple
+const UNITY_THEME = '#d000ff'; // Vibrant Purple
 const UNITY_LIME  = '#00ffff'; // Neon Cyan/Blue for Rank
-const UNITY_GLOW  = 'rgba(157, 0, 255, 0.4)';
+
+const CornerOrnament: React.FC<{ size: number; color: string; position: 'tl' | 'tr' | 'bl' | 'br' }> = ({ size, color, position }) => {
+  const style: React.CSSProperties = {
+    position: 'absolute',
+    width: size,
+    height: size,
+    borderTop: position.startsWith('t') ? `4px solid ${color}` : 'none',
+    borderBottom: position.startsWith('b') ? `4px solid ${color}` : 'none',
+    borderLeft: position.endsWith('l') ? `4px solid ${color}` : 'none',
+    borderRight: position.endsWith('r') ? `4px solid ${color}` : 'none',
+    zIndex: 10,
+    opacity: 0.9,
+  };
+
+  if (position === 'tl') { style.top = 0; style.left = 0; }
+  if (position === 'tr') { style.top = 0; style.right = 0; }
+  if (position === 'bl') { style.bottom = 0; style.left = 0; }
+  if (position === 'br') { style.bottom = 0; style.right = 0; }
+
+  return <div style={style} />;
+};
 
 const getAvatarPosition = (rank: number) => {
   if (rank === 10) return 'center 20%';
@@ -49,24 +73,22 @@ export const RankingGroup: React.FC<Props> = ({
   const isCompact = livers.length >= 4; // 15-11位 (5名)
   const is3Group = livers.length === 3;
   const is2Group = livers.length === 2;
-  const gap = isCompact ? 18 : is2Group ? 80 : is3Group ? 20 : 80;
-  const rankFontSize = isCompact ? 90 : is2Group ? 160 : 130;
-  const nameFontSize = isCompact ? 48 : is2Group ? 85 : 75;
-  const verticalPad = isCompact ? 20 : 0;
-  const marginTop = isCompact ? 220 : 230; // Reduced from 280 to fit 3 items better vertically
+  const gap = isCompact ? 22 : is2Group ? 80 : is3Group ? 20 : 80;
+  const rankFontSize = isCompact ? 100 : is2Group ? 160 : 130;
+  const nameFontSize = isCompact ? 54 : is2Group ? 85 : 75;
+  const marginTop = isCompact ? 230 : 230;
 
   return (
     <AbsoluteFill>
-      {/* ===== 背景 (透明化して下層の動画を表示) ===== */}
-      <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
+      {/* ギャラクシークロック背景 (下位ランク用 subtle モード) */}
+      <GalaxyClock 
+        rank={livers[0].rank} 
+        themeColor={UNITY_THEME} 
+        entrance={opacity} 
+        variant="subtle" 
+      />
 
-        <AbsoluteFill
-          style={{
-            background: `radial-gradient(circle, ${UNITY_GLOW} 0%, rgba(10,0,10,0.4) 100%)`,
-            pointerEvents: 'none',
-          }}
-        />
-      </AbsoluteFill>
+      {/* ===== 背景 (完全に透過させて下層の動画を表示) ===== */}
 
       <AbsoluteFill
         style={{
@@ -76,19 +98,19 @@ export const RankingGroup: React.FC<Props> = ({
           transform: `scale(${scale})`,
         }}
       >
-        {/* 1. Header Title */}
+        {/* 1. Header Title - Cinzel Font */}
         <h1
           style={{
             position: 'absolute',
             top: 100, 
-            fontSize: isCompact ? 80 : 120,
-            fontFamily: "'Segoe UI', Roboto, sans-serif",
+            fontSize: isCompact ? 110 : 130,
+            fontFamily: cinzelFont,
             fontWeight: '900',
             textAlign: 'center',
             margin: 0,
             color: '#FFF',
-            textShadow: `0 0 10px ${UNITY_THEME}, 0 0 30px ${UNITY_THEME}, 0 0 60px ${UNITY_LIME}`,
-            fontStyle: 'italic',
+            textShadow: `0 0 20px ${UNITY_THEME}, 0 0 40px ${UNITY_THEME}`,
+            letterSpacing: '4px',
           }}
         >
           {title}
@@ -129,17 +151,23 @@ export const RankingGroup: React.FC<Props> = ({
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 30,
-                    borderRadius: 12,
-                    border: `2px solid ${UNITY_THEME}`,
-                    boxShadow: `0 8px 32px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.5), 0 0 20px ${UNITY_THEME}40`,
-                    backgroundColor: 'rgba(5,0,15,0.6)',
+                    gap: 35,
+                    borderRadius: 16,
+                    border: `1.5px solid rgba(255, 255, 255, 0.15)`,
+                    boxShadow: `0 10px 40px rgba(0,0,0,0.5), inset 0 0 25px ${UNITY_THEME}33, 0 0 15px ${UNITY_THEME}22`,
+                    background: `linear-gradient(90deg, rgba(30,0,60,0.8) 0%, rgba(10,0,30,0.6) 100%)`,
                     transform: `translateY(${slideY}px) scale(${bounceScale})`,
                     opacity: rowOpacity,
-                    padding: `${verticalPad}px 30px`,
+                    padding: `15px 40px`,
                     position: 'relative',
+                    overflow: 'visible',
                   }}
                 >
+                  {/* Corner Ornaments */}
+                  <CornerOrnament size={32} color={UNITY_LIME} position="tl" />
+                  <CornerOrnament size={32} color={UNITY_LIME} position="tr" />
+                  <CornerOrnament size={32} color={UNITY_LIME} position="bl" />
+                  <CornerOrnament size={32} color={UNITY_LIME} position="br" />
                   <div
                     style={{
                       width: 220,
@@ -174,24 +202,30 @@ export const RankingGroup: React.FC<Props> = ({
                       whiteSpace: 'nowrap' 
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: rankFontSize,
-                        fontWeight: '900',
-                        color: UNITY_LIME,
-                        textShadow: `0 0 10px ${UNITY_LIME}`,
-                        lineHeight: 1.1,
-                      }}
-                    >
-                      {liver.rank}th
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                      <span
+                        style={{
+                          fontSize: rankFontSize,
+                          fontFamily: cinzelFont,
+                          fontWeight: '900',
+                          color: UNITY_LIME,
+                          textShadow: `0 0 20px ${UNITY_LIME}`,
+                          lineHeight: 1,
+                        }}
+                      >
+                        {liver.rank}
+                      </span>
+                      <span style={{ fontSize: 40, fontFamily: cinzelFont, color: UNITY_LIME, opacity: 0.8 }}>th</span>
+                    </div>
                     <span
                       style={{
                         fontSize: nameFontSize,
+                        fontFamily: cinzelFont,
                         fontWeight: '800',
                         color: '#FFF',
-                        textShadow: `0 0 10px rgba(0,0,0,0.8)`,
+                        textShadow: `0 0 15px rgba(0,0,0,0.8), 0 0 10px ${UNITY_THEME}88`,
                         lineHeight: 1.2,
+                        letterSpacing: '1px',
                       }}
                     >
                       {liver.nickname}
@@ -224,10 +258,10 @@ export const RankingGroup: React.FC<Props> = ({
                         left: '0px',
                         width: '24%',
                         fontSize: rankFontSize,
+                        fontFamily: cinzelFont,
                         fontWeight: 900,
                         color: UNITY_LIME,
                         textShadow: `0 0 30px ${UNITY_LIME}, 0 0 10px #000`,
-                        fontStyle: 'italic',
                         textAlign: 'right',
                         paddingRight: 40,
                         lineHeight: 1,
@@ -235,7 +269,7 @@ export const RankingGroup: React.FC<Props> = ({
                       }}
                     >
                       {liver.rank}
-                      <span style={{ fontSize: rankFontSize * 0.4, fontStyle: 'normal', marginLeft: 2 }}>
+                      <span style={{ fontSize: rankFontSize * 0.4, marginLeft: 2, opacity: 0.8 }}>
                         th
                       </span>
                     </div>
@@ -278,11 +312,13 @@ export const RankingGroup: React.FC<Props> = ({
                     <span
                       style={{
                         fontSize: nameFontSize,
+                        fontFamily: cinzelFont,
                         fontWeight: 800,
                         color: '#FFF',
-                        textShadow: `0 0 20px ${UNITY_THEME}, 3px 3px 10px #000`,
+                        textShadow: `0 0 20px ${UNITY_THEME}, 3px 3px 15px #000`,
                         whiteSpace: 'nowrap',
                         textAlign: 'center',
+                        letterSpacing: '2px',
                       }}
                     >
                       {liver.nickname}

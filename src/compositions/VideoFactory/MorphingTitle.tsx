@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
-  AbsoluteFill,
   interpolate,
   spring,
   useCurrentFrame,
   useVideoConfig,
+  Easing,
 } from 'remotion';
 
 interface MorphingTitleProps {
@@ -12,45 +12,24 @@ interface MorphingTitleProps {
   fontSize?: number;
   className?: string;
   style?: React.CSSProperties;
+  delayPerChar?: number; // 文字ごとの時差
 }
 
 /**
- * まる（円）からテキストへとモーフィングして現れるコンポーネント
- * SVGの goo/liquid フィルタを使用して「溶けて繋がる」質感を演出
+ * プレミアムな「スターダスト・スタッガー」タイトル演出
+ * 一文字ずつ光の粒子が収束するように現れ、高級感のある光沢が横切る
  */
 export const MorphingTitle: React.FC<MorphingTitleProps> = ({
   text,
   fontSize = 150,
   className,
   style,
+  delayPerChar = 1.5,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // 登場のアニメーション
-  const spr = spring({
-    frame,
-    fps,
-    config: { damping: 12, stiffness: 120, mass: 0.8 },
-  });
-
-  // モーフィングの進捗 (0 = まる, 1 = テキスト)
-  const morphProgress = interpolate(spr, [0, 0.8], [0, 1], {
-    extrapolateRight: 'clamp',
-  });
-
-  // 円のサイズと位置
-  const circleScale = interpolate(spr, [0, 0.4], [0, 2.5], {
-    extrapolateRight: 'clamp',
-  });
-  const circleOpacity = interpolate(spr, [0.7, 1], [1, 0], {
-    extrapolateRight: 'clamp',
-  });
-
-  // テキストのぼかし (最初は強くぼかして円と一体化させる)
-  const textBlur = interpolate(morphProgress, [0, 0.6, 1], [20, 10, 0]);
-  const textOpacity = interpolate(morphProgress, [0.2, 0.8], [0, 1]);
-  const textScale = interpolate(spr, [0, 1], [0.8, 1]);
+  const chars = useMemo(() => text.split(''), [text]);
 
   return (
     <div
@@ -62,72 +41,90 @@ export const MorphingTitle: React.FC<MorphingTitleProps> = ({
         ...style,
       }}
     >
-      <svg
-        style={{ position: 'absolute', width: 0, height: 0 }}
-        aria-hidden="true"
-      >
-        <defs>
-          <filter id="goo">
-            <feGaussianBlur
-              in="SourceGraphic"
-              stdDeviation="10"
-              result="blur"
-            />
-            <feColorMatrix
-              in="blur"
-              mode="matrix"
-              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
-              result="goo"
-            />
-            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-          </filter>
-        </defs>
-      </svg>
-
-      {/* フィルタを適用するコンテナ */}
       <div
         style={{
-          filter: 'url(#goo)',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           position: 'relative',
         }}
       >
-        {/* モーフィング元：まる */}
-        {circleOpacity > 0 && (
-          <div
-            style={{
-              position: 'absolute',
-              width: fontSize * 0.8,
-              height: fontSize * 0.8,
-              backgroundColor: 'white',
-              borderRadius: '50%',
-              transform: `scale(${circleScale * (1 - morphProgress * 0.8)})`,
-              opacity: circleOpacity,
-              zIndex: 1,
-              boxShadow: '0 0 30px white',
-            }}
-          />
-        )}
+        {chars.map((char, i) => {
+          // 文字ごとのアニメーション進捗
+          const spr = spring({
+            frame: frame - i * delayPerChar,
+            fps,
+            config: { damping: 10, stiffness: 60, mass: 0.5 },
+          });
 
-        {/* モーフィング先：テキスト */}
-        <div
-          className={className}
-          style={{
-            fontSize,
-            fontWeight: 'bold',
-            fontFamily: 'Impact, sans-serif',
-            opacity: textOpacity,
-            filter: `blur(${textBlur}px)`,
-            transform: `scale(${textScale})`,
-            textAlign: 'center',
-            whiteSpace: 'nowrap',
-            zIndex: 2,
-          }}
-        >
-          {text}
-        </div>
+          // 1. 不透明度
+          const opacity = interpolate(spr, [0, 0.6], [0, 1]);
+          
+          // 2. スケール（少し小さめから元のサイズへ）
+          const scale = interpolate(spr, [0, 1], [0.85, 1], {
+            easing: Easing.out(Easing.back(1.2)),
+          });
+
+          // 3. 垂直移動（フワッと浮き上がる）
+          const translateY = interpolate(spr, [0, 1], [25, 0], {
+            easing: Easing.out(Easing.cubic),
+          });
+
+          // 4. シネマティックなブラー
+          const blur = interpolate(spr, [0, 0.8], [25, 0], {
+            extrapolateRight: 'clamp',
+          });
+
+          // 5. グリーム（閃光）のアニメーション - 文字が定着した後に走る
+          const glintProgress = interpolate(frame - 30 - i * 0.5, [0, 40], [-100, 200], {
+            extrapolateLeft: 'clamp',
+            extrapolateRight: 'clamp',
+          });
+
+          return (
+            <span
+              key={i}
+              className={className}
+              style={{
+                display: 'inline-block',
+                fontSize,
+                fontWeight: style?.fontWeight || 900,
+                fontFamily: style?.fontFamily || 'inherit',
+                opacity,
+                // ブレ・点滅対策: filterの最適化
+                filter: blur > 0.1 ? `blur(${blur}px)` : 'none',
+                transform: `scale(${scale}) translateY(${translateY}px)`,
+                position: 'relative',
+                whiteSpace: 'pre',
+                color: style?.color || 'white',
+                // パフォーマンス向上
+                backfaceVisibility: 'hidden',
+                willChange: 'transform, opacity',
+              }}
+            >
+              {char}
+              
+              {/* グリーム（煌めき）エフェクトのオーバーレイ */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,1) 50%, rgba(255,255,255,0.8) 55%, transparent 70%)`,
+                backgroundSize: '200% 100%',
+                backgroundPosition: `${glintProgress}% 0`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                pointerEvents: 'none',
+                opacity: interpolate(spr, [0.8, 1], [0, 0.4]),
+                mixBlendMode: 'plus-lighter',
+              }}>
+                {char}
+              </div>
+            </span>
+          );
+        })}
       </div>
     </div>
   );

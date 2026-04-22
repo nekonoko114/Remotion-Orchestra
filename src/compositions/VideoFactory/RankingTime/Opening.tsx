@@ -3,30 +3,49 @@ import {
   AbsoluteFill,
   random,
   useCurrentFrame,
-  OffthreadVideo,
-  staticFile,
   interpolate,
   useVideoConfig,
+  spring,
+  Easing,
 } from 'remotion';
 import { TimeTunnel } from './TimeTunnel';
 import { LensFlare } from '../../../components/effects/LensFlare';
 import { ImpactEffectTime as ImpactEffect } from '../ImpactEffectTime';
 import { useBeatValue } from '../utils/beat-sync';
 import { CinematicBorder } from '../CinematicBorder';
+import { GalaxyClock } from './GalaxyClock';
 
-const OPENING_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_countdown_red_black_6066.mp4');
+// ローカルインストールされたフォント名（正式名称）
+const cinzelFont = "'Cinzel', serif";
+const shipporiFont = "'Shippori Mincho', serif";
+const orbitronFont = "'Orbitron', sans-serif";
 
-const DigitalTypewriter: React.FC<{
+interface StaggeredTitleProps {
   text: string;
   fontSize: number;
   delay: number;
   duration: number;
   color?: string;
+  fontFamily?: string;
+  fontWeight?: number;
+  letterSpacing?: string;
   yOffset: number;
-}> = ({ text, fontSize, delay, duration, color = '#d000ff', yOffset }) => {
+}
+
+const StaggeredTitle: React.FC<StaggeredTitleProps> = ({
+  text,
+  fontSize,
+  delay,
+  duration,
+  color = '#ffffff',
+  fontFamily = cinzelFont,
+  fontWeight = 900,
+  letterSpacing = 'normal',
+  yOffset,
+}) => {
   const frame = useCurrentFrame();
-  const lines = text.split('\n');
-  const totalLength = text.length;
+  const { fps } = useVideoConfig();
+  const chars = text.split('');
 
   return (
     <div
@@ -36,57 +55,48 @@ const DigitalTypewriter: React.FC<{
         left: '50%',
         transform: 'translate(-50%, -50%)',
         display: 'flex',
-        flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center',
-        gap: fontSize * 0.2, // Increased gap for clarity
+        width: '100%',
         zIndex: 100,
       }}
     >
-      {lines.map((line, segmentIdx) => {
-        const charStartIdx = lines.slice(0, segmentIdx).join('\n').length + (segmentIdx > 0 ? 1 : 0);
-        const segmentProgress = Math.min(1, Math.max(0, (frame - delay - (charStartIdx / totalLength) * duration) / (line.length / totalLength * duration)));
-        const charCount = Math.floor(line.length * segmentProgress);
-        const visibleText = line.substring(0, charCount);
+      {chars.map((char, i) => {
+        const charDelay = delay + (i * (duration / chars.length));
+        const spr = spring({
+          frame: frame - charDelay,
+          fps,
+          config: { damping: 12, stiffness: 100, mass: 0.5 },
+        });
 
-        const isGlitching = segmentProgress < 1 && charCount < line.length;
-        const glitchChars = '01!@#$%^&*()_+<>{}[]';
-        const glitchChar = isGlitching
-          ? glitchChars[Math.floor(random(frame + segmentIdx) * glitchChars.length)]
-          : '';
-
-        if (visibleText.length === 0 && !isGlitching && frame < delay + (charStartIdx / totalLength) * duration) return null;
+        const opacity = interpolate(spr, [0, 1], [0, 1]);
+        const scale = interpolate(spr, [0, 1], [3, 1]);
+        const blur = interpolate(spr, [0, 0.8], [30, 0]);
+        const translateY = interpolate(spr, [0, 1], [50, 0]);
 
         return (
-          <div
-            key={segmentIdx}
+          <span
+            key={i}
             style={{
-              fontFamily: 'system-ui, -apple-system, sans-serif',
+              fontFamily,
               fontSize,
-              fontWeight: 900,
-              color: '#fff',
-              textShadow: `0 0 15px ${color}, 0 0 30px ${color}88`,
-              display: 'flex',
-              alignItems: 'center',
-              whiteSpace: 'nowrap',
-              lineHeight: 1.1, // Added a bit more line height
+              fontWeight,
+              color,
+              letterSpacing,
+              opacity,
+              display: 'inline-block',
+              transform: `scale(${scale}) translateY(${translateY}px)`,
+              // ブレ・点滅対策: filterとtextShadowの最適化
+              filter: blur > 0.2 ? `blur(${blur}px)` : 'none',
+              textShadow: `0 0 10px ${color}, 0 0 20px ${color}aa, 0 0 40px ${color}44`,
+              whiteSpace: 'pre',
+              // パフォーマンスと安定性の向上
+              backfaceVisibility: 'hidden',
+              willChange: 'transform, opacity',
             }}
           >
-            {visibleText}
-            {isGlitching && (
-              <span style={{ opacity: 0.8, color: '#e088ff' }}>{glitchChar}</span>
-            )}
-            {segmentIdx === lines.filter(l => l.length > 0).length - 1 && (segmentProgress < 1 || Math.floor(frame / 5) % 2 === 0) && (
-              <div
-                style={{
-                  width: 15,
-                  height: fontSize * 0.8,
-                  background: color,
-                  marginLeft: 8,
-                  boxShadow: `0 0 10px ${color}`,
-                }}
-              />
-            )}
-          </div>
+            {char}
+          </span>
         );
       })}
     </div>
@@ -105,78 +115,138 @@ export const Opening: React.FC<{
   themeColor = '#d000ff',
 }) => {
   const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
+  const { width, durationInFrames } = useVideoConfig();
   const scale = width / 1080;
   const { pulse, beatIndex } = useBeatValue(180);
 
-  const transitionFrame = 180;
-  const videoScale = 1.1;
+  // カメラワーク: 絶え間ない前進（ズームイン）
+  const cameraZoom = interpolate(frame, [0, durationInFrames], [0.95, 1.2], {
+    easing: Easing.bezier(0.1, 0, 0.9, 1),
+  });
 
-  const baseWiggle = 5 * scale;
-  const explosionWiggle = interpolate(
-    frame,
-    [transitionFrame, transitionFrame + 5, transitionFrame + 40],
-    [0, 35 * scale, 0],
-    {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    },
-  );
-  const wiggleIntensity = baseWiggle + explosionWiggle;
+  // 手ぶれエフェクト
+  const shakeX = (random(`shake-x-${frame}`) - 0.5) * 4 * scale;
+  const shakeY = (random(`shake-y-${frame}`) - 0.5) * 4 * scale;
 
-  const wiggleX = (random(`wiggle-x-${frame}`) - 0.5) * wiggleIntensity;
-  const wiggleY = (random(`wiggle-y-${frame}`) - 0.5) * wiggleIntensity;
+  // ラストのホワイトアウト (音楽の盛り上がりの頂点)
+  const whiteOut = interpolate(frame, [durationInFrames - 15, durationInFrames - 2], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
 
   return (
-    <AbsoluteFill style={{ background: '#000', overflow: 'hidden' }}>
-      {/* 1. Time Tunnel Core */}
-      <AbsoluteFill style={{ zIndex: 0 }}>
-        <TimeTunnel />
-      </AbsoluteFill>
-
-      {/* 2. Flare Video Layered with Mix Mode */}
-      <AbsoluteFill
-        style={{
-          zIndex: 5,
-          transform: `scale(${videoScale}) translate(${wiggleX}px, ${wiggleY}px)`,
-          mixBlendMode: 'screen',
-        }}
-      >
-        <OffthreadVideo
-          src={OPENING_VIDEO}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
-          muted
+    <AbsoluteFill style={{ overflow: 'hidden' }}>
+      {/* 1. Backdrop: Giant Ghostly Clock */}
+      <AbsoluteFill style={{ 
+        transform: `scale(${cameraZoom * 2.5})`, // 巨大な幻影
+        opacity: interpolate(frame, [0, 60], [0, 0.15]), // フィルタを消す代わりに不透明度を下げて幻想的に
+        zIndex: 5,
+      }}>
+        <GalaxyClock 
+          rank={12} 
+          themeColor={themeColor} 
+          entrance={1} 
+          variant="subtle" 
         />
       </AbsoluteFill>
 
+      {/* 2. Space Nebula Overlay for better blending */}
+      <AbsoluteFill style={{
+        background: `radial-gradient(circle, transparent 20%, ${themeColor}11 100%)`,
+        zIndex: 10,
+        mixBlendMode: 'screen',
+      }} />
+
+      {/* 3. Background Scene with Zoom (Time Tunnel) */}
+      <AbsoluteFill
+        style={{
+          transform: `scale(${cameraZoom}) translate(${shakeX}px, ${shakeY}px)`,
+          zIndex: 15,
+        }}
+      >
+        <TimeTunnel />
+      </AbsoluteFill>
+
+      {/* 4. Overlays */}
       <AbsoluteFill style={{ pointerEvents: 'none', zIndex: 100 }}>
         {beatIndex >= 4 && beatIndex % 4 === 0 && pulse > 0.6 && (
           <ImpactEffect color="#ffffff" intensity="normal" />
         )}
-        {frame >= transitionFrame && frame < transitionFrame + 20 && (
-          <ImpactEffect color="#ffffff" intensity="high" />
-        )}
       </AbsoluteFill>
 
-      <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 50 }}>
-        <DigitalTypewriter text="J.O.L" fontSize={260 * scale} delay={0} duration={30} yOffset={-450 * scale} color={themeColor} />
-        <DigitalTypewriter text={date} fontSize={120 * scale} delay={45} duration={30} yOffset={-200 * scale} color={themeColor} />
-        <DigitalTypewriter text={title2} fontSize={140 * scale} delay={90} duration={30} yOffset={0 * scale} color={themeColor} />
-        <DigitalTypewriter text={title3} fontSize={140 * scale} delay={140} duration={30} yOffset={200 * scale} color={themeColor} />
-        <DigitalTypewriter text="結果発表!" fontSize={160 * scale} delay={190} duration={30} yOffset={450 * scale} color={themeColor} />
-      </div>
+      {/* 5. Titles with Stagger Reveal */}
+      <AbsoluteFill style={{ zIndex: 50 }}>
+        <StaggeredTitle 
+          text="J.O.L" 
+          fontSize={320 * scale} 
+          delay={10} 
+          duration={20} 
+          yOffset={-400 * scale} 
+          color="#fff" 
+          letterSpacing="20px"
+        />
+        <StaggeredTitle 
+          text={date} 
+          fontSize={80 * scale} 
+          delay={40} 
+          duration={20} 
+          yOffset={-120 * scale} 
+          color={themeColor} 
+          fontFamily={shipporiFont}
+          letterSpacing="10px"
+        />
+        <StaggeredTitle 
+          text={title2} 
+          fontSize={110 * scale} 
+          delay={70} 
+          duration={25} 
+          yOffset={100 * scale} 
+          color="#fff" 
+          fontFamily={shipporiFont}
+          letterSpacing="5px"
+        />
+        <StaggeredTitle 
+          text={title3} 
+          fontSize={110 * scale} 
+          delay={100} 
+          duration={25} 
+          yOffset={250 * scale} 
+          color="#fff" 
+          fontFamily={shipporiFont}
+          letterSpacing="5px"
+        />
+        <StaggeredTitle 
+          text="RESULTS" 
+          fontSize={160 * scale} 
+          delay={150} 
+          duration={30} 
+          yOffset={500 * scale} 
+          color={themeColor} 
+          fontFamily={orbitronFont}
+          fontWeight={900}
+          letterSpacing="15px"
+        />
+      </AbsoluteFill>
 
+      {/* 6. Effects layers */}
       <AbsoluteFill style={{ zIndex: 20, pointerEvents: 'none' }}>
-        <LensFlare opacity={pulse * 0.02} scale={1.1 * scale} color={themeColor} intensity={0.8} />
+        <LensFlare opacity={pulse * 0.05} scale={1.2 * scale} color={themeColor} intensity={1} />
       </AbsoluteFill>
 
       <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 80 }}>
         <CinematicBorder color={themeColor} glowColor={`${themeColor}80`} />
       </div>
+
+      {/* 7. Final White-out Flash */}
+      {whiteOut > 0 && (
+        <AbsoluteFill
+          style={{
+            backgroundColor: 'white',
+            opacity: whiteOut,
+            zIndex: 1000,
+          }}
+        />
+      )}
     </AbsoluteFill>
   );
 };

@@ -1,20 +1,22 @@
+import { useMemo } from 'react';
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import { Easing } from 'remotion';
-import { wipe } from '@remotion/transitions/wipe';
 import { Ending } from './Ending';
 import { Opening } from './Opening';
 import { RankingGroup } from './RankingGroup';
 import { Top1Reveal } from './Top1Reveal';
 import { TimeBackground } from '../TimeBackground';
-import { AbsoluteFill, useVideoConfig, Audio, staticFile, useCurrentFrame, OffthreadVideo } from 'remotion';
+import { AbsoluteFill, useVideoConfig, Audio, staticFile } from 'remotion';
 import RANKING_DATA_TIME_JSON from '../data-time.json';
 import type { Liver } from '../types';
 import { CinematicBorder } from '../CinematicBorder';
+import { starlightSweep } from './StarlightSweep';
 
 const BGM_SOURCE = staticFile('assets/audio/music/Velocity-Shift.mp3');
-const BGM_START_FROM = 0.0; // Seconds
+const BGM_START_FROM = 23.3; // Seconds
 
-const BACKGROUND_VIDEO = staticFile('assets/pixabay/videos/pixabay_clock_time_minutes_old_gold_retro_antique_spiral_l_207864.mp4');
+const FURTHER_BG = staticFile('backgrounds/I_want_to_202604221429.mp4');
+const FURTHER_BG_START_FRAME = 0;
 
 export const OPENING_SEC = 5;
 export const GRID_BRIDGE_SEC = 4.0;
@@ -22,7 +24,7 @@ export const GROUP_SEC = 6;
 export const TOP_RANK_SEC = 5.0;
 export const TOP1_RANK_SEC = 6.0;
 export const ENDING_SEC = 3;
-export const TRANSITION_FRAMES = 16;
+export const TRANSITION_FRAMES = 20; // Slightly longer for stardust appreciation
 export const LAST_TRANSITION_FRAMES = 15;
 
 type RankingTimeProps = {
@@ -49,74 +51,54 @@ export const RankingTime = (props: RankingTimeProps) => {
   const GROUP_DURATION = Math.round(GROUP_SEC * fps);
   const TOP_RANK_DURATION = Math.round(TOP_RANK_SEC * fps);
   const TOP1_RANK_DURATION = Math.round(TOP1_RANK_SEC * fps);
-  const GRID_BRIDGE_DURATION = Math.round(GRID_BRIDGE_SEC * fps);
   const ENDING_DURATION = ENDING_SEC * fps;
   const TRANSITION_DURATION = TRANSITION_FRAMES;
 
   const timing = linearTiming({
     durationInFrames: TRANSITION_DURATION,
-    easing: Easing.out(Easing.quad),
+    easing: Easing.bezier(0.45, 0, 0.55, 1), // More cinematic ease
   });
 
-  const frame = useCurrentFrame();
 
-  // Calculate range for 15-6 rank groups
-  const groupScenesStart = OPENING_DURATION;
-  const groupScenesEnd = OPENING_DURATION + (GROUP_DURATION * 2) + TRANSITION_DURATION;
-  const isGroupScene = frame >= groupScenesStart && frame < groupScenesEnd;
-
+  const bgVideoSrc = useMemo(() => {
+    return FURTHER_BG;
+  }, []);
 
   return (
     <AbsoluteFill>
-      <TimeBackground />
+      <TimeBackground 
+        bgVideoSrc={bgVideoSrc} 
+        noLoop={true}
+        startFrame={280}
+        videoStartFrom={FURTHER_BG_START_FRAME}
+      />
       <AbsoluteFill>
         <Audio src={BGM_SOURCE} startFrom={BGM_START_FROM * fps} />
       </AbsoluteFill>
 
       <CinematicBorder color={themeColor} glowColor={glowColor} />
 
-      {/* Persistent Background for Ranking Scenes (15th down to 1st) */}
-      {frame >= groupScenesStart && frame < (ENDING_DURATION ? 99999 : 0) /* Adjust logic as needed */ && (
-        <AbsoluteFill style={{ zIndex: 0, opacity: 0.8 }}>
-          <OffthreadVideo
-            src={BACKGROUND_VIDEO}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              filter: 'hue-rotate(280deg) contrast(1.4) brightness(1.2)',
-            }}
-            muted
-            loop
-          />
-          <AbsoluteFill style={{
-            background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%)',
-          }} />
-        </AbsoluteFill>
-      )}
-
       <AbsoluteFill>
-
         <TransitionSeries>
           <TransitionSeries.Sequence durationInFrames={OPENING_DURATION}>
             <Opening title2={openingTitle2} title3={openingTitle3} date={openingDate} themeColor={themeColor} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={wipe({ direction: 'from-top-left' })} timing={timing} />
+          <TransitionSeries.Transition presentation={starlightSweep()} timing={timing} />
 
           {/* 15~11位 */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup title={'TOP 11~15'} livers={RANKING_DATA.filter((d) => d.rank >= 11 && d.rank <= 15)} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={wipe({ direction: 'from-left' })} timing={timing} />
+          <TransitionSeries.Transition presentation={starlightSweep()} timing={timing} />
 
           {/* 10~6位 (統合) */}
           <TransitionSeries.Sequence durationInFrames={GROUP_DURATION}>
             <RankingGroup title={'TOP 6~10'} livers={RANKING_DATA.filter((d) => d.rank >= 6 && d.rank <= 10)} />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={wipe({ direction: 'from-top' })} timing={timing} />
+          <TransitionSeries.Transition presentation={starlightSweep()} timing={timing} />
 
           {/* 5位発表 */}
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
@@ -128,7 +110,7 @@ export const RankingTime = (props: RankingTimeProps) => {
               glowColor={glowColor}
             />
           </TransitionSeries.Sequence>
-          <TransitionSeries.Transition presentation={wipe({ direction: 'from-bottom' })} timing={timing} />
+          <TransitionSeries.Transition presentation={starlightSweep()} timing={timing} />
 
           {/* 4位発表 */}
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
@@ -140,7 +122,7 @@ export const RankingTime = (props: RankingTimeProps) => {
               glowColor={glowColor}
             />
           </TransitionSeries.Sequence>
-          <TransitionSeries.Transition presentation={wipe({ direction: 'from-top' })} timing={timing} />
+          <TransitionSeries.Transition presentation={starlightSweep()} timing={timing} />
 
           {/* 3位発表 */}
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
@@ -152,7 +134,7 @@ export const RankingTime = (props: RankingTimeProps) => {
               glowColor={glowColor}
             />
           </TransitionSeries.Sequence>
-          <TransitionSeries.Transition presentation={wipe({ direction: 'from-bottom' })} timing={timing} />
+          <TransitionSeries.Transition presentation={starlightSweep()} timing={timing} />
 
           {/* 2位発表 */}
           <TransitionSeries.Sequence durationInFrames={TOP_RANK_DURATION}>
@@ -164,7 +146,7 @@ export const RankingTime = (props: RankingTimeProps) => {
               glowColor={glowColor}
             />
           </TransitionSeries.Sequence>
-          <TransitionSeries.Transition presentation={wipe({ direction: 'from-left' })} timing={timing} />
+          <TransitionSeries.Transition presentation={starlightSweep()} timing={timing} />
 
           {/* 1位発表 */}
           <TransitionSeries.Sequence durationInFrames={TOP1_RANK_DURATION}>
@@ -177,7 +159,7 @@ export const RankingTime = (props: RankingTimeProps) => {
             />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Transition presentation={wipe({ direction: 'from-right' })} timing={timing} />
+          <TransitionSeries.Transition presentation={starlightSweep()} timing={timing} />
 
           <TransitionSeries.Sequence durationInFrames={ENDING_DURATION}>
             <Ending />
