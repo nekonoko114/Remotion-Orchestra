@@ -104,7 +104,7 @@ export const LYRICS: LyricLine[] = [
 
   // Verse 2 (Emotional)
   {
-    text: '息がぶつかる夜も',
+    text: '意見がぶつかる夜も',
     startFrame: Math.round(42.5 * FPS),
     endFrame: Math.round(45.0 * FPS),
     style: 'emotional',

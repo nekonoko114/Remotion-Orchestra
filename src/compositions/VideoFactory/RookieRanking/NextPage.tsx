@@ -10,11 +10,21 @@ export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const entrance = spring({
     frame,
     fps,
-    config: { damping: 14, stiffness: 60 },
+    config: { damping: 16, stiffness: 40 },
   });
 
-  const scale = interpolate(entrance, [0, 1], [0.8, 1]);
-  const opacity = interpolate(entrance, [0, 1], [0, 1]);
+  // 全体タイムラインでの365フレーム目（NextPage開始から95フレーム目）から退場開始
+  const exit = spring({
+    frame: frame - 95,
+    fps,
+    config: { damping: 20, stiffness: 100 },
+  });
+
+  const scale = interpolate(entrance, [0, 1], [0.95, 1]);
+  const opacity = interpolate(entrance, [0, 0.5], [0, 1]) - interpolate(exit, [0, 0.5], [0, 1]);
+  const blur = interpolate(entrance, [0, 0.8], [30, 0]) + interpolate(exit, [0, 1], [0, 30]);
+  const letterSpacingReveal = interpolate(entrance, [0, 1], [40, 0]);
+  const translateY = interpolate(exit, [0, 1], [0, -200]);
 
   return (
     <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
@@ -24,31 +34,31 @@ export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
         {/* White burst at the very start of the transition */}
         <AbsoluteFill style={{
           backgroundColor: 'white',
-          opacity: interpolate(frame, [0, 10], [1, 0]),
+          opacity: interpolate(frame, [0, 10], [0.6, 0]),
           zIndex: 100,
         }} />
 
         {/* Subtle Dark Radial Gradient to Dim the Center Trophy */}
         <AbsoluteFill style={{
-          background: 'radial-gradient(circle, rgba(0,0,0,0.6) 0%, transparent 65%)',
-          opacity,
+          background: 'radial-gradient(circle, rgba(0,0,0,0.4) 0%, transparent 65%)',
+          opacity: opacity * 0.8,
         }} />
 
         <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center' }}>
           <div style={{
             opacity,
-            transform: `scale(${scale})`,
+            transform: `scale(${scale}) translateY(${translateY}px)`,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: 20,
+            filter: `blur(${blur}px)`,
           }}>          
             <div style={{
               fontFamily: LuxuryLatinFont,
               fontSize: 80,
-              color: '#FFD700',
-              letterSpacing: '0.2em',
-              // Dark shadow for Gold text
+              color: '#99ff00ff',
+              letterSpacing: `${0.2 + (letterSpacingReveal * 0.05)}em`,
               filter: `drop-shadow(0 0 10px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(0,0,0,0.6))`,
             }}>
               RANKING
@@ -56,8 +66,8 @@ export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
 
             <div style={{
               height: '4px',
-              width: '200px',
-              background: 'linear-gradient(90deg, transparent, #FFD700, transparent)',
+              width: interpolate(entrance, [0, 1], [0, 400]) + 'px',
+              background: 'linear-gradient(90deg, transparent, #00FF88, transparent)',
               margin: '10px 0',
             }} />
 
@@ -70,7 +80,7 @@ export const NextPage: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
               background: 'linear-gradient(to bottom, #ffffff 50%, #cccccc 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              // Stronger dark shadow for White text
+              letterSpacing: `${letterSpacingReveal}px`,
               filter: `drop-shadow(0 0 15px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 40px rgba(0, 0, 0, 0.5))`,
             }}>
               結果発表！

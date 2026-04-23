@@ -67,8 +67,8 @@ export const GoldenBokehOverlay: React.FC<{ startFrame: number }> = ({
         return 'radial-gradient(circle at 30% 30%, rgba(200, 100, 255, 0.9), rgba(128, 0, 128, 0.4) 60%, transparent 100%)';
       case 2: // Silver
         return 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(192, 192, 192, 0.4) 60%, transparent 100%)';
-      default: // Gold
-        return 'radial-gradient(circle at 30% 30%, rgba(255, 255, 200, 0.9), rgba(255, 215, 0, 0.4) 60%, transparent 100%)';
+      default: // Moonlight (Silver/Blue)
+        return 'radial-gradient(circle at 30% 30%, rgba(230, 245, 255, 0.9), rgba(173, 216, 230, 0.4) 60%, transparent 100%)';
     }
   };
 

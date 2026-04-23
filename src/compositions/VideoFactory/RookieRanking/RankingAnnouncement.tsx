@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate, Img, staticFile } from 'remotion';
 import { LuxuryJapaneseFont } from './fonts';
 import { useBeat, BeatShake } from './BeatSync';
-
-// --- Sub-components for Stadium Effects ---
+import { AetherSeal } from './AetherSeal';
+import { EnergyBlast } from './EnergyBlast';
 
 const Searchlight: React.FC<{ x: number, y: number, color: string, angle: number, opacity: number }> = ({ x, y, color, angle, opacity }) => {
   return (
@@ -23,13 +23,63 @@ const Searchlight: React.FC<{ x: number, y: number, color: string, angle: number
   );
 };
 
-const AuraEffect: React.FC<{ color: string }> = ({ color }) => {
+const LightPillar: React.FC<{ color: string, delay: number }> = ({ color, delay }) => {
+  const frame = useCurrentFrame();
+  const progress = spring({ frame: frame - delay, fps: 60, config: { damping: 20 } });
+  
+  const height = interpolate(progress, [0, 1], [0, 2000]);
+  const opacity = interpolate(progress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
+  return (
+    <div style={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 100,
+      height: height,
+      background: `linear-gradient(to right, transparent, ${color}, white, ${color}, transparent)`,
+      opacity: opacity * 0.6,
+      filter: 'blur(30px)',
+      mixBlendMode: 'screen',
+      zIndex: 50,
+    }} />
+  );
+};
+
+const Shockwave: React.FC<{ color: string, delay: number }> = ({ color, delay }) => {
+  const frame = useCurrentFrame();
+  const progress = interpolate(frame - delay, [0, 30], [0, 1], { extrapolateRight: 'clamp' });
+  const opacity = interpolate(progress, [0, 0.2, 1], [0, 1, 0]);
+  const scale = interpolate(progress, [0, 1], [0.5, 3]);
+
+  if (frame < delay) return null;
+
+  return (
+    <div style={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: `translate(-50%, -50%) scale(${scale})`,
+      width: 500,
+      height: 500,
+      border: `8px solid ${color}`,
+      borderRadius: '50%',
+      opacity,
+      filter: 'blur(10px)',
+      zIndex: 40,
+    }} />
+  );
+};
+
+const AuraEffect: React.FC<{ color: string, intensity: number }> = ({ color, intensity }) => {
     const frame = useCurrentFrame();
     return (
         <AbsoluteFill style={{ 
-            background: `radial-gradient(circle, ${color}33 0%, transparent 70%)`,
-            opacity: interpolate(Math.sin(frame * 0.1), [-1, 1], [0.3, 0.6]),
+            background: `radial-gradient(circle, ${color}66 0%, transparent 70%)`,
+            opacity: interpolate(Math.sin(frame * 0.1), [-1, 1], [0.3 * intensity, 0.8 * intensity]),
             mixBlendMode: 'plus-lighter',
+            filter: 'blur(50px)',
         }} />
     );
 };
@@ -39,24 +89,24 @@ const AuraEffect: React.FC<{ color: string }> = ({ color }) => {
 export const RankingAnnouncement: React.FC<{ rank: number, color: string, name?: string, duration: number, bpm?: number, iconUrl?: string }> = ({ rank, color, name = "USER NAME", duration, bpm = 160, iconUrl }) => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
-  const scale = width / 1080;
+  const scaleFactor = width / 1080;
   const { kickStrength } = useBeat(bpm);
 
   const entrance = spring({
     frame,
     fps,
-    config: { damping: 15, stiffness: 100 },
+    config: { damping: 12, stiffness: 90 },
   });
 
-  // Position Mapping Based on Stadium Video
-  // 3rd: Side Monitors, 2nd: Central Pillar Arches, 1st: Main Gate Center
+  // Position Mapping Based on Aurora Background
   const position = useMemo(() => {
-    if (rank === 1) return { top: '50%', left: '50%', scale: 1.2 };
-    if (rank === 2) return { top: '48%', left: '50%', scale: 0.8 };
-    return { top: '42%', left: '15%', scale: 0.6 }; // Side monitor left
+    if (rank === 1) return { top: '56%', left: '50%', scale: 1.12 }; // スケールを抑えて気品を出す
+    if (rank === 2) return { top: '56%', left: '50%', scale: 1.0 };
+    return { top: '56%', left: '50%', scale: 0.95 };
   }, [rank]);
 
-  const baseScale = interpolate(entrance, [0, 1], [0, position.scale]);
+  const baseScale = interpolate(entrance, [0, 1], [0.2, position.scale]);
+  const rotateY = interpolate(entrance, [0, 1], [90, 0]); // 3D Flip
   
   // Final Zoom
   const finalZoom = interpolate(
@@ -66,12 +116,16 @@ export const RankingAnnouncement: React.FC<{ rank: number, color: string, name?:
     { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
   );
 
-  const revealOpacity = interpolate(entrance, [0.5, 1], [0, 1]);
+  const revealOpacity = interpolate(entrance, [0.4, 0.8], [0, 1]);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: 'transparent' }}>
+    <AbsoluteFill style={{ backgroundColor: 'transparent', perspective: '1000px' }}>
       
-      {/* Searchlights Converging (Rank 1 Highlight) */}
+      {/* 1. Global Light Effects */}
+      <LightPillar color={color === "#CD7F32" ? "#00FF88" : color} delay={5} />
+      <Shockwave color={color === "#CD7F32" ? "#00FF88" : color} delay={10} />
+
+      {/* Searchlights (Theme-consistent) */}
       <AbsoluteFill style={{ opacity: rank === 1 ? entrance : 0.4 }}>
         {[...Array(6)].map((_, i) => {
             const angle = interpolate(entrance, [0, 1], [rank === 1 ? (i - 2.5) * 40 : 20, (i - 2.5) * 15]);
@@ -80,7 +134,7 @@ export const RankingAnnouncement: React.FC<{ rank: number, color: string, name?:
                     key={i} 
                     x={rank === 3 ? 15 : 50} 
                     y={rank === 3 ? 30 : 20} 
-                    color={color} 
+                    color={color === "#CD7F32" ? "#00FF88" : color} 
                     angle={angle} 
                     opacity={rank === 1 ? 1 : 0.3} 
                 />
@@ -89,114 +143,151 @@ export const RankingAnnouncement: React.FC<{ rank: number, color: string, name?:
       </AbsoluteFill>
 
       <BeatShake bpm={bpm}>
-        {/* Main Content: Stadium-Integrated Reveal */}
+        {/* Main Content: Premium 3D Reveal */}
         <div style={{
           position: 'absolute',
           top: position.top,
           left: position.left,
-          transform: `translate(-50%, -50%) scale(${baseScale * finalZoom})`,
+          width: 1200 * scaleFactor, // Explicit size to ensure AbsoluteFill children show up
+          height: 1200 * scaleFactor,
+          transform: `translate(-50%, -50%) scale(${baseScale * finalZoom}) rotateY(${rotateY}deg)`,
           zIndex: 100,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center', // Center children vertically
+          transformStyle: 'preserve-3d',
         }}>
-          {rank === 1 && <AuraEffect color={color} />}
+          {/* Energy Burst behind everything */}
+          <EnergyBlast color={color === "#CD7F32" ? "#00FF88" : color} delay={10} />
+          
+          <div style={{ position: 'absolute', inset: 0, zIndex: -1 }}>
+            <AetherSeal rank={rank} color={color === "#CD7F32" ? "#00FF88" : color} />
+          </div>
+          
+          <AuraEffect color={color === "#CD7F32" ? "#00FF88" : color} intensity={rank === 1 ? 1.5 : 0.8} />
 
-          {/* Profile Frame */}
+          {/* 1. Profile Frame with 3D Depth (MIDDLE - Enlarged) */}
           <div style={{
-            width: 500 * scale, 
-            height: 500 * scale,
+            width: 600 * scaleFactor, 
+            height: 600 * scaleFactor,
             borderRadius: "50%",
-            border: `${12 * scale}px solid ${color}`,
+            border: `${16 * scaleFactor}px solid ${color}`,
             backgroundColor: '#000',
-            boxShadow: `0 0 ${40 + kickStrength * 60}px ${color}, inset 0 0 40px ${color}`,
+            boxShadow: `
+              0 0 ${50 + kickStrength * 80}px ${color}, 
+              0 0 120px ${color === "#CD7F32" ? "#00FF88" : color}44,
+              inset 0 0 60px ${color}
+            `,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            overflow: 'hidden',
             position: 'relative',
+            zIndex: 1,
           }}>
-            {iconUrl ? (
-              <Img
-                src={staticFile(iconUrl)}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            ) : (
-                <div style={{ color: '#333', fontSize: 40 }}>NO IMAGE</div>
-            )}
-            
-            {/* Gloss Overlay */}
-            <AbsoluteFill style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%, rgba(0,0,0,0.2) 100%)',
-                pointerEvents: 'none',
-            }} />
+            {/* Crown Decoration (TOP OF ICON - Slightly lifted) */}
+            <div style={{
+                position: 'absolute',
+                top: -270 * scaleFactor, // さらに上へ移動
+                width: 600 * scaleFactor,
+                zIndex: 100,
+                transform: 'translateZ(60px)', // さらに手前へ
+                opacity: revealOpacity,
+            }}>
+                <Img 
+                    src={staticFile(
+                        rank === 1 ? "assets/images/gold-crown.png" : 
+                        rank === 2 ? "assets/images/silver-crown.png" : 
+                        "assets/images/copper-crown.png"
+                    )}
+                    style={{ 
+                        width: '100%', 
+                        height: 'auto', 
+                        filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.6))' // 浮遊感を出すための深い影
+                    }}
+                />
+            </div>
+
+            <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
+                {iconUrl ? (
+                <Img
+                    src={staticFile(iconUrl)}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                ) : (
+                    <div style={{ color: '#333', fontSize: 40, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>NO IMAGE</div>
+                )}
+            </div>
+
+            {/* Rank Text Label (High Above everything) */}
+            <div style={{
+                position: 'absolute',
+                top: 0,
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                zIndex: 110,
+                transform: `translateZ(80px) translateY(${-450 * scaleFactor}px)`,
+            }}>
+                <div style={{
+                    fontFamily: LuxuryJapaneseFont,
+                    fontSize: 200 * scaleFactor,
+                    fontWeight: 900,
+                    color: color,
+                    textShadow: `
+                        0 0 20px black,
+                        0 0 40px ${color},
+                        2px 2px 0px rgba(0,0,0,0.5)
+                    `,
+                    letterSpacing: '12px',
+                    opacity: revealOpacity,
+                }}>
+                    第{rank}位
+                </div>
+            </div>
           </div>
 
-          {/* Rank Badge & Name Plate */}
+          {/* 3. Name Plate (BOTTOM) */}
           <div style={{
-              marginTop: 40 * scale,
+              marginTop: 120 * scaleFactor,
               opacity: revealOpacity,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              width: 800 * scale,
+              width: 900 * scaleFactor,
+              transform: 'translateZ(50px)', // Bring forward in 3D space
           }}>
-            {/* Rank Text */}
-            <div style={{
-                fontFamily: LuxuryJapaneseFont,
-                fontSize: 100 * scale,
-                fontWeight: 900,
-                color: color,
-                textShadow: `0 0 20px black, 0 0 40px ${color}`,
-                marginBottom: 10 * scale,
-            }}>
-                第{rank}位
-            </div>
-
-            {/* Name Plate */}
             <div style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                padding: `${15 * scale}px ${50 * scale}px`,
-                border: `2px solid ${color}`,
-                borderRadius: '4px',
-                boxShadow: `0 0 30px ${color}88`,
+                padding: `${18 * scaleFactor}px ${60 * scaleFactor}px`,
+                border: `3px solid ${color}`,
+                borderRadius: '8px',
+                boxShadow: `0 0 40px ${color}AA`,
+                transform: `translateY(${interpolate(revealOpacity, [0, 1], [40, 0])}px)`, // Dramatic slide up
+                filter: `drop-shadow(0 0 10px ${color})`,
             }}>
                 <span style={{
                     fontFamily: LuxuryJapaneseFont,
-                    fontSize: 60 * scale,
+                    fontSize: 70 * scaleFactor,
                     fontWeight: 700,
                     color: '#fff',
                     whiteSpace: 'nowrap',
+                    opacity: revealOpacity,
+                    letterSpacing: interpolate(revealOpacity, [0, 1], [10, 0]) + 'px', // Letter spacing assemble
                 }}>
                     {name}
                 </span>
             </div>
           </div>
         </div>
-
-        {/* Side Monitor 2nd Icon (for Rank 3 symmetry or multi-monitor feel) */}
-        {rank === 3 && (
-            <div style={{
-                position: 'absolute',
-                top: '42%',
-                right: '15%',
-                transform: `translate(50%, -50%) scale(${baseScale * 0.6})`,
-                opacity: revealOpacity * 0.5,
-                filter: 'grayscale(0.5) brightness(0.7)',
-            }}>
-                <div style={{ width: 400, height: 400, borderRadius: '50%', border: `10px solid ${color}`, overflow: 'hidden' }}>
-                    {iconUrl && <Img src={staticFile(iconUrl)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
-                </div>
-            </div>
-        )}
       </BeatShake>
 
-      {/* Burst Effect for Rank 1 Transition */}
-      {rank === 1 && frame > duration - 20 && (
+      {/* High-Intensity Flash for Rank 1 Reveal / Transition */}
+      {rank === 1 && frame > duration - 25 && (
           <AbsoluteFill style={{
               backgroundColor: 'white',
-              opacity: interpolate(frame, [duration - 15, duration - 5], [0, 1]),
-              zIndex: 1000,
+              opacity: interpolate(frame, [duration - 20, duration - 5], [0, 1]),
+              zIndex: 2000,
           }} />
       )}
     </AbsoluteFill>

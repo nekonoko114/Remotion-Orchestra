@@ -19,7 +19,6 @@ import {
   TOP_RANK_SEC as TOP_RANK_SEC_TIME,
   TOP1_RANK_SEC as TOP1_RANK_SEC_TIME,
   ENDING_SEC as ENDING_SEC_TIME,
-  GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
   TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
 } from './compositions/VideoFactory/RankingTime';
 import {
@@ -124,6 +123,7 @@ import { QuadImageEffectsCatalog } from './compositions/VideoFactory/QuadImageEf
 import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
 import { ArigatoMV, ArigatoSchema } from './compositions/Arigato';
 import { getArigatoImages } from './compositions/Arigato/image-loader';
+import { ARIGATO_TEXT_EVENTS } from './compositions/Arigato/text-events';
 import { BookFlipSample } from './compositions/VideoFactory/BookFlipSample';
 import {
   RankingRoyal,
@@ -293,8 +293,8 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="NarandaMamadeMV"
         component={NarandaMamadeMV}
-        durationInFrames={Math.ceil(narandaMamadeMusicAnalysis.duration * 60)}
-        fps={60}
+        durationInFrames={Math.ceil(narandaMamadeMusicAnalysis.duration * 30)}
+        fps={30}
         width={1920}
         height={1080}
       />
@@ -302,7 +302,7 @@ export const RemotionRoot: React.FC = () => {
         id="soregayasashisa"
         component={SoregayasashisaMV}
         durationInFrames={6800} // ~226 seconds
-        fps={60}
+        fps={30}
         width={1920}
         height={1080}
       />
@@ -310,7 +310,7 @@ export const RemotionRoot: React.FC = () => {
         id="NOVA-SHOW-MV"
         component={NovaShowMV}
         durationInFrames={15 * 8} // 歌詞8セット分
-        fps={60}
+        fps={30}
         width={1920}
         height={1080}
       />
@@ -318,7 +318,7 @@ export const RemotionRoot: React.FC = () => {
         id="Kimitonara"
         component={KimitonaraComposition}
         durationInFrames={60 * 222} // 3分42秒
-        fps={60}
+        fps={30}
         width={1920}
         height={1080}
       />
@@ -342,14 +342,15 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-Rookie-Ranking"
         component={RookieRanking}
-        durationInFrames={1350} // 24 seconds total
+        durationInFrames={1320}
         fps={60}
         width={1080}
         height={1920}
         defaultProps={{
-          bpm: 160,
-          bgmFile: 'assets/audio/music/CAPTIVATE.mp3',
+          bpm: 135,
+          bgmFile: 'assets/audio/music/Gold_Medal_Rush.mp3',
         } as any}
+        
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-RED"
@@ -1047,8 +1048,9 @@ export const RemotionRoot: React.FC = () => {
           images: getArigatoImages(),
           music: 'assets/audio/music/25-ありがとう.mp3',
           title: 'レンレン',
-          message: 'いつも今までありがとう　',
+          message: '約9年間ありがとう',
           fps: 30,
+          additionalTexts: ARIGATO_TEXT_EVENTS,
         }}
       />
 

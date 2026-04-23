@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring, random } from 'remotion';
 import { LuxuryJapaneseFont, LuxuryLatinFont } from './fonts';
 
-const LASER_COLOR = '#00ffcc'; // Sharp Green-ish Cyan
-const SPARK_COUNT = 20;
+const LASER_COLOR = '#00ff88'; // Vibrant Emerald Green
+const SPARK_COUNT = 500;
 
 export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   const frame = useCurrentFrame();
@@ -31,7 +31,7 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
   }, []);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#000', overflow: 'hidden' }}>
+    <AbsoluteFill style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
       {/* 1. Subtle Digital Grid Background */}
       <AbsoluteFill style={{ opacity: 0.15 }}>
         <div style={{
@@ -76,10 +76,20 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
                 fontFamily: LuxuryJapaneseFont,
                 fontSize: 240 * scale,
                 fontWeight: 900,
-                color: LASER_COLOR,
+                color: '#FFF', // Make the core white for max contrast
                 letterSpacing: '0.2em',
-                textShadow: `0 0 10px ${LASER_COLOR}, 0 0 30px ${LASER_COLOR}, 0 0 60px ${LASER_COLOR}`,
-                WebkitTextStroke: `2px ${LASER_COLOR}`,
+                /* Multi-layered shadow for pop and glow: 
+                   1. Sharp black edge
+                   2. Dark glow for contrast 
+                   3. Green outer glow for "Mystical" vibe
+                */
+                textShadow: `
+                  0 0 10px rgba(0,0,0,0.8),
+                  0 0 20px rgba(0,0,0,0.5),
+                  0 0 30px ${LASER_COLOR},
+                  0 0 60px ${LASER_COLOR}
+                `,
+                WebkitTextStroke: `3px #000`, // Strong black border
               }}>
                 新人王
               </div>
@@ -104,15 +114,20 @@ export const Opening: React.FC<{ bpm?: number }> = ({ bpm = 160 }) => {
         {/* Subtitle: ROOKIE OF THE YEAR 2026 */}
         <div style={{
           fontFamily: LuxuryLatinFont,
-          fontSize: 60 * scale,
+          fontSize: 90 * scale,
           fontWeight: 700,
           color: '#fff',
           letterSpacing: '0.5em',
-          opacity: interpolate(laserProgress, [0.7, 0.9], [0, 1]),
-          transform: `translateY(${interpolate(laserProgress, [0.7, 0.9], [20, 0])}px)`,
           textShadow: `0 0 20px ${LASER_COLOR}`,
+          backgroundColor: '#000',
+          marginTop: '100px',
+          padding: '120px 200px',
+          borderRadius: '10px',
+          border: '2px solid #00ff88',
+          textAlign: 'center',
         }}>
-          ROOKIE OF THE YEAR 2026
+          J.O.L<br/>
+          2026.04<br/>
         </div>
       </AbsoluteFill>
 

@@ -1,13 +1,13 @@
 import React from 'react';
-import { AbsoluteFill, Audio, staticFile, Sequence, Video, interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Audio, staticFile, Video, interpolate, useCurrentFrame } from 'remotion';
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
-import { fade } from '@remotion/transitions/fade';
 import { IntroSequence } from './IntroSequence';
-import { TensionGap } from './TensionGap';
 import { RankingAnnouncement } from './RankingAnnouncement';
 import { Ending } from './Ending';
 import { PremiumFrame } from './PremiumFrame';
-import { BeatShake, GlitchOverlay, highIntensityZoom } from './BeatSync';
+import { BeatShake, GlitchOverlay } from './BeatSync';
+import { LiquidGoldLines } from './LiquidGoldLines';
+import { etherealGoldSweep } from './CustomTransitions';
 
 type Props = {
   bpm: number;
@@ -20,54 +20,32 @@ export const RookieRanking: React.FC<Props> = ({ bpm, bgmFile }) => {
     <AbsoluteFill style={{ backgroundColor: '#000', color: 'white', overflow: 'hidden' }}>
       <GlitchOverlay bpm={bpm} />
       
-      {/* 1. Permanent Unified Background (Rookie Ranking Stadium Video) */}
-      <AbsoluteFill style={{ 
-        zIndex: 0,
-        opacity: interpolate(useCurrentFrame(), [260, 275], [0, 1]), // Reveal as laser finishes
-      }}>
+      {/* 1. Silken Aurora Layer (Background) */}
+      <AbsoluteFill style={{ zIndex: 0 }}>
         <BeatShake bpm={bpm}>
-          <AbsoluteFill style={{ 
-            transform: `scale(1.1)`,
-          }}>
+          <AbsoluteFill style={{ transform: `scale(1.1)` }}>
+             {/* Optimized Base Video with Silken Look (Single layer) */}
             <Video 
-              src={staticFile("assets/video/Move_to_stadium_202604221731.mp4")} 
+              src={staticFile("assets/video/The_aurora_descends,_202604231040.mp4")} 
               style={{ 
                 width: '100%', 
                 height: '100%', 
                 objectFit: 'cover',
-                filter: 'brightness(0.7) contrast(1.1) saturate(1.1)',
+                filter: `brightness(${interpolate(useCurrentFrame(), [0, 60], [0.7, 1.1], { extrapolateRight: 'clamp' })}) contrast(1.1) saturate(1.4) contrast(1.1)`,
               }} 
               muted
               loop
             />
-            {/* Subtle Vignette Overlay */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle, transparent 40%, rgba(0,0,0,0.5) 100%)',
-              mixBlendMode: 'multiply',
-            }} />
           </AbsoluteFill>
         </BeatShake>
       </AbsoluteFill>
 
-      {/* 2. Effect Layer (Fire Overlay) - Behind icons */}
-      <Sequence from={615} durationInFrames={865}>
-        <Video 
-          src={staticFile("assets/pixabay/videos/partickle-fire.mp4")}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            mixBlendMode: 'plus-lighter',
-            opacity: 0.8,
-            zIndex: 10,
-            filter: 'sepia(1) saturate(4) hue-rotate(-15deg) brightness(1.5) contrast(1.2)',  
-          }}
-          muted
-          loop
-        />
-      </Sequence>
+      {/* 2. Gold Accents Layer */}
+      <AbsoluteFill style={{ zIndex: 5 }}>
+        <LiquidGoldLines />
+      </AbsoluteFill>
+
+
 
       {/* 3. Main Content Layer (Icons, Names, Transitions) */}
       <AbsoluteFill style={{ zIndex: 20 }}>
@@ -78,66 +56,40 @@ export const RookieRanking: React.FC<Props> = ({ bpm, bgmFile }) => {
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition
-            timing={linearTiming({ durationInFrames: 10 })}
-            presentation={fade()}
-          />
-
-          {/* Tension Build-up */}
-          <TransitionSeries.Sequence durationInFrames={260}>
-            <TensionGap bpm={bpm} />
-          </TransitionSeries.Sequence>
-
-          <TransitionSeries.Transition
             timing={linearTiming({ durationInFrames: 25 })}
-            presentation={highIntensityZoom()}
+            presentation={etherealGoldSweep({ color: '#F7E7CE', glareColor: '#00FF88' })}
           />
 
           {/* Rank 3: まゆみ */}
-          <TransitionSeries.Sequence durationInFrames={200}>
-            <RankingAnnouncement rank={3} color="#CD7F32" name="まゆみ" duration={200} bpm={bpm} iconUrl="assets/avatars/2161646824.jpg" />
+          <TransitionSeries.Sequence durationInFrames={300}>
+            <RankingAnnouncement rank={3} color="#CD7F32" name="まゆみ" duration={300} bpm={bpm} iconUrl="assets/avatars/2161646824.jpg" />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition
             timing={linearTiming({ durationInFrames: 25 })}
-            presentation={highIntensityZoom()}
+            presentation={etherealGoldSweep({ color: '#F7E7CE', glareColor: '#00FF88' })}
           />
 
-          {/* Rank 2: ぼく天然ミッキー */}
-          <TransitionSeries.Sequence durationInFrames={200}>
-            <RankingAnnouncement rank={2} color="#C0C0C0" name="ぼく天然ミッキー" duration={200} bpm={bpm} iconUrl="assets/avatars/user58402831659341.jpg" />
+          {/* Rank 2: すーぱーゆい */}
+          <TransitionSeries.Sequence durationInFrames={300}>
+            <RankingAnnouncement rank={2} color="#C0C0C0" name="すーぱーゆい" duration={300} bpm={bpm} iconUrl="assets/avatars/2161646824.jpg" />
           </TransitionSeries.Sequence>
 
           <TransitionSeries.Transition
-            timing={linearTiming({ durationInFrames: 30 })}
-            presentation={highIntensityZoom()}
+            timing={linearTiming({ durationInFrames: 25 })}
+            presentation={etherealGoldSweep({ color: '#F7E7CE', glareColor: '#00FF88' })}
           />
 
-          {/* Rank 1: 一条美月 */}
-          <TransitionSeries.Sequence durationInFrames={240}>
-            <RankingAnnouncement rank={1} color="#FFD700" name="一条美月" duration={240} bpm={bpm} iconUrl="assets/avatars/mizuki2525214.jpg" />
+          {/* Rank 1: 👑 きてぃ */}
+          <TransitionSeries.Sequence durationInFrames={300}>
+            <RankingAnnouncement rank={1} color="#FFD700" name="きてぃ" duration={300} bpm={bpm} iconUrl="assets/avatars/2161646824.jpg" />
           </TransitionSeries.Sequence>
 
-          <TransitionSeries.Sequence durationInFrames={150}>
+          <TransitionSeries.Sequence durationInFrames={105}>
             <Ending bpm={bpm} />
           </TransitionSeries.Sequence>
         </TransitionSeries>
       </AbsoluteFill>
-
-      {/* 4. Global Overlay Effect (Tension Phase) */}
-      <Sequence from={380} durationInFrames={260}>
-        <Video 
-          src={staticFile("assets/pixabay/videos/outline-storke-rpg.mp4")}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            mixBlendMode: 'screen',
-            zIndex: 30, // Stay on top during TensionGap
-          }}
-          muted
-          loop
-        />
-      </Sequence>
 
       {/* 6. Overall Premium Frame (Highest Layer) */}
       <PremiumFrame />
@@ -145,11 +97,33 @@ export const RookieRanking: React.FC<Props> = ({ bpm, bgmFile }) => {
       {/* 5. Audio Sync */}
       <Audio
         src={staticFile(bgmFile)}
-        startFrom={0}
+        startFrom={1900}
         volume={0.7}
       />
+      {/* 4. Bottom Information Bar (To hide original video text and add branding) */}
+      <AbsoluteFill style={{ 
+        zIndex: 1000, 
+        justifyContent: 'flex-end' 
+      }}>
+        <div style={{
+          width: '100%',
+          height: '160px',
+          background: 'linear-gradient(to top, rgba(0, 30, 15, 0.95) 0%, rgba(0, 50, 30, 0.8) 70%, transparent 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderTop: '2px solid rgba(0, 255, 136, 0.3)',
+        }}>
+          <div style={{
+            width: '40px',
+            height: '2px',
+            background: '#00FF88',
+            marginTop: '15px',
+            opacity: 0.5,
+          }} />
+        </div>
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 };
-
-
