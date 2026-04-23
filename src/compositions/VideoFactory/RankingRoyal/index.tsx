@@ -4,6 +4,7 @@ import { fade } from '@remotion/transitions/fade';
 import {
   AbsoluteFill,
   useVideoConfig,
+  useCurrentFrame,
   Audio,
   staticFile,
   OffthreadVideo,
@@ -17,6 +18,7 @@ import { Top1Reveal } from './Top1Reveal';
 import { GridBridge } from './GridBridge';
 import type { Liver } from '../types';
 import { ROYAL_THEME } from './theme';
+import { BeatPulse } from './BeatPulse';
 
 export const OPENING_SEC = 5.5;
 export const GROUP_SEC = 5;
@@ -34,6 +36,7 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
   openingTitle1,
   openingTitle2,
   openingTitle3,
+  openingTitle4,
   openingDate,
   openingSubtitle,
   useGlitch,
@@ -41,6 +44,7 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
   top3Video,
   livers,
 }) => {
+  const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
   const OPENING_DURATION = OPENING_SEC * fps;
@@ -50,6 +54,10 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
   const ENDING_DURATION = ENDING_SEC * fps;
   const TRANSITION_DURATION = TRANSITION_FRAMES;
   const LAST_TRANSITION_DURATION = LAST_TRANSITION_FRAMES;
+
+  // 5位の個別発表（1つ目のGridBridge）が始まるフレームを計算
+  const top5StartTime = OPENING_DURATION + (GROUP_DURATION * 2) + (TRANSITION_DURATION * 2);
+  const currentBpm = frame < top5StartTime ? bpm / 2 : bpm;
 
   // ラグジュアリーなので少しゆっくりとしたフェードやスライドを使用
   const transition = fade(); // エレガントなフェード遷移
@@ -102,6 +110,7 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
             title1={openingTitle1}
             title2={openingTitle2}
             title3={openingTitle3}
+            title4={openingTitle4}
             date={openingDate}
             subtitle={openingSubtitle}
           />
@@ -245,6 +254,8 @@ export const RankingRoyal: React.FC<RankingRoyalProps> = ({
          }} />
 
       </AbsoluteFill>
+      {/* 音楽に合わせたライティング・パルス（最前面で全体を照らす） */}
+      <BeatPulse bpm={currentBpm} />
     </AbsoluteFill>
   );
 };

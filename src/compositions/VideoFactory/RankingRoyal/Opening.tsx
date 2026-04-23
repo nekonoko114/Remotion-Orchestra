@@ -16,6 +16,7 @@ export type OpeningProps = {
   title1: string;
   title2: string;
   title3: string;
+  title4: string;
   date: string;
   subtitle: string;
 };
@@ -24,6 +25,7 @@ export const Opening: React.FC<OpeningProps> = ({
   title1,
   title2,
   title3,
+  title4,
   date,
   subtitle,
 }) => {
@@ -39,7 +41,8 @@ export const Opening: React.FC<OpeningProps> = ({
   const tracking1 = interpolate(frame, [10, 300], [0, 40], { extrapolateRight: 'clamp' });
   const tracking2 = interpolate(frame, [30, 300], [0, 30], { extrapolateRight: 'clamp' });
   const tracking3 = interpolate(frame, [50, 300], [0, 25], { extrapolateRight: 'clamp' });
-  const trackingSub = interpolate(frame, [80, 300], [5, 20], { extrapolateRight: 'clamp' });
+  const tracking4 = interpolate(frame, [70, 300], [0, 25], { extrapolateRight: 'clamp' });
+  const trackingSub = interpolate(frame, [100, 300], [5, 20], { extrapolateRight: 'clamp' });
 
   // 3. テキストアニメーション
   const title1Y = interpolate(frame, [10, 50], [60, 0], { easing: Easing.out(Easing.exp), extrapolateRight: 'clamp' });
@@ -54,15 +57,19 @@ export const Opening: React.FC<OpeningProps> = ({
   const blur3 = interpolate(frame, [50, 80], [20, 0], { extrapolateRight: 'clamp' });
   const opacity3 = interpolate(frame, [50, 70], [0, 1], { extrapolateRight: 'clamp' });
 
-  const subtitleY = interpolate(frame, [80, 120], [40, 0], { easing: Easing.out(Easing.exp), extrapolateRight: 'clamp' });
-  const blurSub = interpolate(frame, [80, 110], [20, 0], { extrapolateRight: 'clamp' });
-  const opacitySub = interpolate(frame, [80, 100], [0, 0.9], { extrapolateRight: 'clamp' });
+  const title4Y = interpolate(frame, [70, 110], [60, 0], { easing: Easing.out(Easing.exp), extrapolateRight: 'clamp' });
+  const blur4 = interpolate(frame, [70, 100], [20, 0], { extrapolateRight: 'clamp' });
+  const opacity4 = interpolate(frame, [70, 90], [0, 1], { extrapolateRight: 'clamp' });
 
-  const dateY = interpolate(frame, [110, 150], [20, 0], { easing: Easing.out(Easing.exp), extrapolateRight: 'clamp' });
-  const opacityDate = interpolate(frame, [110, 130], [0, 0.8], { extrapolateRight: 'clamp' });
+  const subtitleY = interpolate(frame, [100, 140], [40, 0], { easing: Easing.out(Easing.exp), extrapolateRight: 'clamp' });
+  const blurSub = interpolate(frame, [100, 130], [20, 0], { extrapolateRight: 'clamp' });
+  const opacitySub = interpolate(frame, [100, 120], [0, 0.9], { extrapolateRight: 'clamp' });
+
+  const dateY = interpolate(frame, [130, 170], [20, 0], { easing: Easing.out(Easing.exp), extrapolateRight: 'clamp' });
+  const opacityDate = interpolate(frame, [130, 150], [0, 0.8], { extrapolateRight: 'clamp' });
 
   const lineOpacityTop = interpolate(frame, [10, 40, 150, 300], [0, 0.8, 0.4, 0.8], { extrapolateRight: 'clamp' });
-  const lineOpacityBottom = interpolate(frame, [80, 110, 200, 300], [0, 1, 0.6, 1], { extrapolateRight: 'clamp' });
+  const lineOpacityBottom = interpolate(frame, [100, 130, 200, 300], [0, 1, 0.6, 1], { extrapolateRight: 'clamp' });
 
   // 煌めきのパルス
   const pulse = interpolate(Math.sin(frame / 30), [-1, 1], [0.85, 1.15]);
@@ -168,9 +175,13 @@ export const Opening: React.FC<OpeningProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', gap: '40px', transform: `translateY(${title3Y}px)`, filter: `blur(${blur3}px)`, opacity: opacity3 }}>
               <LuxuryGoldText text={title3} fontSize={160} delay={50} style={{ letterSpacing: `${tracking3}px` }} />
             </div>
+
+            <div style={{ transform: `translateY(${title4Y}px)`, filter: `blur(${blur4}px)`, opacity: opacity4 }}>
+              <LuxuryGoldText text={title4} fontSize={140} delay={70} style={{ letterSpacing: `${tracking4}px` }} />
+            </div>
             
-            <div style={{ marginTop: '70px', display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `translateY(${subtitleY}px)`, filter: `blur(${blurSub}px)`, opacity: opacitySub }}>
-              <LuxuryGoldText text={subtitle} fontSize={110} delay={80} style={{ letterSpacing: `${trackingSub}px`, fontFamily: ROYAL_THEME.fonts.japanese }} />
+            <div style={{ marginTop: '50px', display: 'flex', flexDirection: 'column', alignItems: 'center', transform: `translateY(${subtitleY}px)`, filter: `blur(${blurSub}px)`, opacity: opacitySub }}>
+              <LuxuryGoldText text={subtitle} fontSize={110} delay={100} style={{ letterSpacing: `${trackingSub}px`, fontFamily: ROYAL_THEME.fonts.japanese }} />
               <div style={{ 
                 width: 400, height: 3, marginTop: 40,
                 background: 'linear-gradient(90deg, transparent, rgba(247, 231, 206, 1), transparent)',

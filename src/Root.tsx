@@ -10,7 +10,10 @@ import {
   TRANSITION_FRAMES,
   LAST_TRANSITION_FRAMES,
 } from './compositions/VideoFactory/RankingVertical';
-import { RankingVerticalSchema, LiverSchema } from './compositions/VideoFactory/RankingVertical/schema';
+import {
+  RankingVerticalSchema,
+  LiverSchema,
+} from './compositions/VideoFactory/RankingVertical/schema';
 import RANKING_DATA_JSON from './compositions/VideoFactory/data.json';
 import {
   RankingTime,
@@ -169,13 +172,14 @@ const JOL_RANKING_ROYAL_DURATION =
 
 // Calculate Time Duration (Correctly using its own 5s opening)
 // Updated to exclude GridBridges: Opening + 2 Groups + 5 Reveals + Ending
-const JOL_RANKING_DURATION_TIME = 
+const JOL_RANKING_DURATION_TIME =
   (OPENING_SEC_TIME +
     GROUP_SEC_TIME * 2 +
     TOP_RANK_SEC_TIME * 4 +
     TOP1_RANK_SEC_TIME +
     ENDING_SEC_TIME) *
-    JOL_RANKING_FPS - (8 * TRANSITION_FRAMES_TIME);
+    JOL_RANKING_FPS -
+  8 * TRANSITION_FRAMES_TIME;
 // Previous calculation was ~2750, confirmed it's exactly 2750 frames.
 /*
   (OPENING_SEC_TIME +
@@ -190,12 +194,14 @@ const JOL_RANKING_DURATION_TIME =
 // Calculate Event Duration
 // (Opening 300 + 4 Groups * 270 + 3 Reveals (300, 300, 360) + Ending 240) - (6 * T 12 + 1 * LAST_T 15)
 // = (300 + 1080 + 960 + 240) - (72 + 15) = 2580 - 87 = 2493
-const JOL_RANKING_DURATION_EVENT = 
+const JOL_RANKING_DURATION_EVENT =
   (EVENT_OPENING_SEC +
     EVENT_GROUP_SEC * 2 +
     (EVENT_SCAN_SEC + EVENT_REVEAL_SEC) * 4 +
     (EVENT_SCAN_SEC + EVENT_REVEAL_1_SEC) +
-    EVENT_ENDING_SEC) * JOL_RANKING_FPS - (12 * EVENT_TRANSITION_FRAMES + EVENT_LAST_TRANSITION_FRAMES);
+    EVENT_ENDING_SEC) *
+    JOL_RANKING_FPS -
+  (12 * EVENT_TRANSITION_FRAMES + EVENT_LAST_TRANSITION_FRAMES);
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -213,8 +219,7 @@ export const RemotionRoot: React.FC = () => {
           bpm: 152,
           bgmFile: 'assets/audio/music/doragonSrayer.mp3',
           bgmStartFrom: 25,
-          openingVideo:
-            'backgrounds/diamond-ranking-opening.mp4',
+          openingVideo: 'backgrounds/diamond-ranking-opening.mp4',
           rankingVideo:
             'assets/pixabay/videos/pixabay_fire_flame_beautiful_wallpaper_burn_hot_smoke_feve_200715.mp4',
           openingTitle1: 'J.O.L',
@@ -223,9 +228,12 @@ export const RemotionRoot: React.FC = () => {
           openingSubtitle: '結果発表',
           useGlitch: true,
           glitchIntensity: 10,
-          top3Video: 'assets/pixabay/videos/pixabay_dimension_space_psychedelic_abstract_portal_time_w_31183.mp4',
+          top3Video:
+            'assets/pixabay/videos/pixabay_dimension_space_psychedelic_abstract_portal_time_w_31183.mp4',
           openingDate: '',
-          livers: (RANKING_DATA_JSON as unknown[]).map((l) => LiverSchema.parse(l)),
+          livers: (RANKING_DATA_JSON as unknown[]).map((l) =>
+            LiverSchema.parse(l),
+          ),
         }}
       />
       <Composition
@@ -346,11 +354,12 @@ export const RemotionRoot: React.FC = () => {
         fps={60}
         width={1080}
         height={1920}
-        defaultProps={{
-          bpm: 135,
-          bgmFile: 'assets/audio/music/Gold_Medal_Rush.mp3',
-        } as any}
-        
+        defaultProps={
+          {
+            bpm: 135,
+            bgmFile: 'assets/audio/music/Gold_Medal_Rush.mp3',
+          } as any
+        }
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-RED"
@@ -360,67 +369,69 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
-        defaultProps={{
-          themeColor: '#ff2200',
-          glowColor: 'rgba(255, 60, 0, 0.8)',
-          particleColor1: '#cc0000',
-          particleColor2: '#ff4400',
-          music: {
-            src: 'assets/audio/music/Breathing-Lighter.mp3',
-            volume: 0.6,
-            startFrom: 1440,
-            bpm: 120,
-          },
-          opponent: {
-            name: '限界突破まみ🎽',
-            image: 'assets/images-01/mrm0115-01.png',
-            borderColor: '#fff',
-            glowColor: 'red',
-          },
-          liver: {
-            name: '🔆≒ユージン≒🔆',
-            image: 'assets/images-01/t.o.p_u_jin_.jpeg',
-            altImage: '',
-            altImageStartFrame: 0,
-            altImageEndFrame: 0,
-            gridImage: '',
-            borderColor: '#ff0000',
-            glowColor: '#FF6600',
-          },
-          endingText: '配信再開の<br/>３月<br/>有終の美を<br/>飾りたい！！',
-          features: {
-            useGlitch: true,
-            useMirror: true,
-            useDoublingGrid: false,
-            useGridConvergence: false,
-            useSnowEffect: false,
-            useKaleidoscope: false,
-            useSpinIntro: false,
-            useCircleLiver: false,
-            useMetallicVs: false,
-            hideVsFocusLines: false,
-            colorizeVsVideo: false,
-            useSakuraEffect: false,
-            hideDefaultParticles: false,
-          },
-          liverIntroDuration: 120,
-          reverseVsOrder: true,
-          customBackground: 'assets/images-01/red-energy-bg.png',
-          sceneLiverEffect: {
-            src: 'assets/pixabay/videos/fire-flower01.mp4',
-            blendMode: 'plus-lighter',
-            zIndex: 10,
-            muted: true,
-            opacity: 0,
-          },
-          sceneVsEffect: {
-            src: 'assets/pixabay/videos/fire-explotion.mp4',
-            opacity: 0,
-            blendMode: 'screen',
-            zIndex: 600,
-            muted: true,
-          },
-        } as any}
+        defaultProps={
+          {
+            themeColor: '#ff2200',
+            glowColor: 'rgba(255, 60, 0, 0.8)',
+            particleColor1: '#cc0000',
+            particleColor2: '#ff4400',
+            music: {
+              src: 'assets/audio/music/Breathing-Lighter.mp3',
+              volume: 0.6,
+              startFrom: 1440,
+              bpm: 120,
+            },
+            opponent: {
+              name: '限界突破まみ🎽',
+              image: 'assets/images-01/mrm0115-01.png',
+              borderColor: '#fff',
+              glowColor: 'red',
+            },
+            liver: {
+              name: '🔆≒ユージン≒🔆',
+              image: 'assets/images-01/t.o.p_u_jin_.jpeg',
+              altImage: '',
+              altImageStartFrame: 0,
+              altImageEndFrame: 0,
+              gridImage: '',
+              borderColor: '#ff0000',
+              glowColor: '#FF6600',
+            },
+            endingText: '配信再開の<br/>３月<br/>有終の美を<br/>飾りたい！！',
+            features: {
+              useGlitch: true,
+              useMirror: true,
+              useDoublingGrid: false,
+              useGridConvergence: false,
+              useSnowEffect: false,
+              useKaleidoscope: false,
+              useSpinIntro: false,
+              useCircleLiver: false,
+              useMetallicVs: false,
+              hideVsFocusLines: false,
+              colorizeVsVideo: false,
+              useSakuraEffect: false,
+              hideDefaultParticles: false,
+            },
+            liverIntroDuration: 120,
+            reverseVsOrder: true,
+            customBackground: 'assets/images-01/red-energy-bg.png',
+            sceneLiverEffect: {
+              src: 'assets/pixabay/videos/fire-flower01.mp4',
+              blendMode: 'plus-lighter',
+              zIndex: 10,
+              muted: true,
+              opacity: 0,
+            },
+            sceneVsEffect: {
+              src: 'assets/pixabay/videos/fire-explotion.mp4',
+              opacity: 0,
+              blendMode: 'screen',
+              zIndex: 600,
+              muted: true,
+            },
+          } as any
+        }
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-GREEN"
@@ -457,50 +468,52 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
-        defaultProps={{
-          themeColor: '#0066ff',
-          glowColor: 'rgba(0, 100, 255, 0.8)',
-          particleColor1: '#0000cc',
-          particleColor2: '#0088ff',
-          music: {
-            src: 'assets/audio/music/Breathing-Lighter.mp3',
-            startFrom: 126 * 60,
-            volume: 0.6,
-            bpm: 120,
-          },
-          opponent: {
-            name: '❤️‍🔥しおぴ❤️‍🔥',
-            image: 'assets/images-01/shiori_portrait.webp',
-            borderColor: '#fff',
-            glowColor: '#00ffff',
-          },
-          liver: {
-            name: '限界突破まみ🎽',
-            image: 'assets/images-01/mrm0115-01.png',
-            altImage: '',
-            altImageStartFrame: 0,
-            altImageEndFrame: 0,
-            gridImage: '',
-            borderColor: '#FFF',
-            glowColor: '#0066ff',
-          },
-          endingText: 'この戦いは<br/>絶対に負けられない',
-          features: {
-            useGlitch: true,
-            useMirror: true,
-            useDoublingGrid: false,
-            useGridConvergence: false,
-            useSnowEffect: false,
-            useKaleidoscope: false,
-            useSpinIntro: false,
-            useCircleLiver: false,
-            useMetallicVs: false,
-            hideVsFocusLines: false,
-            colorizeVsVideo: false,
-            useSakuraEffect: false,
-            hideDefaultParticles: false,
-          },
-        } as any}
+        defaultProps={
+          {
+            themeColor: '#0066ff',
+            glowColor: 'rgba(0, 100, 255, 0.8)',
+            particleColor1: '#0000cc',
+            particleColor2: '#0088ff',
+            music: {
+              src: 'assets/audio/music/Breathing-Lighter.mp3',
+              startFrom: 126 * 60,
+              volume: 0.6,
+              bpm: 120,
+            },
+            opponent: {
+              name: '❤️‍🔥しおぴ❤️‍🔥',
+              image: 'assets/images-01/shiori_portrait.webp',
+              borderColor: '#fff',
+              glowColor: '#00ffff',
+            },
+            liver: {
+              name: '限界突破まみ🎽',
+              image: 'assets/images-01/mrm0115-01.png',
+              altImage: '',
+              altImageStartFrame: 0,
+              altImageEndFrame: 0,
+              gridImage: '',
+              borderColor: '#FFF',
+              glowColor: '#0066ff',
+            },
+            endingText: 'この戦いは<br/>絶対に負けられない',
+            features: {
+              useGlitch: true,
+              useMirror: true,
+              useDoublingGrid: false,
+              useGridConvergence: false,
+              useSnowEffect: false,
+              useKaleidoscope: false,
+              useSpinIntro: false,
+              useCircleLiver: false,
+              useMetallicVs: false,
+              hideVsFocusLines: false,
+              colorizeVsVideo: false,
+              useSakuraEffect: false,
+              hideDefaultParticles: false,
+            },
+          } as any
+        }
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-ORANGE"
@@ -510,27 +523,29 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
-        defaultProps={{
-          ...speedOrangeTheme,
-          features: {
-            useGlitch: false,
-            useMirror: false,
-            useDoublingGrid: false,
-            useGridConvergence: true,
-            useSnowEffect: false,
-            useKaleidoscope: false,
-            useSpinIntro: false,
-            useCircleLiver: false,
-            useMetallicVs: false,
-            hideVsFocusLines: false,
-            colorizeVsVideo: false,
-            useSakuraEffect: false,
-            hideDefaultParticles: false,
-          },
-          lightLeakColor: '#ff8800',
-          reverseVsOrder: true,
-          fontFamily: '"Mochiy Pop One", sans-serif',
-        } as any}
+        defaultProps={
+          {
+            ...speedOrangeTheme,
+            features: {
+              useGlitch: false,
+              useMirror: false,
+              useDoublingGrid: false,
+              useGridConvergence: true,
+              useSnowEffect: false,
+              useKaleidoscope: false,
+              useSpinIntro: false,
+              useCircleLiver: false,
+              useMetallicVs: false,
+              hideVsFocusLines: false,
+              colorizeVsVideo: false,
+              useSakuraEffect: false,
+              hideDefaultParticles: false,
+            },
+            lightLeakColor: '#ff8800',
+            reverseVsOrder: true,
+            fontFamily: '"Mochiy Pop One", sans-serif',
+          } as any
+        }
       />
       <Composition
         id="Magic-Circle-Showcase"
@@ -572,74 +587,81 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
-        defaultProps={{
-          themeColor: '#e0f7fa',
-          glowColor: '#0277bd',
-          textStroke: '3px #01579b',
-          textAnimation: 'fade',
-          particleColor1: '#ffffff',
-          particleColor2: '#b3e5fc',
-          music: {
-            src: 'assets/audio/music/その先へ.mp3',
-            startFrom: 48 * 60,
-            volume: 0.6,
-            bpm: 144,
-          },
-          customDurations: {
-            opening: 180,
-            date: 150,
-            liverIntro: 210,
-            msg: 0,
-            opponent: 105,
-            vs: 90,
-            rule: 120,
-            ending: 120,
-            logo: 90,
-          },
-          openingText: [
-            '予約バトル',
-            '決まりました！',
-            'みんな<br/>応援してね❤️',
-          ],
-          dateText: ['2026年<br/>3月28日', 'SATURDAY', '22時30分', 'START!'],
-          rulesText: ['【ルール】', 'グローブ2', 'アイテム他なし', '一本勝負'],
-          endingText: '初予約バトルー！<br/>いつもの<br/>なるりれらしく',
-          reverseVsOrder: true,
-          opponent: {
-            name: '🐄モゥーミルク🍼🐃',
-            image: 'assets/images-01/user1817765055425.jpeg',
-            borderColor: '#aed581',
-            glowColor: '#7cb342',
-          },
-          liver: {
-            name: 'なるりれ🦚🍉',
-            image: 'assets/images-01/karaindaisuki.png',
-            altImage: '',
-            altImageStartFrame: 0,
-            altImageEndFrame: 0,
-            gridImage: '',
-            borderColor: '#ffffff',
-            glowColor: '#81d4fa',
-          },
-          features: {
-            useGlitch: false,
-            useMirror: false,
-            useDoublingGrid: false,
-            useGridConvergence: false,
-            useSnowEffect: true,
-            useKaleidoscope: false,
-            useSpinIntro: true,
-            useCircleLiver: true,
-            useMetallicVs: false,
-            hideVsFocusLines: false,
-            colorizeVsVideo: false,
-            useSakuraEffect: false,
-            hideDefaultParticles: false,
-          },
-          customBackground:
-            'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
-          opponentBackground: 'assets/images-01/meadow_animals_bg.png',
-        } as any}
+        defaultProps={
+          {
+            themeColor: '#e0f7fa',
+            glowColor: '#0277bd',
+            textStroke: '3px #01579b',
+            textAnimation: 'fade',
+            particleColor1: '#ffffff',
+            particleColor2: '#b3e5fc',
+            music: {
+              src: 'assets/audio/music/その先へ.mp3',
+              startFrom: 48 * 60,
+              volume: 0.6,
+              bpm: 144,
+            },
+            customDurations: {
+              opening: 180,
+              date: 150,
+              liverIntro: 210,
+              msg: 0,
+              opponent: 105,
+              vs: 90,
+              rule: 120,
+              ending: 120,
+              logo: 90,
+            },
+            openingText: [
+              '予約バトル',
+              '決まりました！',
+              'みんな<br/>応援してね❤️',
+            ],
+            dateText: ['2026年<br/>3月28日', 'SATURDAY', '22時30分', 'START!'],
+            rulesText: [
+              '【ルール】',
+              'グローブ2',
+              'アイテム他なし',
+              '一本勝負',
+            ],
+            endingText: '初予約バトルー！<br/>いつもの<br/>なるりれらしく',
+            reverseVsOrder: true,
+            opponent: {
+              name: '🐄モゥーミルク🍼🐃',
+              image: 'assets/images-01/user1817765055425.jpeg',
+              borderColor: '#aed581',
+              glowColor: '#7cb342',
+            },
+            liver: {
+              name: 'なるりれ🦚🍉',
+              image: 'assets/images-01/karaindaisuki.png',
+              altImage: '',
+              altImageStartFrame: 0,
+              altImageEndFrame: 0,
+              gridImage: '',
+              borderColor: '#ffffff',
+              glowColor: '#81d4fa',
+            },
+            features: {
+              useGlitch: false,
+              useMirror: false,
+              useDoublingGrid: false,
+              useGridConvergence: false,
+              useSnowEffect: true,
+              useKaleidoscope: false,
+              useSpinIntro: true,
+              useCircleLiver: true,
+              useMetallicVs: false,
+              hideVsFocusLines: false,
+              colorizeVsVideo: false,
+              useSakuraEffect: false,
+              hideDefaultParticles: false,
+            },
+            customBackground:
+              'assets/pixabay/videos/pixabay_christmas_tree_snowy_landscape_snow_winter_christm_323093.mp4',
+            opponentBackground: 'assets/images-01/meadow_animals_bg.png',
+          } as any
+        }
       />
       <Composition
         id="JOL-BATTLE-PATTERN6"
@@ -699,75 +721,82 @@ export const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         schema={BattleSpiritThemeSchema}
-        defaultProps={{
-          themeColor: '#fce4ec',
-          glowColor: '#f06292',
-          textStroke: '3px #c2185b',
-          textAnimation: 'fade',
-          particleColor1: '#ffffff',
-          particleColor2: '#f8bbd0',
-          music: {
-            src: 'assets/audio/music/その先へ.mp3',
-            startFrom: 48 * 60,
-            volume: 0.6,
-            bpm: 144,
-          },
-          customDurations: {
-            opening: 180,
-            date: 150,
-            liverIntro: 210,
-            msg: 0,
-            opponent: 105,
-            vs: 90,
-            rule: 120,
-            ending: 120,
-            logo: 90,
-          },
-          openingText: [
-            '予約バトル',
-            '決まりました！',
-            'みんな<br/>応援してね❤️',
-          ],
-          dateText: ['2026年<br/>3月28日', 'SATURDAY', '22時30分', 'START!'],
-          rulesText: ['【ルール】', 'グローブ2', 'アイテム他なし', '一本勝負'],
-          endingText: '初予約バトルー！<br/>いつもの<br/>なるりれらしく',
-          reverseVsOrder: true,
-          opponent: {
-            name: '🐄モゥーミルク🍼🐃',
-            image: 'assets/images-01/user1817765055425.jpeg',
-            borderColor: '#aed581',
-            glowColor: '#7cb342',
-          },
-          liver: {
-            name: 'なるりれ🦥🍉',
-            image: 'assets/images-01/karaindaisuki.png',
-            altImage: 'assets/images-01/karaindaisuki-photo.jpg',
-            altImageStartFrame: 420,
-            altImageEndFrame: 469,
-            gridImage: '',
-            borderColor: '#ffffff',
-            glowColor: '#ff80ab',
-          },
-          features: {
-            useGlitch: false,
-            useMirror: false,
-            useDoublingGrid: false,
-            useGridConvergence: false,
-            useSnowEffect: false,
-            useSakuraEffect: true,
-            useKaleidoscope: false,
-            useSpinIntro: true,
-            useCircleLiver: true,
-            hideDefaultParticles: true,
-            useMetallicVs: false,
-            hideVsFocusLines: false,
-            colorizeVsVideo: false,
-          } as any,
-          customBackground:
-            'assets/pixabay/videos/pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769.mp4',
-          opponentBackground: 'assets/images-01/meadow_animals_bg.png',
-          fontFamily: '"Mochiy Pop One", sans-serif',
-        } as any}
+        defaultProps={
+          {
+            themeColor: '#fce4ec',
+            glowColor: '#f06292',
+            textStroke: '3px #c2185b',
+            textAnimation: 'fade',
+            particleColor1: '#ffffff',
+            particleColor2: '#f8bbd0',
+            music: {
+              src: 'assets/audio/music/その先へ.mp3',
+              startFrom: 48 * 60,
+              volume: 0.6,
+              bpm: 144,
+            },
+            customDurations: {
+              opening: 180,
+              date: 150,
+              liverIntro: 210,
+              msg: 0,
+              opponent: 105,
+              vs: 90,
+              rule: 120,
+              ending: 120,
+              logo: 90,
+            },
+            openingText: [
+              '予約バトル',
+              '決まりました！',
+              'みんな<br/>応援してね❤️',
+            ],
+            dateText: ['2026年<br/>3月28日', 'SATURDAY', '22時30分', 'START!'],
+            rulesText: [
+              '【ルール】',
+              'グローブ2',
+              'アイテム他なし',
+              '一本勝負',
+            ],
+            endingText: '初予約バトルー！<br/>いつもの<br/>なるりれらしく',
+            reverseVsOrder: true,
+            opponent: {
+              name: '🐄モゥーミルク🍼🐃',
+              image: 'assets/images-01/user1817765055425.jpeg',
+              borderColor: '#aed581',
+              glowColor: '#7cb342',
+            },
+            liver: {
+              name: 'なるりれ🦥🍉',
+              image: 'assets/images-01/karaindaisuki.png',
+              altImage: 'assets/images-01/karaindaisuki-photo.jpg',
+              altImageStartFrame: 420,
+              altImageEndFrame: 469,
+              gridImage: '',
+              borderColor: '#ffffff',
+              glowColor: '#ff80ab',
+            },
+            features: {
+              useGlitch: false,
+              useMirror: false,
+              useDoublingGrid: false,
+              useGridConvergence: false,
+              useSnowEffect: false,
+              useSakuraEffect: true,
+              useKaleidoscope: false,
+              useSpinIntro: true,
+              useCircleLiver: true,
+              hideDefaultParticles: true,
+              useMetallicVs: false,
+              hideVsFocusLines: false,
+              colorizeVsVideo: false,
+            } as any,
+            customBackground:
+              'assets/pixabay/videos/pixabay_sakura_peach_flowers_starry_sky_reflection_pond_re_156769.mp4',
+            opponentBackground: 'assets/images-01/meadow_animals_bg.png',
+            fontFamily: '"Mochiy Pop One", sans-serif',
+          } as any
+        }
       />
       <Composition
         id="JOL-RESERVATION-BATTLE"
@@ -1053,7 +1082,6 @@ export const RemotionRoot: React.FC = () => {
           additionalTexts: ARIGATO_TEXT_EVENTS,
         }}
       />
-
       {/* 🎉 なるりれ マイイベント告知動画 */}
       <Composition
         id="JOL-MINIBA-UNIVERSE"
@@ -1088,9 +1116,142 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         schema={RankingRoyalSchema}
         defaultProps={{
-          ...RankingRoyalSchema.parse({
-            livers: (RANKING_DATA_JSON as unknown[]).map((l) => LiverSchema.parse(l)),
-          }),
+          bpm: 150,
+          bgmFile: 'assets/audio/music/The_Gilded_Siege.mp3',
+          bgmStartFrom: 47.5,
+          rankingVideo:
+            'assets/pixabay/videos/pixabay_diamonds_jewels_rain_falling_wealth_value_money_cr_3125.mp4',
+          openingTitle1: 'J.O.L',
+          openingTitle2: '団結力No.1を',
+          openingTitle3: '掴み取れ',
+          openingDate: '2026年4月',
+          openingTitle4: 'ランキング',
+          openingSubtitle: '結果発表',
+          useGlitch: false,
+          glitchIntensity: 0,
+          top3Video: '',
+          livers: [
+            {
+              rank: 1,
+              id: 'l5332541',
+              nickname: '🌸さくら🌸',
+              image_url: 'assets/avatars/l5332541.jpg',
+              saved_to: '',
+              score: 1500000,
+            },
+            {
+              rank: 2,
+              id: 'mizuki2525214',
+              nickname: '💋一条美月-Mizuki-💋',
+              image_url: 'assets/avatars/mizuki2525214.jpg',
+              saved_to: '',
+              score: 1400000,
+            },
+            {
+              rank: 3,
+              id: 't.o.p_u_jin_',
+              nickname: '🔆≒ユージン≒🔆',
+              image_url: 'assets/avatars/t.o.p_u_jin_.jpg',
+              saved_to: '',
+              score: 1300000,
+            },
+            {
+              rank: 4,
+              id: 'kawamii12',
+              nickname: '小悪魔💋🪽',
+              image_url: 'assets/avatars/koakumachiyan_new.png',
+              saved_to: '',
+              score: 1200000,
+            },
+            {
+              rank: 5,
+              id: 'ooo93o',
+              nickname: 'あむら🧸🖤',
+              image_url: 'assets/avatars/ooo93o.jpg',
+              saved_to: '',
+              score: 1100000,
+            },
+            {
+              rank: 6,
+              id: 'mrm0115',
+              nickname: '限界突破まみ🎽',
+              image_url: 'assets/avatars/mrm0115.jpg',
+              saved_to: '',
+              score: 1000000,
+            },
+            {
+              rank: 7,
+              id: 'ria.kangoshi',
+              nickname: 'りあ🐰🍀',
+              image_url: 'assets/avatars/ria.kangoshi.jpg',
+              saved_to: '',
+              score: 900000,
+            },
+            {
+              rank: 8,
+              id: 'donbeikun9999',
+              nickname: '☠️やらかしタロー☠️',
+              image_url: 'assets/avatars/donbeikun9999.png',
+              saved_to: '',
+              score: 800000,
+            },
+            {
+              rank: 9,
+              id: 'user58402831659341',
+              nickname: '🐭ぼく天然ミッキー🐭',
+              image_url: 'assets/avatars/user58402831659341.jpg',
+              saved_to: '',
+              score: 700000,
+            },
+            {
+              rank: 10,
+              id: 'karaindaisuki',
+              nickname: 'なるりれ🦥🍉',
+              image_url: 'assets/avatars/karaindaisuki.jpg',
+              saved_to: '',
+              score: 600000,
+            },
+            {
+              rank: 11,
+              id: 'ritu_1115',
+              nickname: 'ジンヤ',
+              image_url: 'assets/avatars/ritu_1115.jpg',
+              saved_to: '',
+              score: 500000,
+            },
+            {
+              rank: 12,
+              id: '2161646824',
+              nickname: 'まゆみ♥️💗💛',
+              image_url: 'assets/avatars/2161646824.jpg',
+              saved_to: '',
+              score: 400000,
+            },
+            {
+              rank: 13,
+              id: 'yyuukkii0402',
+              nickname: 'yukiんこ😈',
+              image_url: 'assets/avatars/yyuukkii0402.jpg',
+              saved_to: '',
+              score: 300000,
+            },
+            {
+              rank: 14,
+              id: 'ceo1014',
+              nickname: '🦁CEO🦁',
+              image_url: 'assets/avatars/ceo1014.jpg',
+              saved_to: '',
+              score: 200000,
+            },
+            {
+              rank: 15,
+              id: 'taka19427',
+              nickname: 'taka0526_0901',
+              image_url: 'assets/avatars/taka19427.jpg',
+              saved_to: '',
+              score: 100000,
+            },
+          ],
         }}
       />
     </>
