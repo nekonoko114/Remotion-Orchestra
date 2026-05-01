@@ -163,16 +163,20 @@ const AdvancedFireShader = {
     `,
 };
 
-interface BurningTextProps {
-  text: string;
-  size?: number;
-  height?: number;
-  color?: string;
-  durationInFrames?: number;
-  startFrame?: number;
-  fontUrl?: string;
-  distortionStrength?: number; // New prop
-}
+import { z } from 'zod';
+
+export const BurningTextSchema = z.object({
+  text: z.string(),
+  size: z.number().optional().default(1),
+  height: z.number().optional().default(0.2),
+  color: z.string().optional().default('#ffaa00'),
+  durationInFrames: z.number().optional().default(90),
+  startFrame: z.number().optional().default(0),
+  fontUrl: z.string().optional().default('fonts/helvetiker_regular.typeface.json'),
+  distortionStrength: z.number().optional().default(1.0),
+});
+
+type BurningTextProps = z.infer<typeof BurningTextSchema>;
 
 export const BurningText: React.FC<BurningTextProps> = ({
   text,

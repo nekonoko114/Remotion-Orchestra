@@ -10,7 +10,7 @@ import {
   Easing,
   Sequence,
 } from 'remotion';
-import { ArigatoProps } from './types';
+import { ArigatoProps } from '../../types/ranking-types';
 import { GoldenBokehOverlay } from '../NarandaMamade/GoldenBokehOverlay';
 
 // 動的に計算するため定数は CROSSFADE のみ保持

@@ -2,7 +2,7 @@ import { staticFile } from 'remotion';
 
 // Import visual components if needed for type definitions,
 // using string identifiers to avoid circular dependencies if simple mapping is preferred.
-import { IntroSequence } from './Sequences/IntroSequence';
+import { IntroSequence } from '../Rankings/RookieRanking/IntroSequence';
 import { PreChorusSequence } from './Sequences/PreChorusSequence';
 import { ChorusSequence } from './Sequences/ChorusSequence';
 import { InterludeSequence } from './Sequences/InterludeSequence';

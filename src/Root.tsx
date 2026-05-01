@@ -2,102 +2,87 @@ import { Composition } from 'remotion';
 
 import {
   RankingVertical,
-  OPENING_SEC,
-  GROUP_SEC,
-  TOP_RANK_SEC,
-  GRID_BRIDGE_SEC,
-  ENDING_SEC,
-  TRANSITION_FRAMES,
-  LAST_TRANSITION_FRAMES,
-} from './compositions/VideoFactory/RankingVertical';
+  TOTAL_DURATION_FRAMES as VERTICAL_DURATION,
+} from './compositions/Rankings/RankingVertical';
 import {
   RankingVerticalSchema,
   LiverSchema,
-} from './compositions/VideoFactory/RankingVertical/schema';
-import RANKING_DATA_JSON from './compositions/VideoFactory/data.json';
+} from './compositions/Rankings/RankingVertical/schema';
+import RANKING_DATA_JSON from './data/data.json';
 import {
   RankingTime,
-  OPENING_SEC as OPENING_SEC_TIME,
-  GROUP_SEC as GROUP_SEC_TIME,
-  TOP_RANK_SEC as TOP_RANK_SEC_TIME,
-  TOP1_RANK_SEC as TOP1_RANK_SEC_TIME,
-  ENDING_SEC as ENDING_SEC_TIME,
-  TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
-} from './compositions/VideoFactory/RankingTime';
+  TOTAL_DURATION_FRAMES as TIME_DURATION,
+} from './compositions/Rankings/RankingTime';
+import { RankingTimeSchema } from './compositions/Rankings/RankingTime/schema';
 import {
   RankingEvent,
-  OPENING_SEC as EVENT_OPENING_SEC,
-  GROUP_SEC as EVENT_GROUP_SEC,
-  SCAN_SEC as EVENT_SCAN_SEC,
-  REVEAL_SEC as EVENT_REVEAL_SEC,
-  REVEAL_1_SEC as EVENT_REVEAL_1_SEC,
-  ENDING_SEC as EVENT_ENDING_SEC,
-  TRANSITION_FRAMES as EVENT_TRANSITION_FRAMES,
-  LAST_TRANSITION_FRAMES as EVENT_LAST_TRANSITION_FRAMES,
-} from './compositions/VideoFactory/RankingEvent';
-import { BattleKawaii } from './compositions/VideoFactory/BattleKawaii';
+  TOTAL_DURATION_FRAMES as EVENT_DURATION,
+} from './compositions/Rankings/RankingEvent';
+import { RankingEventSchema } from './compositions/Rankings/RankingEvent/schema';
+import { BattleKawaii } from './compositions/Battles/BattleKawaii';
 import {
   PastelDreamShowcase,
   pastelDreamSchema,
-} from './compositions/VideoFactory/PastelDreamShowcase';
+} from './compositions/Showcases/PastelDreamShowcase';
 import { NarandaMamadeMV } from './compositions/NarandaMamade';
 import { SoregayasashisaMV } from './compositions/Soregayasashisa';
 import narandaMamadeMusicAnalysis from './compositions/NarandaMamade/music_analysis.json';
 import { NovaShowMV } from './components/NovaShowMV';
 import { KimitonaraComposition } from './compositions/Kimitonara';
 import { StitchOverlay } from './compositions/Stitch';
-import { RookieRanking } from './compositions/VideoFactory/RookieRanking';
-import { JolBattleSpiritRed } from './compositions/VideoFactory/JolBattleSpiritRed';
-import { JolBattleSpiritBlue } from './compositions/VideoFactory/JolBattleSpiritBlue';
+import { RookieRanking } from './compositions/Rankings/RookieRanking';
+import { RookieRankingSchema } from './compositions/Rankings/RookieRanking/schema';
+import { JolBattleSpiritRed } from './compositions/Battles/JolBattleSpiritRed';
+import { JolBattleSpiritBlue } from './compositions/Battles/JolBattleSpiritBlue';
 import {
   JolBattleSpiritOrange,
   JOL_ORANGE_DURATION,
-} from './compositions/VideoFactory/JolBattleSpiritOrange';
+} from './compositions/Battles/JolBattleSpiritOrange';
 import {
   JolBattleSpiritGreen,
   greenTheme,
   JOL_GREEN_DURATION,
-} from './compositions/VideoFactory/JolBattleSpiritGreen';
+} from './compositions/Battles/JolBattleSpiritGreen';
 import {
   JolBattleSpiritMagic,
   magicTheme,
   JOL_MAGIC_DURATION,
-} from './compositions/VideoFactory/JolBattleSpiritMagic';
-import { AdvancedEffectsShowcase } from './compositions/VideoFactory/AdvancedEffectsShowcase';
-import { SkiaEffectsShowcase } from './compositions/VideoFactory/SkiaEffectsShowcase';
-import { CanvasEffectsCatalog } from './compositions/VideoFactory/CanvasEffectsCatalog';
-import { SvgEffectsCatalog } from './compositions/VideoFactory/SvgEffectsCatalog';
-import { SvgGraphicsCatalog } from './compositions/VideoFactory/SvgGraphicsCatalog';
-import { GsapEffectsCatalog } from './compositions/VideoFactory/GsapEffectsCatalog';
-import { KineticTypographyCatalog } from './compositions/VideoFactory/KineticTypographyCatalog';
-import { MvLyricTypographyCatalog } from './compositions/VideoFactory/MvLyricTypographyCatalog';
+} from './compositions/Battles/JolBattleSpiritMagic';
+import { AdvancedEffectsShowcase } from './compositions/Showcases/AdvancedEffectsShowcase';
+import { SkiaEffectsShowcase } from './components/effects/SkiaEffectsShowcase';
+import { CanvasEffectsCatalog } from './compositions/Showcases/CanvasEffectsCatalog';
+import { SvgEffectsCatalog } from './compositions/Showcases/SvgEffectsCatalog';
+import { SvgGraphicsCatalog } from './compositions/Showcases/SvgGraphicsCatalog';
+import { GsapEffectsCatalog } from './compositions/Showcases/GsapEffectsCatalog';
+import { KineticTypographyCatalog } from './compositions/Showcases/KineticTypographyCatalog';
+import { MvLyricTypographyCatalog } from './compositions/Showcases/MvLyricTypographyCatalog';
 import {
   JolBattleSpeedOrange,
   speedOrangeTheme,
   JOL_SPEED_ORANGE_DURATION,
-} from './compositions/VideoFactory/JolBattleSpeedOrange';
+} from './compositions/Battles/JolBattleSpeedOrange';
 import {
   JolBattleWhiteSnow,
   JOL_WHITE_DURATION,
-} from './compositions/VideoFactory/JolBattleWhiteSnow';
+} from './compositions/Battles/JolBattleWhiteSnow';
 import {
   JolBattleSpringSakura,
   JOL_SAKURA_DURATION,
-} from './compositions/VideoFactory/JolBattleSpringSakura';
-import { JolBattlePattern6 } from './compositions/VideoFactory/JolBattlePattern6';
+} from './compositions/Battles/JolBattleSpringSakura';
+import { JolBattlePattern6 } from './compositions/Battles/JolBattlePattern6';
 import {
   JolBattleReservation,
   ReservationBattleSchema,
-} from './compositions/VideoFactory/JolBattleReservation';
+} from './compositions/Battles/JolBattleReservation';
 
 import {
   JolPopularityBattle3vs1,
   PopularityBattle3vs1Schema,
-} from './compositions/VideoFactory/JolPopularityBattle3vs1';
+} from './compositions/Battles/JolPopularityBattle3vs1';
 import {
   JolPopularityBattleSakura3vs1,
   PopularityBattleSakura3vs1Schema,
-} from './compositions/VideoFactory/JolPopularityBattleSakura3vs1';
+} from './compositions/Battles/JolPopularityBattleSakura3vs1';
 import {
   ShowcaseBackgrounds,
   SHOWCASE_BG_DURATION,
@@ -107,38 +92,32 @@ import {
   SHOWCASE_TRANS_DURATION,
   ShowcaseTextLayouts,
   SHOWCASE_TEXT_DURATION,
-} from './compositions/VideoFactory/ReusableComponentsShowcase';
+} from './compositions/Showcases/ReusableComponentsShowcase';
 import {
   TransitionsCatalogShowcase,
   TRANSITION_SHOWCASE_DURATION,
-} from './compositions/VideoFactory/TransitionsCatalogShowcase';
+} from './compositions/Showcases/TransitionsCatalogShowcase';
 import {
   EffectCatalogShowcase,
   EFFECT_SHOWCASE_DURATION,
-} from './compositions/VideoFactory/EffectCatalogShowcase';
-import { EffectCatalog } from './compositions/VideoFactory/components/EffectCatalog/effect-catalog';
-import { MagicCircleShowcase } from './compositions/VideoFactory/MagicCircleShowcase';
-import { AdvancedMagicCircleShowcase } from './compositions/VideoFactory/AdvancedMagicCircleShowcase';
-import { TextAnimationCatalog } from './compositions/VideoFactory/TextAnimationCatalog';
-import { TextEffectCatalog } from './compositions/VideoFactory/TextEffectCatalog';
-import { TripleImageEffectsCatalog } from './compositions/VideoFactory/TripleImageEffectsCatalog';
-import { QuadImageEffectsCatalog } from './compositions/VideoFactory/QuadImageEffectsCatalog';
-import { BattleSpiritThemeSchema } from './compositions/VideoFactory/components/BattleShared/types';
+} from './compositions/Showcases/EffectCatalogShowcase';
+import { EffectCatalog } from './compositions/Showcases/components/EffectCatalog/effect-catalog';
+import { MagicCircleShowcase } from './compositions/Showcases/MagicCircleShowcase';
+import { AdvancedMagicCircleShowcase } from './compositions/Showcases/AdvancedMagicCircleShowcase';
+import { TextAnimationCatalog } from './compositions/Showcases/TextAnimationCatalog';
+import { TextEffectCatalog } from './compositions/Showcases/TextEffectCatalog';
+import { TripleImageEffectsCatalog } from './compositions/Showcases/TripleImageEffectsCatalog';
+import { QuadImageEffectsCatalog } from './compositions/Showcases/QuadImageEffectsCatalog';
+import { BattleSpiritThemeSchema } from './compositions/Battles/shared/types';
 import { ArigatoMV, ArigatoSchema } from './compositions/Arigato';
 import { getArigatoImages } from './compositions/Arigato/image-loader';
 import { ARIGATO_TEXT_EVENTS } from './compositions/Arigato/text-events';
-import { BookFlipSample } from './compositions/VideoFactory/BookFlipSample';
+import { BookFlipSample } from './compositions/Showcases/BookFlipSample';
 import {
   RankingRoyal,
-  OPENING_SEC as ROYAL_OPENING_SEC,
-  GROUP_SEC as ROYAL_GROUP_SEC,
-  TOP_RANK_SEC as ROYAL_TOP_RANK_SEC,
-  GRID_BRIDGE_SEC as ROYAL_GRID_BRIDGE_SEC,
-  ENDING_SEC as ROYAL_ENDING_SEC,
-  TRANSITION_FRAMES as ROYAL_TRANSITION_FRAMES,
-  LAST_TRANSITION_FRAMES as ROYAL_LAST_TRANSITION_FRAMES,
-} from './compositions/VideoFactory/RankingRoyal';
-import { RankingRoyalSchema } from './compositions/VideoFactory/RankingRoyal/schema';
+  TOTAL_DURATION_FRAMES as ROYAL_DURATION,
+} from './compositions/Rankings/RankingRoyal';
+import { RankingRoyalSchema } from './compositions/Rankings/RankingRoyal/schema';
 import { AssetPanel } from './components/AssetPanel';
 import {
   MinibaUniverse,
@@ -150,58 +129,7 @@ import React from 'react';
 
 const JOL_RANKING_FPS = 60;
 
-// Calculate Vertical Duration
-// Updated to 4 groups (15-11, 10-8, 7-6, 5-4)
-const JOL_RANKING_DURATION_VERTICAL =
-  (OPENING_SEC +
-    GROUP_SEC * 4 +
-    GRID_BRIDGE_SEC +
-    TOP_RANK_SEC * 3 +
-    ENDING_SEC) *
-    JOL_RANKING_FPS -
-  (8 * TRANSITION_FRAMES + LAST_TRANSITION_FRAMES);
 
-const JOL_RANKING_ROYAL_DURATION =
-  (ROYAL_OPENING_SEC +
-    ROYAL_GROUP_SEC * 2 +
-    ROYAL_GRID_BRIDGE_SEC * 5 +
-    ROYAL_TOP_RANK_SEC * 5 +
-    ROYAL_ENDING_SEC) *
-    JOL_RANKING_FPS -
-  (12 * ROYAL_TRANSITION_FRAMES + ROYAL_LAST_TRANSITION_FRAMES);
-
-// Calculate Time Duration (Correctly using its own 5s opening)
-// Updated to exclude GridBridges: Opening + 2 Groups + 5 Reveals + Ending
-const JOL_RANKING_DURATION_TIME =
-  (OPENING_SEC_TIME +
-    GROUP_SEC_TIME * 2 +
-    TOP_RANK_SEC_TIME * 4 +
-    TOP1_RANK_SEC_TIME +
-    ENDING_SEC_TIME) *
-    JOL_RANKING_FPS -
-  8 * TRANSITION_FRAMES_TIME;
-// Previous calculation was ~2750, confirmed it's exactly 2750 frames.
-/*
-  (OPENING_SEC_TIME +
-    GROUP_SEC_TIME * 3 +
-    GRID_BRIDGE_SEC_TIME +
-    TOP_RANK_SEC_TIME * 3 +
-    ENDING_SEC_TIME) *
-    JOL_RANKING_FPS -
-  8 * TRANSITION_FRAMES_TIME;
-*/
-
-// Calculate Event Duration
-// (Opening 300 + 4 Groups * 270 + 3 Reveals (300, 300, 360) + Ending 240) - (6 * T 12 + 1 * LAST_T 15)
-// = (300 + 1080 + 960 + 240) - (72 + 15) = 2580 - 87 = 2493
-const JOL_RANKING_DURATION_EVENT =
-  (EVENT_OPENING_SEC +
-    EVENT_GROUP_SEC * 2 +
-    (EVENT_SCAN_SEC + EVENT_REVEAL_SEC) * 4 +
-    (EVENT_SCAN_SEC + EVENT_REVEAL_1_SEC) +
-    EVENT_ENDING_SEC) *
-    JOL_RANKING_FPS -
-  (12 * EVENT_TRANSITION_FRAMES + EVENT_LAST_TRANSITION_FRAMES);
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -210,7 +138,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-Ranking-Vertical"
         component={RankingVertical}
-        durationInFrames={Math.ceil(JOL_RANKING_DURATION_VERTICAL)}
+        durationInFrames={Math.ceil(VERTICAL_DURATION)}
         fps={JOL_RANKING_FPS}
         width={1080}
         height={1920}
@@ -239,10 +167,11 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-Ranking-time"
         component={RankingTime}
-        durationInFrames={Math.ceil(JOL_RANKING_DURATION_TIME)}
+        durationInFrames={Math.ceil(TIME_DURATION)}
         fps={JOL_RANKING_FPS}
         width={1080}
         height={1920}
+        schema={RankingTimeSchema}
         defaultProps={{
           openingTitle2: '配信時間',
           openingTitle3: 'ランキング',
@@ -253,10 +182,19 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="JOL-Ranking-Event"
         component={RankingEvent}
-        durationInFrames={Math.ceil(JOL_RANKING_DURATION_EVENT)}
+        durationInFrames={Math.ceil(EVENT_DURATION)}
         fps={JOL_RANKING_FPS}
         width={1080}
         height={1920}
+        schema={RankingEventSchema}
+        defaultProps={{
+          bgmStartFrom: 10,
+          openingTitle1: 'J.O.L',
+          openingTitle2: 'ダイヤモンド',
+          openingTitle3: 'ランキング',
+          openingSubtitle: '結果発表',
+          openingDate: '2026.04',
+        }}
       />
       <Composition
         id="JOL-Battle-Kawaii"
@@ -354,12 +292,11 @@ export const RemotionRoot: React.FC = () => {
         fps={60}
         width={1080}
         height={1920}
-        defaultProps={
-          {
-            bpm: 135,
-            bgmFile: 'assets/audio/music/Gold_Medal_Rush.mp3',
-          } as any
-        }
+        schema={RookieRankingSchema}
+        defaultProps={{
+          bpm: 135,
+          bgmFile: 'assets/audio/music/Gold_Medal_Rush.mp3',
+        }}
       />
       <Composition
         id="JOL-BATTLE-SPIRIT-RED"
@@ -440,6 +377,7 @@ export const RemotionRoot: React.FC = () => {
         fps={60}
         width={1080}
         height={1920}
+        schema={BattleSpiritThemeSchema}
         defaultProps={greenTheme}
       />
       <Composition
@@ -449,6 +387,7 @@ export const RemotionRoot: React.FC = () => {
         fps={60}
         width={1080}
         height={1920}
+        schema={BattleSpiritThemeSchema}
         defaultProps={magicTheme}
       />
       <Composition
@@ -458,6 +397,7 @@ export const RemotionRoot: React.FC = () => {
         fps={60}
         width={1080}
         height={1920}
+        schema={BattleSpiritThemeSchema}
         defaultProps={speedOrangeTheme}
       />
       <Composition
@@ -1110,7 +1050,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="RankingRoyal"
         component={RankingRoyal}
-        durationInFrames={Math.floor(JOL_RANKING_ROYAL_DURATION)}
+        durationInFrames={Math.floor(ROYAL_DURATION)}
         fps={JOL_RANKING_FPS}
         width={1080}
         height={1920}

@@ -11,7 +11,7 @@ import { Lyrics } from './Lyrics';
 import { ChorusLyrics } from './ChorusLyrics';
 // import { SkiaChorusLyrics } from './SkiaChorusLyrics';
 import { CharacterScenes } from './CharacterScenes';
-import { SpeedLines } from './SpeedLines';
+import { SpeedLines } from '../../components/overlays/SpeedLines';
 import { BackgroundScenes } from './BackgroundScenes';
 import { SpeedSlash } from './SpeedSlash';
 import { TIMELINE } from './timeline';

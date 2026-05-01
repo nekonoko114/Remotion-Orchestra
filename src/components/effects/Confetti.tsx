@@ -1,5 +1,4 @@
-import type React from 'react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   AbsoluteFill,
   interpolate,
@@ -8,75 +7,53 @@ import {
   useVideoConfig,
 } from 'remotion';
 
-const COLORS = [
-  '#FFD700', // Gold
-  '#FF0000', // Red
-  '#8B0000', // Dark Red
-  '#000000', // Black
-  '#333333', // Dark Gray
-  '#C0C0C0', // Silver
-  '#FFFFFF', // White (for contrast)
-];
-
-interface ConfettiProps {
-  count?: number;
-  dropHeight?: number;
-  colors?: string[];
-}
-
-/**
- * 画面全体に色とりどりの紙吹雪を降らせるエフェクト
- */
-export const Confetti: React.FC<ConfettiProps> = ({
+export const Confetti: React.FC<{ count?: number; colors?: string[] }> = ({
   count = 100,
-  colors = COLORS,
+  colors = ['#d000ff', '#a200ff', '#ffffff', '#ffd700'],
 }) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
 
-  // 紙吹雪一枚ごとの初期値を生成
   const particles = useMemo(() => {
-    return Array.from({ length: count }).map((_, i) => {
-      const seed = `particle-${i}`;
+    return [...new Array(count)].map((_, i) => {
+      const seed = `confetti-${i}`;
       return {
-        x: random(`${seed}-x`) * width,
-        initialY: -random(`${seed}-y`) * 500, // 上からバラバラに降らせる
-        size: 10 + random(`${seed}-size`) * 15,
-        color: colors[Math.floor(random(`${seed}-color`) * colors.length)],
-        rotationSpeed: (random(`${seed}-rot`) - 0.5) * 10,
-        driftSpeed: (random(`${seed}-drift`) - 0.5) * 5,
-        speed: 5 + random(`${seed}-speed`) * 10,
+        x: random(seed + 'x') * width,
+        y: random(seed + 'y') * height - height, // Start above the screen
+        size: 10 + random(seed + 'size') * 15,
+        color: colors[Math.floor(random(seed + 'color') * colors.length)],
+        rotation: random(seed + 'rot') * 360,
+        speedX: (random(seed + 'sx') - 0.5) * 6, // 少し横への広がりも強化
+        speedY: 6 + random(seed + 'sy') * 10, // 2+5 -> 6+10 に向上
+        spin: (random(seed + 'spin') - 0.5) * 15, // 回転も速く
       };
     });
-  }, [count, width, colors]);
+  }, [count, colors, width, height]);
 
   return (
     <AbsoluteFill style={{ pointerEvents: 'none' }}>
-      {particles.map((p) => {
-        // 重力による落下の計算
-        const y = p.initialY + frame * p.speed;
-        // 画面を通り過ぎたらループ、または消す（ここではシンプルに落下）
-
-        // 空中でのひらひらした動きをサイン波で再現
-        const key = `p-${p.x}-${p.size}`;
-        const xOffset = Math.sin(frame * 0.1 + p.rotationSpeed) * 20;
+      {particles.map((p, i) => {
+        const drop = frame * p.speedY;
+        const drift = Math.sin(frame / 20 + p.x) * 50;
+        const yPos = (p.y + drop) % (height + 100);
+        const opacity = interpolate(yPos, [height - 100, height], [1, 0], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        });
 
         return (
           <div
-            key={key}
+            key={i}
             style={{
               position: 'absolute',
-              left: p.x + xOffset,
-              top: y,
+              left: p.x + drift,
+              top: yPos,
               width: p.size,
-              height: p.size * 0.6, // 少し横長に
+              height: p.size * 0.6,
               backgroundColor: p.color,
-              transform: `rotate(${frame * p.rotationSpeed}deg) rotateX(${frame * 5}deg)`,
-              borderRadius: p.size % 3 === 0 ? '50%' : '2px', // 形を混ぜる
-              opacity: interpolate(y, [height * 0.8, height], [1, 0], {
-                extrapolateRight: 'clamp',
-              }),
-              willChange: 'transform, top, opacity',
+              transform: `rotate(${p.rotation + frame * p.spin}deg)`,
+              opacity,
+              boxShadow: `0 0 10px ${p.color}aa`,
             }}
           />
         );

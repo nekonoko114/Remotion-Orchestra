@@ -9,7 +9,7 @@ import {
 } from 'remotion';
 import { z } from 'zod';
 import * as Effects from '../components/effects';
-import * as Transitions from '../components/transitions';
+import * as Transitions from '../types/transitions';
 import { TextOverlay } from '../components/UI/TextOverlay';
 
 // --- Schema Definitions ---

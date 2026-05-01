@@ -4,11 +4,11 @@ import {
   GROUP_SEC,
   LAST_TRANSITION_FRAMES,
   OPENING_SEC,
-  RankingVideo,
+  RankingVertical as RankingVideo,
   TOP_RANK_SEC,
   TRANSITION_FRAMES,
   GRID_BRIDGE_SEC,
-} from './compositions/VideoFactory/RankingVideo';
+} from './compositions/Rankings/RankingVertical';
 import {
   RankingTime,
   ENDING_SEC as ENDING_SEC_TIME,
@@ -17,7 +17,10 @@ import {
   TOP_RANK_SEC as TOP_RANK_SEC_TIME,
   TRANSITION_FRAMES as TRANSITION_FRAMES_TIME,
   GRID_BRIDGE_SEC as GRID_BRIDGE_SEC_TIME,
-} from './compositions/VideoFactory/RankingTime';
+} from './compositions/Rankings/RankingTime';
+import { RankingVerticalSchema, LiverSchema } from './compositions/Rankings/RankingVertical/schema';
+import RANKING_DATA_JSON from './data/data.json';
+import { RankingTimeSchema } from './compositions/Rankings/RankingTime/schema';
 import './index.css';
 import React from 'react';
 
@@ -55,6 +58,27 @@ export const RankingRoot: React.FC = () => {
         fps={JOL_RANKING_FPS}
         width={1080}
         height={1920}
+        schema={RankingVerticalSchema}
+        defaultProps={{
+          bpm: 152,
+          bgmFile: 'assets/audio/music/doragonSrayer.mp3',
+          bgmStartFrom: 25,
+          openingVideo: 'backgrounds/diamond-ranking-opening.mp4',
+          rankingVideo:
+            'assets/pixabay/videos/pixabay_fire_flame_beautiful_wallpaper_burn_hot_smoke_feve_200715.mp4',
+          openingTitle1: 'J.O.L',
+          openingTitle2: '2026年3月\nダイヤモンド獲得',
+          openingTitle3: 'ランキング',
+          openingSubtitle: '結果発表',
+          useGlitch: true,
+          glitchIntensity: 10,
+          top3Video:
+            'assets/pixabay/videos/pixabay_dimension_space_psychedelic_abstract_portal_time_w_31183.mp4',
+          openingDate: '',
+          livers: (RANKING_DATA_JSON as unknown[]).map((l) =>
+            LiverSchema.parse(l),
+          ),
+        }}
       />
       <Composition
         id="JOL-Ranking-time"
@@ -63,6 +87,13 @@ export const RankingRoot: React.FC = () => {
         fps={JOL_RANKING_FPS}
         width={1080}
         height={1920}
+        schema={RankingTimeSchema}
+        defaultProps={{
+          openingTitle2: '配信時間',
+          openingTitle3: 'ランキング',
+          themeColor: '#d000ff',
+          glowColor: 'rgba(208, 0, 255, 0.6)',
+        }}
       />
     </>
   );

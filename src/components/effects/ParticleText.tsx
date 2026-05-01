@@ -1,185 +1,121 @@
-import { Center, Text3D } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import type React from 'react';
-import { useMemo, useRef } from 'react';
-import { interpolate, random, staticFile, useCurrentFrame } from 'remotion';
-import * as THREE from 'three';
+import { useEffect, useMemo, useRef } from 'react';
+import {
+  AbsoluteFill,
+  interpolate,
+  random,
+  spring,
+  useCurrentFrame,
+  useVideoConfig,
+} from 'remotion';
 
-const ParticleMorphShader = {
-  uniforms: {
-    uTime: { value: 0 },
-    uProgress: { value: 0 },
-    uColor: { value: new THREE.Color('#00ffff') },
-  },
-  vertexShader: `
-        uniform float uTime;
-        uniform float uProgress;
-        attribute vec3 targetPosition;
-        varying float vRandom;
-        
-        float hash(float n) { return fract(sin(n) * 43758.5453123); }
+import { z } from 'zod';
 
-        void main() {
-            float id = float(gl_VertexID);
-            vRandom = hash(id);
-            
-            vec3 scatterPos = position * 5.0; 
-            
-            // Randomized progress for each particle so they don't arrive all at once
-            // Some arrive faster, some slower.
-            float localProgress = smoothstep(0.0, 1.0, (uProgress - vRandom * 0.2) / 0.8);
-            
-            // Cubic ease-out for snapping effect
-            float t = 1.0 - pow(1.0 - localProgress, 3.0);
-            
-            // Spiral motion logic
-            // Mix from scatter to target
-            vec3 pos = mix(scatterPos, targetPosition, t);
-            
-            // Add a spiral/curl offset that disappears as t -> 1.0
-            float angle = uTime * 2.0 + vRandom * 6.28;
-            float radius = (1.0 - t) * 2.0; // Radius shrinks as they arrive
-            
-            pos.x += cos(angle) * radius;
-            pos.y += sin(angle) * radius;
-            pos.z += sin(angle * 2.0) * radius; // 3D swirl
-            
-            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-            gl_PointSize = (25.0 / -mvPosition.z) * (0.5 + vRandom);
-            gl_Position = projectionMatrix * mvPosition;
-        }
-    `,
-  fragmentShader: `
-        uniform vec3 uColor;
-        uniform float uProgress;
-        varying float vRandom;
-        
-        void main() {
-            float dist = distance(gl_PointCoord, vec2(0.5));
-            if (dist > 0.5) discard;
-            float strength = 1.0 - (dist * 2.0);
-            
-            // Fade particles out slightly as mesh fades in
-            float alpha = 1.0;
-            if (uProgress > 0.8) {
-                alpha = 1.0 - (uProgress - 0.8) / 0.2;
-            }
-            
-            gl_FragColor = vec4(uColor, strength * alpha);
-        }
-    `,
-  transparent: true,
-  blending: THREE.AdditiveBlending,
-  depthWrite: false,
-};
+export const ParticleTextSchema = z.object({
+  text: z.string(),
+  fontSize: z.number(),
+  color: z.string().optional().default('#D4AF37'),
+  delay: z.number().optional().default(0),
+  yOffset: z.number().optional().default(0),
+});
 
-interface ParticleTextProps {
-  text: string;
-  size?: number;
-  height?: number;
-  color?: string;
-  fontUrl?: string;
-  durationInFrames?: number;
-  startFrame?: number;
-}
+type Props = z.infer<typeof ParticleTextSchema>;
 
-export const ParticleText: React.FC<ParticleTextProps> = ({
-  text,
-  size = 2,
-  height = 0.4,
-  color = '#00ffff',
-  fontUrl = 'fonts/helvetiker_regular.typeface.json',
-  durationInFrames = 60,
-  startFrame = 0,
-}) => {
+export const ParticleText: React.FC<Props> = ({ text, fontSize, color = '#D4AF37', delay = 0, yOffset = 0 }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { width, height, fps } = useVideoConfig();
   const frame = useCurrentFrame();
-  const materialRef = useRef<THREE.ShaderMaterial>(null);
 
-  const progress = interpolate(
-    frame - startFrame,
-    [0, durationInFrames],
-    [0, 1],
-    { extrapolateRight: 'clamp', extrapolateLeft: 'clamp' },
-  );
+  // High quality sampling but restricted to text area for performance
+  const points = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return [];
 
-  // Cross-fade for the solid mesh - delayed to wait for spiral to finish
-  const meshOpacity = interpolate(progress, [0.85, 1.0], [0, 1], {
-    extrapolateRight: 'clamp',
-    extrapolateLeft: 'clamp',
-  });
+    ctx.font = `900 ${fontSize}px system-ui, -apple-system, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = 'white';
+    ctx.fillText(text, width / 2, height / 2);
 
-  const count = 3000;
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const sampledPoints: { x: number; y: number }[] = [];
 
-  const [scatterPositions, targetPositions] = useMemo(() => {
-    const scatter = new Float32Array(count * 3);
-    const target = new Float32Array(count * 3);
+    // Balanced step for visibility vs performance
+    const step = 4;
 
-    for (let i = 0; i < count; i++) {
-      scatter[i * 3] = (random(`sa-${i}`) - 0.5) * 20;
-      scatter[i * 3 + 1] = (random(`sb-${i}`) - 0.5) * 20;
-      scatter[i * 3 + 2] = (random(`sc-${i}`) - 0.5) * 10;
-
-      target[i * 3] = (random(`ta-${i}`) - 0.5) * (text.length * size * 0.7);
-      target[i * 3 + 1] = (random(`tb-${i}`) - 0.5) * size;
-      target[i * 3 + 2] = (random(`tc-${i}`) - 0.5) * height;
+    for (let y = 0; y < height; y += step) {
+      for (let x = 0; x < width; x += step) {
+        const index = (y * width + x) * 4;
+        if (imageData.data[index + 3] > 100) {
+          // Transparency threshold
+          sampledPoints.push({ x, y });
+        }
+      }
     }
-    return [scatter, target];
-  }, [text, size, height]);
+    return sampledPoints;
+  }, [text, fontSize, width, height]);
 
-  useFrame(({ clock }) => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.uTime.value = clock.getElapsedTime();
-      materialRef.current.uniforms.uProgress.value = progress;
-    }
-  });
+  // Particle state
+  const particles = useMemo(() => {
+    return points.map((p, i) => {
+      const seed = `p-${text}-${i}`;
+      return {
+        startX: (random(`${seed}x`) - 0.5) * width * 1.5,
+        startY: (random(`${seed}y`) - 0.5) * height * 1.5,
+        targetX: p.x,
+        targetY: p.y + yOffset,
+        speed: random(`${seed}s`) * 0.5 + 0.5,
+        size: random(`${seed}size`) * 2 + 1,
+        delay: random(`${seed}delay`) * 10,
+      };
+    });
+  }, [points, text, width, height, yOffset]);
 
-  const material = useMemo(() => {
-    const mat = new THREE.ShaderMaterial(ParticleMorphShader);
-    mat.uniforms.uColor.value = new THREE.Color(color);
-    return mat;
-  }, [color]);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const animFrame = frame - delay;
+    if (animFrame < 0) return;
+
+    ctx.fillStyle = color;
+
+    particles.forEach((p) => {
+      const spr = spring({
+        frame: animFrame - p.delay,
+        fps,
+        config: { damping: 15, stiffness: 100, mass: 0.5 },
+      });
+
+      if (spr <= 0) return;
+
+      const curX = interpolate(spr, [0, 1], [p.startX, p.targetX]);
+      const curY = interpolate(spr, [0, 1], [p.startY, p.targetY]);
+
+      const alpha = interpolate(spr, [0, 0.4], [0, 1]);
+      const flicker = 0.8 + Math.sin(frame * 0.2 + p.delay) * 0.2;
+
+      ctx.globalAlpha = alpha * flicker;
+
+      // Rect is much faster than arc
+      ctx.fillRect(curX, curY, p.size, p.size);
+    });
+  }, [frame, delay, particles, width, height, fps, color]);
 
   return (
-    <group>
-      {/* 1. The Morphing Particles */}
-      <points>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={count}
-            array={scatterPositions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-targetPosition"
-            count={count}
-            array={targetPositions}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <primitive object={material} ref={materialRef} attach="material" />
-      </points>
-
-      {/* 2. The Solid Result Mesh (Fades in) */}
-      {meshOpacity > 0 && (
-        <Center>
-          <Text3D
-            font={staticFile(fontUrl)}
-            size={size}
-            height={height}
-            curveSegments={12}
-          >
-            {text}
-            <meshStandardMaterial
-              color={color}
-              transparent
-              opacity={meshOpacity}
-              metalness={0.5}
-              roughness={0.5}
-            />
-          </Text3D>
-        </Center>
-      )}
-    </group>
+    <AbsoluteFill>
+      <canvas
+        ref={canvasRef}
+        width={width}
+        height={height}
+        style={{ width: '100%', height: '100%' }}
+      />
+    </AbsoluteFill>
   );
 };

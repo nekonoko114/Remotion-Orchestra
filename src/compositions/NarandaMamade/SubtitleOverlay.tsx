@@ -7,7 +7,7 @@ import {
   spring,
   useVideoConfig,
 } from 'remotion';
-import { LYRICS } from './lyrics';
+import { LYRICS } from '../Soregayasashisa/lyrics';
 
 const SoftBlurChar: React.FC<{
   char: string;

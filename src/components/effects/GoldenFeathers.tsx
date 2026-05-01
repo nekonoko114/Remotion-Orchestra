@@ -7,7 +7,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import { ROYAL_THEME } from '../../compositions/VideoFactory/RankingRoyal/theme';
+import { ROYAL_THEME } from '../../compositions/Rankings/RankingRoyal/theme';
 
 interface GoldenFeathersProps {
   count?: number;
