@@ -295,7 +295,8 @@ export const Top1Reveal: React.FC<Props> = ({ rank, liver, title, top3Video, bpm
                 borderRadius: '24px',
                 boxShadow: isRank1 
                   ? `0 0 100px ${ROYAL_THEME.colors.goldGlow}, 0 0 40px white` 
-                  : `0 0 60px ${ROYAL_THEME.colors.goldGlow}`,
+                  : `0 0 25px rgba(255, 215, 0, 0.4)`,
+                filter: isRank1 ? 'none' : 'brightness(1) contrast(2) saturate(1.3)',
               }}
             >
               <LiverCubeScene rank={rank} imageUrl={

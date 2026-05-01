@@ -1,7 +1,7 @@
 [
   {
     "id": "2161646824",
-    "nickname": "まゆみ♥️💗💛",
+    "nickname": "まゆみ",
     "score": 1500,
     "image_url": "assets/avatars/2161646824.jpg",
     "rank": 1,
@@ -11,55 +11,55 @@
     "id": "donbeikun9999",
     "nickname": "☠️やらかしタロー☠️",
     "score": 1400,
-    "image_url": "assets/avatars/donbeikun9999.png",
+    "image_url": "assets/avatars/donbeikun9999.jpg",
     "rank": 2,
-    "saved_to": ""
-  },
-  {
-    "id": "karaindaisuki",
-    "nickname": "なるりれ🦥🍉",
-    "score": 1300,
-    "image_url": "assets/avatars/karaindaisuki.jpg",
-    "rank": 3,
     "saved_to": ""
   },
   {
     "id": "t.o.p_u_jin_",
     "nickname": "🔆≒ユージン≒🔆",
-    "score": 1200,
+    "score": 1300,
     "image_url": "assets/avatars/t.o.p_u_jin_.jpg",
-    "rank": 4,
+    "rank": 3,
     "saved_to": ""
   },
   {
     "id": "mizuki2525214",
     "nickname": "💋一条美月-Mizuki-💋",
-    "score": 1100,
+    "score": 1200,
     "image_url": "assets/avatars/mizuki2525214.jpg",
+    "rank": 4,
+    "saved_to": ""
+  },
+  {
+    "id": "karaindaisuki",
+    "nickname": "なるりれ",
+    "score": 1100,
+    "image_url": "assets/avatars/karaindaisuki.jpg",
     "rank": 5,
+    "saved_to": ""
+  },
+  {
+    "id": "popo820128",
+    "nickname": "じゅんじゅん🩷",
+    "score": 1000,
+    "image_url": "assets/avatars/popo820128.jpg",
+    "rank": 6,
     "saved_to": ""
   },
   {
     "id": "kawamii12",
     "nickname": "小悪魔💋🪽",
-    "score": 1000,
-    "image_url": "assets/avatars/koakumachiyan_new.png",
-    "rank": 6,
-    "saved_to": ""
-  },
-  {
-    "id": "yyuukkii0402",
-    "nickname": "yukiんこ😈",
     "score": 900,
-    "image_url": "assets/avatars/yyuukkii0402.jpg",
+    "image_url": "assets/avatars/koakumachiyan_new.png",
     "rank": 7,
     "saved_to": ""
   },
   {
-    "id": "ceo1014",
-    "nickname": "🦁CEO🦁",
+    "id": "yyuukkii0402",
+    "nickname": "4/2🎂生誕yukiんこ😈",
     "score": 800,
-    "image_url": "assets/avatars/ceo1014.jpg",
+    "image_url": "assets/avatars/yyuukkii0402.jpg",
     "rank": 8,
     "saved_to": ""
   },
@@ -72,18 +72,18 @@
     "saved_to": ""
   },
   {
-    "id": "ikkurrex7ja",
-    "nickname": "†奏良 『そら』 †",
+    "id": "user58402831659341",
+    "nickname": "🐭ぼく天然ミッキー🐭",
     "score": 600,
-    "image_url": "assets/avatars/ikkurrex7ja.jpg",
+    "image_url": "assets/avatars/user58402831659341.jpg",
     "rank": 10,
     "saved_to": ""
   },
   {
-    "id": "user58402831659341",
-    "nickname": "🐭ぼく天然ミッキー🐭",
+    "id": "user9577863834239",
+    "nickname": "天然かな～？✌️マッサ画伯です👍",
     "score": 500,
-    "image_url": "assets/avatars/user58402831659341.jpg",
+    "image_url": "assets/avatars/user9577863834239.jpg",
     "rank": 11,
     "saved_to": ""
   },
@@ -96,26 +96,26 @@
     "saved_to": ""
   },
   {
-    "id": "ooo93o",
-    "nickname": "あむら🧸🖤",
+    "id": "ceo1014",
+    "nickname": "🦁CEO🦁🎗️",
     "score": 300,
-    "image_url": "assets/avatars/ooo93o.jpg",
+    "image_url": "assets/avatars/ceo1014.jpg",
     "rank": 13,
     "saved_to": ""
   },
   {
-    "id": "user9577863834239",
-    "nickname": "マッサ👍",
+    "id": "chirin5497",
+    "nickname": "✨✨Chiho✨✨",
     "score": 200,
-    "image_url": "assets/avatars/user9577863834239.jpg",
+    "image_url": "assets/avatars/chirin5497.jpg",
     "rank": 14,
     "saved_to": ""
   },
   {
-    "id": "ritu_1115",
-    "nickname": "ジンヤ",
+    "id": "ooo93o",
+    "nickname": "あむら🧋",
     "score": 100,
-    "image_url": "assets/avatars/ritu_1115.jpg",
+    "image_url": "assets/avatars/ooo93o.jpg",
     "rank": 15,
     "saved_to": ""
   }

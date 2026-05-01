@@ -219,7 +219,7 @@ export const RankingGroup: React.FC<Props> = ({
                     </div>
                     <span
                       style={{
-                        fontSize: nameFontSize,
+                        fontSize: liver.nickname.length > 10 ? nameFontSize * 0.72 : nameFontSize,
                         fontFamily: cinzelFont,
                         fontWeight: '800',
                         color: '#FFF',
@@ -311,7 +311,7 @@ export const RankingGroup: React.FC<Props> = ({
                 >
                     <span
                       style={{
-                        fontSize: nameFontSize,
+                        fontSize: liver.nickname.length > 10 ? nameFontSize * 0.72 : nameFontSize,
                         fontFamily: cinzelFont,
                         fontWeight: 800,
                         color: '#FFF',

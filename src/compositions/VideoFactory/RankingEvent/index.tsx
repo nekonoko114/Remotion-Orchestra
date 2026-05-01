@@ -1,5 +1,5 @@
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
-import { AbsoluteFill, useVideoConfig, Audio, staticFile } from 'remotion';
+import { AbsoluteFill, useVideoConfig, Audio, staticFile, interpolate } from 'remotion';
 import type { Liver } from '../types';
 import { Ending } from './Ending';
 import { Opening } from './Opening';
@@ -11,44 +11,32 @@ import { CyberBackground } from './CyberBackground';
 import { cyberGateTransition } from '../transitions/CyberGateTransition'; 
 
 import { useCurrentFrame } from 'remotion';
+import RANKING_DATA_EVENT_JSON from '../data-event.json';
 
-// 3月度団結NO1 ランキングデータ
-const mkLiver = (id: string, nickname: string, image_url: string, rank: number): Liver => ({
-  rank, id, nickname, image_url,
-  username: id, user_id: id, unique_id: id,
-  saved_to: '', ok: true, error: null,
-  signature: null, creator_account: '', creator_name: nickname, content: null,
-});
+const RANKING_DATA = (RANKING_DATA_EVENT_JSON as unknown as Liver[]).map((liver) => ({
+  ...liver,
+  username: liver.id,
+  user_id: liver.id,
+  unique_id: liver.id,
+  ok: true,
+  error: null,
+  signature: null,
+  creator_account: '',
+  creator_name: liver.nickname,
+  content: null,
+}));
 
-const RANKING_DATA: Liver[] = [
-  mkLiver('mizuki2525214',       '💋一条美月-Mizuki-💋',        'assets/avatars/mizuki2525214.jpg',       1),
-  mkLiver('donbeikun9999',       '☠️やらかしタロー☠️',          'assets/avatars/donbeikun9999.png',       2),
-  mkLiver('t.o.p_u_jin_',        '🔆≒ユージン≒🔆',              'assets/avatars/t.o.p_u_jin_.jpg',        3),
-  mkLiver('2161646824',          'まゆみ',                       'assets/avatars/2161646824.jpg',          4),
-  mkLiver('l5332541',            '🌸さくら🌸',                  'assets/avatars/l5332541.jpg',            5),
-  mkLiver('karaindaisuki',       'なるりれ🦥🍉',                 'assets/avatars/karaindaisuki.jpg',       6),
-  mkLiver('mrm0115',             '限界突破まみ🎽',               'assets/avatars/mrm0115.jpg',             7),
-  mkLiver('ceo1014',             '🦁CEO🦁🎗️',                   'assets/avatars/ceo1014.jpg',             8),
-  mkLiver('ria.kangoshi',        'りあ🐰🍀',                     'assets/avatars/ria.kangoshi.jpg',        9),
-  mkLiver('ikkurrex7ja',         '✝️奏良『そら』✝️🎽',           'assets/avatars/ikkurrex7ja.jpg',         10),
-  mkLiver('butterfly46490',      '🍯でっちゃんじゃん🌸',          'assets/avatars/butterfly46490.jpg',      11),
-  mkLiver('yyuukkii0402',        'yukiんこ😈',                   'assets/avatars/yyuukkii0402.jpg',        12),
-  mkLiver('user9577863834239',   '天然かな～？✌️マッサ画伯です👍', 'assets/avatars/user9577863834239.jpg',   13),
-  mkLiver('user58402831659341',  '🐭ぼく天然ミッキー🐭',          'assets/avatars/user58402831659341.jpg',  14),
-  mkLiver('ooo93o',              'あむら🧋',                     'assets/avatars/ooo93o.jpg',              15),
-];
+const BGM_START_FROM = 10;
 
-const BGM_START_FROM = 0;
-
-export const OPENING_SEC = 5;
-export const GROUP_SEC = 4.5;     // 10 beats (relaxed stagger)
-export const TOP_RANK_SEC = 4;  // 8 beats
-export const SCAN_SEC = 1.5;
-export const REVEAL_SEC = 5;
-export const REVEAL_1_SEC = 6;
-export const ENDING_SEC = 4;
-export const TRANSITION_FRAMES = 30;
-export const LAST_TRANSITION_FRAMES = 80;
+export const BPM = 150;
+export const OPENING_SEC = 4.8;  // 12 beats
+export const GROUP_SEC = 4.8;    // 12 beats
+export const SCAN_SEC = 1.6;     // 4 beats
+export const REVEAL_SEC = 4.8;   // 12 beats
+export const REVEAL_1_SEC = 6.4; // 16 beats
+export const ENDING_SEC = 4.8;   // 12 beats
+export const TRANSITION_FRAMES = 24; // 1 beat (at 60fps)
+export const LAST_TRANSITION_FRAMES = 96; // 4 beats
 
 const SLASH = cyberGateTransition({ color: '#00ffff', accentColor: '#ff1e1e' });
 const TIMING = linearTiming({ durationInFrames: TRANSITION_FRAMES });
@@ -65,16 +53,16 @@ export const RankingEvent = () => {
   const frame = useCurrentFrame();
 
   return (
-    <AbsoluteFill style={{ backgroundColor: '#000' }}>
+    <AbsoluteFill style={{ backgroundColor: 'rgb(0,0,0,0.5)' }}>
       {/* 共通の背景レイヤーを一括読み込み */}
       <CyberBackground 
-        opacity={frame < 300 ? 1.0 : 0.5} 
-        brightness={frame < 300 ? 1.0 : 0.8}
-        playbackRate={frame < 300 ? 1.2 : 1.0}
+        opacity={interpolate(frame, [OPENING_DURATION, OPENING_DURATION + TRANSITION_FRAMES], [1.0, 0.95], { extrapolateRight: 'clamp' })} 
+        brightness={interpolate(frame, [OPENING_DURATION, OPENING_DURATION + TRANSITION_FRAMES], [1.2, 1.1], { extrapolateRight: 'clamp' })}
+        playbackRate={frame < OPENING_DURATION ? 1.2 : 1.0}
       />
 
       <Audio
-        src={staticFile('assets/audio/music/Kurba.mp3')}
+        src={staticFile('assets/audio/music/Flesh_and_Chrome.mp3')}
         loop
         startFrom={Math.floor(BGM_START_FROM * fps)}
       />
